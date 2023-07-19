@@ -4,22 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>02.HTML.Таблицы</title>
-    <!-- <style>
-        table,
-        td,
-        th {
-            /* задаем границу для всех элементов */
-            border: 1px solid black;
-        }
-    </style>-->
+    <title>02.HTML.Таблицы - Прогноз погоды</title>
 </head>
 
 <body>
-    <table style="margin: auto; width: 400px; border: 1px solid black">
-        <col wi>
-        <thead>
+    
+        <table style="margin: auto; width: 500px; border: 1px solid black">
             <caption><i>Прогноз погоды</i></caption>
+            <thead>
             <tr>
                 <th style="border: 1px solid black">Город</th>
                 <th style="border: 1px solid black">Утро</th>
@@ -27,22 +19,22 @@
                 <th style="border: 1px solid black">Вечер</th>
                 <th style="border: 1px solid black">Ночь</th>
             </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th style="border: 1px solid black">Минск</th>
-                <td style="border: 1px solid black">3</td>
-                <td style="border: 1px solid black"></td>
-                <td style="border: 1px solid black" rowspan="2">qqqqqq</td>
-                <td style="border: 1px solid black"></td>
-            </tr>
-            <tr>
-                <th style="border: 1px solid black">Брест</th>
-                <td style="border: 1px solid black">2</td>
-                <td style="border: 1px solid black"></td>
-                <td style="border: 1px solid black"></td>
-            </tr>
-        </tbody>
+    </thead>
+    <tbody>
+        <tr>
+            <th style="border: 1px solid black">Минск</th>
+            <td style="border: 1px solid black">-5&deg;</td>
+            <td style="border: 1px solid black">+5&deg</td>
+            <td style="border: 1px solid black" rowspan="2">+2&deg;</td>
+            <td style="border: 1px solid black">-10&deg;</td>
+        </tr>
+        <tr>
+            <th style="border: 1px solid black">Брест</th>
+            <td style="border: 1px solid black">0&#176;</td>
+            <td style="border: 1px solid black">+9&#176;</td>
+            <td style="border: 1px solid black">-4&#176;</td>
+        </tr>
+    </tbody>
     </table>
 
 </body>
