@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_HTML- Add</title>
+</head>
+
+<body style="margin-left: 10%; width: 600px;">
+    <!--Не до конца сделано-->
+    <h2>Заполните анкету</h2>
+    <form action="http://fe.it-academy.by/TestForm.php" method="post" name="f_add" target="_blank"></form>
+    <fieldset>
+        <legend>Личные данные</legend>
+        <label>
+            <input type="text" name="name_1" autofocus required placeholder="Фамилия"> <strong> Фамилия</strong>
+        </label><br>
+        <label>
+            <input type="text" name="name_2" required placeholder="Имя"> <strong> Имя</strong>
+        </label><br>
+        <label>
+            <input type="text" name="name_3" required placeholder="Отчество"> <strong> Отчество</strong>
+        </label><br>
+        <fieldset>
+            <legend>Паспортные данные</legend>
+            <label>
+                <input type="text" name="ser_pd" required><strong>Серия</strong>
+            </label> <br>
+            <label>
+                <input type="text" name="number_pd" required><strong> Номер</strong>
+            </label>
+        </fieldset>
+        <fieldset>
+            <legend>Дата рождения</legend>
+            <label>
+                <input type="text" name="year_ birth"> <strong>Год</strong>
+            </label><br>
+            <label>
+                <select name="month_ birth">
+                    <option value="1">Январь</option>
+                    <option value="2">Февраль</option>
+                    <option value="3">Март</option>
+                    <option value="4">Апрель</option>
+                    <option value="5">Май</option>
+                    <option value="6">Июнь</option>
+                    <option value="7">Июль</option>
+                    <option value="8">Август</option>
+                    <option value="9">Сентябрь</option>
+                    <option value="10">Октябрь</option>
+                    <option value="11">Ноябрь</option>
+                    <option value="12">Декабрь</option>
+                </select><strong>Месяц</strong>
+            </label><br>
+            <label>
+                <input type="number" name="date_ birth" min="1" max="31" step="1">
+                <strong>Дата</strong>
+            </label><br>
+        </fieldset>
+        <label>
+            <select name="nationality">
+                <option value="BY">РБ</option>
+                <option value="RU">РФ</option>
+                <option value="UA">Украина</option>
+                <option value="LT">Латвия</option>
+            </select><strong>Национальность</strong>
+        </label> <br>
+        <label> <strong>Адрес</strong><br>
+            <input type="text" name="adress">
+        </label>
+    </fieldset><br>
+    <fieldset>
+        <legend>Интересы</legend>
+    </fieldset>
+
+</body>
+
+</html>
