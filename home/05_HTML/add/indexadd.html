@@ -10,68 +10,134 @@
 <body style="margin-left: 10%; width: 600px;">
     <!--Не до конца сделано-->
     <h2>Заполните анкету</h2>
-    <form action="http://fe.it-academy.by/TestForm.php" method="post" name="f_add" target="_blank"></form>
-    <fieldset>
-        <legend>Личные данные</legend>
-        <label>
-            <input type="text" name="name_1" autofocus required placeholder="Фамилия"> <strong> Фамилия</strong>
-        </label><br>
-        <label>
-            <input type="text" name="name_2" required placeholder="Имя"> <strong> Имя</strong>
-        </label><br>
-        <label>
-            <input type="text" name="name_3" required placeholder="Отчество"> <strong> Отчество</strong>
-        </label><br>
+    <form action="http://fe.it-academy.by/TestForm.php" method="post" name="f_add" target="_blank">
         <fieldset>
-            <legend>Паспортные данные</legend>
+            <legend>Личные данные</legend>
             <label>
-                <input type="text" name="ser_pd" required><strong>Серия</strong>
+                <input type="text" name="name_1" placeholder="Фамилия" pattern="[А-Яа-яЁё]{1,25}" autofocus required>
+                Фамилия
+            </label><br>
+            <label>
+                <input type="text" name="name_2" pattern="[А-Яа-яЁё]{1,20}" required placeholder="Имя"> Имя
+            </label><br>
+            <label>
+                <input type="text" name="name_3" pattern="[А-Яа-яЁё]{1,24}" required placeholder="Отчество"> Отчество
+            </label><br>
+
+            <fieldset>
+                <legend>Паспортные данные</legend>
+                <label>
+                    <input type="text" name="ser_pd" pattern="[A-Z]{2}" required> Серия
+                </label> <br>
+                <label>
+                    <input type="text" name="number_pd" pattern="[0-9]{7}" required> Номер
+                </label>
+            </fieldset>
+            <fieldset>
+                <legend>Дата рождения</legend>
+                <label>
+                    <input type="text" name="year_ birth" pattern="[0-9]{4}"> Год
+                </label><br>
+                <label>
+                    <select name="month_ birth">
+                        <option value="1">Январь</option>
+                        <option value="2">Февраль</option>
+                        <option value="3">Март</option>
+                        <option value="4">Апрель</option>
+                        <option value="5">Май</option>
+                        <option value="6">Июнь</option>
+                        <option value="7">Июль</option>
+                        <option value="8">Август</option>
+                        <option value="9">Сентябрь</option>
+                        <option value="10">Октябрь</option>
+                        <option value="11">Ноябрь</option>
+                        <option value="12">Декабрь</option>
+                    </select> Месяц
+                </label><br>
+                <label>
+                    <input type="number" name="date_ birth" min="1" max="31" step="1"> Дата
+                </label><br>
+            </fieldset>
+            <label>
+                <select name="nationality" required>
+                    <option value="BY">РБ</option>
+                    <option value="RU">РФ</option>
+                    <option value="UA">Украина</option>
+                    <option value="LT">Литва</option>
+                </select> Национальность
             </label> <br>
-            <label>
-                <input type="text" name="number_pd" required><strong> Номер</strong>
+            <label>Адрес<br>
+                <input type="text" name="adress">
             </label>
         </fieldset>
         <fieldset>
-            <legend>Дата рождения</legend>
-            <label>
-                <input type="text" name="year_ birth"> <strong>Год</strong>
-            </label><br>
-            <label>
-                <select name="month_ birth">
-                    <option value="1">Январь</option>
-                    <option value="2">Февраль</option>
-                    <option value="3">Март</option>
-                    <option value="4">Апрель</option>
-                    <option value="5">Май</option>
-                    <option value="6">Июнь</option>
-                    <option value="7">Июль</option>
-                    <option value="8">Август</option>
-                    <option value="9">Сентябрь</option>
-                    <option value="10">Октябрь</option>
-                    <option value="11">Ноябрь</option>
-                    <option value="12">Декабрь</option>
-                </select><strong>Месяц</strong>
-            </label><br>
-            <label>
-                <input type="number" name="date_ birth" min="1" max="31" step="1">
-                <strong>Дата</strong>
-            </label><br>
+            <legend>Интересы</legend>
+            <fieldset>
+                <legend>Хобби</legend>
+                <label>
+                    <input type="checkbox" name="hobby[]" value="fishing"> Рыбалка
+                </label><br>
+                <label>
+                    <input type="checkbox" name="hobby[]" value="astronomy"> Астрономия
+                </label><br>
+                <label>
+                    <input type="checkbox" name="hobby[]" value="diving"> Дайвинг
+                </label><br>
+                <label>
+                    <input type="checkbox" name="hobby[]" value="stamps"> Марки
+                </label><br>
+            </fieldset>
+            <fieldset>
+                <legend>Домашние животные</legend>
+                <select name="pets[]" size="16" multiple>
+                    <optgroup label="Рыбы">
+                        <option value="crucian">карась</option>
+                        <option value="perch">окунь</option>
+                        <option value="herring">сельд</option>
+                    </optgroup>
+                    <optgroup label="Птицы">
+                        <option value="parrot">попугай</option>
+                        <option value="crow">ворона</option>
+                        <option value="chicken">курица</option>
+                    </optgroup>
+                    <optgroup label="Собаки">
+                        <option value="doberman">доберман</option>
+                        <option value="shepherd">овчарка</option>
+                        <option value="dog">дог</option>
+                    </optgroup>
+                    <optgroup label="Кошки">
+                        <option value="sphinx">сфинкс</option>
+                        <option value="british">британская</option>
+                        <option value="yard">дворовая</option>1
+                    </optgroup>
+                </select>
+            </fieldset>
         </fieldset>
-        <label>
-            <select name="nationality">
-                <option value="BY">РБ</option>
-                <option value="RU">РФ</option>
-                <option value="UA">Украина</option>
-                <option value="LT">Латвия</option>
-            </select><strong>Национальность</strong>
-        </label> <br>
-        <label> <strong>Адрес</strong><br>
-            <input type="text" name="adress">
-        </label>
-    </fieldset><br>
-    <fieldset>
-        <legend>Интересы</legend>
-    </fieldset>
+        <fieldset>
+            <legend>Данные для входа и восстановления пароля</legend>
+            <input type="text" placeholder="Логин" pattern="[A-Za-z]{5,20}" required><br>
+            <input type="password" autocomplete="off" placeholder="Пароль" pattern="[A-Za-z]{10,20}" required>
+        </fieldset>
+        <fieldset>
+            <legend>Координаты</legend>
+            <input type="email" name="email" placeholder="Введите адрес почты"><br>
+            <input type="url" name="url_add" placeholder="Введите адрес сайта">
+        </fieldset>
+        <fieldset>
+            <legend>Цифры</legend>
+            <input type="number" min="-2.5" max="2.5" step="0.1"><br>
+            <input type="range" min="1" max="10">
+        </fieldset>
+        <fieldset>
+            <legend>Кнопки управления</legend>
+            <input type="submit" id="f_add" value="Отправить">
+            <input type="reset" value="Сбросить"><br>
+            <button type="button">
+                <img src="email.jpg" alt="Кнопка почты">
+            </button>
+        </fieldset>
+    </form>
+
 
 </body>
 
