@@ -7,19 +7,20 @@ body {
 }
 
 table {
-    width: 100%
+    width: 100%;
+    text-align: center
 }
 
 .cell1 {
     width: 33%;
     text-align: left
 }
-
+/*
 .cell2 {
     width: 34%;
     text-align: center
 }
-
+*/
 .cell3 {
     width: 33%;
     text-align: right
