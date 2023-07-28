@@ -1,0 +1,11 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    background-color: white;
+    margin-left: 10%;
+    width: 660px
+}
+table,
+img {
+    display: none
+}

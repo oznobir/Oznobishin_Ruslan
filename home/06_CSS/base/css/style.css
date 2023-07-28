@@ -1,0 +1,26 @@
+body {
+    font-family: sans-serif;
+    font-size: 14px;
+    background-color: #eee;
+    margin-left: 10%;
+    width: 660px
+}
+
+table {
+    width: 100%
+}
+
+.cell1 {
+    width: 33%;
+    text-align: left
+}
+
+.cell2 {
+    width: 34%;
+    text-align: center
+}
+
+.cell3 {
+    width: 33%;
+    text-align: right
+}
