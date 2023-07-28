@@ -11,8 +11,8 @@ table {
     text-align: center
 }
 
-.cell1 {
-    width: 33%;
+.cell_l {
+    width: 60px;
     text-align: left
 }
 /*
@@ -21,7 +21,7 @@ table {
     text-align: center
 }
 */
-.cell3 {
-    width: 33%;
+.cell_r {
+    width: 60px;
     text-align: right
 }
