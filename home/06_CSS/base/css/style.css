@@ -3,19 +3,17 @@ body {
     font-size: 14px;
     background-color: #eee;
     margin-left: 10%;
-    width: 660px
+    margin-right: 10%;
 }
 
-table {
-    width: 100%;
-    text-align: center
+.right_f {
+    float: right
 }
 
-.cell_l {
-    width: 33%;
-    text-align: left
+.left_f {
+    float: left
 }
-.cell_r {
-    width: 33%;
-    text-align: right
+
+footer .d_img {
+    text-align: center;
 }

@@ -3,9 +3,9 @@ body {
     font-size: 14px;
     background-color: white;
     margin-left: 10%;
-    width: 660px
+    margin-right: 10%;
 }
-table,
-img {
-    display: none
+
+.d_img {
+    display: none;
 }
