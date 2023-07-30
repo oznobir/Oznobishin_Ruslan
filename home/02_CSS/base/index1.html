@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карты</title>
+    <style>
+        body {
+            width: 1000px;
+        }
+
+        .sprite_card {
+            background-image: url(images/cards.png);
+            background-repeat: no-repeat;
+            width: 139px;
+            height: 188px;
+        }
+
+        .chervi_8 {
+            background-position: -432px -1196px;
+        }
+
+        .jocker {
+            background-position: 0px -2389px;
+        }
+
+        .piki_dama {
+
+            background-position: 0px -1792px;
+        }
+
+        .tref_tuz {
+            background-position: -144px -2190px;
+
+        }
+
+        .bubi_9 {
+            background-position: -288px -1394px;
+        }
+
+        .row_card_w {
+            width: 695px;
+        }
+        .overlay_card_w {
+            position: relative;
+        }
+
+        .overlay_card_2 {
+            margin-left: 70px;
+            z-index: 2;
+            position: absolute;
+
+        }
+
+        .overlay_card_3 {
+            margin-left: 140px;
+            position: absolute;
+            z-index: 3;
+
+        }
+
+        .overlay_card_4 {
+            margin-left: 210px;
+            position: absolute;
+            z-index: 4;
+        }
+
+        .overlay_card_5 {
+            margin-left: 280px;
+            position: absolute;
+            z-index: 5;
+        }
+
+        .right_float {
+            float: right
+        }
+
+        .left_float {
+            float: left
+        }
+        .clear {
+            clear: both
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>В один ряд: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
+    
+    <div class="row_card_w">
+        <div class="sprite_card chervi_8 left_float"></div>
+        <div class="sprite_card jocker right_float"></div>
+        <div class="sprite_card piki_dama left_float"></div>
+        <div class="sprite_card tref_tuz right_float"></div>
+        <div class="sprite_card bubi_9 left_float"></div>
+        <div class="clear"></div>
+    </div>
+        <h1>С наложением: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
+    
+    <div class="overlay_card_w">
+        <div class="sprite_card chervi_8 left_float"></div>
+        <div class="sprite_card jocker right_float overlay_card_5"></div>
+        <div class="sprite_card piki_dama left_float overlay_card_2"></div>
+        <div class="sprite_card tref_tuz right_float overlay_card_4"></div>
+        <div class="sprite_card bubi_9 left_float overlay_card_3"></div>
+    </div>
+
+
+    
+
+</body>
+
+</html>
