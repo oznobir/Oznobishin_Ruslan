@@ -39,15 +39,17 @@
             background-position: -288px -1394px;
         }
 
-        .row_card_w {
+        .row_card_div {
             width: 695px;
         }
-        .overlay_card_w {
+
+        .overlay_card_1 {
             position: relative;
         }
 
         .overlay_card_2 {
             margin-left: 70px;
+            margin-top: 20px;
             z-index: 2;
             position: absolute;
 
@@ -55,6 +57,7 @@
 
         .overlay_card_3 {
             margin-left: 140px;
+            margin-top: 40px;
             position: absolute;
             z-index: 3;
 
@@ -62,11 +65,13 @@
 
         .overlay_card_4 {
             margin-left: 210px;
+            margin-top: 60px;
             position: absolute;
             z-index: 4;
         }
 
         .overlay_card_5 {
+            margin-top: 80px;
             margin-left: 280px;
             position: absolute;
             z-index: 5;
@@ -79,6 +84,7 @@
         .left_float {
             float: left
         }
+
         .clear {
             clear: both
         }
@@ -89,8 +95,8 @@
 <body>
 
     <h1>В один ряд: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
-    
-    <div class="row_card_w">
+
+    <div class="row_card_div">
         <div class="sprite_card chervi_8 left_float"></div>
         <div class="sprite_card jocker right_float"></div>
         <div class="sprite_card piki_dama left_float"></div>
@@ -98,18 +104,25 @@
         <div class="sprite_card bubi_9 left_float"></div>
         <div class="clear"></div>
     </div>
-        <h1>С наложением: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
-    
-    <div class="overlay_card_w">
-        <div class="sprite_card chervi_8 left_float"></div>
+    <h1>С наложением: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
+
+    <div>
+        <div class="sprite_card chervi_8 left_float overlay_card_1"></div>
         <div class="sprite_card jocker right_float overlay_card_5"></div>
         <div class="sprite_card piki_dama left_float overlay_card_2"></div>
         <div class="sprite_card tref_tuz right_float overlay_card_4"></div>
         <div class="sprite_card bubi_9 left_float overlay_card_3"></div>
+        <div class="clear"> <br><br><br><br><br></div>
     </div>
-
-
-    
+    <h1>С наложением в обратном порядке от: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
+    <div>
+        <div class="sprite_card chervi_8 left_float overlay_card_5"></div>
+        <div class="sprite_card jocker left_float overlay_card_1"></div>
+        <div class="sprite_card piki_dama right_float overlay_card_4"></div>
+        <div class="sprite_card tref_tuz right_float overlay_card_2"></div>
+        <div class="sprite_card bubi_9 left_float overlay_card_3"></div>
+        <div class="clear"><br><br><br><br><br></div>
+    </div>
 
 </body>
 
