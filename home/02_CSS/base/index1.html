@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карты</title>
     <style>
-        .sprite_card {
+        .sprite_card div {
             background-image: url(images/cards.png);
             background-repeat: no-repeat;
             width: 139px;
@@ -36,8 +36,12 @@
             background-position: -288px -1394px;
         }
 
-        .left_70px {
+        .left_70px div {
             margin-left: -70px;
+        }
+
+        .card_1 {
+            margin-left: 0px;
         }
 
         .clear {
@@ -51,24 +55,22 @@
 
     <h1>В один ряд: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
 
-    <div>
-        <div class="sprite_card chervi_8"></div>
-        <div class="sprite_card piki_dama"></div>
-        <div class="sprite_card bubi_9"></div>
-        <div class="sprite_card tref_tuz"></div>
-        <div class="sprite_card jocker"></div>
-        <div class="clear"></div>
+    <div class="sprite_card">
+        <div class="chervi_8"></div>
+        <div class="piki_dama"></div>
+        <div class="bubi_9"></div>
+        <div class="tref_tuz"></div>
+        <div class="jocker"></div>
     </div>
-    <h1>С наложением 1: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
-    <div>
-        <div class="sprite_card chervi_8"></div>
-        <div class="sprite_card piki_dama left_70px"></div>
-        <div class="sprite_card bubi_9 left_70px"></div>
-        <div class="sprite_card tref_tuz left_70px"></div>
-        <div class="sprite_card jocker left_70px"></div>
-        <div class="clear"></div>
+    <h1 class="clear">С наложением 1: черви 8, пики дама, буби 9, треф туз, джоккер</h1>
+    <div class="sprite_card left_70px">
+        <div class="card_1 chervi_8"></div>
+        <div class="piki_dama "></div>
+        <div class="bubi_9 "></div>
+        <div class="ref_tuz"></div>
+        <div class="jocker"></div>
     </div>
-    
+
 </body>
 
 </html>
