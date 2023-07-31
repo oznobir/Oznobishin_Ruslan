@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список, контейнер</title>
+    <style>
+        .ul {
+            width: 350px;
+        }
+
+        .cont {
+            width: 400px;
+            height: 80px;
+            background-color: black;
+            color: green;
+            overflow: auto;
+            white-space: pre;
+        }
+
+        ul {
+            list-style-type: upper-roman;
+
+        }
+
+        ul ul {
+            list-style-type: lower-roman;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ul">
+        <ul>
+            <li> Контейнер с кодом
+                <ul>
+                    <li>Цвет фона: черный</li>
+                    <li>Цвет текста: зеленый</li>
+                    <li>Ширина: 400рх</li>
+                    <li>Максимальная высота контейнера: 4-е строки</li>
+                    <li>Переполнение: автоматическое</li>
+                </ul>
+            </li>
+            <li> Список
+                <ul>
+                    <li>Ширина: 350рх</li>
+                    <li>Тип списка: римские цифры</li>
+                    <li>Тип вложенного списка: римские нижний регистр цифры</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="cont">
+        <code>
+#!/usr/bin/env python
+print 'Hello. I am a python program.'
+name = raw_input("What is your name?")
+print "Hello there, " + name + "!"
+#!/usr/bin/env python
+print 'Hello. I am a python program.'
+name = raw_input("What is your name?")
+print "Hello there, " + name + "!"
+#!/usr/bin/env python
+print 'Hello. I am a python program.'
+name = raw_input("What is your name?")
+print "Hello there, " + name + "!"
+#!/usr/bin/env python
+print 'Hello. I am a python program.'
+name = raw_input("What is your name?")
+print "Hello there, " + name + "!"
+       </code>
+    </div>
+</body>
+
+</html>
