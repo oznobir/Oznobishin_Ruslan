@@ -4,49 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Баз. задание 3</title>
+    <title>Доп. задание 2</title>
     <style>
         .body {
             display: flex;
-            flex-direction: column;            
+            flex-direction: column;
         }
+
         .wrap {
             background: #dbdbdb;
             display: flex;
-            flex-direction: row;
-            margin-bottom: .2em;
-            align-items: start;
-           
+            flex-direction: row;            
+            
         }
 
         .menu {
             width: 15em;
             background: #cccccc;
+            
         }
 
         main {
             display: flex;
             flex-direction: column;
-            
+
         }
 
         .content {
             background: #aaaaaa;
+            
+        }
+        .wrap, .menu, .content {
             margin-bottom: .2em;
 
         }
 
         .footer {
             background: #ccc;
-
-        }       
-
-        div.content img {
-            display: inline-block;
+    
         }
 
-        .div_rigth {
-            text-align: right;
+        .content img {
+            float: right;
+        }
+
+        .clear {
+            clear: right;
         }
     </style>
 </head>
@@ -85,14 +88,16 @@
                     <p>
                         Примечание: в данном задании "Статья 1" и "Статья 2" должны иметь один и тот же класс
                     </p>
-                    <div class="div_rigth">
-                        <img src="../base/images/icon_mail.png" alt="Email">
+                    <img src="../base/images/icon_mail.png" alt="Email">
+                    <div class="clear">                        
+                    </div>
+
                 </section>
             </main>
         </div>
         <footer class="footer">
             <h3>Подвал</h3>
-            <p>Ширина блока - на всю ширину, высота определяется контентом. Сделаю еще фон #bbb</p>
+            <p>Ширина блока - на всю ширину, высота определяется контентом. еще фон #bbb</p>
         </footer>
     </div>
 

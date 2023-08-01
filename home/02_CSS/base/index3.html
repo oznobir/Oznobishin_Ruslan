@@ -28,12 +28,16 @@
         }
 
         .clear {
-            clear: left;
+            clear: both;
         }
 
-        div.content img {
-            display: inline-block;
+        .content img {
+            float: right;
         }
+
+        /*div.content img {
+            display: inline-block;
+        }*/
 
         .div_rigth {
             text-align: right;
@@ -80,14 +84,17 @@
                     <p>
                         Примечание: в данном задании "Статья 1" и "Статья 2" должны иметь один и тот же класс
                     </p>
-                    <div class="div_rigth">
-                        <img src="images/icon_mail.png" alt="Email">
+                    <img src="images/icon_mail.png" alt="Email">
+
+                    <div class="clear">
                     </div>
+                    <!--                    <div class="div_rigth">
+                        <img src="images/icon_mail.png" alt="Email">
+                    </div> -->
+
             </section>
         </main>
-    </div>
-    <div class="clear">
-    </div>
+
     </div>
     <footer>
         <div class="footer">
