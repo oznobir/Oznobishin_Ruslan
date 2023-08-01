@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баз. задание 3</title>
+    <style>
+        .body {
+            display: flex;
+            flex-direction: column;            
+        }
+        .wrap {
+            background: #dbdbdb;
+            display: flex;
+            flex-direction: row;
+            margin-bottom: .2em;
+            align-items: start;
+           
+        }
+
+        .menu {
+            width: 15em;
+            background: #cccccc;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            
+        }
+
+        .content {
+            background: #aaaaaa;
+            margin-bottom: .2em;
+
+        }
+
+        .footer {
+            background: #ccc;
+
+        }       
+
+        div.content img {
+            display: inline-block;
+        }
+
+        .div_rigth {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="body">
+        <div class="wrap">
+            <nav class="menu">
+                <h3>Блок навигации</h3>
+                <ul>
+                    <li>Ширина блока 15em</li>
+                    <li>Должен присутствовать цвет фона</li>
+                    <li>Распологаться слева</li>
+                    <li>Блок навигации наполните различным контектом достаточным, чтобы
+                        чтобы он стал захватывать по высоте блок Статья 2.
+                    </li>
+                </ul>
+            </nav>
+            <main>
+                <section class="content">
+                    <h3>Статья 1</h3>
+                    <p>
+                        Ширина блока - на всю ширину.
+                        Должен присутствовать цвет фона.
+                        Сделайте отступ от соседей 0,2 em при помощи свойства margin-botton
+                    </p>
+                </section>
+                <section class="content">
+                    <h3>Статья 2</h3>
+                    <p>
+                        Ширина блока - на всю ширину.
+                        Должен присутствовать цвет фона.
+                        Сделайте отступ от соседей 0,2 em при помощи свойства margin-botton.
+                        Вставить картинку при помощи тега, плавание справа.
+                    </p>
+                    <p>
+                        Примечание: в данном задании "Статья 1" и "Статья 2" должны иметь один и тот же класс
+                    </p>
+                    <div class="div_rigth">
+                        <img src="../base/images/icon_mail.png" alt="Email">
+                </section>
+            </main>
+        </div>
+        <footer class="footer">
+            <h3>Подвал</h3>
+            <p>Ширина блока - на всю ширину, высота определяется контентом. Сделаю еще фон #bbb</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>
