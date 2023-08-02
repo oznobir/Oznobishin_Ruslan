@@ -14,7 +14,8 @@
         .wrap {
             background: #dbdbdb;
             display: flex;
-            flex-direction: row;            
+            flex-direction: row;  
+            align-items: stretch;          
             
         }
 
@@ -27,6 +28,7 @@
         main {
             display: flex;
             flex-direction: column;
+            justify-content: space-around;
 
         }
 
@@ -45,11 +47,11 @@
         }
 
         .content img {
-            float: right;
+            display: inline-block;
         }
 
-        .clear {
-            clear: right;
+        .div_img {
+            text-align: right;
         }
     </style>
 </head>
@@ -88,8 +90,9 @@
                     <p>
                         Примечание: в данном задании "Статья 1" и "Статья 2" должны иметь один и тот же класс
                     </p>
-                    <img src="../base/images/icon_mail.png" alt="Email">
-                    <div class="clear">                        
+                    
+                    <div class="div_img"> 
+                        <img src="../base/images/icon_mail.png" alt="Email">                       
                     </div>
 
                 </section>
