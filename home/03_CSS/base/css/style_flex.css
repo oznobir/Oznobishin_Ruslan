@@ -1,59 +1,66 @@
 div.MenuLevel1_fl {
-            display: flex;
-            flex-direction: row;
-        }
+    display: flex;
+    flex-direction: row;
 
-        div.MenuLevel1_fl>div {
-            width: 90px;
-            color: #888;
-            background-color: #d3d3d3;
-            border: solid #4e4e4e 1px;
-            border-radius: 3px;
-            padding: 2px;
-            position: relative;
-            cursor: pointer;
+}
 
-
-        }
-
-        div.MenuLevel2_fl {
-            width: 90px;
-            display: none
-        }
-
-        div.MenuLevel2_fl>div {
-            color: #888;
-            background-color: #d3d3d3;
-            border: solid #4e4e4e 1px;
-            border-radius: 3px;
-            padding: 2px;
-            cursor: pointer
-        }
-        div.MenuLevel1_fl>div:hover {
-            color: #d3d3d3;
-            background-color: #888;
-        }
-
-        div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
-            display: block;
-            position: absolute;
-            left: 0%;
-            top: 100%;
-            z-index: 1
-        }
-        
+div.MenuLevel1_fl>div {
+    width: 90px;
+    color: #888;
+    background-color: #d3d3d3;
+    border: solid #4e4e4e 1px;
+    border-radius: 3px;
+    padding: 2px;
+    position: relative;
+    cursor: pointer;
 
 
-        @media all and (max-width:550px) {
-            div.MenuLevel1_fl {
-                flex-direction: column;
+}
 
-            }
+div.MenuLevel2_fl {
+    width: 90px;
+    height: 0px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(0);
+    transition: all 1.5s ease;
+}
 
-            div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
+div.MenuLevel2_fl>div {
+    color: #888;
+    background-color: #d3d3d3;
+    border: solid #4e4e4e 1px;
+    border-radius: 3px;
+    padding: 2px;
+    cursor: pointer
+}
 
-                left: 100%;
-                top: 0%;
+div.MenuLevel1_fl>div:hover {
+    color: #d3d3d3;
+    background-color: #888;
+}
 
-            }
-        }
+div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
+    opacity: 1;
+    visibility: visible;
+    position: absolute;
+    left: 0%;
+    top: 100%;
+    z-index: 1
+}
+
+
+
+@media all and (max-width:580px) {
+    div.MenuLevel1_fl {
+        flex-direction: column;
+
+    }
+
+    div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
+
+        left: 100%;
+        top: 0%;
+
+    }
+}

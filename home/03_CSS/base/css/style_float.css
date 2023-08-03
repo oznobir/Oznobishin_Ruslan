@@ -1,4 +1,5 @@
-div.MenuLevel1>div {
+div.MenuLevel1>div,
+div.MenuLevel2>div {
     width: 90px;
     color: #888;
     background-color: #d3d3d3;
@@ -7,26 +8,27 @@ div.MenuLevel1>div {
     padding: 2px;
     position: relative;
     cursor: pointer;
+
+}
+
+div.MenuLevel1>div {
     float: left;
 
 }
 
 div.MenuLevel2 {
     width: 90px;
-    display: none
+    height: 0px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(0);
+    transition: all 1.5s ease;
 }
 
-div.MenuLevel2>div {
-    color: #888;
-    background-color: #d3d3d3;
-    border: solid #4e4e4e 1px;
-    border-radius: 3px;
-    padding: 2px;
-    cursor: pointer
-}
 
 div.MenuLevel1>div:hover div.MenuLevel2 {
-    display: block;
+    opacity: 1;
+    visibility: visible;
     position: absolute;
     left: 0%;
     top: 100%;
@@ -37,10 +39,7 @@ div.MenuLevel1>div:hover {
     color: #d3d3d3;
     background-color: #888;
 }
-div.MenuLevel1_fl>div:hover {
-            color: #d3d3d3;
-            background-color: #888;
-        }
+
 .clear {
     clear: both;
 }
