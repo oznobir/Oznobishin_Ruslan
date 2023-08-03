@@ -12,7 +12,7 @@ div.MenuLevel1>div {
 }
 
 div.MenuLevel2 {
-    width: 70px;
+    width: 90px;
     display: none
 }
 
@@ -33,6 +33,14 @@ div.MenuLevel1>div:hover div.MenuLevel2 {
     z-index: 1
 }
 
+div.MenuLevel1>div:hover {
+    color: #d3d3d3;
+    background-color: #888;
+}
+div.MenuLevel1_fl>div:hover {
+            color: #d3d3d3;
+            background-color: #888;
+        }
 .clear {
     clear: both;
 }
