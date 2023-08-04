@@ -14,6 +14,8 @@
         margin: 0;
     }
 
+
+
     p>a[href$=".doc"] img,
     p>a[href$=".pdf"] img,
     p>a[href$=".zip"] img {
@@ -33,10 +35,21 @@
     }
 
     /*
-p>a[href^="https"]    li>a[href] {
-        background: ;
+    p>a[href^="https"]::before { 
+        content: url(pic/extref.png);
     }
 
+    p>a[href$=".doc"]::after {
+        content: url(pic/logo-doc.jpg);
+    }
+    p>a[href$=".pdf"]::after {
+        content: url(pic/logo-pdf.png);
+    }
+    p>a[href$=".zip"]::after {
+        content: url(pic/logo-zip.gif);
+    }
+    li>a[href]::before {
+        content: url(pic/logo-list.jpg);
     }
 */
 </style>
