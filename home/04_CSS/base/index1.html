@@ -7,7 +7,6 @@
     <title>Base#1 04_CSS</title>
 </head>
 <style>
-  
     p {
         border: 1px solid #d8d8d8;
         padding: 4px;
@@ -15,23 +14,31 @@
         margin: 0;
     }
 
-    p>a[href^="https"]::before { 
-        content: url(pic/extref.png);
+    p>a[href$=".doc"] img,
+    p>a[href$=".pdf"] img,
+    p>a[href$=".zip"] img {
+        visibility: hidden;
     }
 
-    p>a[href$=".doc"]::after {
-        content: url(pic/logo-doc.jpg);
-    }
-    p>a[href$=".pdf"]::after {
-        content: url(pic/logo-pdf.png);
-    }
-    p>a[href$=".zip"]::after {
-        content: url(pic/logo-zip.gif);
-    }
-    li>a[href]::before {
-        content: url(pic/logo-list.jpg);
+    p>a[href$=".doc"]:hover img {
+        visibility: visible;
     }
 
+    p>a[href$=".pdf"]:hover img {
+        visibility: visible;
+    }
+
+    p>a[href$=".zip"]:hover img {
+        visibility: visible;
+    }
+
+    /*
+p>a[href^="https"]    li>a[href] {
+        background: ;
+    }
+
+    }
+*/
 </style>
 
 <body>
@@ -41,7 +48,7 @@
         имени файла, используемое для файлов, представляющих текст, с разметкой или без.Расширение .DOC часто
         использовалось для обозначения простых текстовых файлов без форматирования, однако позже стало использоваться
         для двоичных форматов с разметкой.<br>
-        <a href="files/document.doc">Документ MS Word</a>
+        <a href="files/document.doc">Документ MS Word<img src="pic/logo-doc.jpg" alt=".DOC"></a>
     </p>
 
 
@@ -49,14 +56,14 @@
         формат электронных документов, разработанный фирмой Adobe Systems с использованием ряда возможностей языка
         PostScript.
         <br>
-        <a href="files/document.pdf">Документ PDF</a>
+        <a href="files/document.pdf">Документ PDF<img src="pic/logo-pdf.png" alt=".PDF"></a>
     </p>
 
     <p>ZIP — популярный формат сжатия данных и архивации файлов. Файл в этом формате обычно имеет расширение <a
             href="https://ru.wikipedia.org/wiki/zip" target="_blank">.zip</a> и хранит в сжатом или несжатом виде один
         или несколько файлов, которые можно из него извлечь путём распаковки с помощью специальной программы.
         <br>
-        <a href="files/document.zip">Архив</a>
+        <a href="files/document.zip">Архив<img src="pic/logo-zip.gif" alt=".ZIP"></a>
     </p>
     <h3>Это список из файлов</h3>
     <ul>
