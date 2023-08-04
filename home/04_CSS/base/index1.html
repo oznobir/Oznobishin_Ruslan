@@ -15,22 +15,25 @@
     }
 
 
-
-    p>a[href$=".doc"] img,
-    p>a[href$=".pdf"] img,
-    p>a[href$=".zip"] img {
+    p img {
         visibility: hidden;
     }
 
-    p>a[href$=".doc"]:hover img {
+    /*p>a[href$=".doc"] img,
+    p>a[href$=".pdf"] img,
+    p>a[href$=".zip"] img {
+        visibility: hidden;
+    }*/
+
+    p>a[href$=".doc"]:hover~img {
         visibility: visible;
     }
 
-    p>a[href$=".pdf"]:hover img {
+    p>a[href$=".pdf"]:hover~img {
         visibility: visible;
     }
 
-    p>a[href$=".zip"]:hover img {
+    p>a[href$=".zip"]:hover~img {
         visibility: visible;
     }
 
@@ -61,7 +64,7 @@
         имени файла, используемое для файлов, представляющих текст, с разметкой или без.Расширение .DOC часто
         использовалось для обозначения простых текстовых файлов без форматирования, однако позже стало использоваться
         для двоичных форматов с разметкой.<br>
-        <a href="files/document.doc">Документ MS Word<img src="pic/logo-doc.jpg" alt=".DOC"></a>
+        <a href="files/document.doc">Документ MS Word</a><img src="pic/logo-doc.jpg">
     </p>
 
 
@@ -69,14 +72,14 @@
         формат электронных документов, разработанный фирмой Adobe Systems с использованием ряда возможностей языка
         PostScript.
         <br>
-        <a href="files/document.pdf">Документ PDF<img src="pic/logo-pdf.png" alt=".PDF"></a>
+        <a href="files/document.pdf">Документ PDF</a><img src="pic/logo-pdf.png">
     </p>
 
     <p>ZIP — популярный формат сжатия данных и архивации файлов. Файл в этом формате обычно имеет расширение <a
             href="https://ru.wikipedia.org/wiki/zip" target="_blank">.zip</a> и хранит в сжатом или несжатом виде один
         или несколько файлов, которые можно из него извлечь путём распаковки с помощью специальной программы.
         <br>
-        <a href="files/document.zip">Архив<img src="pic/logo-zip.gif" alt=".ZIP"></a>
+        <a href="files/document.zip">Архив</a><img src="pic/logo-zip.gif">
     </p>
     <h3>Это список из файлов</h3>
     <ul>
