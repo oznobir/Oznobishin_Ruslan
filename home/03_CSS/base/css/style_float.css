@@ -21,7 +21,6 @@ div.MenuLevel2 {
     height: 0px;
     visibility: hidden;
     opacity: 0;
-    transform: translateY(0);
     transition: all 1.5s ease;
 }
 
