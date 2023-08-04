@@ -4,7 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>04-CSS-base2 Таблица</title>
+    <style>
+        tr:first-child>th {
+            background: #808080;
+        }
+
+        tr:not(:first-child) th {
+            text-align: left;
+            width: 200px;
+        }
+
+        tr:last-child {
+            text-align: center;
+        }
+        tr:not(:last-child) td {
+            border-bottom: 2px dotted #808080;
+            border-left: 2px dotted #808080;
+        }
+        tr:not(:first-child) th {
+            border-bottom: 2px dotted #808080;
+        }
+        /*
+        tr:not(:first-child)  th, tr:not(:last-child) > td {
+            border-bottom: 2px dotted black;
+        }
+        tr:not(:last-child)  td:not(:last-child) {
+            border-left: 2px dotted black;
+            border-right: 2px dotted black;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        -------------------------------
+        tr:not(:first-child)  th,  tr:not(:first-child)  td:not(:last-child) {
+            border-right: 2px dotted black;
+            border-bottom: 2px dotted black;
+            
+        }
+        tr:not(:last-child) > td:last-child {
+            border-bottom: 2px dotted black;
+            
+        }*/
+    </style>
 </head>
 
 <body>
@@ -59,7 +101,7 @@
             <td>923123379</td>
         </tr>
         <tr>
-            <td rowspan="6">ДАННЫЕ О СОТРУДНИКАХ</td>
+            <td colspan="6">ДАННЫЕ О СОТРУДНИКАХ</td>
         </tr>
     </table>
 
