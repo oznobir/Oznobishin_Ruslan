@@ -13,57 +13,57 @@
         border-radius: 0 15px 0 15px;
         margin: 0;
     }
+    li {
+        list-style-type: none;
+    }
+    ul {
+        margin-left: 0;
+        padding-left: 0;
+    }
 
 
     p img {
         visibility: hidden;
     }
 
-    /*p>a[href$=".doc"] img,
-    p>a[href$=".pdf"] img,
-    p>a[href$=".zip"] img {
-        visibility: hidden;
-    }*/
 
-    p>a[href$=".doc"]:hover~img {
+    p>a[href$=".doc"]:hover+img {
         visibility: visible;
     }
 
-    p>a[href$=".pdf"]:hover~img {
+    p>a[href$=".pdf"]:hover+img {
         visibility: visible;
     }
 
-    p>a[href$=".zip"]:hover~img {
+    p>a[href$=".zip"]:hover+img {
         visibility: visible;
     }
 
-    /*
-    p>a[href^="https"]::before { 
-        content: url(pic/extref.png);
+    p>a[href^="https"]:hover {
+        background-image: url(pic/extref.png);
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 10px 10px;
+        padding-left: 10px;
     }
 
-    p>a[href$=".doc"]::after {
-        content: url(pic/logo-doc.jpg);
+    li>a:hover {
+        background: url(pic/logo-list.jpg);
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 16px 16px;
+        padding-left: 16px;
     }
-    p>a[href$=".pdf"]::after {
-        content: url(pic/logo-pdf.png);
-    }
-    p>a[href$=".zip"]::after {
-        content: url(pic/logo-zip.gif);
-    }
-    li>a[href]::before {
-        content: url(pic/logo-list.jpg);
-    }
-*/
+
 </style>
 
 <body>
     <h1> Баз.задание №1. 04_CSS</h1>
     <h2>Форматы файлов.</h2>
     <p>.DOC или .doc (от англ. <a href="https://ru.wikipedia.org/wiki/Doc" target="_blank">document</a>) — расширение
-        имени файла, используемое для файлов, представляющих текст, с разметкой или без.Расширение .DOC часто
+        имени файла, используемое для файлов, представляющих текст, c разметкой или без.Расширение .DOC часто
         использовалось для обозначения простых текстовых файлов без форматирования, однако позже стало использоваться
-        для двоичных форматов с разметкой.<br>
+        для двоичных форматов c разметкой.<br>
         <a href="files/document.doc">Документ MS Word</a><img src="pic/logo-doc.jpg">
     </p>
 
@@ -75,8 +75,9 @@
         <a href="files/document.pdf">Документ PDF</a><img src="pic/logo-pdf.png">
     </p>
 
-    <p>ZIP — популярный формат сжатия данных и архивации файлов. Файл в этом формате обычно имеет расширение <a
-            href="https://ru.wikipedia.org/wiki/zip" target="_blank">.zip</a> и хранит в сжатом или несжатом виде один
+    <p>ZIP — популярный формат сжатия данных и архивации файлов. Файл в этом формате обычно имеет расширение 
+        <a href="https://ru.wikipedia.org/wiki/zip" target="_blank">.zip</a> и хранит в сжатом или
+        несжатом виде один
         или несколько файлов, которые можно из него извлечь путём распаковки с помощью специальной программы.
         <br>
         <a href="files/document.zip">Архив</a><img src="pic/logo-zip.gif">
