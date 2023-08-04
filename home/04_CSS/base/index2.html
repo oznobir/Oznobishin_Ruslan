@@ -13,39 +13,22 @@
         tr:not(:first-child) th {
             text-align: left;
             width: 200px;
+            border-bottom: 2px dotted #808080;
+        }
+
+        tr:not(:last-child) td {
+            border-bottom: 2px dotted #808080;
+            border-left: 2px dotted #808080;
         }
 
         tr:last-child {
             text-align: center;
         }
-        tr:not(:last-child) td {
-            border-bottom: 2px dotted #808080;
-            border-left: 2px dotted #808080;
+
+        tr:hover {
+            background: #808080;
+            color: #fff;
         }
-        tr:not(:first-child) th {
-            border-bottom: 2px dotted #808080;
-        }
-        /*
-        tr:not(:first-child)  th, tr:not(:last-child) > td {
-            border-bottom: 2px dotted black;
-        }
-        tr:not(:last-child)  td:not(:last-child) {
-            border-left: 2px dotted black;
-            border-right: 2px dotted black;
-        }
-        table {
-            border-collapse: collapse;
-        }
-        -------------------------------
-        tr:not(:first-child)  th,  tr:not(:first-child)  td:not(:last-child) {
-            border-right: 2px dotted black;
-            border-bottom: 2px dotted black;
-            
-        }
-        tr:not(:last-child) > td:last-child {
-            border-bottom: 2px dotted black;
-            
-        }*/
     </style>
 </head>
 
