@@ -10,8 +10,8 @@
   
     p {
         border: 1px solid #d8d8d8;
-        padding: 4px;
-        border-radius: 0 15px 0 15px;
+        padding: .4em;
+        border-radius: 0 1em 0 1em;
         margin: 0;
     }
     li {
@@ -22,20 +22,20 @@
         padding: 0;
     }
 
-    p>a[href^="https"]::before { 
+    p>a[href^="https"]:hover::before { 
         content: url(../base/pic/extref.png);
     }
 
-    p>a[href$=".doc"]::after {
+    p>a[href$=".doc"]:hover::after {
         content: url(../base/pic/logo-doc.jpg);
     }
-    p>a[href$=".pdf"]::after {
+    p>a[href$=".pdf"]:hover::after {
         content: url(../base/pic/logo-pdf.png);
     }
-    p>a[href$=".zip"]::after {
+    p>a[href$=".zip"]:hover::after {
         content: url(../base/pic/logo-zip.gif);
     }
-    li>a[href]::before {
+    li>a:hover::before {
         content: url(../base/pic/logo-list.jpg);
     }
 
