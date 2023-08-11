@@ -17,13 +17,27 @@
       text-decoration: underline !important;
     }
 
-    nav h4 {
+    nav h3 {
       color: #1779ba !important;
     }
 
-    article p,
-    section p {
-      padding-bottom: 2em;
+    nav>a {
+      line-height: 1;
+      display: block;
+      padding: 0.7em 0;
+    }
+
+    pre {
+      padding-top: 2em;
+    }
+
+    p {
+      padding-bottom: 0.7em;
+    }
+
+    code {
+      border-color: #cacaca;
+      background-color: white;
     }
   </style>
 </head>
@@ -47,7 +61,7 @@
           </nav>
         </div>
         <div class="cell small-12">
-          <h3>HOW-TO: Программа на Python, Часть&nbsp;1</h3>
+          <h2>HOW-TO: Программа на Python, Часть&nbsp;1</h2>
         </div>
       </div>
     </header>
@@ -56,7 +70,7 @@
         <header>
           <div class="cell small-12">
             <nav>
-              <h4>Содер&shy;жание</h4>
+              <h3>Содер&shy;жание</h3>
               <ul class="menu vertical nested" data-magellan>
                 <li><a href="#firstProg">Наша первая программа</a></li>
                 <li><a href="#cycleFor">Пример цикла For</a></li>
@@ -79,40 +93,41 @@
       <div class="grid-x grid-padding-x">
         <div class="cell small-12">
           <nav>
-            <h4>Наша первая программа</h4>
+            <h3>Наша первая программа</h3>
             <a href="#">К содержанию</a>
           </nav>
         </div>
         <div class="cell small-12">
           <section id="firstProg" data-magellan-target="firstProg">
-            <p>Наберём код в текстовом редакторе (например, в <b>gedit</b>). Потом мы разберёмся, что делает
+            <p>Наберём код в текстовом редакторе (например, в <strong>gedit</strong>). Потом мы разберёмся, что делает
               каждая строка и пойдём дальше.</p>
             <p>Введите эти 4 строки:</p>
-            <p><code>#!/usr/bin/env python <br> 
-              print 'Hello. I am a python program.' <br>
-              name = raw_input("What is your name?") <br>
-              print "Hello there, " + name + "!"</code></p>
-            <p>Это всё. Сохраните файл как <b>hello.py</b> в любом месте. Я предлагаю сохранить его в папке
-              <b>python_examples</b> в домашнем каталоге. Этот пример показывает, как просто написать
-              программу на Python. Для запуска программы нужно сделать её файл исполняемым. Для
-              этого введите в терминале
+            <p>
+            <pre><code>#!/usr/bin/env python
+print 'Hello. I am a python program.'
+name = raw_input("What is your name?")
+print "Hello there, " + name + "!"</code></pre>
+            Это всё. Сохраните файл как <strong>hello.py</strong> в любом месте. Я предлагаю сохранить его в папке
+            <strong>python_examples</strong> в домашнем каталоге. Этот пример показывает, как просто написать
+            программу на Python. Для запуска программы нужно сделать её файл исполняемым. Для
+            этого введите в терминале
             </p>
-            <p><code><b></b><u>chmod +x hello.py</u></b></code><br>
+            <p><code><strong><em><u>chmod +x hello.py</u></em></strong></code><br>
               в папке, в которой вы сохранили программу. Теперь запустите её.</p>
-
-            <p><code>greg@earth:~/python_examples$ ./hello.py <br>
-            Hello. I am a python program. <br>
-            What is your name? Ferd Burphel <br>
-            Hello there, Ferd Burphel! <br>
-            greg@earth:~/python_examples$</code><br>
-              Вот и всё.</p>
+            <p>
+            <pre><code>greg@earth:~/python_examples$ ./hello.py
+Hello. I am a python program.
+What is your name? Ferd Burphel
+Hello there, Ferd Burphel!
+greg@earth:~/python_examples$</code></pre>
+            Вот и всё.</p>
           </section>
         </div>
       </div>
       <div class="grid-x grid-padding-x">
         <div class="cell small-12">
           <nav>
-            <h4>Пример цикла For</h4>
+            <h3><strong>Пример цикла For</strong></h3>
             <a href="#">К содержанию</a>
           </nav>
         </div>
@@ -120,12 +135,13 @@
           <section id="cycleFor" data-magellan-target="cycleFor">
             <p>Теперь давайте рассмотрим пример программирования цикла. Запустите текстовый
               редактор и наберите следующую программу:</p>
-            <p><code>#!/usr/bin/env python  <br>
-          for cntr in range(0,10): <br>
-          &nbsp;&nbsp;&nbsp;&nbsp;print cntr</code> <br>
-              <i>Не забудьте поставить символ табуляции перед строкой «print cntr»</i>. Это важно. В
-              Python для указания на блоки кода используются не круглые «&#40;» и фигурные «&#123;» скобки
-              как в других языках программирования, а отступы.
+            <p>
+            <pre><code>#!/usr/bin/env python
+for cntr in range(0,10):
+    print cntr</code> </pre>
+            <i>Не забудьте поставить символ табуляции перед строкой «rint cntr»</i>. Это важно. В
+            Python для указания на блоки кода используются не круглые «&#40;» и фигурные «&#123;» скобки
+            как в других языках программирования, а отступы.
             </p>
           </section>
         </div>
