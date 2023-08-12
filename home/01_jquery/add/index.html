@@ -30,12 +30,12 @@
 
 <body>
     <h1>Проверка пароля</h1>
-    <form action="#" id="checkPass">
+    <form action="#">
         <label>
-            <input type="text" name="pass_1"> * Пароль
+            <input type="text" class="pass_1" name="pass_1"> * Пароль
         </label>
         <label>
-            <input type="text" name="pass_2"> * Повторите пароль
+            <input type="text" class="pass_2" name="pass_2"> * Повторите пароль
         </label>
         <input type="submit" value="Отправить">
 
@@ -44,6 +44,35 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous">
         </script>
+    <script>
+
+
+        /////////////////
+        $(document).ready(function () {
+            $('.pass_1').keypress(function () {
+                var v_pass_1 = $('.pass_1').val();
+                var v_pass_2 = $('.pass_2').val();
+                if (v_pass_1 != v_pass_2) {
+                    $('.pass_1').css('background', 'red');
+                    $('.pass_2').css('background', 'red');
+                } else if ((v_pass_1 = v_pass_2) || (v_pass_2 = (''))) {
+                    $('.pass_1').css('background', 'green');
+                    $('.pass_2').css('background', 'green');
+                }
+            })
+            $('.pass_2').keypress(function () {
+                var v_pass_1 = $('.pass_1').val();
+                var v_pass_2 = $('.pass_2').val();
+                if (v_pass_1 != v_pass_2) {
+                    $('.pass_1').css('background', 'red');
+                    $('.pass_2').css('background', 'red');
+                } else if ((v_pass_1 = v_pass_2) || (v_pass_2 = (''))) {
+                    $('.pass_1').css('background', 'green');
+                    $('.pass_2').css('background', 'green');
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>
