@@ -4,8 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BASE 01-JQuery Таблица</title>
+    <title>Таблица - BASE 01-JQuery</title>
     <style>
+        body {
+            margin-left: 5%;
+        }
+
         tr:nth-child(odd) {
             background: #d0d0d0;
 
@@ -34,6 +38,14 @@
         tr:hover {
             background: black;
             color: #fff;
+        }
+
+        #btn {
+            background-color: #1779ba;
+            padding: .2em;
+            width: 150px;
+            text-align: center;
+
         }
     </style>
 </head>
@@ -94,8 +106,24 @@
             <td colspan="6">ДАННЫЕ О СОТРУДНИКАХ</td>
         </tr>
     </table>
+    <button id="btn">Нет скрытых строк</button>
+
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous">
+        </script>
+    <script>
+        $(document).ready(function () {
+            $('tr').on('click', function () {
+                $(this).hide();
+                $('#btn').text('Показать строки')
+            })
+            $('#btn').click (function (){
+                var text_btn = (this).text;
+                if  (text_btn = ('Показать строки')) {
+                $('#btn').text('Скрыть все строки');
+            }
+            })
+        });
     </script>
 </body>
 
