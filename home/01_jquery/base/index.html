@@ -114,7 +114,7 @@
     <script>
         $(document).ready(function () {
             $('tr').click(function () {
-                $(this).hide();
+                $(this).hide('slow');
                 var text_btn = $('#btn').text;
                 if (text_btn = ('Нет скрытых строк')) {
                     $('#btn').text('Показать строки')
@@ -123,7 +123,8 @@
             $('#btn').click(function () {
                 var text_btn = ('#btn').text;
                 if (text_btn = ('Показать строки')) {
-                    $('#btn').text('Нет скрытых строк')
+                    $('#btn').text('Нет скрытых строк');
+                    $('tr').show('slow')
                 }
             })
         });
