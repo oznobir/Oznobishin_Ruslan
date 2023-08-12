@@ -115,14 +115,12 @@
         $(document).ready(function () {
             $('tr').click(function () {
                 $(this).hide();
-                var text_btn = $('#btn').text;
-                if (text_btn = ('Нет скрытых строк')) {
+                if ($('#btn').text = ('Нет скрытых строк')) {
                     $('#btn').text('Показать строки')
                 }
             })
             $('#btn').click(function () {
-                var text_btn = (this).text;
-                if (text_btn = ('Показать строки')) {
+                if ((this).text = ('Показать строки')) {
                     $(this).text('Нет скрытых строк');
                     $('tr').show()
                 }
