@@ -48,10 +48,10 @@
 
 
         /////////////////
-        $(document).ready(function () {           
+        $(document).ready(function () {
             $('.pass_1').keypress(function () {
-              var  v_pass_1 = $('.pass_1').val();
-              var v_pass_2 = $('.pass_2').val();                                
+                var v_pass_1 = $('.pass_1').val();
+                var v_pass_2 = $('.pass_2').val();
                 if (v_pass_1 != v_pass_2) {
                     $('.pass_1').css('background', 'red');
                     $('.pass_2').css('background', 'red');
@@ -59,16 +59,20 @@
                     $('.pass_1').css('background', 'green');
                     $('.pass_2').css('background', 'green');
                 }
+
             })
             $('.pass_2').keypress(function () {
-                             
+                var v_pass_1 = $('.pass_1').val();
+                var v_pass_2 = $('.pass_').val();
                 if (v_pass_1 != v_pass_2) {
                     $('.pass_1').css('background', 'red');
                     $('.pass_2').css('background', 'red');
-                } else  {
+                } else {
                     $('.pass_1').css('background', 'green');
                     $('.pass_2').css('background', 'green');
                 }
+
+
             })
         })
     </script>
