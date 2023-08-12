@@ -19,11 +19,11 @@
         form label,
         form>input {
             display: block;
-            padding-bottom: .2em;
+            padding-bottom: .8em;
         }
 
         form>input {
-            margin-top: 1em;
+            margin-top: 0.4em;
         }
     </style>
 </head>
@@ -49,9 +49,10 @@
 
         /////////////////
         $(document).ready(function () {
+            var v_pass_1 = 0;
+            var v_pass_2 = 0;
             $('.pass_1').keypress(function () {
-                var v_pass_1 = $('.pass_1').val();
-                var v_pass_2 = $('.pass_2').val();
+                v_pass_1 = $('.pass_1').val();                
                 if (v_pass_1 != v_pass_2) {
                     $('.pass_1').css('background', 'red');
                     $('.pass_2').css('background', 'red');
@@ -61,8 +62,7 @@
                 }
             })
             $('.pass_2').keypress(function () {
-                var v_pass_1 = $('.pass_1').val();
-                var v_pass_2 = $('.pass_2').val();
+                v_pass_2 = $('.pass_2').val();
                 if (v_pass_1 != v_pass_2) {
                     $('.pass_1').css('background', 'red');
                     $('.pass_2').css('background', 'red');
