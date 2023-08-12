@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADD 01-JQuery Пароль</title>
+    <style>
+        body {
+            padding-left: 5%;
+        }
+
+        form {
+            border: 1px solid black;
+            width: 350px;
+            padding: .3em .3em;
+        }
+
+        form label,
+        form>input {
+            display: block;
+            padding-bottom: .2em;
+        }
+
+        form>input {
+            margin-top: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Проверка пароля</h1>
+    <form action="#" id="checkPass">
+        <label>
+            <input type="text" name="pass_1"> * Пароль
+        </label>
+        <label>
+            <input type="text" name="pass_2"> * Повторите пароль
+        </label>
+        <input type="submit" value="Отправить">
+
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>
