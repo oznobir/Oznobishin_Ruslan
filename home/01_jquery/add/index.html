@@ -19,23 +19,23 @@
         form label,
         form>input {
             display: block;
-            padding-bottom: .8em;
+            padding-bottom: .4em;
         }
 
         form>input {
-            margin-top: 0.4em;
+            margin-top: .8em;
         }
     </style>
 </head>
 
 <body>
     <h1>Проверка пароля</h1>
-    <form action="#">
+    <form action="#" method="post">
         <label>
-            <input type="text" class="pass_1" name="pass_1"> * Пароль
+            <input type="text" class="pass_1" name="p_1" autocomplete="off"> * Пароль
         </label>
         <label>
-            <input type="text" class="pass_2" name="pass_2"> * Повторите пароль
+            <input type="text" class="pass_2" name="p_2" autocomplete="off"> * Повторите пароль
         </label>
         <input type="submit" value="Отправить">
 
@@ -48,25 +48,24 @@
 
 
         /////////////////
-        $(document).ready(function () {
-            var v_pass_1 = 0;
-            var v_pass_2 = 0;
+        $(document).ready(function () {           
             $('.pass_1').keypress(function () {
-                v_pass_1 = $('.pass_1').val();                
+              var  v_pass_1 = $('.pass_1').val();
+              var v_pass_2 = $('.pass_2').val();                                
                 if (v_pass_1 != v_pass_2) {
                     $('.pass_1').css('background', 'red');
                     $('.pass_2').css('background', 'red');
-                } else if ((v_pass_1 = v_pass_2) || (v_pass_2 = (''))) {
+                } else {
                     $('.pass_1').css('background', 'green');
                     $('.pass_2').css('background', 'green');
                 }
             })
             $('.pass_2').keypress(function () {
-                v_pass_2 = $('.pass_2').val();
+                             
                 if (v_pass_1 != v_pass_2) {
                     $('.pass_1').css('background', 'red');
                     $('.pass_2').css('background', 'red');
-                } else if ((v_pass_1 = v_pass_2) || (v_pass_2 = (''))) {
+                } else  {
                     $('.pass_1').css('background', 'green');
                     $('.pass_2').css('background', 'green');
                 }
