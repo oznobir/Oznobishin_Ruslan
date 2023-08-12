@@ -114,17 +114,17 @@
     <script>
         $(document).ready(function () {
             $('tr').click(function () {
-                $(this).hide('slow');
+                $(this).hide();
                 var text_btn = $('#btn').text;
                 if (text_btn = ('Нет скрытых строк')) {
                     $('#btn').text('Показать строки')
                 }
             })
             $('#btn').click(function () {
-                var text_btn = ('#btn').text;
+                var text_btn = (this).text;
                 if (text_btn = ('Показать строки')) {
-                    $('#btn').text('Нет скрытых строк');
-                    $('tr').show('slow')
+                    $(this).text('Нет скрытых строк');
+                    $('tr').show()
                 }
             })
         });
