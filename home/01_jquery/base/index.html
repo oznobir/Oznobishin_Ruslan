@@ -113,15 +113,18 @@
         </script>
     <script>
         $(document).ready(function () {
-            $('tr').on('click', function () {
+            $('tr').click(function () {
                 $(this).hide();
-                $('#btn').text('Показать строки')
+                var text_btn = $('#btn').text;
+                if (text_btn = ('Нет скрытых строк')) {
+                    $('#btn').text('Показать строки')
+                }
             })
-            $('#btn').click (function (){
-                var text_btn = (this).text;
-                if  (text_btn = ('Показать строки')) {
-                $('#btn').text('Скрыть все строки');
-            }
+            $('#btn').click(function () {
+                var text_btn = ('#btn').text;
+                if (text_btn = ('Показать строки')) {
+                    $('#btn').text('Нет скрытых строк')
+                }
             })
         });
     </script>
