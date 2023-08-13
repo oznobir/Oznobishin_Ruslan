@@ -45,35 +45,29 @@
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous">
         </script>
     <script>
-
-
-        /////////////////
         $(document).ready(function () {
-            $('.pass_1').keypress(function () {
-                var v_pass_1 = $('.pass_1').val();
-                var v_pass_2 = $('.pass_2').val();
-                if (v_pass_1 != v_pass_2) {
-                    $('.pass_1').css('background', 'red');
-                    $('.pass_2').css('background', 'red');
+            $('.pass_1').on('keyup',function () {
+                var value_pass_1 = $('.pass_1').val();
+                var value_pass_2 = $('.pass_2').val();
+                if (value_pass_1 != value_pass_2) {
+                    $('.pass_1').css('backgroundColor', 'red');
+                    $('.pass_2').css('backgroundColor', 'red');
                 } else {
-                    $('.pass_1').css('background', 'green');
-                    $('.pass_2').css('background', 'green');
+                    $('.pass_1').css('backgroundColor', 'green');
+                    $('.pass_2').css('backgroundColor', 'green');
                 }
-
-            })
-            $('.pass_2').keypress(function () {
-                var v_pass_1 = $('.pass_1').val();
-                var v_pass_2 = $('.pass_').val();
-                if (v_pass_1 != v_pass_2) {
-                    $('.pass_1').css('background', 'red');
-                    $('.pass_2').css('background', 'red');
+            });
+            $('.pass_2').on('keyup',function () {
+                var value_pass_1 = $('.pass_1').val();
+                var value_pass_2 = $('.pass_2').val();
+                if (value_pass_1 != value_pass_2) {
+                    $('.pass_1').css('backgroundColor', 'red');
+                    $('.pass_2').css('backgroundColor', 'red');
                 } else {
-                    $('.pass_1').css('background', 'green');
-                    $('.pass_2').css('background', 'green');
+                    $('.pass_1').css('backgroundColor', 'green');
+                    $('.pass_2').css('backgroundColor', 'green');
                 }
-
-
-            })
+            });
         })
     </script>
 </body>
