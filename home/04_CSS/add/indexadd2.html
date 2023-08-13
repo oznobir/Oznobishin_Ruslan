@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,30 +8,35 @@
     <style>
         table {
             border-collapse: collapse;
-            counter-reset: ttd 65 ;
+            counter-reset: ttd 65;
         }
-        
+
         td {
             width: 50px;
             height: 50px;
             border: 1px solid black;
             text-align: center;
-            
+            font-size: 180%;
+
         }
+
         tr:nth-child(odd) td:nth-child(odd) {
-            background: black;
+            background-color: black;
             color: white;
         }
+
         tr:nth-child(even) td:nth-child(even) {
-            background: black;
+            background-color: black;
             color: white;
         }
+
         td::before {
             counter-increment: ttd -1;
             content: counter(ttd);
         }
     </style>
 </head>
+
 <body>
     <h2>Дом задание 3. Шахматная доска</h2>
     <table>
@@ -115,6 +121,7 @@
             <td></td>
         </tr>
     </table>
-    
+
 </body>
+
 </html>
