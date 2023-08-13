@@ -13,17 +13,16 @@
         form {
             border: 1px solid black;
             width: 350px;
-            padding: .4em;
+            padding: 0.8em;
         }
 
-        form label,
-        form>input {
+        form label {
             display: block;
-            padding-bottom: .4em;
+            padding-bottom: 0.4em;
         }
 
         form>input {
-            margin-top: .8em;
+            margin-top: 1.2em;
         }
     </style>
 </head>
@@ -46,7 +45,7 @@
         </script>
     <script>
         $(document).ready(function () {
-            $('.pass_1').on('keyup',function () {
+            $('.pass_1').on('keyup', function () {
                 var value_pass_1 = $('.pass_1').val();
                 var value_pass_2 = $('.pass_2').val();
                 if (value_pass_1 != value_pass_2) {
@@ -57,7 +56,7 @@
                     $('.pass_2').css('backgroundColor', 'green');
                 }
             });
-            $('.pass_2').on('keyup',function () {
+            $('.pass_2').on('keyup', function () {
                 var value_pass_1 = $('.pass_1').val();
                 var value_pass_2 = $('.pass_2').val();
                 if (value_pass_1 != value_pass_2) {
