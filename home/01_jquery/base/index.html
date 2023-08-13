@@ -6,46 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Таблица - BASE 01-JQuery</title>
     <style>
-        body {
-            margin-left: 5%;
+        table {
+            caption-side: bottom;
+            width: 100%;
+            border: 2px dotted black;
+            border-collapse: collapse;
         }
 
-        tr:nth-child(odd) {
+        tr:nth-child(even) {
             background-color: #d0d0d0;
 
         }
 
-        tr:first-child>th {
+        thead th {
             background-color: #808080;
+            color: white;
         }
 
-        tr:not(:first-child) th {
+
+        tbody th {
             text-align: left;
-            width: 200px;
-            border-bottom: 2px dotted #808080;
+            border: 1px solid black;
         }
 
-        tr:not(:last-child) td {
-            border-bottom: 2px dotted #808080;
-            border-left: 2px dotted #808080;
-        }
-
-        tr:last-child {
+        tbody td {
             text-align: center;
-            background-color: #fff;
+            border: 1px solid black;
         }
 
-/*    tr:hover {
-            background-color: black;
-            color: #fff;
-        }
-*/
         #btn {
-            background-color: #1779ba;
+            background-color: blue;
+            color: white;
             padding: .2em;
             width: 150px;
             text-align: center;
-
         }
     </style>
 </head>
@@ -53,59 +47,62 @@
 
 <body>
     <table>
-        <tr>
-            <th>ФИО</th>
-            <th>пол</th>
-            <th>должность</th>
-            <th>дата рож.</th>
-            <th>Данные 01</th>
-            <th>Данные 02</th>
-        </tr>
-        <tr>
-            <th>Иванов Иван Иванович</th>
-            <td>М</td>
-            <td>начальник</td>
-            <td>01.01.1960</td>
-            <td>4567</td>
-            <td>3453</td>
-        </tr>
-        <tr>
-            <th>Петрова Илонна Петровна</th>
-            <td>Ж</td>
-            <td>секретарь</td>
-            <td>01.01.1989</td>
-            <td>98795</td>
-            <td>46523</td>
-        </tr>
-        <tr>
-            <th>Сидоров Илья Игорьевич</th>
-            <td>М</td>
-            <td>бухгалтер</td>
-            <td>01.01.1979</td>
-            <td>743434</td>
-            <td>987979</td>
-        </tr>
-        <tr>
-            <th>Пупин Фёдор Фёдорович</th>
-            <td>М</td>
-            <td>водитель</td>
-            <td>01.01.1963</td>
-            <td>74323434</td>
-            <td>9232379</td>
+        <caption>ДАННЫЕ О СОТРУДНИКАХ</caption>
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>пол</th>
+                <th>должность</th>
+                <th>дата рож.</th>
+                <th>Данные 01</th>
+                <th>Данные 02</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Иванов Иван Иванович</th>
+                <td>М</td>
+                <td>начальник</td>
+                <td>01.01.1960</td>
+                <td>4567</td>
+                <td>3453</td>
+            </tr>
+            <tr>
+                <th>Петрова Илонна Петровна</th>
+                <td>Ж</td>
+                <td>секретарь</td>
+                <td>01.01.1989</td>
+                <td>98795</td>
+                <td>46523</td>
+            </tr>
+            <tr>
+                <th>Сидоров Илья Игорьевич</th>
+                <td>М</td>
+                <td>бухгалтер</td>
+                <td>01.01.1979</td>
+                <td>743434</td>
+                <td>987979</td>
+            </tr>
+            <tr>
+                <th>Пупин Фёдор Фёдорович</th>
+                <td>М</td>
+                <td>водитель</td>
+                <td>01.01.1963</td>
+                <td>74323434</td>
+                <td>9232379</td>
 
-        </tr>
-        <tr>
-            <th>Крупин Сергей Иванович</th>
-            <td>М</td>
-            <td>водитель2</td>
-            <td>01.01.1983</td>
-            <td>3234534</td>
-            <td>923123379</td>
-        </tr>
-        <tr>
-            <td colspan="6">ДАННЫЕ О СОТРУДНИКАХ</td>
-        </tr>
+            </tr>
+            <tr>
+                <th>Крупин Сергей Иванович</th>
+                <td>М</td>
+                <td>водитель2</td>
+                <td>01.01.1983</td>
+                <td>3234534</td>
+                <td>923123379</td>
+            </tr>
+        </tbody>
     </table>
+
     <button id="btn">Нет скрытых строк</button>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
