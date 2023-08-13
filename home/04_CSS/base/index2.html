@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>04-CSS-base2 Таблица</title>
     <style>
+        table {
+            caption-side: bottom;
+        }
         tr:nth-child(odd) {
             background: #d0d0d0;
 
@@ -21,26 +24,20 @@
             border-bottom: 2px dotted #808080;
         }
 
-        tr:not(:last-child) td {
+        td {
             border-bottom: 2px dotted #808080;
             border-left: 2px dotted #808080;
         }
-
-        tr:last-child {
-            text-align: center;
-            background: #fff;
-        }
-
+       
         tr:hover {
             background: black;
             color:#fff;
         }
     </style>
 </head>
-<h2>Домашнее задание №2. 04-CSS</h2>
-
 <body>
     <table>
+        <caption>ДАННЫЕ О СОТРУДНИКАХ</caption>
         <tr>
             <th>ФИО</th>
             <th>пол</th>
@@ -89,10 +86,7 @@
             <td>01.01.1983</td>
             <td>3234534</td>
             <td>923123379</td>
-        </tr>
-        <tr>
-            <td colspan="6">ДАННЫЕ О СОТРУДНИКАХ</td>
-        </tr>
+        </tr>        
     </table>
 
 </body>
