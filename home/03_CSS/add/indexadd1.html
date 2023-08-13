@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,8 +7,12 @@
     <title>03_CSS Меню</title>
 </head>
 <style>
-    div.MenuLevel1>div,
-    div.MenuLevel2>div {
+    div.MenuLevel1_fl {
+        display: flex;
+        flex-direction: row;
+    }
+
+    div.MenuLevel1_fl>div {
         width: 90px;
         color: #888;
         background-color: #d3d3d3;
@@ -17,23 +21,32 @@
         padding: 2px;
         position: relative;
         cursor: pointer;
-
     }
 
-    div.MenuLevel1>div {
-        float: left;
-
-    }
-
-    div.MenuLevel2 {
+    div.MenuLevel2_fl {
         width: 90px;
         height: 0px;
         visibility: hidden;
-
+        opacity: 0;
+        transition: all 1.5s ease;
     }
 
+    div.MenuLevel2_fl>div {
+        color: #888;
+        background-color: #d3d3d3;
+        border: solid #4e4e4e 1px;
+        border-radius: 3px;
+        padding: 2px;
+        cursor: pointer
+    }
 
-    div.MenuLevel1>div:hover div.MenuLevel2 {
+    div.MenuLevel1_fl>div:hover {
+        color: #d3d3d3;
+        background-color: #888;
+    }
+
+    div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
+        opacity: 1;
         visibility: visible;
         position: absolute;
         left: 0%;
@@ -41,21 +54,13 @@
         z-index: 1
     }
 
-    div.MenuLevel1>div:hover {
-        color: #d3d3d3;
-        background-color: #888;
-    }
+    @media all and (max-width:580px) {
+        div.MenuLevel1_fl {
+            flex-direction: column;
 
-    .clear {
-        clear: both;
-    }
-
-    @media all and (max-width:600px) {
-        div.MenuLevel1>div {
-            float: none;
         }
 
-        div.MenuLevel1>div:hover div.MenuLevel2 {
+        div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
 
             left: 100%;
             top: 0%;
@@ -67,10 +72,9 @@
 <body>
     <div>
         <h2>Меню</h2>
-
-        <div class='MenuLevel1'>
+        <div class='MenuLevel1_fl'>
             <div>Понедельник
-                <div class='MenuLevel2'>
+                <div class='MenuLevel2_fl'>
                     <div>Завтрак</div>
                     <div>Обед</div>
                     <div>Ужин</div>
@@ -78,7 +82,7 @@
             </div>
             <div>
                 Вторник
-                <div class='MenuLevel2'>
+                <div class='MenuLevel2_fl'>
                     <div>Завтрак</div>
                     <div>Обед</div>
                     <div>Ужин</div>
@@ -86,21 +90,21 @@
             </div>
             <div>
                 Среда
-                <div class='MenuLevel2'>
+                <div class='MenuLevel2_fl'>
                     <div>Завтрак</div>
                     <div>Обед</div>
                     <div>Ужин</div>
                 </div>
             </div>
             <div>Четверг
-                <div class='MenuLevel2'>
+                <div class='MenuLevel2_fl'>
                     <div>Завтрак</div>
                     <div>Обед</div>
                     <div>Ужин</div>
                 </div>
             </div>
             <div>Пятница
-                <div class='MenuLevel2'>
+                <div class='MenuLevel2_fl'>
                     <div>Завтрак</div>
                     <div>Обед</div>
                     <div>Ужин</div>
@@ -108,14 +112,13 @@
             </div>
             <div>
                 Суббота
-                <div class='MenuLevel2'>
+                <div class='MenuLevel2_fl'>
                     <div>Завтрак</div>
                     <div>Обед</div>
                     <div>Ужин</div>
                 </div>
             </div>
         </div>
-        <div class="clear"></div>
     </div>
 </body>
 
