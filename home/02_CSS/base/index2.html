@@ -16,15 +16,19 @@
             background-color: black;
             color: green;
             overflow: auto;
-            white-space: pre;
         }
 
-        ul {
+        .cont code {
+            white-space: pre;
+
+        }
+
+        .ul>ul {
             list-style-type: upper-roman;
 
         }
 
-        ul ul {
+        .ul>ul ul{
             list-style-type: lower-roman;
         }
     </style>
@@ -52,8 +56,7 @@
         </ul>
     </div>
     <div class="cont">
-        <code>
-#!/usr/bin/env python
+        <code>#!/usr/bin/env python
 print 'Hello. I am a python program.'
 name = raw_input("What is your name?")
 print "Hello there, " + name + "!"
@@ -68,8 +71,7 @@ print "Hello there, " + name + "!"
 #!/usr/bin/env python
 print 'Hello. I am a python program.'
 name = raw_input("What is your name?")
-print "Hello there, " + name + "!"
-       </code>
+print "Hello there, " + name + "!"</code>
     </div>
 </body>
 
