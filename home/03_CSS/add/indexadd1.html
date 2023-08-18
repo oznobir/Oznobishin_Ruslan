@@ -15,7 +15,7 @@
         border: solid #4e4e4e 1px;
         border-radius: 0.2em;
         padding: 0.1em;
-        box-shadow: 0px 8px 16px 0px rgba(1,1,0,2);
+        box-shadow: 0px 8px 16px 0px rgba(1, 1, 0, 2);
         cursor: pointer;
         height: 0;
         opacity: 0;
@@ -30,26 +30,31 @@
         border: solid #4e4e4e 1px;
         border-radius: 0.2em;
         padding: 0.1em;
-        box-shadow: 0px 8px 16px 0px rgba(1,1,0,2);
+        box-shadow: 0px 8px 16px 0px rgba(1, 1, 0, 2);
         cursor: pointer;
         position: relative;
-        transition: color 0.6s, background-color 0.5s;
+        transition: background-color 3s cubic-bezier(0.1, 0.8, 0.5, 2), color 3s 1s linear;
+        
     }
 
     div.MenuLevel1_fl {
         display: flex;
         flex-direction: row;
+        padding-left: 1.2em;
+
     }
 
     div.MenuLevel2_fl {
         opacity: 0;
         overflow: hidden;
-       
+
     }
 
     div.MenuLevel1_fl>div:hover {
         color: #d3d3d3;
         background-color: #888;
+        z-index: 2;
+        transform: scale(1.25);
     }
 
     div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
@@ -65,11 +70,10 @@
         height: 1.2em;
         opacity: 1;
     }
-    
+
     @media all and (max-width:620px) {
         div.MenuLevel1_fl {
             flex-direction: column;
-
         }
 
 
