@@ -1,43 +1,48 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>03_CSS Меню</title>
 </head>
 <style>
+    div.MenuLevel2_fl>div {
+        width: 6em;
+        color: #888;
+        background-color: #d3d3d3;
+        border: solid #4e4e4e 1px;
+        border-radius: 0.2em;
+        padding: 0.1em;
+        cursor: pointer;
+        height: 0;
+        opacity: 0;
+        transition: height 0.6s, opacity 0.5s;
+    }
+
+    div.MenuLevel1_fl>div {
+        width: 6em;
+        height: 1.2em;
+        color: #888;
+        background-color: #d3d3d3;
+        border: solid #4e4e4e 1px;
+        border-radius: 0.2em;
+        padding: 0.1em;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.6s, background-color 0.5s;
+    }
+
     div.MenuLevel1_fl {
         display: flex;
         flex-direction: row;
     }
 
-    div.MenuLevel1_fl>div {
-        width: 90px;
-        color: #888;
-        background-color: #d3d3d3;
-        border: solid #4e4e4e 1px;
-        border-radius: 3px;
-        padding: 2px;
-        position: relative;
-        cursor: pointer;
-    }
-
     div.MenuLevel2_fl {
-        width: 90px;
-        height: 0px;
-        visibility: hidden;
         opacity: 0;
-        transition: all 1.5s ease;
-    }
-
-    div.MenuLevel2_fl>div {
-        color: #888;
-        background-color: #d3d3d3;
-        border: solid #4e4e4e 1px;
-        border-radius: 3px;
-        padding: 2px;
-        cursor: pointer
+        overflow: hidden;
+        transition: opacity 0.5s;
     }
 
     div.MenuLevel1_fl>div:hover {
@@ -47,23 +52,29 @@
 
     div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
         opacity: 1;
-        visibility: visible;
+        overflow: visible;
         position: absolute;
         left: 0%;
         top: 100%;
         z-index: 1
     }
 
-    @media all and (max-width:580px) {
+    div.MenuLevel1_fl>div:hover div.MenuLevel2_fl>div {
+        height: 1.2em;
+        opacity: 1;
+    }
+    
+    @media all and (max-width:620px) {
         div.MenuLevel1_fl {
             flex-direction: column;
 
         }
 
+
         div.MenuLevel1_fl>div:hover div.MenuLevel2_fl {
 
             left: 100%;
-            top: 0%;
+            top: 0;
 
         }
     }
