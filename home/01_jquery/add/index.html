@@ -43,13 +43,14 @@
         </script>
     <script>
         $(document).ready(function () {
-            $('input[type="text"]').on('keyup', function () {
+            var input_pass = $('input[type="text"]');
+            $(input_pass).on('keyup', function () {
                 var value_pass_1 = $('#pass_1').val();
                 var value_pass_2 = $('#pass_2').val();
                 if (value_pass_1 != value_pass_2) {
-                    $('input[type="text"]').css('backgroundColor', 'red');                   
+                    $(input_pass).css('backgroundColor', 'red');                   
                 } else {
-                    $('input[type="text"]').css('backgroundColor', 'green');                   
+                    $(input_pass).css('backgroundColor', 'green');                   
                 }
             });          
         })
