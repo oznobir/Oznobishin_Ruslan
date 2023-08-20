@@ -47,11 +47,9 @@
                 var value_pass_1 = $('#pass_1').val();
                 var value_pass_2 = $('#pass_2').val();
                 if (value_pass_1 != value_pass_2) {
-                    $('#pass_1').css('backgroundColor', 'red');
-                    $('#pass_2').css('backgroundColor', 'red');
+                    $('input[type="text"]').css('backgroundColor', 'red');                   
                 } else {
-                    $('#pass_1').css('backgroundColor', 'green');
-                    $('#pass_2').css('backgroundColor', 'green');
+                    $('input[type="text"]').css('backgroundColor', 'green');                   
                 }
             })
            // $('#pass_1').on('keyup', function () {
