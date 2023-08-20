@@ -45,9 +45,7 @@
         $(document).ready(function () {
             var input_pass = $('input[type="text"]');
             $(input_pass).on('keyup', function () {
-                var value_pass_1 = $('#pass_1').val();
-                var value_pass_2 = $('#pass_2').val();
-                if (value_pass_1 != value_pass_2) {
+                if ($('#pass_1').val() != $('#pass_2').val()) {
                     $(input_pass).css('backgroundColor', 'red');
                 } else {
                     $(input_pass).css('backgroundColor', 'green');
