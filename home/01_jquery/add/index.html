@@ -43,13 +43,7 @@
         </script>
     <script>
         $(document).ready(function () {
-            $('#pass_1').on('keyup', function () {
-                changeRedOrGreen();
-            });
-            $('#pass_2').on('keyup', function () {
-                changeRedOrGreen();
-            });
-            function changeRedOrGreen() {
+            $('input[type="text"]').on('keyup', function () {
                 var value_pass_1 = $('#pass_1').val();
                 var value_pass_2 = $('#pass_2').val();
                 if (value_pass_1 != value_pass_2) {
@@ -59,7 +53,24 @@
                     $('#pass_1').css('backgroundColor', 'green');
                     $('#pass_2').css('backgroundColor', 'green');
                 }
-            };
+            })
+           // $('#pass_1').on('keyup', function () {
+           //     changeRedOrGreen();
+           // });
+           // $('#pass_2').on('keyup', function () {
+           //     changeRedOrGreen();
+           // });
+           // function changeRedOrGreen() {
+           //     var value_pass_1 = $('#pass_1').val();
+           //     var value_pass_2 = $('#pass_2').val();
+           //     if (value_pass_1 != value_pass_2) {
+           //         $('#pass_1').css('backgroundColor', 'red');
+           //         $('#pass_2').css('backgroundColor', 'red');
+           //     } else {
+           //         $('#pass_1').css('backgroundColor', 'green');
+           //         $('#pass_2').css('backgroundColor', 'green');
+           //     }
+           // };
         })
     </script>
 </body>
