@@ -31,10 +31,10 @@
     <h1>Проверка пароля</h1>
     <form action="#" method="post">
         <label>
-            <input type="text" class="pass_1" name="p_1" autocomplete="off"> * Пароль
+            <input type="text" id="pass_1" name="p_1" autocomplete="off"> * Пароль
         </label>
         <label>
-            <input type="text" class="pass_2" name="p_2" autocomplete="off"> * Повторите пароль
+            <input type="text" id="pass_2" name="p_2" autocomplete="off"> * Повторите пароль
         </label>
         <input type="submit" value="Отправить">
 
@@ -45,28 +45,23 @@
         </script>
     <script>
         $(document).ready(function () {
-            $('.pass_1').on('keyup', function () {
-                var value_pass_1 = $('.pass_1').val();
-                var value_pass_2 = $('.pass_2').val();
-                if (value_pass_1 != value_pass_2) {
-                    $('.pass_1').css('backgroundColor', 'red');
-                    $('.pass_2').css('backgroundColor', 'red');
-                } else {
-                    $('.pass_1').css('backgroundColor', 'green');
-                    $('.pass_2').css('backgroundColor', 'green');
-                }
+            $('#pass_1').on('keyup', function () {
+                changeRedOrGreen();
             });
-            $('.pass_2').on('keyup', function () {
-                var value_pass_1 = $('.pass_1').val();
-                var value_pass_2 = $('.pass_2').val();
-                if (value_pass_1 != value_pass_2) {
-                    $('.pass_1').css('backgroundColor', 'red');
-                    $('.pass_2').css('backgroundColor', 'red');
-                } else {
-                    $('.pass_1').css('backgroundColor', 'green');
-                    $('.pass_2').css('backgroundColor', 'green');
-                }
+            $('#pass_2').on('keyup', function () {
+                changeRedOrGreen();
             });
+            function changeRedOrGreen(){
+                var value_pass_1 = $('#pass_1').val();
+                var value_pass_2 = $('#pass_2').val();
+                if (value_pass_1 != value_pass_2) {
+                    $('#pass_1').css('backgroundColor', 'red');
+                    $('#pass_2').css('backgroundColor', 'red');
+                } else {
+                    $('#pass_1').css('backgroundColor', 'green');
+                    $('#pass_2').css('backgroundColor', 'green');
+                }
+            };
         })
     </script>
 </body>
