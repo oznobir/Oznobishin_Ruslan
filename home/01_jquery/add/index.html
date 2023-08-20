@@ -30,9 +30,9 @@
     <h1>Проверка пароля</h1>
     <form action="#" method="post">
 
-        <input type="text" id="pass_1" name="pass_1" autocomplete="off"> 
+        <input type="text" id="pass_1" name="pass_1" autocomplete="off">
         <label for="pass_1">* Пароль</label>
-        <input type="text" id="pass_2" name="pass_2" autocomplete="off"> 
+        <input type="text" id="pass_2" name="pass_2" autocomplete="off">
         <label for="pass_2">* Повторите пароль</label>
         <input type="submit" value="Отправить">
 
@@ -48,11 +48,11 @@
                 var value_pass_1 = $('#pass_1').val();
                 var value_pass_2 = $('#pass_2').val();
                 if (value_pass_1 != value_pass_2) {
-                    $(input_pass).css('backgroundColor', 'red');                   
+                    $(input_pass).css('backgroundColor', 'red');
                 } else {
-                    $(input_pass).css('backgroundColor', 'green');                   
+                    $(input_pass).css('backgroundColor', 'green');
                 }
-            });          
+            });
         })
     </script>
 </body>
