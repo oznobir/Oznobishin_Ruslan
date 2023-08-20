@@ -16,7 +16,8 @@
             padding: 0.8em;
         }
 
-        form input[type="text"] {
+        #pass_1,
+        #pass_2 {
             margin-bottom: 0.4em;
         }
 
@@ -42,7 +43,7 @@
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous">
         </script>
     <script>
-        $(document).ready(function () {           
+        $(document).ready(function () {
             $('#pass_1, #pass_2').on('keyup', function () {
                 if ($('#pass_1').val() != $('#pass_2').val()) {
                     $('#pass_1, #pass_2').css('backgroundColor', 'red');
