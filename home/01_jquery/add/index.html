@@ -16,12 +16,11 @@
             padding: 0.8em;
         }
 
-        form label {
-            display: block;
-            padding-bottom: 0.4em;
+        form input[type="text"] {
+            margin-bottom: 0.4em;
         }
 
-        form>input {
+        form>input[type="submit"] {
             margin-top: 1.2em;
         }
     </style>
@@ -30,12 +29,11 @@
 <body>
     <h1>Проверка пароля</h1>
     <form action="#" method="post">
-        <label>
-            <input type="text" id="pass_1" name="p_1" autocomplete="off"> * Пароль
-        </label>
-        <label>
-            <input type="text" id="pass_2" name="p_2" autocomplete="off"> * Повторите пароль
-        </label>
+
+        <input type="text" id="pass_1" name="pass_1" autocomplete="off"> 
+        <label for="pass_1">* Пароль</label>
+        <input type="text" id="pass_2" name="pass_2" autocomplete="off"> 
+        <label for="pass_2">* Повторите пароль</label>
         <input type="submit" value="Отправить">
 
     </form>
@@ -51,7 +49,7 @@
             $('#pass_2').on('keyup', function () {
                 changeRedOrGreen();
             });
-            function changeRedOrGreen(){
+            function changeRedOrGreen() {
                 var value_pass_1 = $('#pass_1').val();
                 var value_pass_2 = $('#pass_2').val();
                 if (value_pass_1 != value_pass_2) {
