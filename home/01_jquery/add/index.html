@@ -45,11 +45,10 @@
     <script>
         $(document).ready(function () {
             $('#pass_1, #pass_2').on('keyup', function () {
-                var input_pass = $('#pass_1, #pass_2');
                 if ($('#pass_1').val() != $('#pass_2').val()) {
-                    $(input_pass).css('backgroundColor', 'red');
+                    $('#pass_1, #pass_2').css('backgroundColor', 'red');
                 } else {
-                    $(input_pass).css('backgroundColor', 'green');
+                    $('#pass_1, #pass_2').css('backgroundColor', 'green');
                 }
             });
         })
