@@ -3,7 +3,9 @@
 		{
 			"name": "Oznobishin_Ruslan",
 			"path": "../../ItAcademy/Oznobishin_Ruslan"
-		}
+		},
 	],
-	"settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "My"
+	}
 }
