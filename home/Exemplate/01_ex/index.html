@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Меню-аккордеон на CSS</title>
+    <style>
+        .title {
+            color: #fff;
+            background: #2D6B9F;
+            padding: 30px 0;
+            text-align: center;
+            font-family: Verdana, sans-serif;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 10px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .accor-container {
+            margin: 20px 0;
+            width: 400px;
+        }
+
+        .accor-container .accor-body {
+            width: calc(100% - 40px);
+            margin: 0 auto;
+            height: 0;
+            color: rgba(0, 0, 0, 0);
+            background-color: #EFF;
+            line-height: 18px;
+            padding: 0 30px;
+            box-sizing: border-box;
+            transition: color 0.5s, padding 0.5s;
+            overflow: hidden;
+            font-family: Verdana, sans-serif;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 10px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .accor-container .accor-body p {
+            margin: 0 0 10px;
+        }
+
+        .accor-container label {
+            cursor: pointer;
+            background-color: #337AB7;
+            display: block;
+            padding: 15px 20px;
+            width: 100%;
+            color: #BFE2FF;
+            font-weight: 300;
+            box-sizing: border-box;
+            z-index: 100;
+            font-family: Verdana, sans-serif;
+            font-size: 18px;
+            margin: 0 0 5px;
+            transition: color .35s;
+        }
+
+        .accor-container label:hover {
+            color: #FFF;
+        }
+
+        .accor-container input {
+            display: none;
+        }
+
+        .accor-container label:before {
+            content: '\276F';
+            float: right;
+        }
+
+        .accor-container input:checked + label {
+            background-color: #285f8f;
+            color: #FFF;
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4), 0 28px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .accor-container input:checked + label:before {
+            transition: transform .35s;
+            transform: rotate(90deg);
+        }
+
+        .accor-container input:checked + label + .accor-body {
+            height: auto;
+            margin-top: -5px;
+            color: #000;
+            padding: 20px 30px 10px;
+        }
+    </style>
+</head>
+<body>
+    <p class="title">Меню-аккордеон на CSS</p>
+<div class="accor-container">
+    <input type="checkbox" name="checkAccordion" id="checkAccordion1" checked="checked"/>
+    <label for="checkAccordion1">Заголовок вкладки 1</label>
+    <div class="accor-body">
+        <p>Описание вкладки 1-1</p>
+        <p>Описание вкладки 1-2</p>
+    </div>
+
+    <input type="checkbox" name="checkAccordion" id="checkAccordion2"/>
+    <label for="checkAccordion2">Заголовок вкладки 2</label>
+    <div class="accor-body">
+        <p>Описание вкладки 2-1</p>
+    </div>
+
+    <input type="checkbox" name="checkAccordion" id="checkAccordion3"/>
+    <label for="checkAccordion3">Заголовок вкладки 3</label>
+    <div class="accor-body">
+        <p>Описание вкладки 3-1</p>
+        <p>Описание вкладки 3-2</p>
+    </div>
+</div>
+
+<p class="title">Меню-аккордеон с одной открытой вкладкой</p>
+<div class="accor-container">
+
+    <input type="radio" name="accor" id="accor1" checked="checked"/>
+    <label for="accor1">Заголовок вкладки 1</label>
+    <div class="accor-body">
+        <p>Описание вкладки 1-1</p>
+        <p>Описание вкладки 1-2</p>
+    </div>
+
+    <input type="radio" name="accor" id="accor2"/>
+    <label for="accor2">Заголовок вкладки 2</label>
+    <div class="accor-body">
+        <p>Описание вкладки 2-1</p>
+        <p>Описание вкладки 2-2</p>
+    </div>
+
+    <input type="radio" name="accor" id="accor3"/>
+    <label for="accor3">Заголовок вкладки 3</label>
+    <div class="accor-body">
+        <p>Описание вкладки 3-1</p>
+    </div>
+</div>
+</body>
+</html>
