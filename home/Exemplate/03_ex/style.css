@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Verdana, sans-serif;
+    font-size: 40px;
+    width: 100%;
+    min-height: 100vh;
+}
+[class^="box-"] {
+    background-color: skyblue;
+    /* Размещаем контейнеры по центру */
+    display: grid;
+    place-items: center;
+}
+.container {
+    display: grid;
+    gap: 10px;
+    height: 100vh;
+
+    /*!*/
+    /*grid-template-columns: 400px auto 200px;*/
+    grid-template-areas:
+    "A A A A  A A A A A  A A A"
+    "B B B B  E E E E E  D D D"
+    "C C C C  E E E E E  D D D"
+    "F F H H  E E E E E  D D D"
+    "G G G G  G G G G G  D D D";
+}
+.box-1 {
+    grid-area: A;
+}
+.box-2 {
+    grid-area: B;
+}
+.box-3 {
+    grid-area: C;
+}
+.box-4 {
+    grid-area: D;
+}
+.box-5 {
+    grid-area: E;
+}
+.box-6 {
+    grid-area: H;
+}
+.box-7 {
+    grid-area: F;
+}
+.box-8 {
+    grid-area: G;
+}
