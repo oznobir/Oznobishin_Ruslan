@@ -1,2 +1,2 @@
 <?php
-echo 'page3';
+echo 'page3 test';
