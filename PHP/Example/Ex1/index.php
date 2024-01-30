@@ -2,11 +2,12 @@
 error_reporting(E_ALL);
 ini_set('display_errors','on');
 
-include 'pages/page1.php';
-echo '<br>';
-
-include 'pages/page2.php';
-echo '<br>';
-
-include 'pages/page3.php';
+// Только file exists. Без проверки $_GET['page']
+$page = $_GET['page'];
+$path = "pages/page$page.php";
+if (file_exists($path)) {
+    include ($path);
+} else {
+    echo 'file not found';
+}
 echo '<br>';
