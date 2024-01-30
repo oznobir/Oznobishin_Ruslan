@@ -1,7 +1,0 @@
-{
-    "fiveServer.php.executable": "C:\\OSPanel\\modules\\php\\PHP_8.1\\php.exe",
-    "fiveServer.php.ini": "C:\\OSPanel\\modules\\php\\PHP_8.1\\php.ini",
-    "fiveServer.port": 57844,
-    "fiveServer.highlight": true,
-    "fiveServer.host": "192.168.1.105"
-}
