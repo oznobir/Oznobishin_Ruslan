@@ -1,41 +1,33 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="content Description"/>
-    <meta name="author" content="Oznobishin Ruslan">
-    <meta name="publisher-email" content="oznobir@gmail.com">
-    <meta name="robots" content="noindex,nofollow">
-    <title>Index 1</title>
-    <link rel="stylesheet" href="css/style.css?v=2">
-</head>
-<body>
-<div class="wrapper">
-    <header>
-        <?php include 'template/header.php' ?>
-    </header>
-    <main>
-        text-contents !
-        <?php
-        // Только file exists. Без проверки $_GET['page']
-        $page = $_GET['page'];
-        $path = "pages/page$page.php";
-        if (file_exists($path)) {
-            include($path);
-        } else {
-            echo 'file not found';
-        }
-        echo '<br>';
-        ?>
-    </main>
-    <footer>
-        <?php include 'template/footer.php' ?>
-    </footer>
-</div>
-</body>
-</html>
+
+$page = isset($_GET['page']) ? $_GET['page'] : '1';
+
+$path = "pages/page$page.php";
+
+if (file_exists($path)) {
+    $content = file_get_contents($path);
+} else {
+    $content = file_get_contents("pages/404.php");
+    header("HTTP/1.0 404 Not Found");
+    // прежде надо проверить, что 404.php есть
+}
+// сделать потом функцию+-
+$reg = '#\{\{title:(.*?)\}\}#';
+if (preg_match($reg, $content, $match)) {
+    $title = $match[1];
+    $content = trim(preg_replace($reg, '', $content));
+} else {
+    $title = '';
+    // прежде надо проверить, что title есть и не пустой
+}
+$reg = '#\{\{description:(.*?)\}\}#';
+if (preg_match($reg, $content, $match)) {
+    $desc = $match[1];
+    $content = trim(preg_replace($reg, '', $content));
+} else {
+    $desc = '';
+    // прежде надо проверить, что description есть и не пустой
+}
+include 'template/layout.php';
