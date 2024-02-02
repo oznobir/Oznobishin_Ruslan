@@ -1,0 +1,13 @@
+header, footer {
+    line-height: 2rem;
+    text-align: center;
+}
+table {
+    width: 100%;
+
+}
+table td, table th {
+    border: 1px solid black;
+    padding: 1rem;
+
+}
