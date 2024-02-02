@@ -8,7 +8,7 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title?></title>
-<link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="wrapper">
@@ -17,6 +17,7 @@
     </header>
     <main>
         <?= $content?>
+        <?= $content2?>
     </main>
     <footer>
         <?php include 'footer.php' ?>

@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-$page = isset($_GET['page']) ? $_GET['page'] : '1';
+$page = $_GET['page'] ?? '1';
 
 $path = "pages/page$page.php";
 
