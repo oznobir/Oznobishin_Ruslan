@@ -14,7 +14,7 @@ mysqli_query($link, "SET NAMES 'utf8'");
 //*************
 $page = $_GET['page'] ?? '1';
 
-$query = "SELECT * FROM pages WHERE url='$page'";
+$query = "SELECT * FROM pages WHERE url=$page";
 $result = mysqli_query($link, $query) or die(mysqli_error($link));
 $page = mysqli_fetch_assoc($result);
 
