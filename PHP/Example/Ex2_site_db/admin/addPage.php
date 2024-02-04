@@ -39,7 +39,7 @@ function getPage($info = ''): void
                         <textarea name='text' placeholder='text'>$text</textarea><br>
                         text2<br>
                         <textarea name='text2' placeholder='text2'>$text2</textarea><br>
-                        <input type='submit'><br>
+                        <input type='submit' value='Add page'><br>
                     </form>";
     $titleAdm = 'admin add page';
     $descAdm = 'admin add page';
@@ -67,14 +67,14 @@ function addPage($link)
 
         if ($isPage) {
             return [
-                'text' => "Page with url \"$url\" exists!",
+                'text' => "Page \"$url\" exists!",
                 'status' => "error"
             ];
         } elseif ($url != '') {
             $query = "INSERT INTO pages (title, description, url, text, text2) VALUES ('$title','$desc','$url','$text','$text2')";
             mysqli_query($link, $query) or die(mysqli_error($link));
-            header("Location: index.php?add=$url");
-//          Т.к. теперь редирект на admin page с Get['add'], то далее можно возвращать ''.
+            header("Location: index.php?add-p=$url");
+//          Т.к. теперь редирект на admin page с Get['add-p'], то далее можно возвращать ''.
 //            return [
 //                'text' => "Page \"$url\" added successfully!",
 //                'status' => "success"

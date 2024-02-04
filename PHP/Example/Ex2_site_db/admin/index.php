@@ -2,10 +2,17 @@
 include 'connectDbPages.php';
 /** @var $link * */
 $info = deletePage($link);
-if (isset($_GET['add'])) {
-    $url = $_GET['add'];
+if (isset($_GET['add-p'])) {
+    $url = $_GET['add-p'];
     $info = [
         'text' => "Page \"$url\" added successfully!",
+        'status' => "success"
+    ];
+}
+if (isset($_GET['edit-p'])) {
+    $url = $_GET['edit-p'];
+    $info = [
+        'text' => "Page \"$url\" edited successfully!",
         'status' => "success"
     ];
 }
@@ -40,8 +47,8 @@ function showPageTable($link, $info): void
                 <td>{$pageAdm['title']}</td>
                 <td>{$pageAdm['description']}</td>
                 <td>{$pageAdm['url']}</td>
-                <td><a href='/'>edit</a></td>
-                <td><a href='?del={$pageAdm['url']}'>delete</a></td>
+                <td><a href='editPage.php?edit-p={$pageAdm['url']}'>edit</a></td>
+                <td><a href='?delete-p={$pageAdm['url']}'>delete</a></td>
              </tr>";
     }
     $contentAdm .= "</tbody></table>";
@@ -52,8 +59,8 @@ function showPageTable($link, $info): void
 
 function deletePage($link)
 {
-    if (isset($_GET['del'])) {
-        $url = $_GET['del'];
+    if (isset($_GET['delete-p'])) {
+        $url = $_GET['delete-p'];
         $query = "DELETE FROM pages WHERE url = '$url'";
         mysqli_query($link, $query) or die(mysqli_error($link));
         return [
