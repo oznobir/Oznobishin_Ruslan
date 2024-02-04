@@ -1,7 +1,7 @@
 <?php
-/** @var $descAdm */
-/** @var $titleAdm */
-/** @var $contentAdm */
+/** @var $descAdm *
+* @var $titleAdm *
+* @var $contentAdm */
 ?>
 
 <!DOCTYPE html>
@@ -27,8 +27,8 @@
 <body>
 <div class="wrapper">
     <header>
-        <h1>Admin page</h1>
-        <a href="addPage.php">Add new page</a>
+        <h1><?= $titleAdm ?></h1>
+        <a href="add.php">Add new page</a>
     </header>
     <main>
         <?= $contentAdm ?>

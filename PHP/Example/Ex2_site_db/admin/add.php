@@ -5,7 +5,7 @@ include 'connectDbPages.php';
 $info = addPage($link);
 getPage($info);
 
-function getPage($info = ''): void
+function getPage($info): void
 {
     if (isset($_POST['title']) &&
         isset($_POST['description']) &&
@@ -24,23 +24,10 @@ function getPage($info = ''): void
         $text = '';
         $text2 = '';
     }
-    $contentAdm =  '';
-    if ($info) {
-        $contentAdm .=  "<div class='{$info['status']}'>{$info['text']}</div>";
-    }
-    $contentAdm .= "<form method='POST'>
-                        <label for='url'>url:</label><br>
-                        <input name='url' placeholder='url' value='$url'><br>
-                        <label for='title'>title:</label><br>
-                        <input name='title' placeholder='title' value='$title'><br>
-                        <label for='description'>description:</label><br>
-                        <input name='description' placeholder='description' value='$desc'><br>
-                        text<br>
-                        <textarea name='text' placeholder='text'>$text</textarea><br>
-                        text2<br>
-                        <textarea name='text2' placeholder='text2'>$text2</textarea><br>
-                        <input type='submit' value='Add page'><br>
-                    </form>";
+    $id = '';
+    ob_start();
+    include 'formPage.php';
+    $contentAdm = ob_get_clean();
     $titleAdm = 'admin add page';
     $descAdm = 'admin add page';
     include 'layoutAdm.php';
@@ -52,8 +39,7 @@ function addPage($link)
         isset($_POST['description']) &&
         isset($_POST['url']) &&
         isset($_POST['text']) &&
-        isset($_POST['text2']))
-    {
+        isset($_POST['text2'])) {
         $title = $_POST['title'];
         $desc = $_POST['description'];
         $url = $_POST['url'];
@@ -80,7 +66,7 @@ function addPage($link)
 //                'status' => "success"
 //            ];
             return '';
-        }else {
+        } else {
             return [
                 'text' => "Enter url page!",
                 'status' => "error"

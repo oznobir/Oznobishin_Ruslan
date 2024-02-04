@@ -32,23 +32,9 @@ function getPage($link, $info): void
                 $text = $page['text'];
                 $text2 = $page['text2'];
             }
-            $contentAdm =  '';
-            if ($info) {
-                $contentAdm .=  "<div class='{$info['status']}'>{$info['text']}</div>";
-            }
-            $contentAdm .= "<form method='POST'>
-                                <label for='id'>url:</label><br>
-                                <input name='id' value='$id' readonly><br>
-                                <label for='url'>url:</label><br>
-                                <input name='url' placeholder='url' value='$url'><br>
-                                <label for='title'>title:</label><br>
-                                <input name='title' placeholder='title' value='$title'><br>
-                                <label for='description'>description:</label><br>
-                                <input name='description' placeholder='description' value='$desc'><br>
-                                text<br><textarea name='text' placeholder='text'>$text</textarea><br>
-                                text2<br><textarea name='text2' placeholder='text2'>$text2</textarea><br>
-                                <input type='submit' value='Edit page'><br><br>
-                            </form>";
+            ob_start();
+            include 'formPage.php';
+            $contentAdm = ob_get_clean();
         } else {
             $contentAdm = "<div class='error'>Page not found in database</div>";
         }

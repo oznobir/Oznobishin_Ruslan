@@ -1,6 +1,6 @@
 <?php
 include 'connectDbPages.php';
-/** @var $link * */
+/** @var $link */
 $info = deletePage($link);
 if (isset($_GET['add-p'])) {
     $url = $_GET['add-p'];
@@ -17,41 +17,16 @@ if (isset($_GET['edit-p'])) {
     ];
 }
 showPageTable($link, $info);
-
 function showPageTable($link, $info): void
 {
-    $contentAdm =  '';
-    if ($info){
-        $contentAdm .=  "<div class='{$info['status']}'>{$info['text']}</div>";
-    }
-
     $query = "SELECT id, title, description, url FROM pages";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
     for ($data = []; $row = mysqli_fetch_assoc($result);){
         $data [] = $row;
     }
-
-    $contentAdm .= "<table><thead><tr>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Url</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr></thead>
-                <tbody>";
-    foreach ($data as $pageAdm) {
-        $contentAdm .=
-            "<tr>
-                <td>{$pageAdm['id']}</td>
-                <td>{$pageAdm['title']}</td>
-                <td>{$pageAdm['description']}</td>
-                <td>{$pageAdm['url']}</td>
-                <td><a href='editPage.php?edit-p={$pageAdm['url']}'>edit</a></td>
-                <td><a href='?delete-p={$pageAdm['url']}'>delete</a></td>
-             </tr>";
-    }
-    $contentAdm .= "</tbody></table>";
+    ob_start();
+    include 'tablePages.php';
+    $contentAdm = ob_get_clean();
     $titleAdm = 'admin page';
     $descAdm = 'admin page';
     include 'layoutAdm.php';
