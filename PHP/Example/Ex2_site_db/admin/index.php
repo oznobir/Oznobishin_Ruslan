@@ -2,17 +2,17 @@
 include 'connectDbPages.php';
 /** @var $link */
 $info = deletePage($link);
-if (isset($_GET['add-p'])) {
-    $url = $_GET['add-p'];
+if (isset($_GET['add-id'])) {
+    $id = $_GET['add-id'];
     $info = [
-        'text' => "Page \"$url\" added successfully!",
+        'text' => "Page with Id \"$id\" added successfully!",
         'status' => "success"
     ];
 }
-if (isset($_GET['edit-p'])) {
-    $url = $_GET['edit-p'];
+if (isset($_GET['edit-id'])) {
+    $id = $_GET['edit-id'];
     $info = [
-        'text' => "Page \"$url\" edited successfully!",
+        'text' => "Page with Id \"$id\" edited successfully!",
         'status' => "success"
     ];
 }
@@ -34,12 +34,13 @@ function showPageTable($link, $info): void
 
 function deletePage($link)
 {
-    if (isset($_GET['delete-p'])) {
-        $url = $_GET['delete-p'];
-        $query = "DELETE FROM pages WHERE url = '$url'";
+    if (isset($_GET['delete-id'])) {
+        $id = $_GET['delete-id'];
+
+        $query = "DELETE FROM pages WHERE id = '$id'";
         mysqli_query($link, $query) or die(mysqli_error($link));
         return [
-            'text' => "Page \"$url\" delete successfully!",
+            'text' => "Page with Id \"$id\" delete successfully!",
             'status' => "success"
         ];
     } else {

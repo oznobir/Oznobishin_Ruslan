@@ -3,15 +3,17 @@ include 'connectDbPages.php';
 /** @var $link * */
 
 $info = addPage($link);
-getPage($info);
+getPage($link, $info);
 
-function getPage($info): void
+function getPage($link, $info): void
 {
+
     if (isset($_POST['title']) &&
         isset($_POST['description']) &&
         isset($_POST['url']) &&
         isset($_POST['text']) &&
         isset($_POST['text2'])) {
+
         $title = $_POST['title'];
         $desc = $_POST['description'];
         $url = $_POST['url'];
@@ -24,7 +26,7 @@ function getPage($info): void
         $text = '';
         $text2 = '';
     }
-    $id = '';
+
     ob_start();
     include 'formPage.php';
     $contentAdm = ob_get_clean();
@@ -40,11 +42,12 @@ function addPage($link)
         isset($_POST['url']) &&
         isset($_POST['text']) &&
         isset($_POST['text2'])) {
-        $title = $_POST['title'];
-        $desc = $_POST['description'];
-        $url = $_POST['url'];
-        $text = $_POST['text'];
-        $text2 = $_POST['text2'];
+
+        $title = mysqli_real_escape_string($link, $_POST['title']);
+        $desc = mysqli_real_escape_string($link, $_POST['description']);
+        $url = mysqli_real_escape_string($link, $_POST['url']);
+        $text = mysqli_real_escape_string($link, $_POST['text']);
+        $text2 = mysqli_real_escape_string($link, $_POST['text2']);
         // проверка - есть ли такой url, лучше использовать SELECT COUNT
         $query = "SELECT COUNT(*) as count FROM pages WHERE url = '$url'";
         $result = mysqli_query($link, $query) or die(mysqli_error($link));
@@ -53,16 +56,17 @@ function addPage($link)
 
         if ($isPage) {
             return [
-                'text' => "Page \"$url\" exists!",
+                'text' => "Page with url \"$url\" exists!",
                 'status' => "error"
             ];
         } elseif ($url != '') {
             $query = "INSERT INTO pages (title, description, url, text, text2) VALUES ('$title','$desc','$url','$text','$text2')";
             mysqli_query($link, $query) or die(mysqli_error($link));
-            header("Location: index.php?add-p=$url");
-//          Т.к. теперь редирект на admin page с Get['add-p'], то далее можно возвращать ''.
+            $id = mysqli_insert_id($link);
+            header("Location: index.php?add-id=$id");
+//          Т.к. теперь редирект на admin page с Get['add-id'], то далее можно возвращать ''.
 //            return [
-//                'text' => "Page \"$url\" added successfully!",
+//                'text' => "Page with \"$id\" added successfully!",
 //                'status' => "success"
 //            ];
             return '';

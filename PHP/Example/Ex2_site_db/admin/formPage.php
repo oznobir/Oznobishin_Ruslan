@@ -9,12 +9,10 @@
  */
 
 if ($info) {
-    echo "<div class=' {$info['status']}'> {$info['text']}</div>";
+    echo '<div class ="'.$info['status'].'">'.$info['text'].'</div>';
 } ?>
 <form method='POST'>
-    <label>
-        <input name='id' value="<?= $id ?>" hidden='hidden'>
-    </label><br>
+
     <label for='url'> url:<br>
         <input name='url' placeholder='url' value="<?= $url ?>">
     </label><br>

@@ -24,8 +24,8 @@ if ($info) {
             <td><?= $pageAdm['title'] ?></td>
             <td><?= $pageAdm['description'] ?></td>
             <td><?= $pageAdm['url'] ?></td>
-            <td><a href="edit.php?edit-p=<?= $pageAdm['url'] ?>">edit</a></td>
-            <td><a href="?delete-p=<?= $pageAdm['url'] ?>">delete</a></td>
+            <td><a href="edit.php?edit-id=<?= $pageAdm['id'] ?>">edit</a></td>
+            <td><a href="?delete-id=<?= $pageAdm['id'] ?>">delete</a></td>
         </tr>
     <?php } ?>
     </tbody>
