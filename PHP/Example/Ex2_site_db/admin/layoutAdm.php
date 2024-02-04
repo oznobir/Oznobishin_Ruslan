@@ -1,7 +1,7 @@
 <?php
-/** @var $desc */
-/** @var $title */
-/** @var $content */
+/** @var $descAdm */
+/** @var $titleAdm */
+/** @var $contentAdm */
 ?>
 
 <!DOCTYPE html>
@@ -9,11 +9,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $desc ?>"/>
+    <meta name="description" content="<?= $descAdm ?>"/>
     <meta name="author" content="Oznobishin Ruslan">
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
-    <title><?= $title ?></title>
+    <title><?= $titleAdm ?></title>
     <link rel="stylesheet" type="text/css" href="styleAdm.css">
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="76x76" href="../img/favicon/apple-touch-icon.png">
@@ -28,9 +28,10 @@
 <div class="wrapper">
     <header>
         <h1>Admin page</h1>
+        <a href="addPage.php">Add new page</a>
     </header>
     <main>
-        <?= $content ?>
+        <?= $contentAdm ?>
     </main>
     <footer>
         <h2>by site</h2>

@@ -11,3 +11,10 @@ table td, table th {
     padding: 1rem;
 
 }
+.success {
+    color: forestgreen;
+}
+
+.error {
+    color: indianred;
+}

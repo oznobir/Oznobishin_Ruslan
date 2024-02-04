@@ -1,37 +1,30 @@
 <?php
-//**************
-//Потом можно вынести в отдельный файл
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
-
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbName = 'dbPages';
-
-$link = mysqli_connect($host, $user, $password, $dbName);
-mysqli_query($link, "SET NAMES 'utf8'");
-//*************
-if (deletePage($link)) {
-    $id = $_GET['del'];
-    $info ="Page $id delete successfully";
-} else {
-    $info = '';
+include 'connectDbPages.php';
+/** @var $link * */
+$info = deletePage($link);
+if (isset($_GET['add'])) {
+    $url = $_GET['add'];
+    $info = [
+        'text' => "Page \"$url\" added successfully!",
+        'status' => "success"
+    ];
 }
 showPageTable($link, $info);
+
 function showPageTable($link, $info): void
 {
-    $content =  '';
+    $contentAdm =  '';
     if ($info){
-        $content .=  "<div>Info: $info</div>";
+        $contentAdm .=  "<div class='{$info['status']}'>{$info['text']}</div>";
     }
+
     $query = "SELECT id, title, description, url FROM pages";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
     for ($data = []; $row = mysqli_fetch_assoc($result);){
         $data [] = $row;
     }
 
-    $content .= "<table><thead><tr>
+    $contentAdm .= "<table><thead><tr>
                     <th>Id</th>
                     <th>Title</th>
                     <th>Description</th>
@@ -41,31 +34,34 @@ function showPageTable($link, $info): void
                 </tr></thead>
                 <tbody>";
     foreach ($data as $pageAdm) {
-        $content .=
+        $contentAdm .=
             "<tr>
                 <td>{$pageAdm['id']}</td>
                 <td>{$pageAdm['title']}</td>
                 <td>{$pageAdm['description']}</td>
                 <td>{$pageAdm['url']}</td>
                 <td><a href='/'>edit</a></td>
-                <td><a href='?del={$pageAdm['id']}'>delete</a></td>
+                <td><a href='?del={$pageAdm['url']}'>delete</a></td>
              </tr>";
     }
-    $content .= "</tbody></table>";
-    $title = 'admin page';
-    $desc = 'admin page';
+    $contentAdm .= "</tbody></table>";
+    $titleAdm = 'admin page';
+    $descAdm = 'admin page';
     include 'layoutAdm.php';
 } // end function showPageTable($link, $info): void
 
 function deletePage($link)
 {
     if (isset($_GET['del'])) {
-        $id = $_GET['del'];
-        $query = "DELETE FROM pages WHERE id = '$id'";
+        $url = $_GET['del'];
+        $query = "DELETE FROM pages WHERE url = '$url'";
         mysqli_query($link, $query) or die(mysqli_error($link));
-        return true;
+        return [
+            'text' => "Page \"$url\" delete successfully!",
+            'status' => "success"
+        ];
     } else {
-        return false;
+        return '';
     }
 } // end function deletePage($link)
 

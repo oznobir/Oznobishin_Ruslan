@@ -1,17 +1,7 @@
 <?php
-//**************
-//Потом можно вынести в отдельный файл
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
+include 'admin/connectDbPages.php';
+/** @var $link */
 
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbName = 'dbPages';
-
-$link = mysqli_connect($host, $user, $password, $dbName);
-mysqli_query($link, "SET NAMES 'utf8'");
-//*************
 $page = $_GET['p'] ?? '1';
 
 $query = "SELECT * FROM pages WHERE url = '$page'";
@@ -29,7 +19,9 @@ if (!$page) {
 
     $query = "SELECT url FROM pages";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
-    for ($data = []; $row = mysqli_fetch_assoc($result); $data [] = $row) ;
+    for ($data = []; $row = mysqli_fetch_assoc($result);) {
+        $data [] = $row;
+    }
 //    var_dump($data);
 //    Пока в базе url в том порядке как нужно
 
@@ -51,4 +43,3 @@ function createLinkMenu($href): string
     }
     return "<div><a$classLinkMenu href=\"?p=$href\">Page $href</a></div>";
 }//  end  function createLinkMenu($href): string
-

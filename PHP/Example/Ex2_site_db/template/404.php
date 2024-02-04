@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-<div class="wrap">
+<div class="wrapper">
     <header>
         <?php include 'header.php' ?>
     </header>

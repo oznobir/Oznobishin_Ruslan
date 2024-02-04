@@ -12,6 +12,7 @@ header, footer {
     border-radius: 0.2rem;
     box-shadow: 5px 5px 15px 0 rgba(1, 0, 0, 0.5);
 }
+
 /*[class ^="box-"]*/
 .box-menu {
     display: flex;

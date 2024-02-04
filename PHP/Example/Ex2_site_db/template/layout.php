@@ -38,7 +38,6 @@
         <section class="box-texts">
             <div class="box-text1">
                 <?= $content ?>
-                <a class="active" href="layout.php"></a>
             </div>
             <div class="box-text2">
                 <?= $content2 ?>
