@@ -95,13 +95,13 @@ function editPage($link)
 
             header("Location: index.php?edit-p=$url");
             return [
-                'text' => "Page \"$url\" edited successfully!",
-                'status' => "success"
+                "text" => "Page \"$url\" edited successfully!",
+                "status" => "success"
             ];
         } else {
             return [
-                'text' => "Page not found!",
-                'status' => "error"
+                'text' => 'Page not found!',
+                'status' => 'error'
             ];
         }
     } else {
