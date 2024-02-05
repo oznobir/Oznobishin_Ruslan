@@ -113,6 +113,8 @@ function editPage($link): void
                 'text' => "Page Id not found!",
                 'status' => "error"
             ];
+            header("Location: index.php");
+            die();
         }
     }
 }
