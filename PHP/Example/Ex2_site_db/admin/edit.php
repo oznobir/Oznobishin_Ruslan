@@ -1,9 +1,9 @@
 <?php
 include 'connectDbPages.php';
 /** @var $link * */
-$info = editPage($link);
-getPage($link, $info);
-function getPage($link, $info): void
+editPage($link);
+getPage($link);
+function getPage($link): void
 {
     if (isset($_GET['edit-id'])) {
         $id = $_GET['edit-id'];
@@ -35,17 +35,27 @@ function getPage($link, $info): void
             include 'formPage.php';
             $contentAdm = ob_get_clean();
         } else {
-            $contentAdm = "<div class='error'>Page ID not found in database</div>";
+            $_SESSION ['message'] = [
+                'text' => "Page ID not found in database!",
+                'status' => "error"
+            ];
+            header("Location: index.php");
+            die();
         }
     } else {
-        $contentAdm = "<div class='error'>Page ID not selected</div>";
+        $_SESSION ['message'] = [
+            'text' => "Page ID not selected",
+            'status' => "error"
+        ];
+        header("Location: index.php");
+        die();
     }
     $titleAdm = 'admin edit page';
     $descAdm = 'admin edit page';
     include 'layoutAdm.php';
 }
 
-function editPage($link)
+function editPage($link): void
 {
     if (isset($_POST['url']) &&
         isset($_POST['title']) &&
@@ -65,35 +75,44 @@ function editPage($link)
             $result = mysqli_query($link, $query) or die(mysqli_error($link));
             $page = mysqli_fetch_assoc($result);
 
+
             if (mysqli_real_escape_string($link, $page ['url']) !== $url) {
                 $query = "SELECT COUNT(*) as count FROM pages WHERE url = '$url'";
                 $result = mysqli_query($link, $query) or die(mysqli_error($link));
                 $isPage = mysqli_fetch_assoc($result)['count'];
 
                 if ($isPage) {
-                    return [
+                    $_SESSION ['message'] = [
                         'text' => "Page with url \"$url\" exists!",
                         'status' => "error"
                     ];
+                    header("Location: edit.php?edit-id=$id");
+                    die();
                 }
             }
 
+            if (!$url) {
+                $_SESSION ['message'] = [
+                    'text' => "Enter url page!",
+                    'status' => "error"
+                ];
+                header("Location: edit.php?edit-id=$id");
+                die();
+            }
             $query = "UPDATE pages SET  title ='$title', description ='$desc', 
             url ='$url', text ='$text', text2='$text2' WHERE id ='$id'";
             mysqli_query($link, $query) or die(mysqli_error($link));
-
-            header("Location: index.php?edit-id=$id");
-            return [
-                "text" => "Page with Id \"$id\" edited successfully!",
-                "status" => "success"
+            $_SESSION ['message'] = [
+                'text' => "Page with Id \"$id\" edited successfully!",
+                'status' => "success"
             ];
+            header("Location: index.php");
+            die();
         } else {
-            return [
-                'text' => 'Page ID not found!',
-                'status' => 'error'
+            $_SESSION ['message'] = [
+                'text' => "Page Id not found!",
+                'status' => "error"
             ];
         }
-    } else {
-        return '';
     }
 }

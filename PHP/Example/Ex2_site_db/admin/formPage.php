@@ -1,16 +1,11 @@
 <?php
 /* @var $url
- * @var $id
  * @var $title
  * @var $desc
  * @var $text
  * @var $text2
- * @var $info
  */
-
-if ($info) {
-    echo '<div class ="'.$info['status'].'">'.$info['text'].'</div>';
-} ?>
+?>
 <form method='POST'>
 
     <label for='url'> url:<br>

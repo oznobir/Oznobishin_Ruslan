@@ -1,9 +1,9 @@
 <?php
 /** @var $descAdm *
-* @var $titleAdm *
-* @var $contentAdm */
+** @var $titleAdm *
+** @var $infoAdm *
+** @var $contentAdm */
 ?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -31,6 +31,7 @@
         <a href="add.php">Add new page</a>
     </header>
     <main>
+        <?php include 'infoAdm.php'?>
         <?= $contentAdm ?>
     </main>
     <footer>

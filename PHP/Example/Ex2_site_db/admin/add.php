@@ -2,10 +2,10 @@
 include 'connectDbPages.php';
 /** @var $link * */
 
-$info = addPage($link);
-getPage($link, $info);
+addPage($link);
+getPage();
 
-function getPage($link, $info): void
+function getPage(): void
 {
 
     if (isset($_POST['title']) &&
@@ -35,7 +35,7 @@ function getPage($link, $info): void
     include 'layoutAdm.php';
 }// end function getPage($info = ''): void
 
-function addPage($link)
+function addPage($link): void
 {
     if (isset($_POST['title']) &&
         isset($_POST['description']) &&
@@ -48,35 +48,32 @@ function addPage($link)
         $url = mysqli_real_escape_string($link, $_POST['url']);
         $text = mysqli_real_escape_string($link, $_POST['text']);
         $text2 = mysqli_real_escape_string($link, $_POST['text2']);
-        // проверка - есть ли такой url, лучше использовать SELECT COUNT
+
         $query = "SELECT COUNT(*) as count FROM pages WHERE url = '$url'";
         $result = mysqli_query($link, $query) or die(mysqli_error($link));
         $isPage = mysqli_fetch_assoc($result)['count'];
-//        var_dump($isPage);
 
         if ($isPage) {
-            return [
+            $_SESSION ['message'] = [
                 'text' => "Page with url \"$url\" exists!",
                 'status' => "error"
             ];
         } elseif ($url != '') {
-            $query = "INSERT INTO pages (title, description, url, text, text2) VALUES ('$title','$desc','$url','$text','$text2')";
+            $query = "INSERT INTO pages (title, description, url, text, text2) 
+                      VALUES ('$title','$desc','$url','$text','$text2')";
             mysqli_query($link, $query) or die(mysqli_error($link));
             $id = mysqli_insert_id($link);
-            header("Location: index.php?add-id=$id");
-//          Т.к. теперь редирект на admin page с Get['add-id'], то далее можно возвращать ''.
-//            return [
-//                'text' => "Page with \"$id\" added successfully!",
-//                'status' => "success"
-//            ];
-            return '';
+            $_SESSION ['message'] =  [
+                'text' => "Page with id \"$id\" added successfully!",
+                'status' => "success"
+            ];
+            header("Location: index.php");
+            die();
         } else {
-            return [
+            $_SESSION ['message'] =  [
                 'text' => "Enter url page!",
                 'status' => "error"
             ];
         }
-    } else {
-        return '';
     }
 }// end function addPage($link)

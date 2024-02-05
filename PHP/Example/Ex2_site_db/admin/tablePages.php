@@ -1,9 +1,5 @@
 <?php
-/* @var $data
- * @var $info */
-if ($info) {
-    echo "<div class='{$info['status']}'>{$info['text']}</div>";
-}
+/* @var $data */
 ?>
 <table>
     <thead>

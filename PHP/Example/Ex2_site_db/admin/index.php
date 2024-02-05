@@ -1,23 +1,11 @@
 <?php
 include 'connectDbPages.php';
 /** @var $link */
-$info = deletePage($link);
-if (isset($_GET['add-id'])) {
-    $id = $_GET['add-id'];
-    $info = [
-        'text' => "Page with Id \"$id\" added successfully!",
-        'status' => "success"
-    ];
-}
-if (isset($_GET['edit-id'])) {
-    $id = $_GET['edit-id'];
-    $info = [
-        'text' => "Page with Id \"$id\" edited successfully!",
-        'status' => "success"
-    ];
-}
-showPageTable($link, $info);
-function showPageTable($link, $info): void
+
+deletePage($link);
+showPageTable($link);
+
+function showPageTable($link): void
 {
     $query = "SELECT id, title, description, url FROM pages";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
@@ -29,22 +17,23 @@ function showPageTable($link, $info): void
     $contentAdm = ob_get_clean();
     $titleAdm = 'admin page';
     $descAdm = 'admin page';
+
     include 'layoutAdm.php';
 } // end function showPageTable($link, $info): void
 
-function deletePage($link)
+function deletePage($link): void
 {
     if (isset($_GET['delete-id'])) {
         $id = $_GET['delete-id'];
 
         $query = "DELETE FROM pages WHERE id = '$id'";
         mysqli_query($link, $query) or die(mysqli_error($link));
-        return [
+        $_SESSION ['message'] =  [
             'text' => "Page with Id \"$id\" delete successfully!",
             'status' => "success"
         ];
-    } else {
-        return '';
+        header("Location: index.php");
+        die();
     }
 } // end function deletePage($link)
 
