@@ -1,4 +1,101 @@
-.wrapper {
-    width: 400px;
-    border: #444444 solid 1px;
+header, footer {
+    line-height: 2rem;
+    text-align: center;
+}
+.box-main {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: #888;
+    border: solid #888 2px;
+    border-radius: 0.2rem;
+    box-shadow: 5px 5px 15px 0 rgba(1, 0, 0, 0.5);
+}
+
+/*[class ^="box-"]*/
+.box-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.box-texts {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    background-color: #888;
+}
+
+.box-text1 {
+    color: #444;
+    background-color: #d3d3d3;
+    padding: 0.6rem;
+    flex-grow: 1;
+    border-radius: 0;
+}
+
+.box-text2 {
+    flex-grow: 1;
+    color: #444;
+    background-color: #d3d3d3;
+    padding: 0.6rem;
+    border-radius: 0 0.2rem 0.2rem 0;
+}
+
+.box-menu > div > a.active {
+    color: #444;
+    background-color: #d3d3d3;
+    cursor: text;
+    border-right-color: #d3d3d3;
+    border-right-width: 2px;
+}
+
+.box-menu > div > a {
+    display: inline-block;
+    text-decoration: none;
+    width: 11rem;
+    line-height: 2rem;
+    text-align: center;
+    color: #d3d3d3;
+    background-color: #888;
+    border-right: solid #888 2px;
+    /*border-top: solid #888 1px;*/
+    border-bottom: solid #888 1px;
+    border-radius: 0.2rem 0 0 0.2rem;
+    padding: 0.2rem;
+    box-shadow: 5px 5px 15px -1px rgba(1, 0, 0, 0.5);
+    transition: background-color, color 0.5s linear;
+}
+
+.box-menu > div > a:hover {
+    color: #444;
+    background-color: #d3d3d3;
+    border-right-color: #888;
+    border-right-width: 2px;
+
+}
+
+@media all and (max-width: 900px) {
+    .box-texts {
+        flex-direction: column;
+    }
+    .box-menu > div > a {
+        width: 8rem;
+    }
+}
+@media all and (max-width: 600px) {
+    .box-texts {
+        flex-direction: column;
+    }
+    .box-menu > div > a {
+        width: 6rem;
+    }
+}
+@media all and (max-width: 400px) {
+    .box-texts {
+        flex-direction: column;
+    }
+    .box-menu > div > a {
+        width: 4rem;
+    }
 }
