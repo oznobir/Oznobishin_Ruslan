@@ -27,7 +27,7 @@ function showContent($data, $page): string
 
         $content .= "<form><fieldset>";
         ob_start();
-        include "pages/p$page/ex_1.php";
+        include "pages/p$page/index.php";
         $content .= ob_get_clean();
         $content .= "</fieldset></form>";
     }
@@ -61,31 +61,5 @@ function creatForm($data): string
 }
 function showContent2($page): string
 {
-    return highlight_file("pages/p$page/ex_1.php", true);
+    return highlight_file("pages/p$page/index.php", true);
 }
-
-//if (file_exists($path)) {
-//    $content = file_get_contents($path);
-//} else {
-//    $content = file_get_contents("pages/404.php");
-//    header("HTTP/1.0 404 Not Found");
-//    // прежде надо проверить, что 404.php есть
-//}
-//// сделать потом функцию+-
-//$reg = '#\{\{title:(.*?)\}\}#';
-//if (preg_match($reg, $content, $match)) {
-//    $title = $match[1];
-//    $content = trim(preg_replace($reg, '', $content));
-//} else {
-//    $title = '';
-//    // прежде надо проверить, что title есть и не пустой
-//}
-//$reg = '#\{\{description:(.*?)\}\}#';
-//if (preg_match($reg, $content, $match)) {
-//    $desc = $match[1];
-//    $content = trim(preg_replace($reg, '', $content));
-//} else {
-//    $desc = '';
-//    // прежде надо проверить, что description есть и не пустой
-//}
-//include 'template/layout.php';

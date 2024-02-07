@@ -1,55 +1,21 @@
 <?php
-/* @var $data ; */
-
-//include 'data.php';
-//// Инициализация переменных $a $b $c со значением из _POST или из default в data.php
-//foreach ($data as $arr) {
-//    $w = $arr['name'];
-//    if (isset($_POST['button'])) {
-//        $post = $_POST[$w];
-//    } else {
-//        $post = $arr['default'];
-//    }
-//    $$w = $post;
-//}
-//$content = creatForm($data);
-//if (file_exists('ex_1.php')) {
-////    $content2 = file_get_contents('ex_1.php');
-//    $content2 = highlight_file('ex_1.php', true);
-//} else {
-//    $content2 = '';
-//}
-//if (isset($_POST['button'])) {
-//// Отображение результата из ex_1.php
-//    $content .= "<form><fieldset>";
-//    ob_start();
-//    include 'ex_1.php';
-//    $content .= ob_get_clean();
-//    $content .= "</fieldset></form>";
-//}
-//include 'layout.php';
-//function creatForm($data): string
-//{
-//    $content = "<form method=\"POST\"><fieldset>";
-//    foreach ($data as $arr) {
-//        if (isset($_POST['button'])) {
-//            $post = $_POST[$arr['name']];
-//        } else {
-//            $post = $arr['default'];
-//        }
-//        if ($arr['type'] == 'text') {
-//            $content .= "
-//              <label for=\"id_{$arr['name']}\">\${$arr['name']}:</label>
-//              <input type=\"text\" id = \"id_{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"$post\"><br><br>
-//            ";
-//        }
-//        if ($arr['type'] == 'textarea') {
-//            $content .= "<span>Текст: </span>
-/*                  <textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\"><?= $post ?></textarea><br>*/
-//                ";
-//        }
-//    }
-//    $content .= "<input type=\"submit\" name=\"button\" value=\"Результат\" />";
-//    $content .= " </fieldset></form>";
-//    return $content;
-//}
+if (is_numeric($a) && is_numeric($b) && is_numeric($c)) {
+    if ($a > $b) {
+        $max = $a;
+        $min = $b;
+    } else {
+        $max = $b;
+        $min = $a;
+    }
+    if ($c > $max) {
+        $max = $c;
+    } elseif ($c < $min) {
+        $min = $c;
+    }
+    $sum = $min + $max;
+    echo "<p>max = $max</p>";
+    echo "<p>min = $min</p>";
+    echo "<p>Их сумма = $sum</p>";
+} else {
+    echo "<p>Не числовые данные</p>";
+}
