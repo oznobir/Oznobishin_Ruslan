@@ -13,13 +13,15 @@ include 'template/layout.php';
 function showContent($data, $page): string
 {
     foreach ($data as $arr) {
-        $w = $arr['name'];
-        if (isset($_POST['button'])) {
-            $post = $_POST[$w];
-        } else {
-            $post = $arr['default'];
+        if ($arr['name']) {
+            $w = $arr['name'];
+            if (isset($_POST['button'])) {
+                $post = $_POST[$w];
+            } else {
+                $post = $arr['default'];
+            }
+            $$w = $post;
         }
-        $$w = $post;
     }
     $content = creatForm($data);
 
@@ -34,21 +36,30 @@ function showContent($data, $page): string
 
     return $content;
 }
+
 function creatForm($data): string
 {
     $content = "<form method=\"POST\"><fieldset>";
     foreach ($data as $arr) {
-        if (isset($_POST['button'])) {
+        // тут подумать !!!!
+        if (($arr['name']) && isset($_POST['button'])) {
             $post = $_POST[$arr['name']];
         } else {
             $post = $arr['default'];
         }
+
         if ($arr['type'] == 'text') {
             $content .= "
               <label for=\"id_{$arr['name']}\">\${$arr['name']}:</label>
               <input type=\"text\" id = \"id_{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"$post\"><br><br> 
             ";
         }
+        if ($arr['type'] == 'label') {
+            $content .= "
+              <label>$post:</label><br><br> 
+            ";
+        }
+
         if ($arr['type'] == 'textarea') {
             $content .= "<span>Текст: </span>
                   <textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\"><?= $post ?></textarea><br>
@@ -59,6 +70,7 @@ function creatForm($data): string
     $content .= " </fieldset></form>";
     return $content;
 }
+
 function showContent2($page): string
 {
     return highlight_file("pages/p$page/index.php", true);

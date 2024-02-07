@@ -45,9 +45,9 @@
     # Если кнопка нажата
 
     if (isset($_POST['button_1'])) {
-        var_dump($_POST['button_1']);
+
         $x = $_POST['z1_x'];
-        var_dump($_POST['z1_x']);
+
         if ($x > 0) {
             echo "<p class ='color_green'>$x</p>";
         } elseif ($x < 0) {
@@ -275,7 +275,6 @@
             $goods_max = $d;
             $goods_min = $c;
         }
-        // Толщина стенок сумки не учитывается, для лучшего перебирания значений
         if ($bag_max >= $goods_max && $bag_min >= $goods_min) {
             echo "<p class ='color_green'> Товар поместится в сумку</p>";
         } else {
