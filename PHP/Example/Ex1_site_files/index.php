@@ -2,15 +2,51 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-$page = $_GET['p'] ?? '2';
+if (file_exists("data/data_menu.php")) {
+    $data_menu = include "data/data_menu.php";
 
-//$path = "pages/p$page";
-$data = include "data/data_p$page.php";
-//var_dump($data);
-$content = showContent($data, $page);
-$content2 = showContent2($page);
+    $page = $_GET['p'] ?? '1';
+
+    $p = $data_menu[$page]['dir'];
+    if (file_exists("data/data_$p.php")) {
+        $data = include "data/data_$p.php";
+        $title = "Пример $page. Условные операторы PHP.";
+        $desc = $data_menu[$page]['desc'];
+        $menu = '';
+        foreach ($data_menu as $key => $a) {
+            // порядковый номер (ключ массива) в меню
+            $menu .= createLinkMenu($key);
+        }
+
+        $content = showContent($data, $p);
+        $content2 = showContent2($p);
+    } else {
+        $title = "File 'data/data_$p.php' not found";
+        $desc = "File 'data/data_$p.php' not found";
+        $menu = '';
+        $content = '';
+        $content2 = '';
+    }
+
+} else {
+    $title = "File 'data_menu.php' not found";
+    $desc = "File 'data_menu.php' not found";
+    $menu = '';
+    $content = '';
+    $content2 = '';
+}
 include 'template/layout.php';
-function showContent($data, $page): string
+function createLinkMenu($href): string
+{
+    $page = $_GET['p'] ?? '1';
+    if ($page == $href) {
+        $classLinkMenu = " class='active'";
+    } else {
+        $classLinkMenu = '';
+    }
+    return "<div><a$classLinkMenu href=\"?p=$href\">Пример $href</a></div>";
+}//  end  function createLinkMenu($href): string
+function showContent($data, $p): string
 {
     foreach ($data as $arr) {
         if ($arr['name']) {
@@ -29,7 +65,7 @@ function showContent($data, $page): string
 
         $content .= "<form><fieldset>";
         ob_start();
-        include "pages/p$page/index.php";
+        include "pages/$p/index.php";
         $content .= ob_get_clean();
         $content .= "</fieldset></form>";
     }
@@ -71,7 +107,7 @@ function creatForm($data): string
     return $content;
 }
 
-function showContent2($page): string
+function showContent2($p): string
 {
-    return highlight_file("pages/p$page/index.php", true);
+    return highlight_file("pages/$p/index.php", true);
 }

@@ -1,6 +1,9 @@
-header, footer {
+header  h1, footer {
     line-height: 2rem;
     text-align: center;
+}
+header  p{
+    line-height: 2rem;
 }
 .box-main {
     display: flex;
