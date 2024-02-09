@@ -4,9 +4,7 @@ ini_set('display_errors', 'on');
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-
     $page = $_GET['p'] ?? '1';
-
     $p = $data_menu[$page]['dir'];
     if (file_exists("data/data_$p.php")) {
         $data = include "data/data_$p.php";
@@ -17,14 +15,13 @@ if (file_exists("data/data_menu.php")) {
             // порядковый номер (ключ массива) в меню
             $menu .= createLinkMenu($key);
         }
-
-        $content = showContent($data, $p);
+        $content1 = showContent1($data, $p);
         $content2 = showContent2($p);
     } else {
         $title = "File 'data/data_$p.php' not found";
         $desc = "File 'data/data_$p.php' not found";
         $menu = '';
-        $content = '';
+        $content1 = '';
         $content2 = '';
     }
 
@@ -32,7 +29,7 @@ if (file_exists("data/data_menu.php")) {
     $title = "File 'data_menu.php' not found";
     $desc = "File 'data_menu.php' not found";
     $menu = '';
-    $content = '';
+    $content1 = '';
     $content2 = '';
 }
 include 'template/layout.php';
@@ -46,7 +43,7 @@ function createLinkMenu($href): string
     }
     return "<div><a$classLinkMenu href=\"?p=$href\">Пример $href</a></div>";
 }//  end  function createLinkMenu($href): string
-function showContent($data, $p): string
+function showContent1($data, $p): string
 {
     foreach ($data as $arr) {
         if ($arr['name']) {
@@ -59,23 +56,23 @@ function showContent($data, $p): string
             $$w = $post;
         }
     }
-    $content = creatForm($data);
+    $content1 = creatForm($data);
 
     if (isset($_POST['button'])) {
 
-        $content .= "<form><fieldset>";
+        $content1 .= "<form><fieldset>";
         ob_start();
         include "pages/$p/index.php";
-        $content .= ob_get_clean();
-        $content .= "</fieldset></form>";
+        $content1 .= ob_get_clean();
+        $content1 .= "</fieldset></form>";
     }
 
-    return $content;
-}
+    return $content1;
+}// end function showContent($data, $p): string
 
 function creatForm($data): string
 {
-    $content = "<form method=\"POST\"><fieldset>";
+    $content1 = "<form method=\"POST\"><fieldset>";
     foreach ($data as $arr) {
         // тут подумать !!!!
         if (($arr['name']) && isset($_POST['button'])) {
@@ -85,29 +82,29 @@ function creatForm($data): string
         }
 
         if ($arr['type'] == 'text') {
-            $content .= "
+            $content1 .= "
               <label for=\"id_{$arr['name']}\">\${$arr['name']}:</label>
               <input type=\"text\" id = \"id_{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"$post\"><br><br> 
             ";
         }
         if ($arr['type'] == 'label') {
-            $content .= "
+            $content1 .= "
               <label>$post:</label><br><br> 
             ";
         }
 
         if ($arr['type'] == 'textarea') {
-            $content .= "<span>Текст: </span>
+            $content1 .= "<span>Текст: </span>
                   <textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\"><?= $post ?></textarea><br>
                 ";
         }
     }
-    $content .= "<input type=\"submit\" name=\"button\" value=\"Результат\" />";
-    $content .= " </fieldset></form>";
-    return $content;
-}
+    $content1 .= "<input type=\"submit\" name=\"button\" value=\"Результат\" />";
+    $content1 .= " </fieldset></form>";
+    return $content1;
+} // end function creatForm($data): string
 
 function showContent2($p): string
 {
     return highlight_file("pages/$p/index.php", true);
-}
+} // end function showContent2($p): string

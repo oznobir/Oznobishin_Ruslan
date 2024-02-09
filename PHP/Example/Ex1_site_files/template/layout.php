@@ -23,7 +23,7 @@
         </nav>
         <section class="box-texts">
             <div class="box-text1">
-                <?= $content ?>
+                <?= $content1 ?>
 
             </div>
             <div class="box-text2">
