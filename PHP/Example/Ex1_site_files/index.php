@@ -4,16 +4,25 @@ ini_set('display_errors', 'on');
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-    $page = $_GET['p'] ?? '1';
-    $p = $data_menu[$page]['dir'];
+//    var_dump($data_menu);
+//    exit();
+    $page = $_GET['p'] ?? '1-2-1';
+// Временно. Переделать !!!!
+//    $reg = '#(\d+-\d+)#';
+    $reg = '#(\d+)-(\d+)-(\d+)#';
+    preg_match($reg, $page, $match);
+    $sup = [$match[1], $match[2], "$match[1]-$match[2]"];
+
+    $p = $data_menu[$sup[0]]['children'][$sup[2]]['children'][$page]['dir'];
+
     if (file_exists("data/data_$p.php")) {
         $data = include "data/data_$p.php";
-        $title = "Пример $page. Условные операторы PHP.";
-        $desc = $data_menu[$page]['desc'];
+        $title = "Пример $page. {$data_menu[$sup[0]]['children'][$sup[2]]['desc']}.";
+        $desc = $data_menu[$sup[0]]['children'][$sup[2]]['children'][$page]['desc'];
         $menu = '';
-        foreach ($data_menu as $key => $a) {
-            // порядковый номер (ключ массива) в меню
-            $menu .= createLinkMenu($key);
+//        $tree_menu = getTree($data_menu);
+        foreach ($data_menu[$sup[0]]['children'][$sup[2]]['children'] as $key => $a) {
+                $menu .= createLinkMenu($key);
         }
         $content1 = showContent1($data, $p);
         $content2 = showContent2($p);
@@ -33,9 +42,24 @@ if (file_exists("data/data_menu.php")) {
     $content2 = '';
 }
 include 'template/layout.php';
+// Массив переделан как $tree
+//function getTree($data): array
+//{
+//    $tree = array();
+//    foreach ($data as $key => &$node) {
+//        //Если нет вложений
+//        if (!$node['parent']) {
+//            $tree[$key] = &$node;
+//        } else {
+//            //Если есть потомки, то переберем массив
+//            $data[$node['parent']]['children'][$key] = &$node;
+//        }
+//    }
+//    return $tree;
+//}
 function createLinkMenu($href): string
 {
-    $page = $_GET['p'] ?? '1';
+    $page = $_GET['p'] ?? '1-2-1';
     if ($page == $href) {
         $classLinkMenu = " class='active'";
     } else {
