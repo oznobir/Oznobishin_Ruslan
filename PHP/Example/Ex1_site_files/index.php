@@ -4,59 +4,73 @@ ini_set('display_errors', 'on');
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-//    var_dump($data_menu);
-//    exit();
     $page = $_GET['p'] ?? '1-2-1';
-// Временно. Переделать !!!!
-//    $reg = '#(\d+-\d+)#';
-    $reg = '#(\d+)-(\d+)-(\d+)#';
-    preg_match($reg, $page, $match);
-    $sup = [$match[1], $match[2], "$match[1]-$match[2]"];
-
-    $p = $data_menu[$sup[0]]['children'][$sup[2]]['children'][$page]['dir'];
-
-    if (file_exists("data/data_$p.php")) {
-        $data = include "data/data_$p.php";
-        $title = "Пример $page. {$data_menu[$sup[0]]['children'][$sup[2]]['desc']}.";
-        $desc = $data_menu[$sup[0]]['children'][$sup[2]]['children'][$page]['desc'];
-        $menu = '';
+    if (getData_menu($data_menu, $page)) {
+        $menu_p = getData_menu($data_menu, $page);
+        $p = $menu_p['dir'];
+        if (file_exists("data/data_$p.php")) {
+            $data = include "data/data_$p.php";
+            $sup_menu_p = getData_menu($data_menu, $page, true);
+            $title = "Пример $page";
+            $desc = $menu_p['desc'];
+            $menu = '';
 //        $tree_menu = getTree($data_menu);
-        foreach ($data_menu[$sup[0]]['children'][$sup[2]]['children'] as $key => $a) {
+            foreach ($sup_menu_p as $key => $a) {
                 $menu .= createLinkMenu($key);
+            }
+            $content1 = showContent1($data, $p);
+            $content2 = showContent2($p);
+        } else {
+            $title = '';
+            $desc = "";
+            $menu = '';
+            $content1 = "File 'data/data_$p.php' not found";;
+            $content2 = '';
         }
-        $content1 = showContent1($data, $p);
-        $content2 = showContent2($p);
     } else {
-        $title = "File 'data/data_$p.php' not found";
-        $desc = "File 'data/data_$p.php' not found";
+        $title = "";
+        $desc = "";
         $menu = '';
-        $content1 = '';
+        $content1 = "File '$page' not found";
         $content2 = '';
     }
-
 } else {
-    $title = "File 'data_menu.php' not found";
-    $desc = "File 'data_menu.php' not found";
+    $title = "";
+    $desc = "";
     $menu = '';
-    $content1 = '';
+    $content1 = "File 'data_menu.php' not found";
     $content2 = '';
 }
 include 'template/layout.php';
-// Массив переделан как $tree
-//function getTree($data): array
-//{
-//    $tree = array();
-//    foreach ($data as $key => &$node) {
-//        //Если нет вложений
-//        if (!$node['parent']) {
-//            $tree[$key] = &$node;
-//        } else {
-//            //Если есть потомки, то переберем массив
-//            $data[$node['parent']]['children'][$key] = &$node;
-//        }
-//    }
-//    return $tree;
-//}
+function getData_menu($data_menu, $page, $parent = false)
+{
+    $preg = '#([0-9-]+)-([0-9-]+)#';
+    //$preg ='#([a-z0-9_-]?+)-([a-z0-9_-]+)#'; //если разбор с начала
+    if (preg_match($preg, $page, $params[])) {
+        for ($i = 0; ($params[$i]); $i++) {
+            //    preg_match($preg, $params[$i][2], $params[]); //если разбор с начала
+            preg_match($preg, $params[$i][1], $params[]);
+        }
+        for ($i = count($params) - 2; $i >= 0; $i--) {
+//            if (isset($data_menu[$params[$i][1]]['children'])) {
+            $data_menu = $data_menu[$params[$i][1]]['children'];
+//            }
+        }
+    }
+    if (!$parent) {
+        if (isset($data_menu[$page]['dir'])) {
+            return $data_menu[$page];
+        } else {
+            return null;
+        }
+    }
+    if (isset($data_menu[$page])) {
+        return $data_menu;
+    } else {
+        return null;
+    }
+}// end function getSubData_menu($data_menu, $page, $parent = false)
+
 function createLinkMenu($href): string
 {
     $page = $_GET['p'] ?? '1-2-1';
