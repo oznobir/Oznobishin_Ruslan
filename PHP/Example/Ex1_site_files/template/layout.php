@@ -8,8 +8,8 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css?v2">
+
 </head>
 <body>
 <header>
@@ -27,45 +27,7 @@
                      <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </span>
-                <input type="checkbox" name="accor" id="accor1"/>
-                <label for="accor1">Заголовок вкладки 1</label>
-                <div class="accor-container">
-
-                    <input type="checkbox" name="accor" id="accor1_1"/>
-                    <label for="accor1_1">Заголовок вкладки 1-1</label>
-                    <div class="accor-body">
-                        <p>Описание вкладки 1-1-1</p>
-                        <p>Описание вкладки 1-1-2</p>
-                    </div>
-
-                    <input type="checkbox" name="accor" id="accor1_2"/>
-                    <label for="accor1_2">Заголовок вкладки 1-2</label>
-                    <div class="accor-body">
-                        <p>Описание вкладки 1-2-1</p>
-                        <p>Описание вкладки 1-2-2</p>
-                    </div>
-
-                </div>
-
-                <input type="checkbox" name="accor" id="accor2"/>
-                <label for="accor2">Заголовок вкладки 2</label>
-                <div class="accor-container">
-
-                    <input type="checkbox" name="accor" id="accor2_1"/>
-                    <label for="accor2_1">Заголовок вкладки 2-1</label>
-                    <div class="accor-body">
-                        <p>Описание вкладки 2-1-1</p>
-                        <p>Описание вкладки 2-1-2</p>
-                    </div>
-
-                    <input type="checkbox" name="accor" id="accor2_2"/>
-                    <label for="accor2_2">Заголовок вкладки 2-2</label>
-                    <div class="accor-body">
-                        <p>Описание вкладки 2-2-1</p>
-                        <p>Описание вкладки 2-2-2</p>
-                    </div>
-
-                </div>
+                <?= $mainMenu ?>
             </div>
         </div>
     </div>

@@ -80,7 +80,7 @@ header  p{
     box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.2), 0 .75rem .75rem rgba(0, 0, 0, 0.2);
 }
 
-.accor-container {
+.accor-group > .accor-container {
     width: auto;
     margin: 0 1.75rem 0 1.75rem;
     height: 0;
@@ -92,7 +92,7 @@ header  p{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 .75rem 16px rgba(0, 0, 0, 0.2);
 }
 
-.accor-body {
+.accor-container > .accor-container {
     margin: 0 1.75rem .75rem 1.75rem;
     height: 0;
     overflow: hidden;
@@ -102,11 +102,11 @@ header  p{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 10px 16px rgba(0, 0, 0, 0.2);
 }
 
-.accor-container .accor-body p {
-    padding: 0 1.25rem;
+.accor-container > div {
+    margin: .25rem 1.75rem;
 }
 
-.accor-group label, .accor-container label {
+.accor-group label, .accor-group > .accor-container label {
     display: block;
     box-sizing: border-box;
     width: auto;
@@ -123,33 +123,33 @@ header  p{
 
 }
 
-.accor-group label:hover, .accor-container label:hover {
+.accor-group label:hover, .accor-group > .accor-container label:hover {
     background-color: #888;
     color: #FFF;
 }
 
-.accor-group input, .accor-container input {
+.accor-group input, .accor-group > .accor-container input {
     display: none;
 }
 
-.accor-group label:before, .accor-container label:before {
+.accor-group label:before, .accor-group > .accor-container label:before {
     content: '\276F';
     float: right;
 }
 
-.accor-group input:checked + label, .accor-container input:checked + label {
+.accor-group input:checked + label, .accor-group > .accor-container input:checked + label {
     background-color: #888;
     color: #FFF;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-.accor-group input:checked + label:before, .accor-container input:checked + label:before {
+.accor-group input:checked + label:before, .accor-group > .accor-container input:checked + label:before {
     transition: transform .35s;
     transform: rotate(90deg);
 }
 
-.accor-group input:checked + label + .accor-container, .accor-container input:checked + label + .accor-body {
+.accor-group > input:checked + label + .accor-container, .accor-container input:checked + label + .accor-container {
     height: auto;
     color: #000;
     border: 1px solid #888;

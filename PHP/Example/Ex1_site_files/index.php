@@ -10,11 +10,12 @@ if (file_exists("data/data_menu.php")) {
         $p = $menu_p['dir'];
         if (file_exists("data/data_$p.php")) {
             $data = include "data/data_$p.php";
+
+            $mainMenu = showMainMenu($data_menu);
             $sup_menu_p = getData_menu($data_menu, $page, true);
             $title = "Пример $page";
             $desc = $menu_p['desc'];
             $menu = '';
-//        $tree_menu = getTree($data_menu);
             foreach ($sup_menu_p as $key => $a) {
                 $menu .= createLinkMenu($key);
             }
@@ -23,25 +24,45 @@ if (file_exists("data/data_menu.php")) {
         } else {
             $title = '';
             $desc = "";
+            $mainMenu = showMainMenu($data_menu);
             $menu = '';
-            $content1 = "File 'data/data_$p.php' not found";;
+            $content1 = "Файл 'data/data_$p.php' не найден. Перейдите в 'Содержание'.";
             $content2 = '';
         }
     } else {
         $title = "";
         $desc = "";
+        $mainMenu = showMainMenu($data_menu);
         $menu = '';
-        $content1 = "File '$page' not found";
+        $content1 = "Файл '$page' не найден. Перейдите в 'Содержание'.";
         $content2 = '';
     }
 } else {
     $title = "";
     $desc = "";
+    $mainMenu = '';
     $menu = '';
     $content1 = "File 'data_menu.php' not found";
     $content2 = '';
 }
 include 'template/layout.php';
+
+function showMainMenu($data): string
+{
+    $string = '';
+    foreach ($data as $key => $value) {
+        if (isset($value['children'])) {
+            $string .= "<input type=\"checkbox\" name=\"accor\" id=\"accor_$key\"/>
+                      <label for=\"accor_$key\">{$value['desc']}</label>";
+        } else {
+            $string .= "<div><a href=\"?p=$key\" title=\"{$value['desc']}\">{$value['desc']}</a></div>";
+        }
+        if (isset($value['children'])) {
+            $string .= '<div class="accor-container">'. showMainMenu($value['children']).'</div>';
+        }
+    }
+    return $string;
+} // end function showMainMenu($data): string
 function getData_menu($data_menu, $page, $parent = false)
 {
     $preg = '#([0-9-]+)-([0-9-]+)#';
@@ -52,9 +73,9 @@ function getData_menu($data_menu, $page, $parent = false)
             preg_match($preg, $params[$i][1], $params[]);
         }
         for ($i = count($params) - 2; $i >= 0; $i--) {
-//            if (isset($data_menu[$params[$i][1]]['children'])) {
+            if (isset($data_menu[$params[$i][1]]['children'])) {
             $data_menu = $data_menu[$params[$i][1]]['children'];
-//            }
+            }
         }
     }
     if (!$parent) {
