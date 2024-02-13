@@ -96,7 +96,7 @@ header  p{
     margin: 0 1.75rem .75rem 1.75rem;
     height: 0;
     overflow: hidden;
-    background-color: #FFF;
+    background-color: #d3d3d3;
     box-sizing: border-box;
     transition: color 0.5s, padding 0.5s;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 10px 16px rgba(0, 0, 0, 0.2);
