@@ -5,19 +5,17 @@ ini_set('display_errors', 'on');
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
     $page = $_GET['p'] ?? '1-2-1';
-    if (getData_menu($data_menu, $page)) {
-        $menu_p = getData_menu($data_menu, $page);
-        $p = $menu_p['dir'];
+    if (getMenuParent($data_menu, $page)) {
+        $menu_p = getMenuParent($data_menu, $page);
+        $p = $menu_p['children'][$page]['dir'];
         if (file_exists("data/data_$p.php")) {
             $data = include "data/data_$p.php";
-
             $mainMenu = showMainMenu($data_menu);
-            $sup_menu_p = getData_menu($data_menu, $page, true);
-            $title = "Пример $page";
-            $desc = $menu_p['desc'];
+            $title = "Пример $page. {$menu_p['desc']}";
+            $desc = $menu_p['children'][$page]['desc'];
             $menu = '';
-            foreach ($sup_menu_p as $key => $a) {
-                $menu .= createLinkMenu($key);
+            foreach ($menu_p['children'] as $key => $a) {
+                $menu .= createLinkMenu($key, $menu_p['children'][$key]['desc']);
             }
             $content1 = showContent1($data, $p);
             $content2 = showContent2($p);
@@ -63,7 +61,7 @@ function showMainMenu($data): string
     }
     return $string;
 } // end function showMainMenu($data): string
-function getData_menu($data_menu, $page, $parent = false)
+function getMenuParent($data_menu, $page) // get menu parent and 'route'
 {
     $preg = '#([0-9-]+)-([0-9-]+)#';
     //$preg ='#([a-z0-9_-]?+)-([a-z0-9_-]+)#'; //если разбор с начала
@@ -72,27 +70,21 @@ function getData_menu($data_menu, $page, $parent = false)
             //    preg_match($preg, $params[$i][2], $params[]); //если разбор с начала
             preg_match($preg, $params[$i][1], $params[]);
         }
-        for ($i = count($params) - 2; $i >= 0; $i--) {
+        for ($i = count($params) - 2; $i > 0; $i--) {
             if (isset($data_menu[$params[$i][1]]['children'])) {
             $data_menu = $data_menu[$params[$i][1]]['children'];
             }
         }
+        $data_menu = $data_menu[$params[0][1]];
     }
-    if (!$parent) {
-        if (isset($data_menu[$page]['dir'])) {
-            return $data_menu[$page];
-        } else {
-            return null;
-        }
-    }
-    if (isset($data_menu[$page])) {
+    if (isset($data_menu['children'][$page]['dir'])) {
         return $data_menu;
     } else {
         return null;
     }
-}// end function getSubData_menu($data_menu, $page, $parent = false)
+}// function getMenuParent($data_menu, $page)
 
-function createLinkMenu($href): string
+function createLinkMenu($href, $title): string
 {
     $page = $_GET['p'] ?? '1-2-1';
     if ($page == $href) {
@@ -100,8 +92,8 @@ function createLinkMenu($href): string
     } else {
         $classLinkMenu = '';
     }
-    return "<div><a$classLinkMenu href=\"?p=$href\">Пример $href</a></div>";
-}//  end  function createLinkMenu($href): string
+    return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$href\">Пример $href</a></div>";
+}//  end  function createLinkMenu($href, $title): string
 function showContent1($data, $p): string
 {
     foreach ($data as $arr) {
