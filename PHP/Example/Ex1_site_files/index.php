@@ -5,19 +5,18 @@ ini_set('display_errors', 'on');
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
     $page = $_GET['p'] ?? '1-2-1';
-    if (getMenuParent($data_menu, $page)) {
-        $menu_p = getMenuParent($data_menu, $page);
-        $p = $menu_p['children'][$page]['dir'];
+    if ($menu_parent = getMenuParent($data_menu, $page)) {
+        $p = $menu_parent['children'][$page]['dir'];
         if (file_exists("data/data_$p.php")) {
-            $data = include "data/data_$p.php";
             $mainMenu = showMainMenu($data_menu);
-            $title = "Пример $page. {$menu_p['desc']}";
-            $desc = $menu_p['children'][$page]['desc'];
+            $title = "Пример $page. {$menu_parent['desc']}";
+            $desc = $menu_parent['children'][$page]['desc'];
             $menu = '';
-            foreach ($menu_p['children'] as $key => $a) {
-                $menu .= createLinkMenu($key, $menu_p['children'][$key]['desc']);
+            foreach ($menu_parent['children'] as $key => $a) {
+                $menu .= createLinkMenu($key, $a['desc']);
             }
-            $content1 = showContent1($data, $p);
+            $data_p = include "data/data_$p.php";
+            $content1 = showContent1($data_p, $p);
             $content2 = showContent2($p);
         } else {
             $title = '';
@@ -50,13 +49,12 @@ function showMainMenu($data): string
     $string = '';
     foreach ($data as $key => $value) {
         if (isset($value['children'])) {
-            $string .= "<input type=\"checkbox\" name=\"accor\" id=\"accor_$key\"/>
-                      <label for=\"accor_$key\">{$value['desc']}</label>";
+            $string .= "<input type=\"checkbox\" name=\"accor\" id=\"accor_$key\"/><label for=\"accor_$key\">{$value['desc']}</label>";
         } else {
             $string .= "<div><a href=\"?p=$key\" title=\"{$value['desc']}\">{$value['desc']}</a></div>";
         }
         if (isset($value['children'])) {
-            $string .= '<div class="accor-container">'. showMainMenu($value['children']).'</div>';
+            $string .= '<div class="accor-container">' . showMainMenu($value['children']) . '</div>';
         }
     }
     return $string;
@@ -72,16 +70,19 @@ function getMenuParent($data_menu, $page) // get menu parent and 'route'
         }
         for ($i = count($params) - 2; $i > 0; $i--) {
             if (isset($data_menu[$params[$i][1]]['children'])) {
-            $data_menu = $data_menu[$params[$i][1]]['children'];
+                $data_menu = $data_menu[$params[$i][1]]['children'];
             }
         }
         $data_menu = $data_menu[$params[0][1]];
-    }
-    if (isset($data_menu['children'][$page]['dir'])) {
-        return $data_menu;
+        if (isset($data_menu['children'][$page]['dir'])) {
+            return $data_menu;
+        } else {
+            return null;
+        }
     } else {
         return null;
     }
+
 }// function getMenuParent($data_menu, $page)
 
 function createLinkMenu($href, $title): string
@@ -133,21 +134,14 @@ function creatForm($data): string
         }
 
         if ($arr['type'] == 'text') {
-            $content1 .= "
-              <label for=\"id_{$arr['name']}\">\${$arr['name']}:</label>
-              <input type=\"text\" id = \"id_{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"$post\"><br><br> 
-            ";
+            $content1 .= "<label for=\"id_{$arr['name']}\">\${$arr['name']}:</label><input type=\"text\" id = \"id_{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"$post\"><br><br>";
         }
         if ($arr['type'] == 'label') {
-            $content1 .= "
-              <label>$post:</label><br><br> 
-            ";
+            $content1 .= "<label>$post:</label><br><br>";
         }
 
         if ($arr['type'] == 'textarea') {
-            $content1 .= "<span>Текст: </span>
-                  <textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\"><?= $post ?></textarea><br>
-                ";
+            $content1 .= "<span>Текст: </span><textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\"><?= $post ?></textarea><br>";
         }
     }
     $content1 .= "<input type=\"submit\" name=\"button\" value=\"Результат\" />";

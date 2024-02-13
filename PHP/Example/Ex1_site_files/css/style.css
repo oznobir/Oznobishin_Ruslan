@@ -10,13 +10,15 @@ header  p{
     position: fixed;
     left: 0;
     z-index: 99;
-    width: calc(100% - 2rem);
+    width: calc(100% - 3rem);
+    height: calc(100% - 6rem);
     transform: translateX(-100%);
     transition: transform 0.4s ease-in-out;
+    overflow: auto;
 }
 
 .main-menu-container.visible {
-    transform: translateX(1rem);
+    transform: translateX(1.5rem);
 }
 
 .accor-group span.close-btn {
@@ -71,8 +73,6 @@ header  p{
 
 .accor-group {
     width: auto;
-    height: 25rem;
-    overflow: auto;
     padding: .75rem 0 1.25rem;
     background-color: #d3d3d3;
     border-radius: 5px;
@@ -179,6 +179,7 @@ header  p{
     flex-direction: row;
     flex-grow: 1;
     background-color: #888;
+    overflow: auto;
 }
 
 .box-text1 {
@@ -195,6 +196,7 @@ header  p{
     background-color: #d3d3d3;
     padding: 0.6rem;
     border-radius: 0 0.2rem 0.2rem 0;
+    overflow: auto;
 }
 
 .box-menu > div > a.active {
