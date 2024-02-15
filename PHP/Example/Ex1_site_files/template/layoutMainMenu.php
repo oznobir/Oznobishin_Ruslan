@@ -14,27 +14,18 @@
 <body>
 <header>
     <h1>PHP</h1>
-    <button class="main-menu-btn"><a href="index.php?p=all">Содержание</a></button>
 </header>
 <main class="wrapper">
-    <header>
-        <h2><?= $title ?></h2>
-        <p><?= $desc ?></p>
-    </header>
-    <section class="box-main">
-        <nav class='box-menu'>
-            <?= $menu ?>
-        </nav>
-        <div class="box-texts">
-            <div class="box-text1">
-                <?= $content1 ?>
-
-            </div>
-            <div class="box-text2">
-                <?= $content2 ?>
+    <nav>
+        <div class="main-menu-container">
+            <div class="main-menu">
+                <div class="accor-group">
+                    <div class="as-title">Содержание</div>
+                    <?= $mainMenu ?>
+                </div>
             </div>
         </div>
-    </section>
+    </nav>
 </main>
 <footer>
     by oznor

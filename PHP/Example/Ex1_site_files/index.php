@@ -4,7 +4,15 @@ ini_set('display_errors', 'on');
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-    $page = $_GET['p'] ?? '1-2-1';
+    $page = $_GET['p'] ?? 'all';
+    if ($page == 'all'){
+        $mainMenu = showMainMenu($data_menu);
+        $title = '';
+        $desc = "";
+        include 'template/layoutMainMenu.php';
+        die();
+        // Доделать
+    }
     if ($menu_parent = getMenuParent($data_menu, $page)) {
         $p = $menu_parent['children'][$page]['dir'];
         if (file_exists("data/data_$p.php")) {
@@ -21,7 +29,7 @@ if (file_exists("data/data_menu.php")) {
         } else {
             $title = '';
             $desc = "";
-            $mainMenu = showMainMenu($data_menu);
+//            $mainMenu = showMainMenu($data_menu);
             $menu = '';
             $content1 = "Файл 'data/data_$p.php' не найден. Перейдите в 'Содержание'.";
             $content2 = '';
@@ -29,7 +37,7 @@ if (file_exists("data/data_menu.php")) {
     } else {
         $title = "";
         $desc = "";
-        $mainMenu = showMainMenu($data_menu);
+//        $mainMenu = showMainMenu($data_menu);
         $menu = '';
         $content1 = "Файл '$page' не найден. Перейдите в 'Содержание'.";
         $content2 = '';
@@ -37,7 +45,7 @@ if (file_exists("data/data_menu.php")) {
 } else {
     $title = "";
     $desc = "";
-    $mainMenu = '';
+//    $mainMenu = '';
     $menu = '';
     $content1 = "File 'data_menu.php' not found";
     $content2 = '';
@@ -73,7 +81,9 @@ function getMenuParent($data_menu, $page) // get menu parent and 'route'
                 $data_menu = $data_menu[$params[$i][1]]['children'];
             }
         }
-        $data_menu = $data_menu[$params[0][1]];
+        if (isset($data_menu[$params[0][1]])) {
+            $data_menu = $data_menu[$params[0][1]];
+        }
         if (isset($data_menu['children'][$page]['dir'])) {
             return $data_menu;
         } else {
