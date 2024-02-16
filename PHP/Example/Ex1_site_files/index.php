@@ -10,7 +10,6 @@ if (file_exists("data/data_menu.php")) {
         if ($menu_parent = getMenuParent($data_menu, $page)) {
             $p = $menu_parent['children'][$page]['dir'];
             if (file_exists("data/data_$p.php")) {
-                $mainMenu = showMainMenu($data_menu);
                 $title = "Пример $page. {$menu_parent['desc']}";
                 $desc = $menu_parent['children'][$page]['desc'];
                 $menu = '';
@@ -72,14 +71,14 @@ function tplMainMenu($data): string
         if (isset($value['children'])) {
             $string .= "<input type=\"checkbox\" name=\"accor\" id=\"accor_$key\"/><label for=\"accor_$key\">{$value['desc']}</label>";
         } else {
-            $string .= "<div><a href=\"?p=$key\" title=\"{$value['desc']}\">{$value['desc']}</a></div>";
+            $string .= "<div><a href=\"?p=$key\" title =\"Пример $key\">{$value['desc']}</a></div>";
         }
         if (isset($value['children'])) {
             $string .= '<div class="accor-container">' . tplMainMenu($value['children']) . '</div>';
         }
     }
     return $string;
-} // end function showMainMenu($data): string
+} // end function showMainMenu($data): string\"?p=$key\"
 function getMenuParent($data_menu, $page) // get menu parent and 'route'
 {
     $preg = '#([0-9-]+)-([0-9-]+)#';
