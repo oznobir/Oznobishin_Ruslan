@@ -25,6 +25,7 @@ if (file_exists("data/data_menu.php")) {
                 die();
             }
         } else {
+            $page = htmlspecialchars($page);
             $_SESSION ['message'] = [
                 'text' => "Файл '$page' не найден.",
                 'status' => "error"
