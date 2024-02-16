@@ -2,7 +2,7 @@ header  h1, footer {
     line-height: 2rem;
     text-align: center;
 }
-header  p{
+header  p {
     line-height: 2rem;
 }
 header .success {
@@ -11,11 +11,6 @@ header .success {
 
 header .error {
     color: indianred;
-}
-
-.main-menu-container {
-    width: 100%;
-
 }
 
 .accor-group .as-title {

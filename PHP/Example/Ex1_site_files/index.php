@@ -25,18 +25,20 @@ if (file_exists("data/data_menu.php")) {
                     'text' => "Файл 'data/data_$p.php' не найден.",
                     'status' => "error"
                 ];
-                $page = 'all';
+                header("Location: index.php?p=all");
+                die();
             }
         } else {
             $_SESSION ['message'] = [
                 'text' => "Файл '$page' не найден.",
                 'status' => "error"
             ];
-            $page = 'all';
+            header("Location: index.php?p=all");
+            die();
         }
     }
     if ($page == 'all') {
-        $mainMenu = '<div class="as-title">Содержание</div>' . showMainMenu($data_menu);
+        $mainMenu = showMainMenu($data_menu);
         $title = 'Содержание. Скрипты на PHP';
         $desc = "Скрипты на PHP. Изучаем вместе";
         include 'template/layoutMainMenu.php';
@@ -50,13 +52,20 @@ if (file_exists("data/data_menu.php")) {
     header("HTTP/1.0 404 Not Found");
     $title = "404 Not Found";
     $desc = "404 Not Found";
-    $mainMenu = "<p class = 'as-title'>Исправьте и попробуйте еще раз</p>";
+    $mainMenu = "";
     include 'template/layoutMainMenu.php';
     die();
 }
 include 'template/layout.php';
-
 function showMainMenu($data): string
+{
+    $string = '<div class="accor-group">';
+    $string .= '<div class="as-title">Содержание</div>';
+    $string .= tplMainMenu($data);
+    $string .= '</div>';
+    return $string;
+}
+function tplMainMenu($data): string
 {
     $string = '';
     foreach ($data as $key => $value) {
@@ -66,7 +75,7 @@ function showMainMenu($data): string
             $string .= "<div><a href=\"?p=$key\" title=\"{$value['desc']}\">{$value['desc']}</a></div>";
         }
         if (isset($value['children'])) {
-            $string .= '<div class="accor-container">' . showMainMenu($value['children']) . '</div>';
+            $string .= '<div class="accor-container">' . tplMainMenu($value['children']) . '</div>';
         }
     }
     return $string;

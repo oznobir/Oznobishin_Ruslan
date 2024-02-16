@@ -18,11 +18,7 @@
 </header>
 <main class="wrapper">
     <nav>
-        <div class="main-menu-container">
-            <div class="accor-group">
-                <?= $mainMenu ?>
-            </div>
-        </div>
+        <?= $mainMenu ?>
     </nav>
 </main>
 <footer>
