@@ -5,7 +5,7 @@ session_start();
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-    $page = $_GET['p'] ?? 'all';
+    $page = htmlspecialchars($_GET['p']) ?? 'all';
     if ($page !== 'all') {
         if ($data_parent = getDataParent($data_menu, $page)) {
             $dir_p = $data_parent['children'][$page]['dir'];
@@ -25,7 +25,6 @@ if (file_exists("data/data_menu.php")) {
                 die();
             }
         } else {
-            $page = htmlspecialchars($page);
             $_SESSION ['message'] = [
                 'text' => "Файл '$page' не найден.",
                 'status' => "error"
