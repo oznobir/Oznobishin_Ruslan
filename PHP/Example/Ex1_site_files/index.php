@@ -12,7 +12,7 @@ if (file_exists("data/data_menu.php")) {
             if (file_exists("data/data_$dir_p.php")) {
                 $title = "Пример $page. {$data_parent['desc']}";
                 $desc = $data_parent['children'][$page]['desc'];
-                $menu = showMenuPage($data_parent['children']);
+                $menu = showMenuPage($data_parent['children'], $page);
                 $data_p = include "data/data_$dir_p.php";
                 $content1 = showContent1($data_p, $dir_p);
                 $content2 = showContent2($dir_p);
@@ -53,11 +53,11 @@ if (file_exists("data/data_menu.php")) {
     die();
 }
 include 'template/layout.php';
-function showMenuPage($data): string
+function showMenuPage($data, $page): string
 {
     $menu = '';
     foreach ($data as $key => $a) {
-        $menu .= createLinkMenu($key, $a['desc']);
+        $menu .= createLinkMenu($key, $a['desc'], $page);
     }
     return $menu;
 } // end function showMenuPage($data): string
@@ -110,9 +110,8 @@ function getDataParent($data_menu, $page) // get menu parent and 'route'
 
 }// function getMenuParent($data_menu, $page)
 
-function createLinkMenu($href, $title): string
+function createLinkMenu($href, $title, $page): string
 {
-    $page = $_GET['p'] ?? '1-2-1';
     if ($page == $href) {
         $classLinkMenu = " class='active'";
     } else {
