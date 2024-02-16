@@ -7,21 +7,18 @@ if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
     $page = $_GET['p'] ?? 'all';
     if ($page !== 'all') {
-        if ($menu_parent = getMenuParent($data_menu, $page)) {
-            $p = $menu_parent['children'][$page]['dir'];
-            if (file_exists("data/data_$p.php")) {
-                $title = "Пример $page. {$menu_parent['desc']}";
-                $desc = $menu_parent['children'][$page]['desc'];
-                $menu = '';
-                foreach ($menu_parent['children'] as $key => $a) {
-                    $menu .= createLinkMenu($key, $a['desc']);
-                }
-                $data_p = include "data/data_$p.php";
-                $content1 = showContent1($data_p, $p);
-                $content2 = showContent2($p);
+        if ($data_parent = getDataParent($data_menu, $page)) {
+            $dir_p = $data_parent['children'][$page]['dir'];
+            if (file_exists("data/data_$dir_p.php")) {
+                $title = "Пример $page. {$data_parent['desc']}";
+                $desc = $data_parent['children'][$page]['desc'];
+                $menu = showMenuPage($data_parent['children']);
+                $data_p = include "data/data_$dir_p.php";
+                $content1 = showContent1($data_p, $dir_p);
+                $content2 = showContent2($dir_p);
             } else {
                 $_SESSION ['message'] = [
-                    'text' => "Файл 'data/data_$p.php' не найден.",
+                    'text' => "Файл 'data/data_$dir_p.php' не найден.",
                     'status' => "error"
                 ];
                 header("Location: index.php?p=all");
@@ -56,6 +53,14 @@ if (file_exists("data/data_menu.php")) {
     die();
 }
 include 'template/layout.php';
+function showMenuPage($data): string
+{
+    $menu = '';
+    foreach ($data as $key => $a) {
+        $menu .= createLinkMenu($key, $a['desc']);
+    }
+    return $menu;
+} // end function showMenuPage($data): string
 function showMainMenu($data): string
 {
     $string = '<div class="accor-group">';
@@ -78,8 +83,8 @@ function tplMainMenu($data): string
         }
     }
     return $string;
-} // end function showMainMenu($data): string\"?p=$key\"
-function getMenuParent($data_menu, $page) // get menu parent and 'route'
+} // end function showMainMenu($data): string
+function getDataParent($data_menu, $page) // get menu parent and 'route'
 {
     $preg = '#([0-9-]+)-([0-9-]+)#';
     if (preg_match($preg, $page, $params[])) {
