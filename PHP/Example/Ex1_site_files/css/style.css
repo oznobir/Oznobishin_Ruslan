@@ -5,7 +5,14 @@ header  h1, footer {
 header  p{
     line-height: 2rem;
 }
-/*----*/
+header .success {
+    color: forestgreen;
+}
+
+header .error {
+    color: indianred;
+}
+
 .main-menu-container {
     width: 100%;
 

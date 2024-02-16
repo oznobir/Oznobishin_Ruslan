@@ -14,15 +14,13 @@
 <body>
 <header>
     <h1>PHP</h1>
+    <?php include 'template/info.php' ?>
 </header>
 <main class="wrapper">
     <nav>
         <div class="main-menu-container">
-            <div class="main-menu">
-                <div class="accor-group">
-                    <div class="as-title">Содержание</div>
-                    <?= $mainMenu ?>
-                </div>
+            <div class="accor-group">
+                <?= $mainMenu ?>
             </div>
         </div>
     </nav>

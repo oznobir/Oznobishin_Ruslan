@@ -1,54 +1,58 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
+session_start();
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
     $page = $_GET['p'] ?? 'all';
-    if ($page == 'all'){
-        $mainMenu = showMainMenu($data_menu);
-        $title = '';
-        $desc = "";
+    if ($page !== 'all') {
+        if ($menu_parent = getMenuParent($data_menu, $page)) {
+            $p = $menu_parent['children'][$page]['dir'];
+            if (file_exists("data/data_$p.php")) {
+                $mainMenu = showMainMenu($data_menu);
+                $title = "Пример $page. {$menu_parent['desc']}";
+                $desc = $menu_parent['children'][$page]['desc'];
+                $menu = '';
+                foreach ($menu_parent['children'] as $key => $a) {
+                    $menu .= createLinkMenu($key, $a['desc']);
+                }
+                $data_p = include "data/data_$p.php";
+                $content1 = showContent1($data_p, $p);
+                $content2 = showContent2($p);
+            } else {
+                $_SESSION ['message'] = [
+                    'text' => "Файл 'data/data_$p.php' не найден.",
+                    'status' => "error"
+                ];
+                $page = 'all';
+            }
+        } else {
+            $_SESSION ['message'] = [
+                'text' => "Файл '$page' не найден.",
+                'status' => "error"
+            ];
+            $page = 'all';
+        }
+    }
+    if ($page == 'all') {
+        $mainMenu = '<div class="as-title">Содержание</div>' . showMainMenu($data_menu);
+        $title = 'Содержание. Скрипты на PHP';
+        $desc = "Скрипты на PHP. Изучаем вместе";
         include 'template/layoutMainMenu.php';
         die();
-        // Доделать
-    }
-    if ($menu_parent = getMenuParent($data_menu, $page)) {
-        $p = $menu_parent['children'][$page]['dir'];
-        if (file_exists("data/data_$p.php")) {
-            $mainMenu = showMainMenu($data_menu);
-            $title = "Пример $page. {$menu_parent['desc']}";
-            $desc = $menu_parent['children'][$page]['desc'];
-            $menu = '';
-            foreach ($menu_parent['children'] as $key => $a) {
-                $menu .= createLinkMenu($key, $a['desc']);
-            }
-            $data_p = include "data/data_$p.php";
-            $content1 = showContent1($data_p, $p);
-            $content2 = showContent2($p);
-        } else {
-            $title = '';
-            $desc = "";
-//            $mainMenu = showMainMenu($data_menu);
-            $menu = '';
-            $content1 = "Файл 'data/data_$p.php' не найден. Перейдите в 'Содержание'.";
-            $content2 = '';
-        }
-    } else {
-        $title = "";
-        $desc = "";
-//        $mainMenu = showMainMenu($data_menu);
-        $menu = '';
-        $content1 = "Файл '$page' не найден. Перейдите в 'Содержание'.";
-        $content2 = '';
     }
 } else {
-    $title = "";
-    $desc = "";
-//    $mainMenu = '';
-    $menu = '';
-    $content1 = "File 'data_menu.php' not found";
-    $content2 = '';
+    $_SESSION ['message'] = [
+        'text' => "Файл 'data_menu.php' не найден.",
+        'status' => "error"
+    ];
+    header("HTTP/1.0 404 Not Found");
+    $title = "404 Not Found";
+    $desc = "404 Not Found";
+    $mainMenu = "<p class = 'as-title'>Исправьте и попробуйте еще раз</p>";
+    include 'template/layoutMainMenu.php';
+    die();
 }
 include 'template/layout.php';
 
@@ -70,10 +74,8 @@ function showMainMenu($data): string
 function getMenuParent($data_menu, $page) // get menu parent and 'route'
 {
     $preg = '#([0-9-]+)-([0-9-]+)#';
-    //$preg ='#([a-z0-9_-]?+)-([a-z0-9_-]+)#'; //если разбор с начала
     if (preg_match($preg, $page, $params[])) {
         for ($i = 0; ($params[$i]); $i++) {
-            //    preg_match($preg, $params[$i][2], $params[]); //если разбор с начала
             preg_match($preg, $params[$i][1], $params[]);
         }
         for ($i = count($params) - 2; $i > 0; $i--) {
