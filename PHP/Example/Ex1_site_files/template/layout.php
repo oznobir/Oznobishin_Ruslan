@@ -9,7 +9,7 @@
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
     <link rel="stylesheet" type="text/css" href="css/style.css?v2">
-
+    <?= $content2['head'] ?>
 </head>
 <body>
 <header>
@@ -31,7 +31,7 @@
 
             </div>
             <div class="box-text2">
-                <?= $content2 ?>
+                <?= $content2['tabs'] ?>
             </div>
         </div>
     </section>
@@ -39,5 +39,6 @@
 <footer>
     by oznor
 </footer>
+<?= $content2['foot'] ?>
 </body>
 </html>

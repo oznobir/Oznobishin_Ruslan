@@ -1,5 +1,7 @@
 <?php
-if (is_numeric($a) && is_numeric($b) && is_numeric($c)) {
+if (is_numeric($a)
+    && is_numeric($b)
+    && is_numeric($c)) {
     if ($a > $b) {
         $max = $a;
         $min = $b;

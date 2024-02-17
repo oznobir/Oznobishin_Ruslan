@@ -15,7 +15,7 @@ if (file_exists("data/data_menu.php")) {
                 $menu = showMenuPage($data_parent['children'], $page);
                 $data_p = include "data/data_$dir_p.php";
                 $content1 = showContent1($data_p, $dir_p);
-                $content2 = showContent2($dir_p);
+                $content2 = showContent2($data_p['content2'], $dir_p);
             } else {
                 $_SESSION ['message'] = [
                     'text' => "Файл 'data/data_$dir_p.php' не найден.",
@@ -53,6 +53,7 @@ if (file_exists("data/data_menu.php")) {
     die();
 }
 include 'template/layout.php';
+
 function showMenuPage($data, $page): string
 {
     $menu = '';
@@ -60,7 +61,8 @@ function showMenuPage($data, $page): string
         $menu .= createLinkMenu($key, $a['desc'], $page);
     }
     return $menu;
-} // end function showMenuPage($data): string
+} // end function showMenuPage($data, $page): string
+
 function showMainMenu($data): string
 {
     $string = '<div class="accor-group">';
@@ -68,7 +70,8 @@ function showMainMenu($data): string
     $string .= tplMainMenu($data);
     $string .= '</div>';
     return $string;
-}
+} // end function showMainMenu($data): string
+
 function tplMainMenu($data): string
 {
     $string = '';
@@ -83,8 +86,9 @@ function tplMainMenu($data): string
         }
     }
     return $string;
-} // end function showMainMenu($data): string
-function getDataParent($data_menu, $page) // get menu parent and 'route'
+} // end function tplMainMenu($data): string
+
+function getDataParent($data_menu, $page)
 {
     $preg = '#([0-9-]+)-([0-9-]+)#';
     if (preg_match($preg, $page, $params[])) {
@@ -94,10 +98,14 @@ function getDataParent($data_menu, $page) // get menu parent and 'route'
         for ($i = count($params) - 2; $i > 0; $i--) {
             if (isset($data_menu[$params[$i][1]]['children'])) {
                 $data_menu = $data_menu[$params[$i][1]]['children'];
+            } else {
+                return null;
             }
         }
         if (isset($data_menu[$params[0][1]])) {
             $data_menu = $data_menu[$params[0][1]];
+        } else {
+            return null;
         }
         if (isset($data_menu['children'][$page]['dir'])) {
             return $data_menu;
@@ -107,8 +115,7 @@ function getDataParent($data_menu, $page) // get menu parent and 'route'
     } else {
         return null;
     }
-
-}// function getMenuParent($data_menu, $page)
+}// function getDataParent($data_menu, $page)
 
 function createLinkMenu($href, $title, $page): string
 {
@@ -118,10 +125,11 @@ function createLinkMenu($href, $title, $page): string
         $classLinkMenu = '';
     }
     return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$href\">Пример $href</a></div>";
-}//  end  function createLinkMenu($href, $title): string
+}//  end  function createLinkMenu($href, $title, $page): string
+
 function showContent1($data, $p): string
 {
-    foreach ($data as $arr) {
+    foreach ($data['content1'] as $arr) {
         if ($arr['name']) {
             $w = $arr['name'];
             if (isset($_POST['button'])) {
@@ -132,19 +140,19 @@ function showContent1($data, $p): string
             $$w = $post;
         }
     }
-    $content1 = creatForm($data);
+    $content1 = creatForm($data['content1']);
 
     if (isset($_POST['button'])) {
 
         $content1 .= "<form><fieldset>";
         ob_start();
-        include "pages/$p/index.php";
+        include "pages/$p/{$data['content2'][0]['path']}";
         $content1 .= ob_get_clean();
         $content1 .= "</fieldset></form>";
     }
 
     return $content1;
-}// end function showContent($data, $p): string
+}// end function showContent1($data, $p): string
 
 function creatForm($data): string
 {
@@ -173,7 +181,36 @@ function creatForm($data): string
     return $content1;
 } // end function creatForm($data): string
 
-function showContent2($p): string
+function showContent2($data, $p): array
 {
-    return highlight_file("pages/$p/index.php", true);
+    $content2 = array('tabs' => '', 'head' => '', 'foot' => '');
+    $i = 1;
+    $content2 ['tabs'] .= "<div class=\"text2-tabs\">";
+    foreach ($data as $arr) {
+
+        if ($i == 1) {
+            $checked = 'checked="checked"';
+        } else {
+            $checked = '';
+        }
+        $content2 ['tabs'] .= "<input name=\"text2-tabs\" type=\"radio\" id=\"text2-tab-$i\" $checked class=\"text2-input\"/>";
+        $content2 ['tabs'] .= "<label for=\"text2-tab-$i\" class=\"text2-label\">{$arr['name']}</label>";
+        $content2 ['tabs'] .= "<div class=\"text2-panel\">";
+        if ($arr['type'] == 'php') {
+            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
+        }
+        if ($arr['type'] == 'css') {
+            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
+            $content2 ['head'] .= '<style>'.file_get_contents("pages/$p/{$arr['path']}").'</style>';
+        }
+        if ($arr['type'] == 'js') {
+            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
+            $content2 ['foot'] .='<script>'. file_get_contents("pages/$p/{$arr['path']}") .'</script>';
+        }
+        $content2 ['tabs'] .= "</div>";
+        $i++;
+    }
+    $content2 ['tabs'] .= "</div>";
+    return $content2;
+//    return highlight_file("pages/$p/index.php", true);
 } // end function showContent2($p): string

@@ -1,10 +1,16 @@
 <?php
 return
     [
-        ['name' => null, 'type' => 'label', 'default' => 'Размеры сумки'],
-        ['name' => 'a', 'type' => 'text', 'default' => '15'],
-        ['name' => 'b', 'type' => 'text', 'default' => '13'],
-        ['name' => null, 'type' => 'label', 'default' => 'Размеры товара'],
-        ['name' => 'c', 'type' => 'text', 'default' => '13'],
-        ['name' => 'd', 'type' => 'text', 'default' => '10']
+        'content1' => [
+            ['name' => null, 'type' => 'label', 'default' => 'Размеры сумки'],
+            ['name' => 'a', 'type' => 'text', 'default' => '15'],
+            ['name' => 'b', 'type' => 'text', 'default' => '13'],
+            ['name' => null, 'type' => 'label', 'default' => 'Размеры товара'],
+            ['name' => 'c', 'type' => 'text', 'default' => '13'],
+            ['name' => 'd', 'type' => 'text', 'default' => '10']
+        ],
+        'content2' => [
+            ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
+            ['name' => 'style.css', 'type' => 'css', 'path' => 'style.css'],
+        ],
     ];

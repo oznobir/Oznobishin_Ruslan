@@ -2,11 +2,11 @@
 if (is_numeric($x)) {
     echo "<div>Результат выполнения:</div>";
     if ($x > 0) {
-        echo "<div style ='color: green'>$x</div>";
+        echo "<div class ='green'>$x</div>";
     } elseif ($x < 0) {
-        echo "<div style ='color: red'>$x</div>";
+        echo "<div class ='red'>$x</div>";
     } else {
-        echo "<div style ='color: yellow'>$x</div>";
+        echo "<div class ='yellow'>$x</div>";
     }
 } else {
     echo '<div>$x - не число</div>';
