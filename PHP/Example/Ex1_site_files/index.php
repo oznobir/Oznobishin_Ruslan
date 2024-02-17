@@ -201,15 +201,14 @@ function showContent2($data, $p): array
         }
         if ($arr['type'] == 'css') {
             $str_cont = file_get_contents("pages/$p/{$arr['path']}");
-            $str_hl = '<code><span style="color: #000000">' . substr(highlight_string('<?php'. $str_cont, true), 80);
-            $content2 ['tabs'] .= $str_hl;
+//            $str_hl = highlight_string('<?php'. $str_cont, true);
+            $content2 ['tabs'] .= str_replace ('&lt;?php', '', highlight_string('<?php'. $str_cont, true));
             $content2 ['head'] .= '<style>'. $str_cont .'</style>';
         }
         if ($arr['type'] == 'js') {
             // если js или что-то еще будет, переделать в отдельную функцию
             $str_cont = file_get_contents("pages/$p/{$arr['path']}");
-            $str_hl = '<code><span style="color: #000000">' . substr(highlight_string('<?php'. $str_cont, true), 80);
-            $content2 ['tabs'] .= $str_hl;
+            $content2 ['tabs'] .= preg_replace ('#&lt;?php#', '', highlight_string('<?php'. $str_cont, true));
             $content2 ['foot'] .='<script>'. $str_cont .'</script>';
         }
         $content2 ['tabs'] .= "</div>";

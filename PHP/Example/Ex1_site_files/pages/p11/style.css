@@ -1,0 +1,11 @@
+table {
+    border-collapse: collapse;
+    text-align: center;
+}
+td {
+    border: 1px solid black;
+    width: 40px;
+}
+.current {
+    background-color: #bbb
+}
