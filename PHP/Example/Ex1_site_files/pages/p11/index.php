@@ -1,17 +1,18 @@
 <?php
+if (is_numeric($n)) {
 $array=[];
 for ($i = 0; $i < $n; $i++) {
     $array[$i] = mt_rand(0, 100);
 }
 function printArray($array, $currentKey = -1): void
 {
-    echo "<tr>\n";
+    echo "<tr>";
     foreach ($array as $key => $value) {
         $style = '';
         if ($key == $currentKey) $style = ' class = "current" ';
-        echo "<td$style>$value</td>\n";
+        echo "<td$style>$value</td>";
     }
-    echo "</tr>\n";
+    echo "</tr>";
 }
 
 echo '<p>'.'Сортировка выборкой '.'</p>'."<table>";
@@ -84,3 +85,6 @@ for ($currentKey = 1; $currentKey < $count; $currentKey++) {
     printArray($sortingArray, $currentKey);
 }
 echo "</table><p>Количество сравнений $compare, обменов $change</p>";
+} else {
+    echo "<p>Не числовые данные</p>";
+}
