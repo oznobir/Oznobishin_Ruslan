@@ -200,12 +200,17 @@ function showContent2($data, $p): array
             $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
         }
         if ($arr['type'] == 'css') {
-            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
-            $content2 ['head'] .= '<style>'.file_get_contents("pages/$p/{$arr['path']}").'</style>';
+            $str_cont = file_get_contents("pages/$p/{$arr['path']}");
+            $str_hl = '<code><span style="color: #000000">' . substr(highlight_string('<?php'. $str_cont, true), 80);
+            $content2 ['tabs'] .= $str_hl;
+            $content2 ['head'] .= '<style>'. $str_cont .'</style>';
         }
         if ($arr['type'] == 'js') {
-            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
-            $content2 ['foot'] .='<script>'. file_get_contents("pages/$p/{$arr['path']}") .'</script>';
+            // если js или что-то еще будет, переделать в отдельную функцию
+            $str_cont = file_get_contents("pages/$p/{$arr['path']}");
+            $str_hl = '<code><span style="color: #000000">' . substr(highlight_string('<?php'. $str_cont, true), 80);
+            $content2 ['tabs'] .= $str_hl;
+            $content2 ['foot'] .='<script>'. $str_cont .'</script>';
         }
         $content2 ['tabs'] .= "</div>";
         $i++;
