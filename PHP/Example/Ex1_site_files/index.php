@@ -16,7 +16,6 @@ if (file_exists("data/data_menu.php")) {
                 $data_p = include "data/data_$dir_p.php";
                 $content1 = showContent1($data_p);
                 $content2 = showContent2($data_p['content2'], $dir_p);
-                $listData_p = listData_p($data_p);
                 if (!empty($_POST)) {
                     runAjax($_POST, $data_p, $dir_p);
                     exit();
@@ -60,13 +59,12 @@ if (file_exists("data/data_menu.php")) {
 include 'template/layout.php';
 function runAjax($POST, $array, $dir_p): void
 {
-    $lis = listData_p($array);
     $listPOST = array();
     foreach ($POST as $key => $item) {
         $listPOST[] = $key;
     }
     header("Content-type: text/plain; charset=UTF-8");
-    if ($lis == $listPOST) {
+    if (listData_p($array) == $listPOST) {
         foreach ($array['content1'] as $item) {
             if ($item['name']) {
                 $w = $item['name'];
@@ -78,7 +76,6 @@ function runAjax($POST, $array, $dir_p): void
         echo '</p>';
     } else {
         echo "<p>Данные не найдены</p>";
-//        var_dump($_POST);
     }
 }
 function listData_p($array): array
