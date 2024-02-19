@@ -8,7 +8,8 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="css/style.css?v2">
+    <link rel="stylesheet" type="text/css" href="access/style.css?v2">
+    <script src="access/fetch.js"></script>
     <?= $content2['head'] ?>
 </head>
 <body>
@@ -28,7 +29,6 @@
         <div class="box-texts">
             <div class="box-text1">
                 <?= $content1 ?>
-
             </div>
             <div class="box-text2">
                 <?= $content2['tabs'] ?>

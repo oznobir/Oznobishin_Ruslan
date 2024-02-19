@@ -8,7 +8,7 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="css/style.css?v2">
+    <link rel="stylesheet" type="text/css" href="access/style.css?v2">
 
 </head>
 <body>

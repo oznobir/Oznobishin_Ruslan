@@ -14,8 +14,13 @@ if (file_exists("data/data_menu.php")) {
                 $desc = $data_parent['children'][$page]['desc'];
                 $menu = showMenuPage($data_parent['children'], $page);
                 $data_p = include "data/data_$dir_p.php";
-                $content1 = showContent1($data_p, $dir_p);
+                $content1 = showContent1($data_p);
                 $content2 = showContent2($data_p['content2'], $dir_p);
+                $listData_p = listData_p($data_p);
+                if (!empty($_POST)) {
+                    runAjax($_POST, $data_p, $dir_p);
+                    exit();
+                }
             } else {
                 $_SESSION ['message'] = [
                     'text' => "Файл 'data/data_$dir_p.php' не найден.",
@@ -53,7 +58,39 @@ if (file_exists("data/data_menu.php")) {
     die();
 }
 include 'template/layout.php';
-
+function runAjax($POST, $array, $dir_p): void
+{
+    $lis = listData_p($array);
+    $listPOST = array();
+    foreach ($POST as $key => $item) {
+        $listPOST[] = $key;
+    }
+    header("Content-type: text/plain; charset=UTF-8");
+    if ($lis == $listPOST) {
+        foreach ($array['content1'] as $item) {
+            if ($item['name']) {
+                $w = $item['name'];
+                $$w = htmlspecialchars($POST[$w], ENT_QUOTES, 'UTF-8');
+            }
+        }
+        echo '<p>';
+        include "pages/$dir_p/index.php";
+        echo '</p>';
+    } else {
+        echo "<p>Данные не найдены</p>";
+//        var_dump($_POST);
+    }
+}
+function listData_p($array): array
+{
+    $listArray = array();
+    foreach ($array['content1'] as $item) {
+        if ($item['name']) {
+            $listArray[] = $item['name'];
+        }
+    }
+    return $listArray;
+}
 function showMenuPage($data, $page): string
 {
     $menu = '';
@@ -127,56 +164,40 @@ function createLinkMenu($href, $title, $page): string
     return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$href\">Пример $href</a></div>";
 }//  end  function createLinkMenu($href, $title, $page): string
 
-function showContent1($data, $p): string
+function showContent1($data_p): string
 {
-    foreach ($data['content1'] as $arr) {
-        if ($arr['name']) {
-            $w = $arr['name'];
-            if (isset($_POST['button'])) {
-                $post = $_POST[$w];
-            } else {
-                $post = $arr['default'];
-            }
-            $$w = $post;
-        }
-    }
-    $content1 = creatForm($data['content1']);
+    $content1 = creatForm($data_p['content1']);
+    $content1 .= "<div id = \"result\">?</div>";
 
-    if (isset($_POST['button'])) {
-
-        $content1 .= "<form><fieldset>";
-        ob_start();
-        include "pages/$p/{$data['content2'][0]['path']}";
-        $content1 .= ob_get_clean();
-        $content1 .= "</fieldset></form>";
-    }
 
     return $content1;
 }// end function showContent1($data, $p): string
 
 function creatForm($data): string
 {
-    $content1 = "<form method=\"POST\"><fieldset>";
+    $content1 = "<form name =\"page\" method='post'><fieldset>";
     foreach ($data as $arr) {
         // тут подумать !!!!
-        if (($arr['name']) && isset($_POST['button'])) {
-            $post = $_POST[$arr['name']];
-        } else {
-            $post = $arr['default'];
-        }
+//        if (($arr['name']) && isset($_POST['button'])) {
+//            $post = $_POST[$arr['name']];
+//        } else {
+//            $post = $arr['default'];
+//        }
 
         if ($arr['type'] == 'text') {
-            $content1 .= "<label for=\"id_{$arr['name']}\">\${$arr['name']}:</label><input type=\"text\" id = \"id_{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"$post\"><br><br>";
+            $content1 .= "<label for=\"{$arr['name']}\">\${$arr['name']}:</label>
+<input type=\"text\" id = \"{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"{$arr['default']}\"><br><br>";
         }
         if ($arr['type'] == 'label') {
-            $content1 .= "<label>$post:</label><br><br>";
+            $content1 .= "<label>{$arr['default']}:</label><br><br>";
         }
 
         if ($arr['type'] == 'textarea') {
-            $content1 .= "<span>Текст: </span><textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\"><?= $post ?></textarea><br>";
+            $content1 .= "<span>Текст: </span>
+<textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\">{$arr['default']}</textarea><br>";
         }
     }
-    $content1 .= "<input type=\"submit\" name=\"button\" value=\"Результат\" />";
+    $content1 .= "<input type=\"button\" value=\"Результат\" onClick=\"sendRequest();\"/>";
     $content1 .= " </fieldset></form>";
     return $content1;
 } // end function creatForm($data): string

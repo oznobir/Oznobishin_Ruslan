@@ -246,6 +246,7 @@ header .error {
     padding: 0.6rem;
     flex-grow: 1;
     border-radius: 0;
+    overflow: auto;
 }
 
 .box-text2 {

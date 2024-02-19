@@ -2,7 +2,7 @@
 return
     [
         'content1' => [
-            ['name' => null, 'type' => 'label', 'default' => 'Введите количество чисел'],
+            ['name' => null, 'type' => 'label', 'default' => 'Введите $n'],
             ['name' => 'n', 'type' => 'text', 'default' => '10000'],
 
         ],
