@@ -57,6 +57,7 @@ if (file_exists("data/data_menu.php")) {
     die();
 }
 include 'template/layout.php';
+
 function runAjax($POST, $array, $dir_p): void
 {
     $listPOST = array();
@@ -71,12 +72,8 @@ function runAjax($POST, $array, $dir_p): void
                 $$w = htmlspecialchars($POST[$w], ENT_QUOTES, 'UTF-8');
             }
         }
-        echo '<p>';
         include "pages/$dir_p/index.php";
-        echo '</p>';
-    } else {
-        echo "<p>Данные не найдены</p>";
-    }
+    } else  echo "<p>Данные не найдены</p>";
 }
 function listData_p($array): array
 {
