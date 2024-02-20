@@ -2,7 +2,7 @@
 $path ='';
 header("Content-type: text/plain; charset=UTF-8");
 foreach ($_POST as $key => $item) {
-    if ($item !== '') {
+    if ($item != '') {
         if ($key == 'path') {
             $path = $item;
         } else {
