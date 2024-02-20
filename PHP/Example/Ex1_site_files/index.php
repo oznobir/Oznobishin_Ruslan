@@ -16,7 +16,7 @@ if (file_exists("data/data_menu.php")) {
                 $data_p = include "data/data_$dir_p.php";
                 $content1 = showContent1($data_p);
                 $content2 = showContent2($data_p['content2'], $dir_p);
-                if (isPostFetch($_POST, $data_p)) {
+                if (!empty($_POST) && isPostFetch($_POST, $data_p)) {
                     runFetch($_POST, $data_p, $dir_p);
                     exit();
                 }
@@ -72,7 +72,6 @@ function runFetch($POST, $array, $dir_p): void
 
 function isPostFetch($POST, $array): bool
 {
-    if (!empty($POST)) {
         $listData_p = array();
         foreach ($array['content1'] as $item) {
             if ($item['name']) {
@@ -86,7 +85,6 @@ function isPostFetch($POST, $array): bool
         if ($listData_p == $listPOST) {
             return true;
         } else return false;
-    } else return false;
 }
 
 function showMenuPage($data, $page): string
