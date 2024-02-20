@@ -72,20 +72,23 @@ function runFetch($POST, $array, $dir_p): void
 
 function isPostFetch($POST, $array): bool
 {
-    $listData_p = array();
-    foreach ($array['content1'] as $item) {
-        if ($item['name']) {
-            $listData_p[] = $item['name'];
+    if (!empty($POST)) {
+        $listData_p = array();
+        foreach ($array['content1'] as $item) {
+            if ($item['name']) {
+                $listData_p[] = $item['name'];
+            }
         }
-    }
-    $listPOST = array();
-    foreach ($POST as $key => $item) {
-        $listPOST[] = $key;
-    }
-    if ($listData_p == $listPOST) {
-        return true;
+        $listPOST = array();
+        foreach ($POST as $key => $item) {
+            $listPOST[] = $key;
+        }
+        if ($listData_p == $listPOST) {
+            return true;
+        } else return false;
     } else return false;
 }
+
 function showMenuPage($data, $page): string
 {
     $menu = '';
