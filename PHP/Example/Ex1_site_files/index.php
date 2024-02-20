@@ -16,8 +16,8 @@ if (file_exists("data/data_menu.php")) {
                 $data_p = include "data/data_$dir_p.php";
                 $content1 = showContent1($data_p);
                 $content2 = showContent2($data_p['content2'], $dir_p);
-                if (!empty($_POST)) {
-                    runAjax($_POST, $data_p, $dir_p);
+                if (isPostFetch($_POST, $data_p)) {
+                    runFetch($_POST, $data_p, $dir_p);
                     exit();
                 }
             } else {
@@ -58,32 +58,33 @@ if (file_exists("data/data_menu.php")) {
 }
 include 'template/layout.php';
 
-function runAjax($POST, $array, $dir_p): void
+function runFetch($POST, $array, $dir_p): void
 {
+    header("Content-type: text/plain; charset=UTF-8");
+    foreach ($array['content1'] as $item) {
+        if ($item['name']) {
+            $w = $item['name'];
+            $$w = htmlspecialchars($POST[$w], ENT_QUOTES, 'UTF-8');
+        }
+    }
+    include "pages/$dir_p/index.php";
+}
+
+function isPostFetch($POST, $array): bool
+{
+    $listData_p = array();
+    foreach ($array['content1'] as $item) {
+        if ($item['name']) {
+            $listData_p[] = $item['name'];
+        }
+    }
     $listPOST = array();
     foreach ($POST as $key => $item) {
         $listPOST[] = $key;
     }
-    header("Content-type: text/plain; charset=UTF-8");
-    if (listData_p($array) == $listPOST) {
-        foreach ($array['content1'] as $item) {
-            if ($item['name']) {
-                $w = $item['name'];
-                $$w = htmlspecialchars($POST[$w], ENT_QUOTES, 'UTF-8');
-            }
-        }
-        include "pages/$dir_p/index.php";
-    } else  echo "<p>Данные не найдены</p>";
-}
-function listData_p($array): array
-{
-    $listArray = array();
-    foreach ($array['content1'] as $item) {
-        if ($item['name']) {
-            $listArray[] = $item['name'];
-        }
-    }
-    return $listArray;
+    if ($listData_p == $listPOST) {
+        return true;
+    } else return false;
 }
 function showMenuPage($data, $page): string
 {
@@ -217,14 +218,14 @@ function showContent2($data, $p): array
         if ($arr['type'] == 'css') {
             $str_cont = file_get_contents("pages/$p/{$arr['path']}");
 //            $str_hl = highlight_string('<?php'. $str_cont, true);
-            $content2 ['tabs'] .= str_replace ('&lt;?php', '', highlight_string('<?php'. $str_cont, true));
-            $content2 ['head'] .= '<style>'. $str_cont .'</style>';
+            $content2 ['tabs'] .= str_replace('&lt;?php', '', highlight_string('<?php' . $str_cont, true));
+            $content2 ['head'] .= '<style>' . $str_cont . '</style>';
         }
         if ($arr['type'] == 'js') {
             // если js или что-то еще будет, переделать в отдельную функцию
             $str_cont = file_get_contents("pages/$p/{$arr['path']}");
-            $content2 ['tabs'] .= preg_replace ('#&lt;?php#', '', highlight_string('<?php'. $str_cont, true));
-            $content2 ['foot'] .='<script>'. $str_cont .'</script>';
+            $content2 ['tabs'] .= preg_replace('#&lt;?php#', '', highlight_string('<?php' . $str_cont, true));
+            $content2 ['foot'] .= '<script>' . $str_cont . '</script>';
         }
         $content2 ['tabs'] .= "</div>";
         $i++;
