@@ -5,7 +5,7 @@ session_start();
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-    $page = htmlspecialchars($_GET['p']) ?? 'all';
+    $page = htmlspecialchars($_GET['p'], ENT_QUOTES, 'UTF-8') ?? 'all';
     if ($page !== 'all') {
         if ($data_parent = getDataParent($data_menu, $page)) {
             $dir_p = $data_parent['children'][$page]['dir'];
@@ -14,12 +14,8 @@ if (file_exists("data/data_menu.php")) {
                 $desc = $data_parent['children'][$page]['desc'];
                 $menu = showMenuPage($data_parent['children'], $page);
                 $data_p = include "data/data_$dir_p.php";
-                $content1 = showContent1($data_p);
+                $content1 = showContent1($data_p, $dir_p);
                 $content2 = showContent2($data_p['content2'], $dir_p);
-                if (!empty($_POST) && isPostFetch($_POST, $data_p)) {
-                    runFetch($_POST, $data_p, $dir_p);
-                    exit();
-                }
             } else {
                 $_SESSION ['message'] = [
                     'text' => "Файл 'data/data_$dir_p.php' не найден.",
@@ -57,35 +53,6 @@ if (file_exists("data/data_menu.php")) {
     die();
 }
 include 'template/layout.php';
-
-function runFetch($POST, $array, $dir_p): void
-{
-    header("Content-type: text/plain; charset=UTF-8");
-    foreach ($array['content1'] as $item) {
-        if ($item['name']) {
-            $w = $item['name'];
-            $$w = htmlspecialchars($POST[$w], ENT_QUOTES, 'UTF-8');
-        }
-    }
-    include "pages/$dir_p/index.php";
-}
-
-function isPostFetch($POST, $array): bool
-{
-        $listData_p = array();
-        foreach ($array['content1'] as $item) {
-            if ($item['name']) {
-                $listData_p[] = $item['name'];
-            }
-        }
-        $listPOST = array();
-        foreach ($POST as $key => $item) {
-            $listPOST[] = $key;
-        }
-        if ($listData_p == $listPOST) {
-            return true;
-        } else return false;
-}
 
 function showMenuPage($data, $page): string
 {
@@ -160,26 +127,19 @@ function createLinkMenu($href, $title, $page): string
     return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$href\">Пример $href</a></div>";
 }//  end  function createLinkMenu($href, $title, $page): string
 
-function showContent1($data_p): string
+function showContent1($data_p, $dir_p): string
 {
-    $content1 = creatForm($data_p['content1']);
+    $content1 = creatForm($data_p, $dir_p);
     $content1 .= "<div id = \"result\">?</div>";
 
 
     return $content1;
 }// end function showContent1($data, $p): string
 
-function creatForm($data): string
+function creatForm($data, $dir_p): string
 {
-    $content1 = "<form name =\"page\" method='post'><fieldset>";
-    foreach ($data as $arr) {
-        // тут подумать !!!!
-//        if (($arr['name']) && isset($_POST['button'])) {
-//            $post = $_POST[$arr['name']];
-//        } else {
-//            $post = $arr['default'];
-//        }
-
+    $content1 = "<form name =\"pageForm\" method='post'><fieldset>";
+    foreach ($data['content1'] as $arr) {
         if ($arr['type'] == 'text') {
             $content1 .= "<label for=\"{$arr['name']}\">\${$arr['name']}:</label>
 <input type=\"text\" id = \"{$arr['name']}\" name=\"{$arr['name']}\" autocomplete=\"off\" value=\"{$arr['default']}\"><br><br>";
@@ -193,6 +153,7 @@ function creatForm($data): string
 <textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\">{$arr['default']}</textarea><br>";
         }
     }
+    $content1 .= "<input type=\"hidden\" name=\"path\" value=\"pages/$dir_p/{$data['content2'][0]['path']}\"/>";
     $content1 .= "<input type=\"button\" value=\"Результат\" onClick=\"sendRequest();\"/>";
     $content1 .= " </fieldset></form>";
     return $content1;
