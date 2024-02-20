@@ -9,7 +9,16 @@
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
     <link rel="stylesheet" type="text/css" href="access/style.css?v2">
-    <script src="access/fetch.js"></script>
+    <script>
+        async function sendRequest() {
+            let response = await fetch('template/response.php', {
+                method: 'POST', body: new FormData(document.forms.form)
+            });
+            if (response.ok) {
+                document.getElementById("result").innerHTML = await response.text();
+            }
+        }
+    </script>
     <?= $content2['head'] ?>
 </head>
 <body>

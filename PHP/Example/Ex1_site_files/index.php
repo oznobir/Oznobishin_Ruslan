@@ -138,7 +138,7 @@ function showContent1($data_p, $dir_p): string
 
 function creatForm($data, $dir_p): string
 {
-    $content1 = "<form name =\"pageForm\" method='post'><fieldset>";
+    $content1 = "<form name =\"form\" method='post'><fieldset>";
     foreach ($data['content1'] as $arr) {
         if ($arr['type'] == 'text') {
             $content1 .= "<label for=\"{$arr['name']}\">\${$arr['name']}:</label>
