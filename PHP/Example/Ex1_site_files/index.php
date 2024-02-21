@@ -127,16 +127,7 @@ function createLinkMenu($href, $title, $page): string
     return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$href\">Пример $href</a></div>";
 }//  end  function createLinkMenu($href, $title, $page): string
 
-function showContent1($data_p, $dir_p): string
-{
-    $content1 = creatForm($data_p, $dir_p);
-    $content1 .= "<div id = \"result\">?</div>";
-
-
-    return $content1;
-}// end function showContent1($data, $p): string
-
-function creatForm($data, $dir_p): string
+function showContent1($data, $dir_p): string
 {
     $content1 = "<form name =\"form\" method='post'><fieldset>";
     foreach ($data['content1'] as $arr) {
@@ -156,8 +147,9 @@ function creatForm($data, $dir_p): string
     $content1 .= "<input type=\"hidden\" name=\"path\" value=\"pages/$dir_p/{$data['content2'][0]['path']}\"/>";
     $content1 .= "<input type=\"button\" value=\"Результат\" onClick=\"sendRequest();\"/>";
     $content1 .= " </fieldset></form>";
+    $content1 .= "<div id = \"result\">?</div>";
     return $content1;
-} // end function creatForm($data): string
+} // end function showContent1($data, $dir_p): string
 
 function showContent2($data, $p): array
 {
