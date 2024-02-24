@@ -130,6 +130,7 @@ function createLinkMenu($href, $title, $page): string
 function showContent1($data, $dir_p): string
 {
     $content1 = "<form name =\"form\" method='post'><fieldset>";
+    $content1 .= "<label type=\"text\"><small>pages/$dir_p</small></label><br><br>";
     foreach ($data['content1'] as $arr) {
         if ($arr['type'] == 'text') {
             $content1 .= "<label for=\"{$arr['name']}\">\${$arr['name']}:</label>
@@ -138,13 +139,14 @@ function showContent1($data, $dir_p): string
         if ($arr['type'] == 'label') {
             $content1 .= "<label>{$arr['default']}:</label><br><br>";
         }
-
+        if ($arr['type'] == 'security') {
+            $content1 .= "<input type=\"hidden\" name = \"{$arr['name']}\" value=\"{$arr['default']}\">";
+        }
         if ($arr['type'] == 'textarea') {
             $content1 .= "<span>Текст: </span>
 <textarea name=\"{$arr['name']}\" placeholder=\"Введите текст\">{$arr['default']}</textarea><br>";
         }
     }
-    $content1 .= "<input type=\"hidden\" name=\"path\" value=\"pages/$dir_p/{$data['content2'][0]['path']}\"/>";
     $content1 .= "<input type=\"button\" value=\"Результат\" onClick=\"sendRequest();\"/>";
     $content1 .= " </fieldset></form>";
     $content1 .= "<div id = \"result\">?</div>";
@@ -167,8 +169,8 @@ function showContent2($data, $p): array
 
         if ($arr['type'] == 'php') {
             $content2 ['tabs'] .= "<div class=\"text2-panel php\">";
-            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
             $content2 ['tabs'] .= "<input type=\"hidden\" name=\"path\" value=\"{$arr['path']}\"/>";
+            $content2 ['tabs'] .= highlight_file("pages/$p/{$arr['path']}", true);
             $content2 ['tabs'] .= "</div>";
         }
         if ($arr['type'] == 'css') {
