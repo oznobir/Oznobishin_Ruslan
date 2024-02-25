@@ -241,12 +241,13 @@ header .error {
 }
 
 .box-text1 {
+    display: flex;
+    flex-direction: column;
     color: #444;
     background-color: #d3d3d3;
     padding: 0.6rem 0.3rem 0.6rem 0.6rem;
-    /*flex-grow: 1;*/
     border-radius: 0;
-    overflow: auto;
+    /*overflow: auto;*/
 }
 
 .box-text2 {
@@ -292,11 +293,15 @@ header .error {
     border-bottom: solid #bbb 1px;
 }
 #result, .box-text1 > form {
+    /*flex-grow: 1;*/
     padding: 0.6rem;
     border: solid #bbb 2px;
     border-radius: 0.2rem;
     overflow: auto;
 }
+/*#result {*/
+/*    flex-grow: 1;*/
+/*}*/
 form > label, form > input {
     padding: .3rem;
 }
