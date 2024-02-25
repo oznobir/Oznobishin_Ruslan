@@ -218,8 +218,8 @@ header .error {
 .box-main {
     display: flex;
     flex-direction: row;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    /*margin-top: 1rem;*/
+    /*margin-bottom: 1rem;*/
     background-color: #bbb;
     border: solid #bbb 2px;
     border-radius: 0.2rem;
@@ -243,8 +243,8 @@ header .error {
 .box-text1 {
     color: #444;
     background-color: #d3d3d3;
-    padding: 0.6rem;
-    flex-grow: 1;
+    padding: 0.6rem 0.3rem 0.6rem 0.6rem;
+    /*flex-grow: 1;*/
     border-radius: 0;
     overflow: auto;
 }
@@ -253,7 +253,7 @@ header .error {
     flex-grow: 1;
     color: #444;
     background-color: #d3d3d3;
-    padding: 0.6rem;
+    padding: 0.6rem 0.6rem 0.6rem 0.3rem;
     border-radius: 0 0.2rem 0.2rem 0;
     overflow: auto;
 }
@@ -291,11 +291,38 @@ header .error {
     border-top: solid #bbb 1px;
     border-bottom: solid #bbb 1px;
 }
+#result, .box-text1 > form {
+    padding: 0.6rem;
+    border: solid #bbb 2px;
+    border-radius: 0.2rem;
+    overflow: auto;
+}
+form > label, form > input {
+    padding: .3rem;
+}
+form label:first-of-type {
+    display: block;
+    background-color: #bbb;
+    margin: -.6rem;
+    /*padding: .3rem;*/
+}
+form label:last-of-type {
+    display: block;
+    float: right;
+    font-size: small;
+}
 
 @media all and (max-width: 900px) {
     .box-texts {
         flex-direction: column;
     }
+    .box-text1 {
+        padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+    }
+    .box-text2 {
+        padding: 0.3rem 0.6rem 0.6rem 0.6rem;
+    }
+
 
     .box-menu > div > a {
         width: 8rem;
@@ -305,6 +332,12 @@ header .error {
 @media all and (max-width: 600px) {
     .box-texts {
         flex-direction: column;
+    }
+    .box-text1 {
+        padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+    }
+    .box-text2 {
+        padding: 0.3rem 0.6rem 0.6rem 0.6rem;
     }
 
     .box-menu > div > a {
@@ -329,6 +362,12 @@ header .error {
     /*----*/
     .box-texts {
         flex-direction: column;
+    }
+    .box-text1 {
+        padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+    }
+    .box-text2 {
+        padding: 0.3rem 0.6rem 0.6rem 0.6rem;
     }
 
     .box-menu > div > a {

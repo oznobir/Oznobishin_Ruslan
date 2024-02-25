@@ -129,8 +129,8 @@ function createLinkMenu($href, $title, $page): string
 
 function showContent1($data, $dir_p): string
 {
-    $content1 = "<form name =\"form\" method='post'><fieldset>";
-    $content1 .= "<label type=\"text\"><small>pages/$dir_p</small></label><br><br>";
+    $content1 = "<form name =\"form\" method='post'>";
+    $content1 .= "<label type=\"text\">Исходные данные</label><br>";
     foreach ($data['content1'] as $arr) {
         if ($arr['type'] == 'text') {
             $content1 .= "<label for=\"{$arr['name']}\">\${$arr['name']}:</label>
@@ -148,8 +148,9 @@ function showContent1($data, $dir_p): string
         }
     }
     $content1 .= "<input type=\"button\" value=\"Результат\" onClick=\"sendRequest();\"/>";
-    $content1 .= " </fieldset></form>";
-    $content1 .= "<div id = \"result\">?</div>";
+    $content1 .= "<label type=\"text\">pages/$dir_p</label><br>";
+    $content1 .= "</form>";
+    $content1 .= "<div id = \"result\"> ... </div>";
     return $content1;
 } // end function showContent1($data, $dir_p): string
 

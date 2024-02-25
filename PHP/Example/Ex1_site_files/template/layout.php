@@ -16,7 +16,7 @@
     <meta name="application-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="access/style.css?v2">
+    <link rel="stylesheet" type="text/css" href="access/style.css?v1.28">
     <script src="access/fetch.js"></script>
     <?= $content2['head'] ?>
 </head>
