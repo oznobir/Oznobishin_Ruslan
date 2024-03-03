@@ -5,20 +5,30 @@ session_start();
 
 if (file_exists("data/data_menu.php")) {
     $data_menu = include "data/data_menu.php";
-    $page = htmlspecialchars($_GET['p'], ENT_QUOTES, 'UTF-8') ?? 'all';
-    if ($page !== 'all') {
-        if ($data_parent = getDataParent($data_menu, $page)) {
-            $dir_p = $data_parent['children'][$page]['dir'];
-            if (file_exists("data/data_$dir_p.php")) {
+    if (isset($_GET['p'])) {
+        $page = htmlspecialchars($_GET['p'], ENT_QUOTES, 'UTF-8');
+    } else {
+        $page = 'all';
+    }
+    if ($page == 'all' || $page == '') {
+        $mainMenu = showMainMenu($data_menu);
+        $title = 'Содержание. Скрипты на PHP';
+        $desc = "Скрипты на PHP. Изучаем вместе";
+        include 'template/layoutMainMenu.php';
+        die();
+    } else {
+        $data_parent = getDataParent($data_menu, $page);
+        $data_p = getDataP($data_parent, $page);
+        if ($data_p) {
+            if (file_exists("pages/{$data_p['dir']}/{$data_p['content2'][0]['path']}")) {
                 $title = "Пример $page. {$data_parent['desc']}";
-                $desc = $data_parent['children'][$page]['desc'];
+                $desc = $data_p['desc'];
                 $menu = showMenuPage($data_parent['children'], $page);
-                $data_p = include "data/data_$dir_p.php";
-                $content1 = showContent1($data_p, $dir_p);
-                $content2 = showContent2($data_p['content2'], $dir_p);
+                $content1 = showContent1($data_p);
+                $content2 = showContent2($data_p);
             } else {
                 $_SESSION ['message'] = [
-                    'text' => "Файл 'data/data_$dir_p.php' не найден.",
+                    'text' => "Файл 'pages/{$data_p['dir']}/{$data_p['content2'][0]['path']}' не найден.",
                     'status' => "error"
                 ];
                 header("Location: index.php?p=all");
@@ -26,19 +36,12 @@ if (file_exists("data/data_menu.php")) {
             }
         } else {
             $_SESSION ['message'] = [
-                'text' => "Файл '$page' не найден.",
+                'text' => "Нет данных примера $page в 'data/data_menu.php'.",
                 'status' => "error"
             ];
             header("Location: index.php?p=all");
             die();
         }
-    }
-    if ($page == 'all') {
-        $mainMenu = showMainMenu($data_menu);
-        $title = 'Содержание. Скрипты на PHP';
-        $desc = "Скрипты на PHP. Изучаем вместе";
-        include 'template/layoutMainMenu.php';
-        die();
     }
 } else {
     $_SESSION ['message'] = [
@@ -87,34 +90,30 @@ function tplMainMenu($data): string
     }
     return $string;
 } // end function tplMainMenu($data): string
+function getDataP($data_menu, $page)
+{
+//    if (isset($data_menu['children'][$page])) {
+//        return $data_menu['children'][$page];
+//    } else return null;
+    return $data_menu['children'][$page] ?? null;
+}
 
 function getDataParent($data_menu, $page)
 {
-    $preg = '#([0-9-]+)-([0-9-]+)#';
-    if (preg_match($preg, $page, $params[])) {
-        for ($i = 0; ($params[$i]); $i++) {
-            preg_match($preg, $params[$i][1], $params[]);
-        }
-        for ($i = count($params) - 2; $i > 0; $i--) {
-            if (isset($data_menu[$params[$i][1]]['children'])) {
-                $data_menu = $data_menu[$params[$i][1]]['children'];
-            } else {
-                return null;
-            }
-        }
-        if (isset($data_menu[$params[0][1]])) {
-            $data_menu = $data_menu[$params[0][1]];
-        } else {
-            return null;
-        }
-        if (isset($data_menu['children'][$page]['dir'])) {
-            return $data_menu;
-        } else {
-            return null;
-        }
-    } else {
-        return null;
+    $params = explode("-", $page);
+    $string = $params[0];
+    for ($i = 1; $i < count($params); $i++) {
+        $string .= '-' . $params[$i];
+        $params[$i] = $string;
     }
+    for ($i = 0; $i < count($params) - 2; $i++) {
+        if (isset($data_menu[$params[$i]]['children'])) {
+            $data_menu = $data_menu[$params[$i]]['children'];
+        } else return null;
+    }
+    if (isset($data_menu[$params[count($params) - 2]]['children'])) {
+        return $data_menu[$params[count($params) - 2]];
+    } else return null;
 }// function getDataParent($data_menu, $page)
 
 function createLinkMenu($href, $title, $page): string
@@ -127,7 +126,7 @@ function createLinkMenu($href, $title, $page): string
     return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$href\">Пример $href</a></div>";
 }//  end  function createLinkMenu($href, $title, $page): string
 
-function showContent1($data, $dir_p): string
+function showContent1($data): string
 {
     $content1 = "<form name =\"form\" method='post'>";
     $content1 .= "<label type=\"text\">Исходные данные</label><br>";
@@ -148,18 +147,19 @@ function showContent1($data, $dir_p): string
         }
     }
     $content1 .= "<input type=\"button\" value=\"Результат\" onClick=\"sendRequest();\"/>";
-    $content1 .= "<label type=\"text\">pages/$dir_p</label><br>";
+    $content1 .= "<label type=\"text\">pages/{$data['dir']}</label><br>";
     $content1 .= "</form>";
     $content1 .= "<div id = \"result\"> ... </div>";
     return $content1;
 } // end function showContent1($data, $dir_p): string
 
-function showContent2($data, $p): array
+function showContent2($data): array
 {
     $content2 = array('tabs' => '', 'head' => '', 'foot' => '');
     $i = 1;
+    $p = $data['dir'];
     $content2 ['tabs'] .= "<div class=\"text2-tabs\">";
-    foreach ($data as $arr) {
+    foreach ($data['content2'] as $arr) {
         if ($i == 1) {
             $checked = 'checked="checked"';
         } else {
