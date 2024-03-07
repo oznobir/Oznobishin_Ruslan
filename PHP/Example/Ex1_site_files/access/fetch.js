@@ -8,7 +8,7 @@ async function sendRequest() {
         path[ind] = elem.children[0].value;
         my_form.append("php" + ind, blob[ind], path[ind]);
     });
-    let response = await fetch('template/response.php', {
+    let response = await fetch('functions/response.php', {
         method: 'POST', body: my_form
     });
     if (response.ok) {

@@ -16,9 +16,9 @@
     <meta name="application-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="access/style.css?v1.2">
-    <script src="access/fetch.js"></script>
-    <?= $content2['head'] ?>
+<link rel="stylesheet" type="text/css" href="access/style.css?v1.3">
+<script src="access/fetch.js?v1.2"></script>
+<?= $content2['head'] ?>
 </head>
 <body>
 <header>
@@ -37,9 +37,10 @@
         <div class="box-texts">
             <div class="box-text1">
                 <?= $content1 ?>
+                <div id="result"> ... </div>
             </div>
             <div class="box-text2">
-                <?= $content2['tabs'] ?>
+                <?= $content2 ['tabs'] ?>
             </div>
         </div>
     </section>

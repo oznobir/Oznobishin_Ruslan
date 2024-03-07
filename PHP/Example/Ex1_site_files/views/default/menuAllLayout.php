@@ -8,13 +8,13 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="access/style.css?v2">
+<link rel="stylesheet" type="text/css" href="access/style.css?v2">
 
 </head>
 <body>
 <header>
     <h1>PHP</h1>
-    <?php include 'template/info.php' ?>
+    <?php //include 'template/info.php' ?>
 </header>
 <main class="wrapper">
     <nav>
