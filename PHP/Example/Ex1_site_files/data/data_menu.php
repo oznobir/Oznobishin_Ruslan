@@ -13,11 +13,9 @@ return [
             '1-1-2' => ['dir' => 'p13', 'content1' => [
                 ['name' => null, 'type' => 'label', 'default' => 'Введите $n'],
                 ['name' => 'n', 'type' => 'text', 'default' => '10000'],
-
             ], 'content2' => [
-                    ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
-                ], 'desc' => 'Ошибки при различных операциях с данными № 2.'],
-
+                ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
+            ], 'desc' => 'Ошибки при различных операциях с данными № 2.'],
         ]],
         '1-2' => ['desc' => 'Условный оператор IF', 'children' => [
             '1-2-1' => ['dir' => 'p1', 'content1' => [
@@ -25,7 +23,6 @@ return [
             ], 'content2' => [
                 ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
                 ['name' => 'style.css', 'type' => 'css', 'path' => 'style.css'],
-                //['name' => 'script.js', 'type' => 'js', 'path' => 'js/script.js']
             ], 'desc' => 'Вывести для числа $x его значение разным цветом: зеленым - если $x положительно, желтым - если $x равно нулю, красным - если $x отрицательно. Используются только условные операторы.'],
             '1-2-2' => ['dir' => 'p2', 'content1' => [
                 ['name' => 'a', 'type' => 'text', 'default' => '10'],
@@ -82,9 +79,9 @@ return [
                 ['name' => 'd', 'type' => 'text', 'default' => '11'],
                 ['name' => 'f', 'type' => 'text', 'default' => '9']
             ], 'content2' => [
-                    ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
-                    ['name' => 'style.css', 'type' => 'css', 'path' => 'style.css'],
-                ], 'desc' => 'Определить поместится ли товар в сумку, когда известны длина, ширина и высота сумки $a, $b, $e, а также длина, ширина и высота товара $c, $d , $f. Ввод длины, ширины и высоты в произвольном порядке. Используются только условные операторы. Вариант 1.'],
+                ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
+                ['name' => 'style.css', 'type' => 'css', 'path' => 'style.css'],
+            ], 'desc' => 'Определить поместится ли товар в сумку, когда известны длина, ширина и высота сумки $a, $b, $e, а также длина, ширина и высота товара $c, $d , $f. Ввод длины, ширины и высоты в произвольном порядке. Используются только условные операторы. Вариант 1.'],
             '1-2-8' => ['dir' => 'p8', 'content1' => [
                 ['name' => null, 'type' => 'label', 'default' => 'Размеры сумки'],
                 ['name' => 'a', 'type' => 'text', 'default' => '15'],
@@ -112,8 +109,8 @@ return [
                 ['name' => 'n', 'type' => 'text', 'default' => '10'],
 
             ], 'content2' => [
-                    ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
-                ], 'desc' => 'Операторы continue, break. Найти сумму ряда случайных чисел, которые не больше 50.'],
+                ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
+            ], 'desc' => 'Операторы continue, break. Найти сумму ряда случайных чисел, которые не больше 50.'],
 
         ]],
         '1-4' => ['desc' => 'Обработка массивов', 'children' => [
@@ -135,10 +132,10 @@ return [
                 ['name' => 'test1', 'type' => 'text', 'default' => "\$id = 100;"],
                 ['name' => 'test2', 'type' => 'text', 'default' => "eval(\$test1); echo \$id;"],
             ], 'content2' => [
-                    ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
-                    ['name' => 'test2.php', 'type' => 'php', 'path' => 'test/test2.php'],
-                    ['name' => 'test1.php', 'type' => 'php', 'path' => 'test/test1.php'],
-                ], 'desc' => 'Пример работы функции eval()'],
+                ['name' => 'index.php', 'type' => 'php', 'path' => 'index.php'],
+                ['name' => 'test2.php', 'type' => 'php', 'path' => 'test/test2.php'],
+                ['name' => 'test1.php', 'type' => 'php', 'path' => 'test/test1.php'],
+            ], 'desc' => 'Пример работы функции eval()'],
 
         ]],
     ]],
