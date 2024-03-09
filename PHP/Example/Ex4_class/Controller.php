@@ -25,7 +25,6 @@ class Controller
             die();
         }
         $this->model = new Model();
-
         $dataMenuPage = $this->model->getAllByMenu_id($dataPage);
         $this->view = new View();
         $this->view->includeView('views/pageMenuView.php');
@@ -48,11 +47,11 @@ class Controller
         $this->model = new Model();
         $dataMenu = $this->model->getAll();
         $this->view = new View();
-        $dataLayout ['mainMenu'] = $this->view->renderView('Views/menuAllView.php', $dataMenu);
+        $dataLayout ['mainMenu'] = $this->view->renderView('views/menuAllView.php', $dataMenu);
         $dataLayout ['title'] = 'Главное меню';
         $dataLayout ['desc'] = 'Примеры скриптов РНР. Изучаем вместе';
         $this->view = new View();
-        echo $this->view->renderLayout('Views/menuAllLayout.php', $dataLayout);
+        echo $this->view->renderLayout('views/menuAllLayout.php', $dataLayout);
     }
 //    public function create() {}
 //    public function update() {}
