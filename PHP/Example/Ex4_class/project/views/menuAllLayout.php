@@ -13,7 +13,7 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="access/style.css?v2.5">
+    <link rel="stylesheet" type="text/css" href="project/access/style.css?v2.5">
 
 </head>
 <body>

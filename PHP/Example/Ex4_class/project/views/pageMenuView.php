@@ -25,5 +25,5 @@ function createLinkMenu($key, $title, $page): string
     } else {
         $classLinkMenu = '';
     }
-    return "<div><a$classLinkMenu title=\"$title\" href=\"?p=$key\">Пример $key</a></div>";
+    return "<div><a$classLinkMenu title=\"$title\" href=\"?controller=page&p=$key\">Пример $key</a></div>";
 }//  end  function createLinkMenu($href, $title, $page): string

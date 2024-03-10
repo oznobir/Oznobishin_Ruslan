@@ -11,7 +11,7 @@
                 </label>
             <?php } else { ?>
                 <div>
-                    <a href="?p=<?= $key ?>" title="Пример <?= $key ?>">
+                    <a href="?controller=page&p=<?= $key ?>" title="Пример <?= $key ?>">
                         <?= $value['description'] ?>
                     </a>
                 </div>
@@ -33,7 +33,7 @@
             </label>
         <?php } else { ?>
             <div>
-                <a href="?p=<?= $key1 ?>" title="Пример <?= $key1 ?>">
+                <a href="?controller=page&p=<?= $key1 ?>" title="Пример <?= $key1 ?>">
                     <?= $value1['description'] ?>
                 </a>
             </div>

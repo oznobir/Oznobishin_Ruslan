@@ -2,6 +2,7 @@
 /**
  * Model
  */
+namespace Core;
 class Model
 {
     private $link;
