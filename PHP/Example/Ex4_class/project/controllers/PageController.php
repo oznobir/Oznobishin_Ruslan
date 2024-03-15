@@ -1,9 +1,10 @@
 <?php
 
 namespace Project\Controllers;
-use \Core\Model;
+
 use \Core\View;
 use \Core\Controller;
+use Project\Models\PageModel;
 
 /**
  * Controller
@@ -15,13 +16,13 @@ class PageController extends Controller
      */
     public function show(): void
     {
-        $this->model = new Model();
+        $this->model = new PageModel();
         $dataPage = $this->model->getBySlug($this->parameters['p']);
         if (!$dataPage) {
-            header("Location: index.php?controller=menu");
+            header("Location: /menu/");
             die();
         }
-        $this->model = new Model();
+        $this->model = new PageModel();
         $dataMenuPage = $this->model->getAllByMenu_id($dataPage);
         $this->view = new View();
         $this->view->includeView('project/views/pageMenuView.php');

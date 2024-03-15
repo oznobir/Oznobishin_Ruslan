@@ -3,83 +3,31 @@
  * Model
  */
 namespace Core;
+use mysqli;
+
 class Model
 {
-    private $link;
+    private static mysqli|false $link;
 
     public function __construct()
     {
-        if (!$this->link) {
-            $this->link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            mysqli_query($this->link, "SET NAMES 'utf8'");
-        }
+//			if (!self::$link) {
+        self::$link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        mysqli_query(self::$link, "SET NAMES 'utf8'");
+//			}
     }
 
-    /**
-     * @param $slug
-     * @return bool|array|null
-     */
-    public function getBySlug($slug): bool|array|null
+    protected function findOne($query)
     {
-        $query = "SELECT * FROM example WHERE slug='$slug'";
-        $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link));
+        $result = mysqli_query(self::$link, $query) or die(mysqli_error(self::$link));
         return mysqli_fetch_assoc($result);
-
     }
-
-    /**
-     * @param $dataPage
-     * @return array|void
-     */
-    public function getAllByMenu_id($dataPage)
+    protected function findMany($query, $by = 'id')
     {
-        $menu_id = $dataPage['menu_id'];
-        $query = "SELECT slug, title, description FROM `example` WHERE menu_id = '$menu_id'";
-        $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link));
-        for ($data = []; $row = mysqli_fetch_assoc($result);) {
-            $data[$row['slug']] = $row;
+        $result = mysqli_query(self::$link, $query) or die(mysqli_error(self::$link));
+        for ($data = []; $row = mysqli_fetch_assoc($result); ){
+            $data[$row[$by]] = $row;
         }
         return $data;
     }
-
-    /**
-     * @return array
-     */
-    public function getAll(): array
-    {
-        $query = "SELECT menu.id, menu.description, menu.parent_id FROM `menu` UNION
-              SELECT example.slug, example.description, example.menu_id FROM `example`";
-        $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link));
-        for ($data = []; $row = mysqli_fetch_assoc($result);) {
-            $data[$row['id']] = $row;
-        }
-        return $this->getTree($data);
-    }
-
-    /**
-     * Преобразование массива
-     * @param array $dataset
-     * @return array
-     */
-    private function getTree(array $dataset): array
-    {
-        $tree = array();
-        foreach ($dataset as $id => &$node) {
-            //Если нет вложений
-            if (!$node['parent_id']) {
-                $tree[$id] = &$node;
-                $tree[$id]['children'] = [];
-            } else {
-                //Если есть потомки, то переберем массив
-                $dataset[$node['parent_id']]['children'][$id] = &$node;
-            }
-        }
-        return $tree;
-    }
-
-//    public function count(){}
-//    public function selectRow($id){}
-//    public function insert($data){}
-//    public function update($data, $id){}
-//    public function delete($id){}
 }

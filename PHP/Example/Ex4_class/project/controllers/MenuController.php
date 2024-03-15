@@ -1,9 +1,10 @@
 <?php
 
 namespace Project\Controllers;
-use \Core\Model;
+
 use \Core\View;
 use \Core\Controller;
+use Project\Models\MenuModel;
 
 /**
  * Controller
@@ -16,7 +17,7 @@ class MenuController extends Controller
      */
     public function show(): void
     {
-        $this->model = new Model();
+        $this->model = new MenuModel();
         $dataMenu = $this->model->getAll();
         $this->view = new View();
         $dataLayout ['mainMenu'] = $this->view->renderView('project/views/menuAllView.php', $dataMenu);

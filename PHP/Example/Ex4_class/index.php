@@ -19,9 +19,9 @@ spl_autoload_register(function($class) {
         throw new \Exception("Для класса $class не найден файл $path. Проверьте наличие файла по указанному пути. Убедитесь, что пространство имен вашего класса совпадает с тем, которое пытается найти фреймворк для данного класса. Например, вы создаете класса модели, но забыли заюзать ее через use. В этом случае вы пытаетесь вызвать класс модели в пространстве имен контроллера, а такого файла нет.");
     }
 });
-
+$routes = require 'project/config/routes.php';
 $router = new Router();
-$route = $router->getRoute();
+$route = $router->getRoute($routes);
 $controller = new $route['controller']($route['parameters']);
 $action = $route['action'];
 $controller->$action();

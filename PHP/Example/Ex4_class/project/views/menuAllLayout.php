@@ -12,8 +12,9 @@
     <meta name="author" content="Oznobishin Ruslan">
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
+    <link rel="shortcut icon" type="image/x-icon" href="/project/access/favicon.ico">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="project/access/style.css?v2.5">
+    <link rel="stylesheet" type="text/css" href="/project/access/style.css?v2.5">
 
 </head>
 <body>

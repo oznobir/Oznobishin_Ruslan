@@ -11,7 +11,7 @@
                 </label>
             <?php } else { ?>
                 <div>
-                    <a href="?controller=page&p=<?= $key ?>" title="Пример <?= $key ?>">
+                    <a href="/page/<?= $key ?>/" title="Пример <?= $key ?>">
                         <?= $value['description'] ?>
                     </a>
                 </div>
@@ -23,7 +23,7 @@
             <?php }
         } ?>
     </div>
-<?php function tplMainMenu($data1)
+<?php function tplMainMenu($data1): void
 {
     foreach ($data1 as $key1 => $value1) {
         if (isset($value1['children'])) { ?>
@@ -33,7 +33,7 @@
             </label>
         <?php } else { ?>
             <div>
-                <a href="?controller=page&p=<?= $key1 ?>" title="Пример <?= $key1 ?>">
+                <a href="/page/<?= $key1 ?>/" title="Пример <?= $key1 ?>">
                     <?= $value1['description'] ?>
                 </a>
             </div>

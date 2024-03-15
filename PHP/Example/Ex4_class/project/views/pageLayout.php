@@ -7,25 +7,16 @@
     <meta name="author" content="Oznobishin Ruslan">
     <meta name="publisher-email" content="oznobir@gmail.com">
     <meta name="robots" content="noindex,nofollow">
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="76x76" href="project/access/img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="project/access/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="project/access/img/favicon/favicon-16x16.png">
-    <link rel="manifest" href="project/access/img/favicon/site.web-manifest">
-    <link rel="manifest" href="project/access/img/favicon/site.web-manifest">
-    <link rel="manifest" href="project/access/img/favicon/site.web-manifest">
-    <link rel="mask-icon" href="project/access/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="application-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="shortcut icon" type="image/x-icon" href="/project/access/favicon.ico">
     <title><?= $title ?></title>
-    <link rel="stylesheet" type="text/css" href="project/access/style.css?v2.5">
-    <script src="project/access/fetch.js?v1.2"></script>
+    <link rel="stylesheet" type="text/css" href="/project/access/style.css?v2.5">
+    <script src="/project/access/fetch.js?v1.2"></script>
     <?= $content2_head ?>
 </head>
 <body>
 <header>
     <h1>PHP</h1>
-    <button class="main-menu-btn"><a href="?controller=menu">Содержание</a></button>
+    <button class="main-menu-btn"><a href="/menu/">Содержание</a></button>
 </header>
 <main class="wrapper">
     <header>

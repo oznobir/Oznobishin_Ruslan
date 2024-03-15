@@ -33,7 +33,7 @@ class View
             include $viewPath;
             return ob_get_clean();
         } else {
-            echo "Не найден файл с View по пути $viewPath";
+            echo "Не найден файл с View по пути $viewPath (renderView)";
             die();
         }
     }
@@ -48,9 +48,8 @@ class View
         if (file_exists($viewPath)) {
             include $viewPath;
         } else {
-            echo "Не найден файл с View по пути $viewPath";
+            echo "Не найден файл с View по пути $viewPath (includeView)";
             die();
         }
     }
 }
-
