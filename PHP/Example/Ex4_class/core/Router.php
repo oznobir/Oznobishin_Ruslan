@@ -20,7 +20,7 @@ class Router
             }
         }
 
-        return ['controller' => 'Project\Controllers\ErrorController', 'action' =>'NotFound', 'parameters' => []];
+        return ['controller' => 'Project\Controllers\ErrorController', 'action' =>'notFound', 'parameters' => []];
     }
 
     /** Создает паттерн из path, указанного в route
