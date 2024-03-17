@@ -1,25 +1,14 @@
 <?php
 namespace Core;
+
 class View
 {
-    /**
-     * @param string $layoutPath
-     * @param array|null $data
-     * @return false|string|void
-     */
-    public function renderLayout(string $layoutPath, array $data = null)
-    {
-        if (file_exists($layoutPath)) {
-            ob_start();
-            extract($data);
-            include $layoutPath;
-            return ob_get_clean();
-        } else {
-            echo "Не найден файл с layout по пути $layoutPath";
-            die();
-        }
-    }
+    private $parameters;
 
+    public function __construct($parameters)
+    {
+        $this->parameters = $parameters;
+    }
     /**
      * @param string $viewPath
      * @param array|null $data
@@ -29,6 +18,7 @@ class View
     {
         if (file_exists($viewPath)) {
             ob_start();
+            extract($data);
             extract($data);
             include $viewPath;
             return ob_get_clean();

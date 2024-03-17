@@ -5,13 +5,14 @@ use \Core\View;
 
 class ErrorController extends Controller
 {
+    /**
+     * @return void
+     */
     public function notFound(): void
     {
-        $view = new View();
-        $dataLayout ['content'] = $view->renderView('project/views/notFound.php', []);
-        $layout = new View();
-        $dataLayout ['title'] = 'Not Found';
-        $dataLayout ['description'] = 'Not Found';
-        echo $layout->renderView('project/views/allLayout.php', $dataLayout);
+        $this->data['content'] = $this->render('project/views/notFound.php');
+        $this->data['title'] = 'Not Found';
+        $this->data['description'] = 'Not Found';
+        echo $this->render('project/views/allLayout.php');
     }
 }

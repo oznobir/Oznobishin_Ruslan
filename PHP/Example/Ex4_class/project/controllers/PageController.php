@@ -16,19 +16,13 @@ class PageController extends Controller
      */
     public function show(): void
     {
-        $dataLayout =  (new PageModel())->getBySlug($this->parameters['p']);
-        if (!$dataLayout) {
-            header("Location: /menu/");
-            die();
-        }
-        $dataView['menu'] =  (new PageModel())->getAllByMenu_id($dataLayout['menu_id']);
-        $dataView['page'] = $this->parameters['p'];
-        $dataLayout ['menu'] = (new View())->renderView('project/views/pageMenuView.php', $dataView);
-        unset($dataLayout ['id']);
-        unset($dataLayout ['menu_id']);
-        unset($dataLayout ['slug']);
-        $dataLayout ['content_head'] = '';
-        $dataLayout ['content_foot'] = '';
-        echo (new View())->renderLayout('project/views/pageLayout.php', $dataLayout);
+        $this->data['page'] =  (new PageModel())->getBySlug($this->parameters['p']);
+        if (!$this->data['page']) $this->redirect('/menu/');
+        $this->data['menu'] =  (new PageModel())->getAllByMenu_id($this->data['page']['menu_id']);
+        $this->data['content'] = $this->render('project/views/pageMenuView.php');
+        $this->data['content_head'] = '';
+        $this->data['content_foot'] = '';
+        echo $this->render('project/views/pageLayout.php');
+
     }
 }
