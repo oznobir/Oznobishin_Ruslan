@@ -16,7 +16,9 @@ class Router
                 $params = $this->clearParams($params);
                 $controller = $route->controller;
                 $action = $route->action;
-                return ['controller' => 'Project\Controllers\\'.ucfirst($controller).'Controller', 'action' => $action, 'parameters' => $params];
+
+                return ['controller' => 'Project\Controllers\\'.ucfirst($controller).'Controller',
+                    'action' => $action, 'parameters' => $params];
             }
         }
 
@@ -41,7 +43,7 @@ class Router
         $result = [];
         foreach ($params as $key => $param) {
             if (!is_int($key)) {
-                $result[$key] = $param;
+                $result[$key] = htmlspecialchars($param, ENT_QUOTES, 'UTF-8');
             }
         }
         return $result;
