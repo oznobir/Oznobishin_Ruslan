@@ -1,5 +1,5 @@
 <?php
-namespace Core;
+namespace core;
 
 require 'project/config/config.php';
 spl_autoload_register(function ($class) {

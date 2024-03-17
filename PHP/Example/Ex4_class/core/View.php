@@ -4,10 +4,10 @@ class View
 {
     /**
      * @param string $layoutPath
-     * @param array|string $data
+     * @param array|null $data
      * @return false|string|void
      */
-    public function renderLayout(string $layoutPath, array|string $data = '')
+    public function renderLayout(string $layoutPath, array $data = null)
     {
         if (file_exists($layoutPath)) {
             ob_start();
@@ -22,10 +22,10 @@ class View
 
     /**
      * @param string $viewPath
-     * @param array|string $data
+     * @param array|null $data
      * @return false|string|void
      */
-    public function renderView(string $viewPath, array|string $data = '')
+    public function renderView(string $viewPath, array $data = null)
     {
         if (file_exists($viewPath)) {
             ob_start();
@@ -34,21 +34,6 @@ class View
             return ob_get_clean();
         } else {
             echo "Не найден файл с View по пути $viewPath (renderView)";
-            die();
-        }
-    }
-
-    /**
-     * @param string $viewPath
-     * @param array|string $data
-     * @return void
-     */
-    public function includeView(string $viewPath, array|string $data = ''): void
-    {
-        if (file_exists($viewPath)) {
-            include $viewPath;
-        } else {
-            echo "Не найден файл с View по пути $viewPath (includeView)";
             die();
         }
     }

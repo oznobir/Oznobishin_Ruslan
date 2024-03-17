@@ -7,11 +7,11 @@ class ErrorController extends Controller
 {
     public function notFound(): void
     {
-        $this->view = new View();
-        $dataLayout ['mainMenu'] = $this->view->renderView('project/views/notFound.php', []);
-        $this->view = new View();
+        $view = new View();
+        $dataLayout ['content'] = $view->renderView('project/views/notFound.php', []);
+        $layout = new View();
         $dataLayout ['title'] = 'Not Found';
-        $dataLayout ['desc'] = 'Not Found';
-        echo $this->view->renderView('project/views/menuAllLayout.php', $dataLayout);
+        $dataLayout ['description'] = 'Not Found';
+        echo $layout->renderView('project/views/allLayout.php', $dataLayout);
     }
 }

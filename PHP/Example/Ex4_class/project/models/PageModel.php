@@ -17,9 +17,8 @@ class PageModel extends Model
      * @param $dataPage
      * @return array|null
      */
-    public function getAllByMenu_id($dataPage): ?array
+    public function getAllByMenu_id($menu_id): ?array
     {
-        $menu_id = $dataPage['menu_id'];
         return $this->findMany("SELECT slug, title, description FROM `example` WHERE menu_id = '$menu_id'", 'slug');
     }
 }

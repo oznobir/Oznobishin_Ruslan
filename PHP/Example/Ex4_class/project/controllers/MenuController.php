@@ -17,16 +17,10 @@ class MenuController extends Controller
      */
     public function show(): void
     {
-        $this->model = new MenuModel();
-        $dataMenu = $this->model->getAll();
-        $this->view = new View();
-        $dataLayout ['mainMenu'] = $this->view->renderView('project/views/menuAllView.php', $dataMenu);
+        $dataMenu = (new MenuModel())->getAll();
+        $dataLayout ['content'] = (new View())->renderView('project/views/menuAllView.php', $dataMenu);
         $dataLayout ['title'] = 'Главное меню';
-        $dataLayout ['desc'] = 'Примеры скриптов РНР. Изучаем вместе';
-        $this->view = new View();
-        echo $this->view->renderLayout('project/views/menuAllLayout.php', $dataLayout);
+        $dataLayout ['description'] = 'Примеры скриптов РНР. Изучаем вместе';
+        echo (new View())->renderLayout('project/views/allLayout.php', $dataLayout);
     }
-//    public function create() {}
-//    public function update() {}
-//    public function delete() {}
 }

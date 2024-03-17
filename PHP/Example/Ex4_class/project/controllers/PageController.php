@@ -16,24 +16,19 @@ class PageController extends Controller
      */
     public function show(): void
     {
-        $this->model = new PageModel();
-        $dataPage = $this->model->getBySlug($this->parameters['p']);
-        if (!$dataPage) {
+        $dataLayout =  (new PageModel())->getBySlug($this->parameters['p']);
+        if (!$dataLayout) {
             header("Location: /menu/");
             die();
         }
-        $this->model = new PageModel();
-        $dataMenuPage = $this->model->getAllByMenu_id($dataPage);
-        $this->view = new View();
-        $this->view->includeView('project/views/pageMenuView.php');
-        $dataLayout ['menu'] = showMenuPage($dataMenuPage, $dataPage['slug']);
-        $dataLayout ['desc'] = $dataPage['description'];
-        $dataLayout ['title'] = $dataPage['title'];
-        $dataLayout ['content1'] = $dataPage['form'];
-        $dataLayout ['content2_head'] = '';
-        $dataLayout ['content2_tabs'] = $dataPage['content'];
-        $dataLayout ['content2_foot'] = '';
-        $this->view = new View();
-        echo $this->view->renderLayout('project/views/pageLayout.php', $dataLayout);
+        $dataView['menu'] =  (new PageModel())->getAllByMenu_id($dataLayout['menu_id']);
+        $dataView['page'] = $this->parameters['p'];
+        $dataLayout ['menu'] = (new View())->renderView('project/views/pageMenuView.php', $dataView);
+        unset($dataLayout ['id']);
+        unset($dataLayout ['menu_id']);
+        unset($dataLayout ['slug']);
+        $dataLayout ['content_head'] = '';
+        $dataLayout ['content_foot'] = '';
+        echo (new View())->renderLayout('project/views/pageLayout.php', $dataLayout);
     }
 }
