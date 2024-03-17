@@ -6,7 +6,7 @@
  * @var string $content
  * @var string $content_foot
  * @var string $form
- */?>
+ */ ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -28,24 +28,7 @@
     <button class="main-menu-btn"><a href="/menu/">Содержание</a></button>
 </header>
 <main class="wrapper">
-    <header>
-        <h2><?= $title ?></h2>
-        <p><?= $description ?></p>
-    </header>
-    <section class="box-main">
-        <nav class='box-menu'>
-            <?= $menu ?>
-        </nav>
-        <div class="box-texts">
-            <div class="box-text1">
-                <?= $form ?>
-                <div id="result"> ... </div>
-            </div>
-            <div class="box-text2">
-                <?= $content ?>
-            </div>
-        </div>
-    </section>
+    <?= $content ?>
 </main>
 <footer>
     by oznor

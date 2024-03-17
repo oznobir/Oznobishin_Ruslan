@@ -14,7 +14,7 @@ class PageModel extends Model
     }
 
     /**
-     * @param $dataPage
+     * @param $menu_id
      * @return array|null
      */
     public function getAllByMenu_id($menu_id): ?array
