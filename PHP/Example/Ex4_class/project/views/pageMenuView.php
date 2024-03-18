@@ -1,8 +1,7 @@
 <?php /**
  * @var array $menu
- * @var string $content_head
+ * @var string $p
  * @var array $page
- * @var string $content_foot
  */?>
 <header>
     <h2><?= $page['title'] ?></h2>
@@ -11,7 +10,7 @@
 <section class="box-main">
     <nav class='box-menu'>
         <?php foreach ($menu as $key => $item) {?>
-            <div><a<?=$page['slug']==$key?" class='active'":''?> title="<?=$item['description']?>" href="/page/<?=$key?>/">Пример <?=$key?></a></div>
+            <div><a<?=$p==$key?" class='active'":''?> title="<?=$item['description']?>" href="/page/<?=$key?>/">Пример <?=$key?></a></div>
         <?php } ?>
     </nav>
     <div class="box-texts">

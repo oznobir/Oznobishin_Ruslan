@@ -18,7 +18,7 @@ class View
     {
         if (file_exists($viewPath)) {
             ob_start();
-            extract($data);
+            extract($this->parameters);
             extract($data);
             include $viewPath;
             return ob_get_clean();
