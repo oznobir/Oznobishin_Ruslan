@@ -16,13 +16,12 @@ class PageController extends Controller
      */
     public function show(): void
     {
-        $this->data['page'] =  (new PageModel())->getBySlug($this->parameters['p']);
+        $this->data['page'] =  (new PageModel())->getDataPage($this->parameters);
         if (!$this->data['page']) $this->redirect('/menu/');
-        $this->data['menu'] =  (new PageModel())->getAllByMenu_id($this->data['page']['menu_id']);
+        $this->data['menu'] =  (new PageModel())->getDataMenu(['menu_id'=>$this->data['page']['menu_id']]);
         $this->data['content'] = $this->render('project/views/pageMenuView.php');
         $this->data['content_head'] = '';
         $this->data['content_foot'] = '';
         echo $this->render('project/views/pageLayout.php');
-
     }
 }

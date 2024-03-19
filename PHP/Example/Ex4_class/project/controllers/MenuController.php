@@ -17,7 +17,7 @@ class MenuController extends Controller
      */
     public function show(): void
     {
-        $this->data = (new MenuModel())->getAll();
+        $this->data['menu'] = (new MenuModel())->getData();
         $this->data['content'] = $this->render('project/views/menuAllView.php');
         $this->data['title'] = 'Главное меню';
         $this->data['description'] = 'Примеры скриптов РНР. Изучаем вместе';

@@ -4,14 +4,21 @@ use Core\Model;
 
 class MenuModel extends Model
 {
-    /**
-     * @return array массив с вложенными в children по parent_id menu и example
-     */
-    public function getAll(): array
+    protected function setQueries(): void
     {
-        $menu = $this->findMany("SELECT menu.id, menu.description, menu.parent_id FROM `menu` UNION
-              SELECT example.slug, example.description, example.menu_id FROM `example`", 'id');
-        return $this->getTree($menu);
+        $this->query = [
+            'getMenuAll' =>
+                'SELECT menu.id, menu.description, menu.parent_id FROM `menu` UNION SELECT example.slug, example.description, example.menu_id FROM `example`',
+        ];
+    }
+
+    /**
+     * @param $parameters - из GET
+     * @return array
+     */
+    public function getData($parameters = null): array
+    {
+        return $this->getTree(self::selectAll($this->query['getMenuAll'],\PDO::FETCH_UNIQUE, $parameters));
     }
     /**
      * Преобразование массива
@@ -34,3 +41,12 @@ class MenuModel extends Model
         return $tree;
     }
 }
+//    /**
+//     * @return array массив с вложенными в children по parent_id menu и example
+//     */
+//    public function getAll(): array
+//    {
+//        $menu = $this->findMany("SELECT menu.id, menu.description, menu.parent_id FROM `menu` UNION
+//              SELECT example.slug, example.description, example.menu_id FROM `example`", 'id');
+//        return $this->getTree($menu);
+//    }

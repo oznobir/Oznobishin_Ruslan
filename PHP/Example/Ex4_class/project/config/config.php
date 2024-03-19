@@ -1,9 +1,11 @@
 <?php
 
-const DB_HOST = 'localhost';
+//const DB_HOST = 'localhost';
 const DB_USER = 'root';
 const DB_PASS = '';
-const DB_NAME = 'dbPages';
+//const DB_NAME = 'dbPages';
+const DB_DSN = "mysql:host=localhost;dbname=dbPages;charset=utf8";
+
 
 //*********************DUMP DB************************************/
 

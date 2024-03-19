@@ -1,9 +1,9 @@
-<?php /** @var array $data */ ?>
+<?php /** @var array $menu */ ?>
     <div class="accor-group">
         <div class="as-title">
             Содержание
         </div>
-        <?php foreach ($data as $key => $value) {
+        <?php foreach ($menu as $key => $value) {
             if (isset($value['children'])) { ?>
                 <input type="checkbox" name="accor" id="accor_<?= $key ?>"/>
                 <label for="accor_<?= $key ?>">
