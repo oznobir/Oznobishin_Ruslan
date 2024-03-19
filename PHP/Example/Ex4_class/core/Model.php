@@ -5,6 +5,8 @@
 namespace Core;
 //use mysqli;
 
+use PDO;
+
 class Model
 {
     protected static object $pdo;
@@ -34,8 +36,8 @@ class Model
     public static function connect(): void
     {
 //        if (!self::$pdo) {
-        self::$pdo = new \PDO(self::$dsn, self::$user, self::$password);
-        self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        self::$pdo = new PDO(self::$dsn, self::$user, self::$password);
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 //    }
     }
 
