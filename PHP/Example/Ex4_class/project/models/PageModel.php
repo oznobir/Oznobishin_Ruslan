@@ -1,6 +1,7 @@
 <?php
 namespace project\models;
 use Core\Model;
+use PDO;
 
 class PageModel extends Model
 {
@@ -13,7 +14,7 @@ class PageModel extends Model
     }
     public function getDataPage($parameters = null)
     {
-        return self::selectRow($this->query['getPageBySlug'], \PDO::FETCH_ASSOC, $parameters);
+        return self::selectRow($this->query['getPageBySlug'], PDO::FETCH_ASSOC, $parameters);
     }
 
     /**
@@ -22,7 +23,7 @@ class PageModel extends Model
      */
     public function getDataMenu($parameters = null): array
     {
-        return self::selectAll($this->query['getMenuByMenuId'], \PDO::FETCH_UNIQUE, $parameters);
+        return self::selectAll($this->query['getMenuByMenuId'], PDO::FETCH_UNIQUE, $parameters);
     }
 }
 ///**

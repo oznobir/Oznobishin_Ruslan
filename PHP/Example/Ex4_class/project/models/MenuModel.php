@@ -1,6 +1,7 @@
 <?php
 namespace Project\Models;
 use Core\Model;
+use PDO;
 
 class MenuModel extends Model
 {
@@ -18,7 +19,7 @@ class MenuModel extends Model
      */
     public function getData($parameters = null): array
     {
-        return $this->getTree(self::selectAll($this->query['getMenuAll'],\PDO::FETCH_UNIQUE, $parameters));
+        return $this->getTree(self::selectAll($this->query['getMenuAll'], PDO::FETCH_UNIQUE, $parameters));
     }
     /**
      * Преобразование массива
