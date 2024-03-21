@@ -1,0 +1,21 @@
+#AddDefaultCharset utf-8
+##Options +FollowSimLinks
+#Options -Indexes
+#DirectoryIndex index.php
+
+RewriteEngine On
+RewriteBase /
+#RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} !^/project/access/
+RewriteRule .+ index.php
+
+##RewriteRule ^([a-z]+)/$ /?controller=$1&%{QWERY_STRING} [NS,L]
+##RewriteRule ^([a-z]+)/([0-9-]+)/$ /?controller=$1&p=$2&%{QWERY_STRING} [NS,L]
+#RewriteCond $1 !^(index\.php)
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_URI} !^\.(css|js|jpd|gif|png)$
+##RewriteCond %{REQUEST_URI} !^project/access/
+##RewriteCond %{REQUEST_URI} !^/admin/
+##RewriteCond %{REQUEST_URI} !^/index.php
+#RewriteRule ^(.*)$ index.php/$1 [L,QSL]
