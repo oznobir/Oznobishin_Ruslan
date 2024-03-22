@@ -21,7 +21,7 @@ class View
         if (file_exists($viewPath)) {
             ob_start();
             extract($this->parameters);
-            extract($data);
+            if ($data) extract($data);
             include $viewPath;
             return ob_get_clean();
         } else {

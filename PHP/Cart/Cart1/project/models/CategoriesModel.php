@@ -9,15 +9,35 @@ class CategoriesModel extends Model
     {
         $this->query = [
             'getMenuAll' =>
-                'SELECT id, parent_id, title FROM `categories`',
+                'SELECT id, parent_id, title, slug FROM `categories`',
+            'getCategory' =>
+                'SELECT * FROM `categories` WHERE slug=:slug',
+            'getSubCategories' =>
+                'SELECT * FROM `categories` WHERE parent_id=:id',
         ];
+    }
+    /** Получение дочерних категорий по id
+     * @param $parameters - id
+     * @return array массив подкатегорий
+     */
+    public function geSubCategoriesById ($parameters) : array
+    {
+        return self::selectAll($this->query['getSubCategories'], PDO::FETCH_ASSOC, $parameters);
+    }
+    /** Получение категории по slug
+     * @param $parameters - slug
+     * @return array массив категорией
+     */
+    public function getCategoryBySlug ($parameters) : array
+    {
+        return self::selectRow($this->query['getCategory'], PDO::FETCH_ASSOC, $parameters);
     }
 
     /** Получение массива категорий с подкатегориями
      * @param $parameters
      * @return array массив категорий с подкатегориями
      */
-    public function getDataWithChild($parameters = null): array
+    public function getCategoriesWithChild($parameters = null): array
     {
         return $this->getTree(self::selectAll($this->query['getMenuAll'], PDO::FETCH_UNIQUE, $parameters));
     }
@@ -34,6 +54,7 @@ class CategoriesModel extends Model
             //от FETCH_UNIQUE
             unset($dataset[$id][1]);
             unset($dataset[$id][2]);
+            unset($dataset[$id][3]);
             //Если нет вложений
             if (!$node['parent_id']) {
                 $tree[$id] = &$node;
@@ -46,12 +67,3 @@ class CategoriesModel extends Model
         return $tree;
     }
 }
-//    /**
-//     * @return array массив с вложенными в children по parent_id menu и example
-//     */
-//    public function getAll(): array
-//    {
-//        $menu = $this->findMany("SELECT menu.id, menu.description, menu.parent_id FROM `menu` UNION
-//              SELECT example.slug, example.description, example.menu_id FROM `example`", 'id');
-//        return $this->getTree($menu);
-//    }

@@ -1,17 +1,12 @@
 <?php /** @var array $menu */ ?>
-<main>
     <nav>
         <div class="left-column">
             <div class="left-menu">
                 <div class="menu-caption">Меню:</div>
-                <ul><?php tpl($menu);?></ul>
+                <ul><?php tpl($menu); ?></ul>
             </div>
         </div>
     </nav>
-    <div class="center-column">
-        center-column
-    </div>
-</main>
 <?php function tpl($menu): void
 {
     foreach ($menu as $item) { ?>

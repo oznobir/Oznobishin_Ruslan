@@ -4,6 +4,7 @@ namespace Project\Controllers;
 
 use Core\Controller;
 use Project\Models\CategoriesModel;
+use Project\Models\ProductsModel;
 
 class IndexController extends Controller
 {
@@ -12,12 +13,10 @@ class IndexController extends Controller
      */
     public function index(): void
     {
-//        $this->data['page'] =  (new PageModel())->getDataPage($this->parameters);
-//        if (!$this->data['page']) $this->redirect('/menu/');
-        $this->data['menu'] =  (new CategoriesModel())->getDataWithChild();
-        $this->data['content'] = $this->render('project/views/default/shopView.php');
-        $this->data['title'] = 'myshop.by Каталог товаров';
+        $this->data['title'] = 'Каталог товаров';
         $this->data['description'] = 'Гипермаркет myshop.by Каталог товаров';
-        echo $this->render('project/views/default/shopLayout.php');
+        $this->data['menu'] =  (new CategoriesModel())->getCategoriesWithChild();
+        $this->data['products'] =  (new ProductsModel())->getProductsLast();
+        echo $this->render('project/views/default/shopProductsCenter.php');
     }
 }

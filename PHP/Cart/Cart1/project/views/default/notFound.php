@@ -1,6 +1,6 @@
+<?php include 'shopHeaderLayout.php'?>
 <p>
 	Запрошенная вами страница не найдена!
-    <button class="main-menu-btn"><a href="/menu/">Содержание</a></button>
 </p>
 <p>
 	Скорее всего дело в том, что для данного URL не прописан route
@@ -10,3 +10,5 @@
 <p>
     Потом в router сделать redirect на главную...
 </p>
+<button><a href="/">Каталог товаров</a></button>
+<?php include 'shopFooterLayout.php'?>
