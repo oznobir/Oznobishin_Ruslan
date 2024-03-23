@@ -1,4 +1,5 @@
-<?php /**
+<?php
+/**
  * @var string $description
  * @var string $title
  * @var string $content
