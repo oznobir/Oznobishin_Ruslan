@@ -18,13 +18,16 @@ class ProductsModel extends Model
                 'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC',
         ];
     }
+
     /** Получение данных продукта по slug
      * @param $parameters - slug из Router
-     * @return array массив данных продукта
+     * @return array|null массив данных продукта
      */
-    public function getProductBySlug($parameters): array
+    public function getProductBySlug($parameters): array|null
     {
-        return self::selectRow($this->query['3'], PDO::FETCH_ASSOC, $parameters);
+        $data = self::selectRow($this->query['3'], PDO::FETCH_ASSOC, $parameters);
+        If (!$data) return null;
+        return $data;
     }
     /** Получение массива продуктов
      * @param $limit - количество последних по id, null - все

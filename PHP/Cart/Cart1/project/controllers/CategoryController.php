@@ -14,16 +14,17 @@ class CategoryController extends Controller
     public function index(): void
     {
         $cat =  (new CategoriesModel())->getCategoryBySlug($this->parameters);
+        if (!$cat) $this->redirect('/');
         $id = ['id' => $cat['id']];
         $this->data['title'] = "Товары в категории {$cat['title']}";
-        $this->data['menu'] =  (new CategoriesModel())->getCategoriesWithChild();
         $this->data['description'] = "Товары в категории {$cat['title']} в myshop.by";
+        $this->data['menu'] =  (new CategoriesModel())->getCategoriesWithChild();
         if ($cat['parent_id'] == 0) {
             $this->data['categories'] = (new CategoriesModel())->geSubCategoriesById($id);
-            echo $this->render('project/views/default/shopCategoriesCenter.php');
+            echo $this->render('project/views/default/shopCategoriesView.php');
         } else {
             $this->data['products'] = (new ProductsModel())->getProductsCategoryById($id);
-            echo $this->render('project/views/default/shopProductsCenter.php');
+            echo $this->render('project/views/default/shopProductsView.php');
         }
     }
 }

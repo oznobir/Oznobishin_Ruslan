@@ -24,13 +24,16 @@ class CategoriesModel extends Model
     {
         return self::selectAll($this->query['1'], PDO::FETCH_ASSOC, $parameters);
     }
+
     /** Получение категории по slug
      * @param $parameters - slug
-     * @return array массив категорией
+     * @return array|null массив категорией
      */
-    public function getCategoryBySlug ($parameters) : array
+    public function getCategoryBySlug ($parameters) : array|null
     {
-        return self::selectRow($this->query['2'], PDO::FETCH_ASSOC, $parameters);
+        $data = self::selectRow($this->query['2'], PDO::FETCH_ASSOC, $parameters);
+        If (!$data) return null;
+        return $data;
     }
 
     /** Получение массива категорий с подкатегориями

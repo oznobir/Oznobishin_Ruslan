@@ -14,7 +14,8 @@ class ProductController extends Controller
     public function index(): void
     {
         $this->data = (new ProductsModel())->getProductBySlug($this->parameters);
+        if (!$this->data) $this->redirect('/');
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
-        echo $this->render('project/views/default/shopOneProductCenter.php');
+        echo $this->render('project/views/default/shopOneProductView.php');
     }
 }

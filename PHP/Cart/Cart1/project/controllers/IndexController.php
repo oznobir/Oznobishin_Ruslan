@@ -17,6 +17,6 @@ class IndexController extends Controller
         $this->data['description'] = 'Гипермаркет myshop.by Каталог товаров';
         $this->data['menu'] =  (new CategoriesModel())->getCategoriesWithChild();
         $this->data['products'] =  (new ProductsModel())->getProductsLast();
-        echo $this->render('project/views/default/shopProductsCenter.php');
+        echo $this->render('project/views/default/shopProductsView.php');
     }
 }

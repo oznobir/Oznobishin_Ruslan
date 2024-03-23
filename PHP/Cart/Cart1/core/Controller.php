@@ -7,7 +7,7 @@ namespace Core;
 class Controller
 {
 
-    protected array|null $data =[];
+    protected array|null $data = [];
     protected array|null $parameters;
 
     public function __construct($parameters)
@@ -23,4 +23,12 @@ class Controller
     {
         header("Location: $url");
     }
-}
+
+    public function renderNew($pathLayout, $pathView)
+    {
+        foreach ($args as $key => $pathView) {
+            $this->data[$key] = (new View($this->parameters))->renderView($pathView, $this->data);
+        }
+            return (new View($this->parameters))->renderView($pathLayout, $this->data);
+        }
+    }

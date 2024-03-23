@@ -10,5 +10,5 @@
 <p>
     Потом в router сделать redirect на главную...
 </p>
-<button><a href="/">Каталог товаров</a></button>
+<p><a href="/">Каталог товаров</a></p>
 <?php include 'shopFooterLayout.php'?>
