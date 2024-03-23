@@ -21,7 +21,7 @@ main {
     /*background-color: #eee;*/
 }
 
-.products {
+.products-list {
     display: flex;
     gap: 25px;
     flex-direction: row;
@@ -32,7 +32,7 @@ main {
     /*background-color: #eee;*/
 }
 
-.product-card {
+.products-cell {
     display: flex;
     width: 200px;
     gap: 25px;
@@ -41,13 +41,27 @@ main {
 
 }
 
-.product-card-image, .product-card-link {
+.products-cell-image, .products-cell-link {
     display: flex;
     justify-content: center;
     align-content: space-between;
 
 }
-
+.product-card, .product-other {
+    display: flex;
+    /*gap: 25px;*/
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    color: #444;
+    padding: 0.6rem 0.6rem 0.6rem 0.3rem;
+    /*background-color: #eee;*/
+}
+.product-basic {
+    display: flex;
+    /*gap: 25px;*/
+    flex-direction: row;
+}
 
 @media all and (max-width: 900px) {
     main {
@@ -64,7 +78,7 @@ main {
 }
 
 @media all and (max-width: 600px) {
-    main {
+    main, .product-basic {
         flex-direction: column;
     }
 

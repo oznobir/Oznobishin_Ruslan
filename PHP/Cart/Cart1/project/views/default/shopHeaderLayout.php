@@ -13,7 +13,7 @@
     <meta name="robots" content="noindex,nofollow">
     <link rel="shortcut icon" type="image/x-icon" href="/project/access/favicon.ico">
     <title><?= $title ?></title>
-    <link href="/project/access/css/style.css?v1.27" rel="stylesheet">
+    <link href="/project/access/css/style.css" rel="stylesheet">
 </head>
 <body>
 <header>

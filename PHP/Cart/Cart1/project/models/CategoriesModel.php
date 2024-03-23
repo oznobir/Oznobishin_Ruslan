@@ -8,11 +8,11 @@ class CategoriesModel extends Model
     protected function setQueries(): void
     {
         $this->query = [
-            'getMenuAll' =>
+            '3' =>
                 'SELECT id, parent_id, title, slug FROM `categories`',
-            'getCategory' =>
+            '2' =>
                 'SELECT * FROM `categories` WHERE slug=:slug',
-            'getSubCategories' =>
+            '1' =>
                 'SELECT * FROM `categories` WHERE parent_id=:id',
         ];
     }
@@ -22,7 +22,7 @@ class CategoriesModel extends Model
      */
     public function geSubCategoriesById ($parameters) : array
     {
-        return self::selectAll($this->query['getSubCategories'], PDO::FETCH_ASSOC, $parameters);
+        return self::selectAll($this->query['1'], PDO::FETCH_ASSOC, $parameters);
     }
     /** Получение категории по slug
      * @param $parameters - slug
@@ -30,7 +30,7 @@ class CategoriesModel extends Model
      */
     public function getCategoryBySlug ($parameters) : array
     {
-        return self::selectRow($this->query['getCategory'], PDO::FETCH_ASSOC, $parameters);
+        return self::selectRow($this->query['2'], PDO::FETCH_ASSOC, $parameters);
     }
 
     /** Получение массива категорий с подкатегориями
@@ -39,7 +39,7 @@ class CategoriesModel extends Model
      */
     public function getCategoriesWithChild($parameters = null): array
     {
-        return $this->getTree(self::selectAll($this->query['getMenuAll'], PDO::FETCH_UNIQUE, $parameters));
+        return $this->getTree(self::selectAll($this->query['3'], PDO::FETCH_UNIQUE, $parameters));
     }
 
     /**

@@ -10,13 +10,22 @@ class ProductsModel extends Model
     protected function setQueries(): void
     {
         $this->query = [
-            'getProductsLast' =>
+            '3' =>
+                'SELECT * FROM `products` WHERE slug =:slug',
+            '2' =>
                 'SELECT * FROM `products` ORDER BY id DESC',
-            'getProductsCategory' =>
+            '1' =>
                 'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC',
         ];
     }
-
+    /** Получение данных продукта по slug
+     * @param $parameters - slug из Router
+     * @return array массив данных продукта
+     */
+    public function getProductBySlug($parameters): array
+    {
+        return self::selectRow($this->query['3'], PDO::FETCH_ASSOC, $parameters);
+    }
     /** Получение массива продуктов
      * @param $limit - количество последних по id, null - все
      * @return array массив продуктов
@@ -24,9 +33,9 @@ class ProductsModel extends Model
     public function getProductsLast($limit = null): array
     {
         if ($limit) {
-            $this->query['getProductsLast'] .= " limit $limit";
+            $this->query['2'] .= " limit $limit";
         }
-        return self::selectAll($this->query['getProductsLast'], PDO::FETCH_ASSOC);
+        return self::selectAll($this->query['2'], PDO::FETCH_ASSOC);
     }
     /** Получение массива всех продуктов в категории по id
      * @param $id - id категории
@@ -34,6 +43,6 @@ class ProductsModel extends Model
      */
     public function getProductsCategoryById($id): array
     {
-        return self::selectAll($this->query['getProductsCategory'], PDO::FETCH_ASSOC, $id);
+        return self::selectAll($this->query['1'], PDO::FETCH_ASSOC, $id);
     }
 }
