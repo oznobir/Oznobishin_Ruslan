@@ -13,8 +13,11 @@ class ProductController extends Controller
      */
     public function index(): void
     {
-        $this->data = (new ProductsModel())->getProductBySlug($this->parameters);
+
+        $this->data = (new ProductsModel())->getProductBySlug(['slug'=>$this->parameters['slug']]);
         if (!$this->data) $this->redirect('/');
+        $this->data['idInCart'] = 0;
+        if (in_array($this->data['id'], $_SESSION['cart'])) $this->data['idInCart'] = 1;
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         echo $this->render('project/views/default/shopOneProductView.php');
     }

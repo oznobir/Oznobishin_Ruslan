@@ -7,6 +7,7 @@
  * @var string $id
  * @var string $status
  * @var string $description
+ * @var int $idInCart
  */ ?>
 <?php include 'shopHeaderLayout.php' ?>
     <main>
@@ -30,7 +31,16 @@
                             <?php if ($status == 1) : ?>
                                 <p>В наличии</p>
                                 <p>Цена: <?= $price ?></p>
-                                <p><a href="#" alt="Добавить в корзину">Добавить в корзину</a></p>
+                                <p>
+                                    <a id="removeCart_<?= $id ?>" <?= (!$idInCart) ? "class=\"hidden\"" : '' ?>
+                                       href="#" onclick="removeFromCart(<?= $id ?>); return false;" alt="Удалить из корзины">
+                                        Удалить из корзины
+                                    </a>
+                                    <a id="addCart_<?= $id ?>" <?= ($idInCart) ? "class=\"hidden\"" : '' ?>
+                                       href="#" onclick="addToCart(<?= $id ?>); return false;" alt="Добавить в корзину">
+                                        Добавить в корзину
+                                    </a>
+                                </p>
                             <?php else : ?>
                                 <p>Нет в наличии</p>
                             <?php endif; ?>

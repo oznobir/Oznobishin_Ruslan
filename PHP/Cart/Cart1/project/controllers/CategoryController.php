@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index(): void
     {
-        $cat =  (new CategoriesModel())->getCategoryBySlug($this->parameters);
+        $cat =  (new CategoriesModel())->getCategoryBySlug(['slug'=>$this->parameters['slug']]);
         if (!$cat) $this->redirect('/');
         $id = ['id' => $cat['id']];
         $this->data['title'] = "Товары в категории {$cat['title']}";

@@ -14,6 +14,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/project/access/favicon.ico">
     <title><?= $title ?></title>
     <link href="/project/access/css/style.css" rel="stylesheet">
+    <script src="/project/access/js/main.js"></script>
 </head>
 <body>
 <header>
