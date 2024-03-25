@@ -3,7 +3,8 @@
 namespace Project\Controllers;
 
 use Core\Controller;
-
+use Project\Models\ProductsModel;
+use Project\Models\CategoriesModel;
 
 /**
  * Контроллер для работы с корзиной
@@ -11,6 +12,15 @@ use Core\Controller;
  */
 class CartController extends Controller
 {
+    public function index(): void
+    {
+        $itemsId = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+        if ($itemsId) $this->data['products'] = (new ProductsModel())->getProductsFromArray($itemsId);
+        $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
+        $this->data['title'] = '';
+        $this->data['description'] = '';
+        echo $this->render('project/views/default/shopCartView.php');
+    }
     public function add(): void
     {
         $itemId = intval($this->parameters['id']);

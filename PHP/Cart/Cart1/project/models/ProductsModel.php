@@ -9,7 +9,10 @@ class ProductsModel extends Model
 {
     protected function setQueries(): void
     {
+
         $this->query = [
+            '4' =>
+                "SELECT * FROM `products` WHERE id", //for IN
             '3' =>
                 'SELECT * FROM `products` WHERE slug =:slug',
             '2' =>
@@ -18,7 +21,17 @@ class ProductsModel extends Model
                 'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC',
         ];
     }
-
+    /** Получение данных продуктов из корзины по id
+     * @param $parameters - id продуктов из корзины $_SESSION['cart']
+     * @return array|null массив данных продуктов
+     */
+    public function getProductsFromArray($parameters): ?array
+    {
+        $this->query['4'] .= ' IN ('. str_repeat('?,', count($parameters) - 1) . '?)';
+        $data = self::selectAll($this->query['4'], PDO::FETCH_ASSOC, $parameters);
+        if (!$data) return null;
+        return $data;
+    }
     /** Получение данных продукта по slug
      * @param $parameters - slug из Router
      * @return array|null массив данных продукта
@@ -26,7 +39,7 @@ class ProductsModel extends Model
     public function getProductBySlug($parameters): array|null
     {
         $data = self::selectRow($this->query['3'], PDO::FETCH_ASSOC, $parameters);
-        If (!$data) return null;
+        if (!$data) return null;
         return $data;
     }
     /** Получение массива продуктов

@@ -14,7 +14,7 @@ spl_autoload_register(function ($class) {
     }
     return false;
 });
-try {
+//try {
     $routes = require 'project/config/routes.php';
     $router = new Router();
     $route = $router->getRoute($routes);
@@ -23,7 +23,6 @@ try {
     $action = $route['action'];
     Model::init(DB_DSN, DB_USER, DB_PASS);
     $controller->$action();
-
-} catch (Throwable $t) {
-    echo "Ошибка - " . $t->getMessage();
-}
+//} catch (Throwable $t) {
+//    echo "Ошибка - " . $t->getMessage();
+//}

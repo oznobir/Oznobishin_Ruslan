@@ -12,6 +12,7 @@ async function addToCart(itemId) {
         }
     }
 }
+
 async function removeFromCart(itemId) {
     console.log("js - removeFromCart(itemId)");
     let url = "/cart/remove/" + itemId + '/';
@@ -24,4 +25,11 @@ async function removeFromCart(itemId) {
             document.getElementById("removeCart_" + itemId).style.display = "none";
         }
     }
+}
+
+function conversionPrice(itemId) {
+    console.log("js - conversionPrice(itemId)");
+    let newCount = document.querySelector('#itemCount_' + itemId).value;
+    let price = +document.querySelector('#itemPrice_' + itemId).getAttribute('value');
+    document.querySelector("#itemRealPrice_" + itemId).innerText = newCount * price;
 }
