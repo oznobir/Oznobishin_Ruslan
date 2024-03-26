@@ -31,7 +31,7 @@ class UsersModel extends Model
 
         if (self::exec($this->query['1'], $parameters)) {
             $userData['user'] = self::selectRow($this->query['2'], PDO::FETCH_ASSOC,
-                $parameters);
+                ['email' => $parameters['email'], 'pwdHash' => $parameters['pwdHash']]);
             (isset($userData['user']))? $userData['success'] = true:$userData['success'] = false;
             return $userData;
         }
