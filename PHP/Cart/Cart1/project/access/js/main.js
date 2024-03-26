@@ -29,7 +29,7 @@ async function removeFromCart(itemId) {
 
 function conversionPrice(itemId) {
     console.log("js - conversionPrice(itemId)");
-    let newCount = document.querySelector('#itemCount_' + itemId).value;
+    let newCount = +document.querySelector('#itemCount_' + itemId).value;
     let price = +document.querySelector('#itemPrice_' + itemId).getAttribute('value');
     document.querySelector("#itemRealPrice_" + itemId).innerText = newCount * price;
 }

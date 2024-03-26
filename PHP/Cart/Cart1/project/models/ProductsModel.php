@@ -25,9 +25,9 @@ class ProductsModel extends Model
      * @param $parameters - id продуктов из корзины $_SESSION['cart']
      * @return array|null массив данных продуктов
      */
-    public function getProductsFromArray($parameters): ?array
+    public function getProductsFromArray($parameters, $count): ?array
     {
-        $this->query['4'] .= ' IN ('. str_repeat('?,', count($parameters) - 1) . '?)';
+        $this->query['4'] .= ' IN ('. str_repeat('?,', $count - 1) . '?)';
         $data = self::selectAll($this->query['4'], PDO::FETCH_ASSOC, $parameters);
         if (!$data) return null;
         return $data;

@@ -14,13 +14,15 @@ class CartController extends Controller
 {
     public function index(): void
     {
-        $itemsId = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-        if ($itemsId) $this->data['products'] = (new ProductsModel())->getProductsFromArray($itemsId);
+//        $itemsId = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+        if ($this->parameters['cartCountItems'])
+            $this->data['products'] = (new ProductsModel())->getProductsFromArray($_SESSION['cart'], $this->parameters['cartCountItems']);
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         $this->data['title'] = '';
         $this->data['description'] = '';
         echo $this->render('project/views/default/shopCartView.php');
     }
+
     public function add(): void
     {
         $itemId = intval($this->parameters['id']);
@@ -39,6 +41,7 @@ class CartController extends Controller
         }
         echo json_encode($jsData);
     }
+
     public function remove(): void
     {
         $itemId = intval($this->parameters['id']);
