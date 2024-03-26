@@ -54,27 +54,16 @@ class Model
         $pdostmt->execute($parameters);
         return $pdostmt->fetch($fetch);
     }
+    public static function exec($sql, $parameters = null) {
+        $pdostmt = self::$pdo->prepare($sql);
+        $pdostmt->execute($parameters);
+        return $pdostmt->rowCount();
+    }
+    public static function selectAllCount($sql,  $parameters = null)
+    {
+        $pdostmt = self::$pdo->prepare($sql);
+        $pdostmt->execute($parameters);
+        $row = $pdostmt->fetch(\PDO::FETCH_NUM);
+        return $row? $row[0]: null;
+    }
 }
-//    private static mysqli|false $link;
-//
-//    public function __construct()
-//    {
-////			if (!self::$link) {
-//        self::$link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-//        mysqli_query(self::$link, "SET NAMES 'utf8'");
-////			}
-//    }
-//
-//    protected function findOne($query)
-//    {
-//        $result = mysqli_query(self::$link, $query) or die(mysqli_error(self::$link));
-//        return mysqli_fetch_assoc($result);
-//    }
-//    protected function findMany($query, $by = 'id')
-//    {
-//        $result = mysqli_query(self::$link, $query) or die(mysqli_error(self::$link));
-//        for ($data = []; $row = mysqli_fetch_assoc($result); ){
-//            $data[$row[$by]] = $row;
-//        }
-//        return $data;
-//    }

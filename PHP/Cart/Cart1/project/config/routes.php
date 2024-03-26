@@ -2,7 +2,7 @@
 
 use Core\Route;
 
-//if ($_SERVER['REQUEST_METHOD'] === 'GET')
+if ($_SERVER['REQUEST_METHOD'] === 'GET')
     return [
         new Route('/', 'index', 'index'),
         new Route('/category/:slug/', 'category', 'index'),
@@ -12,7 +12,7 @@ use Core\Route;
         new Route('/cart/remove/:id/', 'cart', 'remove'),
 
     ];
-//if ($_SERVER['REQUEST_METHOD'] === 'POST')
-//    return [
-//        new Route('/cart/add/:id/', 'cart', 'add'),
-//    ];
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+    return [
+        new Route('/user/register/', 'user', 'register'),
+    ];

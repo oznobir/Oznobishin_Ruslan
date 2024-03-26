@@ -33,3 +33,19 @@ function conversionPrice(itemId) {
     let price = +document.querySelector('#itemPrice_' + itemId).getAttribute('value');
     document.querySelector("#itemRealPrice_" + itemId).innerText = newCount * price;
 }
+
+async function registerNewUser() {
+    console.log("js - registerNewUser(itemId)");
+
+    let response = await fetch("/user/register/", {
+        method: 'POST',
+        body: new FormData(document.forms.registerBoxHidden)
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        if (jsData['success']) {
+            document.getElementById("registerBox").style.display = "none";
+        }
+    }
+}
