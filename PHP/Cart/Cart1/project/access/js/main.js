@@ -44,9 +44,10 @@ async function registerNewUser() {
         let jsData = await response.json();
         alert(jsData['message']);
         if (jsData['success']) {
-            document.querySelector("#registerBox").style.display = "none";
+            document.querySelector("#userBox").style.display = "block"
             document.querySelector('#userLink').innerHTML = jsData.user.displayName;
-            document.querySelector("#userBox").style.display = "block";
+            document.querySelector("#authBox").style.display = "none";
+            document.querySelector("#registerBox").style.display = "none";
         }
     }
 }
@@ -63,8 +64,8 @@ async function login() {
         alert(jsData['message']);
         if (jsData['success']) {
             document.querySelector("#userBox").style.display = "block";
-            document.querySelector("#registerBox").style.display = "none";
             document.querySelector("#authBox").style.display = "none";
+            document.querySelector("#registerBox").style.display = "none";
             document.querySelector('#userLink').innerHTML = jsData.user.displayName;
             // document.querySelector("#userBox").classList.remove('hidden');
             // document.querySelector("#registerBox").classList.add('hidden');

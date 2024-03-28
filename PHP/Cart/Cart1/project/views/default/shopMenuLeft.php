@@ -32,7 +32,7 @@
                 <a href="/user/logout/">Выйти</a><br>
                 <!--        onclick="logout();"-->
             </div>
-            <br>
+
             <div id="authBox">
                 <div class="menu-caption as-link" onclick="showHiddenLoginBox();">Авторизация</div>
                 <form id="loginBox">
