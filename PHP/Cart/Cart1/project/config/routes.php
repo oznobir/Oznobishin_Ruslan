@@ -10,9 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
         new Route('/cart/', 'cart', 'index'),
         new Route('/cart/add/:id/', 'cart', 'add'),
         new Route('/cart/remove/:id/', 'cart', 'remove'),
-
+        new Route('/user/logout/', 'user', 'logout'),
     ];
 if ($_SERVER['REQUEST_METHOD'] === 'POST')
     return [
         new Route('/user/register/', 'user', 'register'),
+        new Route('/user/login/', 'user', 'login'),
     ];

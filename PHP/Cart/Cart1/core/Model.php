@@ -40,6 +40,12 @@ class Model
 //    }
     }
 
+    /**
+     * @param string $sql - запрос из массива $this->query
+     * @param $fetch - атрибут PDO :: fetch
+     * @param array $parameters - массив для метода execute ключ - значение
+     * @return mixed
+     */
     public static function selectAll($sql, $fetch,  $parameters = null)
     {
         $pdostmt = self::$pdo->prepare($sql);
@@ -47,6 +53,12 @@ class Model
         return $pdostmt->fetchAll($fetch);
     }
 
+    /**
+     * @param string $sql - запрос из массива $this->query, добавляется " limit 1"
+     * @param $fetch - атрибут PDO :: fetch
+     * @param array $parameters - массив для метода execute ключ - значение
+     * @return mixed
+     */
     public static function selectRow($sql, $fetch, $parameters = null)
     {
         $sql .= " limit 1";
@@ -54,11 +66,23 @@ class Model
         $pdostmt->execute($parameters);
         return $pdostmt->fetch($fetch);
     }
+
+    /**
+     * @param string $sql - запрос из массива $this->query
+     * @param array $parameters - массив для метода execute ключ - значение
+     * @return mixed
+     */
     public static function exec($sql, $parameters = null) {
         $pdostmt = self::$pdo->prepare($sql);
         $pdostmt->execute($parameters);
         return $pdostmt->rowCount();
     }
+
+    /**
+     * @param string $sql - запрос из массива $this->query
+     * @param array $parameters - массив для метода execute ключ - значение
+     * @return int|null
+     */
     public static function selectAllCount($sql,  $parameters = null)
     {
         $pdostmt = self::$pdo->prepare($sql);

@@ -36,16 +36,54 @@ function conversionPrice(itemId) {
 
 async function registerNewUser() {
     console.log("js - registerNewUser(itemId)");
-
     let response = await fetch("/user/register/", {
         method: 'POST',
-        body: new FormData(document.forms.registerBoxHidden)
+        body: new FormData(document.querySelector('#registerBoxHidden'))
     });
     if (response.ok) {
         let jsData = await response.json();
         alert(jsData['message']);
         if (jsData['success']) {
-            document.getElementById("registerBox").style.display = "none";
+            document.querySelector("#registerBox").style.display = "none";
+            document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+            document.querySelector("#userBox").style.display = "block";
         }
+    }
+}
+
+async function login() {
+    console.log("js - login()");
+    let data = new FormData(document.querySelector("#loginBox"));
+    let response = await fetch("/user/login/", {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        if (jsData['success']) {
+            document.querySelector("#userBox").style.display = "block";
+            document.querySelector("#registerBox").style.display = "none";
+            document.querySelector("#authBox").style.display = "none";
+            document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+            // document.querySelector("#userBox").classList.remove('hidden');
+            // document.querySelector("#registerBox").classList.add('hidden');
+            // document.querySelector("#loginBox").classList.add('hidden');
+        }
+    }
+}
+
+function showHiddenRegisterBox() {
+    if (document.querySelector("#registerBoxHidden").style.display !== "block") {
+        document.querySelector("#registerBoxHidden").style.display = "block";
+    } else {
+        document.querySelector("#registerBoxHidden").style.display = "none";
+    }
+}
+function showHiddenLoginBox() {
+    if (document.querySelector("#loginBox").style.display !== "block") {
+        document.querySelector("#loginBox").style.display = "block";
+    } else {
+        document.querySelector("#loginBox").style.display = "none";
     }
 }

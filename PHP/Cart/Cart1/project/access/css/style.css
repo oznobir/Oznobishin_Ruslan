@@ -65,6 +65,17 @@ main {
 .hidden {
     display: none;
 }
+.as-link {
+    text-decoration: underline;
+    cursor: pointer;
+    color: blue;
+}
+#registerBoxHidden, #loginBox {
+    display: none;
+}
+/*.show {*/
+/*    display: inline-block;*/
+/*}*/
 @media all and (max-width: 900px) {
     main {
         flex-direction: column;

@@ -7,44 +7,81 @@ use Project\Models\UsersModel;
 
 class UserController extends Controller
 {
-    /**
-     * @return void
+    /** Регистрация нового пользователя fetch
+     *
+     * проверки в UsersModel()
+     * /user/register/
+     * @return void передает в json - массив с success и message и имя пользователя
      */
     public function register(): void
     {
-        $email = (isset($_REQUEST['email'])) ? trim($_REQUEST['email']) : null;
-        $name = (isset($_REQUEST['name'])) ? trim($_REQUEST['name']) : null;
-        $pwd1 = (isset($_REQUEST['pwd1'])) ? $_REQUEST['pwd1'] : null;
-        $pwd2 = (isset($_REQUEST['pwd2'])) ? $_REQUEST['pwd2'] : null;
-        $phone = (isset($_REQUEST['phone'])) ? $_REQUEST['phone'] : null;
-        $address = (isset($_REQUEST['address'])) ? $_REQUEST['address'] : null;
-
-//        $email = (isset($_REQUEST['email'])) ? htmlspecialchars(trim($_REQUEST['email']), ENT_QUOTES, 'UTF-8') : null;
-//        $name = (isset($_REQUEST['name'])) ? htmlspecialchars(trim($_REQUEST['name']), ENT_QUOTES, 'UTF-8') : null;
-//        $pwd1 = (isset($_REQUEST['pwd1'])) ? htmlspecialchars($_REQUEST['pwd1'], ENT_QUOTES, 'UTF-8') : null;
-//        $pwd2 = (isset($_REQUEST['pwd2'])) ? htmlspecialchars($_REQUEST['pwd2'], ENT_QUOTES, 'UTF-8') : null;
-//        $phone = (isset($_REQUEST['phone'])) ? htmlspecialchars($_REQUEST['phone'], ENT_QUOTES, 'UTF-8') : null;
-//        $address = (isset($_REQUEST['address'])) ? htmlspecialchars($_REQUEST['address'], ENT_QUOTES, 'UTF-8') : null;
+        $email = (isset($_POST['email'])) ? trim($_POST['email']) : null;
+        $name = (isset($_POST['name'])) ? trim($_POST['name']) : null;
+        $pwd1 = (isset($_POST['pwd1'])) ? $_POST['pwd1'] : null;
+        $pwd2 = (isset($_POST['pwd2'])) ? $_POST['pwd2'] : null;
+        $phone = (isset($_POST['phone'])) ? $_POST['phone'] : null;
+        $address = (isset($_POST['address'])) ? $_POST['address'] : null;
 
         $newUser = new UsersModel();
-        $info = $newUser->checkRegisterParam($email, $pwd1, $pwd2);
+        $info = $newUser->checkRegisterParam($email, $pwd1, $pwd2); //проверку может быть потом в js
         $check = $newUser->checkEmail($email);
         if (!$info && $check) {
             $info['success'] = false;
             $info['message'] = 'Пользователь с таким email уже существует';
         }
         if (!$info) {
-            $pwdHash = password_hash($pwd1, 'argon2id');
-            $userData = $newUser->registerNewUser($email, $pwdHash, $name, $phone, $address);
+            $userData = $newUser->registerNewUser($email, $pwd1, $name, $phone, $address);
             if ($userData['success']) {
+                $_SESSION['user'] = $userData['user'];
+                $_SESSION['user']['displayName'] = $userData['user']['name'] ? $userData['user']['name'] : $userData['user']['email'];
                 $info['success'] = true;
                 $info['message'] = 'Пользователь успешно зарегистрирован';
-                $info['userName'] = ($userData['user']['name']) ? $userData['user']['name'] : $userData['user']['email'];
-                $_SESSION['user'] = $userData['user'];
-                $_SESSION['user']['displayName'] = $info['userName'];
+                $info['user'] = $_SESSION['user'];
             } else {
                 $info['success'] = false;
                 $info['message'] = 'Ошибка регистрации';
+            }
+        }
+        echo json_encode($info);
+    }
+
+    /** Удаляет из $_SESSION данные о пользователе и данные в корзине
+     *
+     * /user/logout/
+     * @return void redirect "/"
+     */
+    public function logout(): void
+    {
+        if ($_SESSION['user']) {
+            unset($_SESSION['user']);
+            unset($_SESSION['cart']);
+        }
+        $this->redirect('/');
+    }
+
+    /** Авторизация пользователя fetch
+     *
+     * /user/login/
+     * @return void передает в json - массив данных о пользователе
+     */
+    public function login(): void
+    {
+        $email = isset($_POST['loginEmail']) ? trim($_POST['loginEmail']) : null;
+        $pwd = isset($_POST['loginPwd']) ? trim($_POST['loginPwd']) : null;;
+
+        $user = new UsersModel();
+        $info = $user->checkLoginParam($email, $pwd); //проверку может быть потом в js
+        if (!$info) {
+            $userData = $user->loginUser($email, $pwd);
+            if ($userData['success']) {
+                $_SESSION['user'] = $userData['user'];
+                $_SESSION['user']['displayName'] = $userData['user']['name'] ? $userData['user']['name'] : $userData['user']['email'];
+                $info['success'] = true;
+                $info['message'] = "Здравствуйте, {$_SESSION['user']['displayName']}";
+                $info['user'] = $_SESSION['user'];
+            } else {
+                $info['success'] = false;
+                $info['message'] = 'Неверный логин или пароль';
             }
         }
         echo json_encode($info);
