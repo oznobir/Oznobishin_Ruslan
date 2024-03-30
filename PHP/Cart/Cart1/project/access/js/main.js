@@ -26,6 +26,28 @@ async function removeFromCart(itemId) {
         }
     }
 }
+async function updateUserData() {
+    console.log("js - updateUserData()");
+    // let phone = document.getElementById("newPhone").value;
+    // let address = document.getElementById("newAddress").value;
+    // let pwd1= document.getElementById("newPwd1").value;
+    // let pwd2 = document.getElementById("newPwd2").value;
+    // let curPwd = document.getElementById("pwd").value;
+    // let name = document.getElementById("newName").value;
+    // let postData = { phone: phone, address: address, pwd1: pwd1, pwd2: pwd2, curPwd: curPwd, name: name};
+    let response = await fetch("/user/update/",{
+        method: 'POST',
+        body: new FormData(document.querySelector('#userForm'))
+        // body: postData
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        // if (jsData['success']) {
+        //     document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+        // }
+    }
+}
 
 function conversionPrice(itemId) {
     console.log("js - conversionPrice(itemId)");

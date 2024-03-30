@@ -16,15 +16,13 @@ spl_autoload_register(function ($class) {
     return false;
 });
 //try {
-$routes = require 'project/config/routes.php';
-$router = new Router();
-$route = $router->getRoute($routes);
-$route['parameters']['cartCountItems'] = count($_SESSION['cart']);
-$route['parameters']['arrUser'] = $_SESSION['user'] ?? null;
-$controller = new $route['controller']($route['parameters']);
-$action = $route['action'];
-Model::init(DB_DSN, DB_USER, DB_PASS);
-$controller->$action();
+    $routes = require 'project/config/routes.php';
+    $router = new Router();
+    $route = $router->getRoute($routes);
+    $controller = new $route['controller']($route['parameters']);
+    $action = $route['action'];
+    Model::init(DB_DSN, DB_USER, DB_PASS);
+    $controller->$action();
 //    var_dump($_SESSION);
 //} catch (Throwable $t) {
 //    echo "Ошибка - " . $t->getMessage();

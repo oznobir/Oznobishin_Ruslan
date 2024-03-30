@@ -62,7 +62,7 @@
             <div class="menu-caption">Корзина:</div>
             <a href="/cart/" title="Перейти в корзину">В корзине: </a>
             <span id="cartCountItems">
-                <?= $cartCountItems > 0 ? $cartCountItems : 'Пусто' ?>
+                <?= count($_SESSION['cart']) > 0 ? count($_SESSION['cart']) : 'Пусто' ?>
             </span>
         </div>
     </div>

@@ -7,28 +7,15 @@ use PDO;
 
 class ProductsModel extends Model
 {
-    protected function setQueries(): void
-    {
-
-        $this->query = [
-            '4' =>
-                "SELECT * FROM `products` WHERE id", //for IN
-            '3' =>
-                'SELECT * FROM `products` WHERE slug =:slug',
-            '2' =>
-                'SELECT * FROM `products` ORDER BY id DESC',
-            '1' =>
-                'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC',
-        ];
-    }
     /** Получение данных продуктов из корзины по id
      * @param $parameters - id продуктов из корзины $_SESSION['cart']
      * @return array|null массив данных продуктов
      */
     public function getProductsFromArray($parameters, $count): ?array
     {
-        $this->query['4'] .= ' IN ('. str_repeat('?,', $count - 1) . '?)';
-        $data = self::selectAll($this->query['4'], PDO::FETCH_ASSOC, $parameters);
+        $query = "SELECT * FROM `products` WHERE id ";
+        $query .= 'IN ('. str_repeat('?,', $count - 1) . '?)';
+        $data = self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
         if (!$data) return null;
         return $data;
     }
@@ -38,7 +25,8 @@ class ProductsModel extends Model
      */
     public function getProductBySlug($parameters): array|null
     {
-        $data = self::selectRow($this->query['3'], PDO::FETCH_ASSOC, $parameters);
+        $query = 'SELECT * FROM `products` WHERE slug =:slug';
+        $data = self::selectRow($query, PDO::FETCH_ASSOC, $parameters);
         if (!$data) return null;
         return $data;
     }
@@ -48,10 +36,11 @@ class ProductsModel extends Model
      */
     public function getProductsLast($limit = null): array
     {
+        $query ='SELECT * FROM `products` ORDER BY id DESC';
         if ($limit) {
-            $this->query['2'] .= " limit $limit";
+            $query .= " limit $limit";
         }
-        return self::selectAll($this->query['2'], PDO::FETCH_ASSOC);
+        return self::selectAll($query, PDO::FETCH_ASSOC);
     }
     /** Получение массива всех продуктов в категории по id
      * @param $id - id категории
@@ -59,6 +48,7 @@ class ProductsModel extends Model
      */
     public function getProductsCategoryById($id): array
     {
-        return self::selectAll($this->query['1'], PDO::FETCH_ASSOC, $id);
+        $query = 'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC';
+        return self::selectAll($query, PDO::FETCH_ASSOC, $id);
     }
 }

@@ -12,17 +12,10 @@ class Model
     protected static string $dsn;
     protected static string $user;
     protected static string $password;
-    protected array $query;
 
     public function __construct()
     {
         self::connect();
-        $this->setQueries();
-    }
-
-    protected function setQueries(): void
-    {
-        $this->query = [];
     }
 
     public static function init($dsn, $user, $password): void
@@ -41,7 +34,7 @@ class Model
     }
 
     /**
-     * @param string $sql - запрос из массива $this->query
+     * @param string $sql - запрос
      * @param $fetch - атрибут PDO :: fetch
      * @param array $parameters - массив для метода execute ключ - значение
      * @return mixed
@@ -54,7 +47,7 @@ class Model
     }
 
     /**
-     * @param string $sql - запрос из массива $this->query, добавляется " limit 1"
+     * @param string $sql - запрос, добавляется " limit 1"
      * @param $fetch - атрибут PDO :: fetch
      * @param array $parameters - массив для метода execute ключ - значение
      * @return mixed
@@ -68,18 +61,19 @@ class Model
     }
 
     /**
-     * @param string $sql - запрос из массива $this->query
+     * @param string $sql - запрос
      * @param array $parameters - массив для метода execute ключ - значение
      * @return mixed
      */
-    public static function exec($sql, $parameters = null) {
+    public static function exec($sql, $parameters = null)
+    {
         $pdostmt = self::$pdo->prepare($sql);
         $pdostmt->execute($parameters);
         return $pdostmt->rowCount();
     }
 
     /**
-     * @param string $sql - запрос из массива $this->query
+     * @param string $sql - запрос
      * @param array $parameters - массив для метода execute ключ - значение
      * @return int|null
      */

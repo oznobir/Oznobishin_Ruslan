@@ -14,9 +14,10 @@ class CartController extends Controller
 {
     public function index(): void
     {
-//        $itemsId = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-        if ($this->parameters['cartCountItems'])
-            $this->data['products'] = (new ProductsModel())->getProductsFromArray($_SESSION['cart'], $this->parameters['cartCountItems']);
+        $itemsId = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+        if ($itemsId)
+            $this->data['products'] = (new ProductsModel())->getProductsFromArray($itemsId, count($itemsId));
+        $this->data['arrUser'] = $_SESSION['user'] ?? null;
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         $this->data['title'] = '';
         $this->data['description'] = '';
