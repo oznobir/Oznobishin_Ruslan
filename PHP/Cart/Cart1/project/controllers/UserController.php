@@ -122,7 +122,7 @@ class UserController extends Controller
                 $_SESSION['user']['name'] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
                 $_SESSION['user']['phone'] = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
                 $_SESSION['user']['address'] = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
-                $_SESSION['user']['password'] = $curPwdHash;
+                $_SESSION['user']['password'] =  md5($pwd1);
                 $_SESSION['user']['displayName'] = $name ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : $_SESSION['user']['email'];
                 $info['success'] = true;
                 $info['message'] = 'Данные сохранены';
