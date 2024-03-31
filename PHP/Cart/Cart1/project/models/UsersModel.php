@@ -18,11 +18,11 @@ class UsersModel extends Model
      */
     public function registerNewUser(string $email, string $pwd1, ?string $name, ?string $phone, ?string $address): ?array
     {
-        $parameters1['email'] = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+        $parameters1['email'] = $email;
         $parameters1['pwdHash'] = md5($pwd1);
-        $parameters1['name'] = (isset($name)) ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : null;
-        $parameters1['phone'] = (isset($phone)) ? htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') : null;
-        $parameters1['address'] = (isset($address)) ? htmlspecialchars($address, ENT_QUOTES, 'UTF-8') : null;
+        $parameters1['name'] = $name;
+        $parameters1['phone'] = $phone;
+        $parameters1['address'] = $address;
         $parameters2['email'] = $parameters1['email'];
         $parameters2['pwdHash'] = $parameters1['pwdHash'];
         $query = "INSERT INTO `users`( `email`, `password`, `name`, `phone`, `address`) 
@@ -44,7 +44,7 @@ class UsersModel extends Model
      */
     public function loginUser(string $email, string $pwd): array
     {
-        $parameters['email'] = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+        $parameters['email'] = $email;
         $parameters['pwdHash'] = md5($pwd);
         $query = 'SELECT * FROM `users` WHERE email =:email and password =:pwdHash';
         $userData['user'] = self::selectRow($query, PDO::FETCH_ASSOC, $parameters);
@@ -63,19 +63,18 @@ class UsersModel extends Model
      */
     public function updateUser(?string $name, ?string $phone, ?string $address, string $curPwd, ?string $pwd1): array
     {
-        $parameters['email'] = htmlspecialchars($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
-        $parameters['name'] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-        $parameters['phone'] = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
-        $parameters['address'] = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
+        $parameters['email'] = $_SESSION['user']['email'];
+        $parameters['name'] = $name;
+        $parameters['phone'] = $phone;
+        $parameters['address'] = $address;
         $parameters['curPwd'] = md5($curPwd);
-//        UPDATE `users` SET `name` ='User 2', `phone` ='355', `address` ='ueh' WHERE `email` = 'user2' AND `password`='698d51a19d8a121ce581499d7b701668' =' LIMIT 1
 
-        $query = 'UPDATE `users` SET ';
+        $query = 'UPDATE `users` SET';
         if ($pwd1) {
             $parameters['pwdHash'] = md5($pwd1);
-            $query .= '`password`=:pwdHash,';
+            $query .= ' `password`=:pwdHash,';
         }
-        $query .= '`name` =:name,`phone` =:phone,`address`=:address WHERE `email`=:email AND `password`=:curPwd LIMIT 1';
+        $query .= ' `name` =:name,`phone` =:phone,`address`=:address WHERE `email`=:email AND `password`=:curPwd LIMIT 1';
 
         return [
             'result' => self::exec($query, $parameters),
@@ -83,20 +82,20 @@ class UsersModel extends Model
         ];
     }
 
-    private function createSequence(array $items, $name): array
-    {
-        $in = "";
-        $i = 0;
-        foreach ($items as $item) {
-            $key = ":$name" . $i++;
-            $in .= "$key,";
-            $inParams['parameters'][$key] = $item;
-        }
-        $inParams['string'] = rtrim($in, ",");
-        return $inParams;
-    }
+//    private function createSqlIn(array $items): array
+//    {
+//        $in = "";
+//        $i = 0;
+//        foreach ($items as $item) {
+//            $key = ":param" . $i++;
+//            $in .= "$key,";
+//            $inParams['parameters'][$key] = $item;
+//        }
+//        $inParams['string'] = rtrim($in, ",");
+//        return $inParams;
+//    }
 
-    /** Проверка есть ли такой email
+    /** Проверка есть ли такой email при регистрации
      *
      * @param string $email почта
      * @return int|null число, если есть в базе или null, если нет в базе
@@ -108,7 +107,7 @@ class UsersModel extends Model
         return self::selectAllCount($query['3'], $parameters);
     }
 
-    /** Проверка введены ли почта, пароли и совпадают ли пароли
+    /** Проверка введены ли почта, пароли и совпадают ли пароли при регистрации
      *
      * @param string|null $email почта
      * @param string|null $pwd1 пароль 1
@@ -138,7 +137,7 @@ class UsersModel extends Model
         return $resultCheck;
     }
 
-    /** Проверка введены ли почта и пароль
+    /** Проверка введены ли почта и пароль при авторизации
      *
      * @param string|null $email почта или имя
      * @param string|null $pwd пароль 1

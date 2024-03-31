@@ -59,20 +59,23 @@ main {
 }
 .product-basic {
     display: flex;
-    /*gap: 25px;*/
     flex-direction: row;
 }
-.hidden {
+.hidden, #registerBoxHidden, #loginBox  {
     display: none;
 }
-.as-link {
-    text-decoration: underline;
-    cursor: pointer;
-    color: blue;
+#userForm > div {
+    display: flex;
+    gap: 25px;
+    flex-direction: row;
+    justify-content: space-between;
 }
-#registerBoxHidden, #loginBox {
-    display: none;
-}
+/*.as-link {*/
+/*    text-decoration: underline;*/
+/*    cursor: pointer;*/
+/*    color: blue;*/
+/*}*/
+
 /*.show {*/
 /*    display: inline-block;*/
 /*}*/

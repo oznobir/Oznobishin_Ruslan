@@ -13,7 +13,6 @@ class UserController extends Controller
         if (empty($_SESSION['user'])) $this->redirect('/');
         $this->data['title'] = 'Личный аккаунт';
         $this->data['description'] = 'Гипермаркет myshop.by Личный аккаунт пользователя';
-        $this->data['arrUser'] = $_SESSION['user'];
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         echo $this->render('project/views/default/shopUserView.php');
     }
@@ -26,15 +25,15 @@ class UserController extends Controller
      */
     public function register(): void
     {
-        $email = (isset($_POST['email'])) ? trim($_POST['email']) : null;
-        $name = (isset($_POST['name'])) ? trim($_POST['name']) : null;
-        $pwd1 = (isset($_POST['pwd1'])) ? $_POST['pwd1'] : null;
-        $pwd2 = (isset($_POST['pwd2'])) ? $_POST['pwd2'] : null;
-        $phone = (isset($_POST['phone'])) ? $_POST['phone'] : null;
-        $address = (isset($_POST['address'])) ? $_POST['address'] : null;
+        $email = (isset($_POST['email'])) ? htmlspecialchars(trim($_POST['email']), ENT_QUOTES, 'UTF-8') : null;
+        $name = (isset($_POST['name'])) ? htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8') : null;
+        $pwd1 = (isset($_POST['pwd1'])) ? htmlspecialchars($_POST['pwd1'], ENT_QUOTES, 'UTF-8') : null;
+        $pwd2 = (isset($_POST['pwd2'])) ? htmlspecialchars($_POST['pwd2'], ENT_QUOTES, 'UTF-8') : null;
+        $phone = (isset($_POST['phone'])) ? htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8') : null;
+        $address = (isset($_POST['address'])) ? htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8') : null;
 
         $newUser = new UsersModel();
-        $info = $newUser->checkRegisterParam($email, $pwd1, $pwd2); //проверку может быть потом в js
+        $info = $newUser->checkRegisterParam($email, $pwd1, $pwd2);
         $check = $newUser->checkEmail($email);
         if (!$info && $check) {
             $info['success'] = false;
@@ -77,8 +76,8 @@ class UserController extends Controller
      */
     public function login(): void
     {
-        $email = isset($_POST['loginEmail']) ? trim($_POST['loginEmail']) : null;
-        $pwd = isset($_POST['loginPwd']) ? trim($_POST['loginPwd']) : null;;
+        $email = isset($_POST['loginEmail']) ? htmlspecialchars(trim($_POST['loginEmail']), ENT_QUOTES, 'UTF-8') : null;
+        $pwd = isset($_POST['loginPwd']) ? htmlspecialchars($_POST['loginPwd'], ENT_QUOTES, 'UTF-8') : null;
 
         $user = new UsersModel();
         $info = $user->checkLoginParam($email, $pwd);
@@ -107,29 +106,29 @@ class UserController extends Controller
     {
         if (!isset($_SESSION['user'])) $this->redirect('/');
 
-        $name = (isset($_POST['name'])) ? trim($_POST['name']) : null;
-        $pwd1 = (isset($_POST['pwd1'])) ? $_POST['pwd1'] : null;
-        $pwd2 = (isset($_POST['pwd2'])) ? $_POST['pwd2'] : null;
-        $phone = (isset($_POST['phone'])) ? $_POST['phone'] : null;
-        $address = (isset($_POST['address'])) ? $_POST['address'] : null;
-        $curPwd = (isset($_POST['curPwd'])) ? $_POST['curPwd'] : null;
+        $name = (isset($_POST['name'])) ? htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8'): null;
+        $pwd1 = (isset($_POST['pwd1'])) ? htmlspecialchars($_POST['pwd1'], ENT_QUOTES, 'UTF-8') : null;
+        $pwd2 = (isset($_POST['pwd2'])) ? htmlspecialchars($_POST['pwd2'], ENT_QUOTES, 'UTF-8') : null;
+        $phone = (isset($_POST['phone'])) ? htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8') : null;
+        $address = (isset($_POST['address'])) ? htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8') : null;
+        $curPwd = (isset($_POST['curPwd'])) ? htmlspecialchars($_POST['curPwd'], ENT_QUOTES, 'UTF-8') : null;
         $curPwdHash = md5($curPwd);
 
         $info = (new UsersModel())->checkUpdateParam($curPwdHash, $pwd1, $pwd2);
         if (!$info) {
             $userData = (new UsersModel())->updateUser($name, $phone, $address, $curPwd, $pwd1);
             if ($userData['result']) {
-                $_SESSION['user']['name'] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-                $_SESSION['user']['phone'] = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
-                $_SESSION['user']['address'] = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
+                $_SESSION['user']['name'] = $name;
+                $_SESSION['user']['phone'] = $phone;
+                $_SESSION['user']['address'] = $address;
                 $_SESSION['user']['password'] = $userData['newPwd'];
-                $_SESSION['user']['displayName'] = $name ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : $_SESSION['user']['email'];
+                $_SESSION['user']['displayName'] = $name ? $name : $_SESSION['user']['email'];
                 $info['success'] = true;
                 $info['message'] = 'Данные сохранены';
                 $info['user'] = $_SESSION['user'];
             } else {
                 $info['success'] = false;
-                $info['message'] = 'Ошибка при сохранении данных';
+                $info['message'] = 'Данные не изменены';
             }
         }
         echo json_encode($info);

@@ -18,10 +18,10 @@
             } ?>
         </div>
         <br>
-        <?php if (isset($arrUser)) : ?>
+        <?php if (!empty($_SESSION['user'])) : ?>
             <div id="userBox">
                 <div class="menu-caption">Аккаунт:</div>
-                <a href="/user/"><?= $arrUser['displayName'] ?></a><br>
+                <a href="/user/"><?= $_SESSION['user']['displayName'] ?></a><br>
                 <a href="/user/logout/">Выйти</a><br>
             </div>
             <br>
@@ -34,18 +34,21 @@
             </div>
 
             <div id="authBox">
-                <div class="menu-caption as-link" onclick="showHiddenLoginBox();">Авторизация</div>
+                <div class="menu-caption">
+                    <a href="#" onclick="showHiddenLoginBox(); return false;">Авторизация</a>
+                </div>
                 <form id="loginBox">
                     <label for="loginEmail">Логин (email):</label><br>
                     <input type="text" id="loginEmail" name="loginEmail" value=""><br>
                     <label for="loginPwd">Введите пароль:</label><br>
                     <input type="password" id="loginPwd" name="loginPwd" value=""><br><br>
-                    <input type="button" onclick="login();" value="Войти">
+                    <input type="button" onclick="login();" value="Войти"><br><br>
                 </form>
             </div>
-            <br>
             <div id="registerBox">
-                <div class="menu-caption as-link" onclick="showHiddenRegisterBox();">Регистрация</div>
+                <div class="menu-caption">
+                    <a href="#" onclick="showHiddenRegisterBox(); return false;">Регистрация</a>
+                </div>
                 <form id="registerBoxHidden" name="registerBoxHidden">
                     <label for="email">Логин (email):</label><br>
                     <input type="text" id="email" name="email" value=""><br>
@@ -53,7 +56,7 @@
                     <input type="password" id="pwd1" name="pwd1" value=""><br>
                     <label for="pwd2">Повторите пароль:</label><br>
                     <input type="password" id="pwd2" name="pwd2" value=""><br><br>
-                    <input type="button" onclick="registerNewUser();" value="Зарегистрироваться">
+                    <input type="button" onclick="registerNewUser();" value="Зарегистрироваться"><br><br>
                 </form>
             </div>
             <br>
