@@ -36,7 +36,8 @@ class CartController extends Controller
         $itemId = intval($this->parameters['id']);
         if (!$itemId) exit();
         $jsData = [];
-        if (!empty($_SESSION['cart']) && !in_array($itemId, $_SESSION['cart'])) {
+
+        if (!in_array($itemId, $_SESSION['cart'])) {
             $_SESSION['cart'][] = $itemId;
             if (count($_SESSION['cart'])) {
                 $jsData['countItems'] = count($_SESSION['cart']);
