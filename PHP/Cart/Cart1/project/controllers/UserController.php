@@ -117,12 +117,12 @@ class UserController extends Controller
 
         $info = (new UsersModel())->checkUpdateParam($curPwdHash, $pwd1, $pwd2);
         if (!$info) {
-            $userData = (new UsersModel())->updateUser($name, $phone, $address, $curPwd, $pwd1, $pwd2);
-            if ($userData) {
+            $userData = (new UsersModel())->updateUser($name, $phone, $address, $curPwd, $pwd1);
+            if ($userData['result']) {
                 $_SESSION['user']['name'] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
                 $_SESSION['user']['phone'] = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
                 $_SESSION['user']['address'] = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
-                $_SESSION['user']['password'] =  md5($pwd1);
+                $_SESSION['user']['password'] = $userData['newPwd'];
                 $_SESSION['user']['displayName'] = $name ? htmlspecialchars($name, ENT_QUOTES, 'UTF-8') : $_SESSION['user']['email'];
                 $info['success'] = true;
                 $info['message'] = 'Данные сохранены';

@@ -54,30 +54,33 @@ class UsersModel extends Model
 
     /** Изменения данных пользователя
      *
-     * @param string $name имя
-     * @param string $phone телефон
-     * @param string $address адрес
+     * @param string|null $name имя
+     * @param string|null $phone телефон
+     * @param string|null $address адрес
      * @param string $curPwd текущий пароль
-     * @param string $pwd1 новый пароль
-     * @param string $pwd2 повтор нового пароля
-     * @return bool массив данных пользователя
+     * @param string|null $pwd1 новый пароль
+     * @return array
      */
-    public function updateUser(string $name, string $phone, string $address, string $curPwd, string $pwd1, string $pwd2): bool
+    public function updateUser(?string $name, ?string $phone, ?string $address, string $curPwd, ?string $pwd1): array
     {
         $parameters['email'] = htmlspecialchars($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8');
         $parameters['name'] = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
         $parameters['phone'] = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
         $parameters['address'] = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
-        $parameters['pwdCur'] = md5($curPwd);
+        $parameters['curPwd'] = md5($curPwd);
 //        UPDATE `users` SET `name` ='User 2', `phone` ='355', `address` ='ueh' WHERE `email` = 'user2' AND `password`='698d51a19d8a121ce581499d7b701668' =' LIMIT 1
 
         $query = 'UPDATE `users` SET ';
-        if ($pwd1 && $pwd2)  {
+        if ($pwd1) {
             $parameters['pwdHash'] = md5($pwd1);
             $query .= '`password`=:pwdHash,';
         }
-        $query .= '`name` =:name,`phone` =:phone,`address`=:address WHERE `email`=:email AND `password`=:pwdCur LIMIT 1';
-        return self::exec($query, $parameters);
+        $query .= '`name` =:name,`phone` =:phone,`address`=:address WHERE `email`=:email AND `password`=:curPwd LIMIT 1';
+
+        return [
+            'result' => self::exec($query, $parameters),
+            'newPwd' => $parameters['pwdHash'] ?? $parameters['curPwd']
+        ];
     }
 
     private function createSequence(array $items, $name): array
@@ -159,6 +162,7 @@ class UsersModel extends Model
         }
         return $resultCheck;
     }
+
     public function checkUpdateParam(string|null $curPwdHash, string|null $pwd1, string|null $pwd2): array|null
     {
         $resultCheck = null;
