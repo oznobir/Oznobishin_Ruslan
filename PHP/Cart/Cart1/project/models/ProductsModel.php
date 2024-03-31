@@ -7,14 +7,14 @@ use PDO;
 
 class ProductsModel extends Model
 {
-    /** Получение данных продуктов из корзины по id
-     * @param $parameters - id продуктов из корзины $_SESSION['cart']
+    /** Получение данных продуктов из корзины по их id
+     * @param array $parameters - id продуктов из корзины $_SESSION['cart']
      * @return array|null массив данных продуктов
      */
-    public function getProductsFromArray($parameters, $count): ?array
+    public function getProductsFromArray(array $parameters): ?array
     {
         $query = "SELECT * FROM `products` WHERE id ";
-        $query .= 'IN ('. str_repeat('?,', $count - 1) . '?)';
+        $query .= 'IN ('. str_repeat('?,', count($parameters) - 1) . '?)';
         $data = self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
         if (!$data) return null;
         return $data;
