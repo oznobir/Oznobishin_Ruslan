@@ -5,6 +5,7 @@ namespace Project\Controllers;
 use Core\Controller;
 use Project\Models\CategoriesModel;
 use Project\Models\UsersModel;
+use Project\Models\ProductsModel;
 
 class UserController extends Controller
 {
@@ -14,6 +15,8 @@ class UserController extends Controller
         $this->data['title'] = 'Личный аккаунт';
         $this->data['description'] = 'Гипермаркет myshop.by Личный аккаунт пользователя';
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
+        if (!empty($_SESSION['viewProducts']))
+            $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         echo $this->render('project/views/default/shopUserView.php');
     }
 

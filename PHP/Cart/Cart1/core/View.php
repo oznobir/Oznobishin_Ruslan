@@ -11,6 +11,7 @@ class View
     {
         $this->parameters = $parameters;
     }
+
     /**
      * @param string $viewPath
      * @param array|null $data

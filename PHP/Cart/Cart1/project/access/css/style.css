@@ -2,20 +2,25 @@
     box-sizing: border-box;
 }
 
-header h1, footer {
-    line-height: 2rem;
+header div, footer {
     text-align: center;
 }
+header div {
+    font-size: 1.6rem;
+    font-weight: bold;
 
-main {
+}
+
+main, header {
     display: flex;
     flex-direction: row;
+    gap: 25px;
     /*background-color: #eee;*/
     /*border: solid #ddd 2px;*/
 }
 
 .left-column {
-    width: 300px;
+    width: 250px;
     color: #444;
     padding: 0.6rem 0.3rem 0.6rem 0.6rem;
     /*background-color: #eee;*/

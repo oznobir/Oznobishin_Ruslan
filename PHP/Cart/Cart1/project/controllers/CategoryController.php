@@ -20,6 +20,8 @@ class CategoryController extends Controller
         $this->data['description'] = "Товары в категории {$cat['title']} в myshop.by";
         $this->data['arrUser'] = $_SESSION['user'] ?? null;
         $this->data['menu'] =  (new CategoriesModel())->getCategoriesWithChild();
+        if (!empty($_SESSION['viewProducts']))
+            $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         if ($cat['parent_id'] == 0) {
             $this->data['categories'] = (new CategoriesModel())->geSubCategoriesById($id);
             echo $this->render('project/views/default/shopCategoriesView.php');

@@ -21,6 +21,8 @@ class CartController extends Controller
         if (!empty($_SESSION['cart']))
             $this->data['products'] = (new ProductsModel())->getProductsFromArray($_SESSION['cart']);
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
+        if (!empty($_SESSION['viewProducts']))
+            $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         $this->data['title'] = 'Корзина товаров';
         $this->data['description'] = 'Корзина товаров Гипермаркет myshop.by';
         echo $this->render('project/views/default/shopCartView.php');
