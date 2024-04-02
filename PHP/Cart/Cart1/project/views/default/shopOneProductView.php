@@ -31,16 +31,20 @@
                             <?php if ($status == 1) : ?>
                                 <p>В наличии</p>
                                 <p>Цена: <?= $price ?></p>
-                                <p>
-                                    <a id="removeCart_<?= $id ?>" <?= (!$idInCart) ? "class=\"hidden\"" : '' ?>
-                                       href="#" onclick="removeFromCart(<?= $id ?>); return false;" alt="Удалить из корзины">
+                                <div  id="removeCart_<?= $id ?>" <?= (!$idInCart) ? "class=\"hidden\"" : '' ?>>
+                                    <a href="/" onclick="removeFromCart(<?= $id ?>); return false;"
+                                       alt="Удалить из корзины">
                                         Удалить из корзины
                                     </a>
-                                    <a id="addCart_<?= $id ?>" <?= ($idInCart) ? "class=\"hidden\"" : '' ?>
-                                       href="#" onclick="addToCart(<?= $id ?>); return false;" alt="Добавить в корзину">
+                                </div>
+                                <div id="addCart_<?= $id ?>" <?= ($idInCart) ? "class=\"hidden\"" : '' ?>>
+                                    <label for="itemCart_<?= $id ?>"></label>
+                                    <input type="number" name="item_<?= $id ?>" id="itemCart_<?= $id ?>"
+                                           value="1" min="1" max="99" size="3" autocomplete="off">
+                                    <a href="/" onclick="addToCart(<?= $id ?>); return false;" alt="Добавить в корзину">
                                         Добавить в корзину
                                     </a>
-                                </p>
+                                </div>
                             <?php else : ?>
                                 <p>Нет в наличии</p>
                             <?php endif; ?>

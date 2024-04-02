@@ -13,7 +13,7 @@ class ProductsModel extends Model
      */
     public function getProductsFromArray(array $parameters): ?array
     {
-        $parameters = array_values($parameters);
+        $parameters = array_keys($parameters);
         $query = "SELECT * FROM `products` WHERE id ";
         $query .= 'IN ('. str_repeat('?,', count($parameters) - 1) . '?)';
         $data = self::selectAll($query, PDO::FETCH_ASSOC, $parameters);

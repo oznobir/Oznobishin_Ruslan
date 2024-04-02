@@ -34,22 +34,25 @@ class CartController extends Controller
     public function add(): void
     {
         $itemId = intval($this->parameters['id']);
-        if (!$itemId) exit();
-        $jsData = [];
+        $itemCount = intval($this->parameters['count']);
+        if (!$itemId || !$itemCount) exit();
 
-        if (!in_array($itemId, $_SESSION['cart'])) {
-            $_SESSION['cart'][] = $itemId;
-            if (count($_SESSION['cart'])) {
-                $jsData['countItems'] = count($_SESSION['cart']);
-            } else {
-                $jsData['countItems'] = 'Пусто';
-            }
-            $jsData['success'] = 1;
+        $jsData = [];
+        if (!array_key_exists($itemId, $_SESSION['viewProducts'])) $_SESSION['viewProducts'][$itemId] = $itemCount;
+        if ($_SESSION['viewProducts'][$itemId] != $itemCount) $_SESSION['viewProducts'][$itemId] = $itemCount;
+
+        if (!array_key_exists($itemId, $_SESSION['cart'])) {
+            $_SESSION['cart'][$itemId] = $itemCount;
+            if ($_SESSION['cart'][$itemId] != $itemCount) $_SESSION['cart'][$itemId] = $itemCount;
+            if (count($_SESSION['cart'])) $jsData['countItems'] = count($_SESSION['cart']);
+            else $jsData['countItems'] = 'Пусто';
+            $jsData['success'] = true;
         } else {
-            $jsData['success'] = 0;
+            $jsData['success'] = false;
         }
         echo json_encode($jsData);
     }
+
     /** fetch
      * Удаление из корзины (сессии) id продукта
      * /cart/remove/id/
@@ -60,18 +63,53 @@ class CartController extends Controller
         $itemId = intval($this->parameters['id']);
         if (!$itemId) exit();
         $jsData = [];
-        $key = array_search($itemId, $_SESSION['cart']);
-        if ($key !== false) {
-            unset($_SESSION['cart'][$key]);
+        $key = array_key_exists($itemId, $_SESSION['cart']);
+        if ($key) {
+            $_SESSION['viewProducts'][$itemId] = $_SESSION['cart'][$itemId];
+            unset($_SESSION['cart'][$itemId]);
             if (count($_SESSION['cart'])) {
                 $jsData['countItems'] = count($_SESSION['cart']);
             } else {
                 $jsData['countItems'] = 'Пусто';
             }
-            $jsData['success'] = 1;
+            $jsData['success'] = true;
         } else {
-            $jsData['success'] = 0;
+            $jsData['success'] = false;
         }
         echo json_encode($jsData);
+    }
+
+    /** fetch
+     * Изменение количества продукта в корзине (сессию)
+     * /cart/add/id/count/
+     * @return void json - success при ошибке, новое количество в корзине
+     */
+    public function count(): void
+    {
+        $itemId = intval($this->parameters['id']);
+        $itemCount = intval($this->parameters['count']);
+        if (!$itemId || !$itemCount) exit();
+
+        $jsData = [];
+        if (array_key_exists($itemId, $_SESSION['viewProducts']))
+            $_SESSION['viewProducts'][$itemId] = $itemCount;
+
+        if (array_key_exists($itemId, $_SESSION['cart'])) {
+            $_SESSION['cart'][$itemId] = $itemCount;
+            $jsData['success'] = true;
+        } else {
+            $jsData['success'] = false;
+        }
+        echo json_encode($jsData);
+    }
+
+    /** Формирование страницы заказа
+     *
+     * @return void страница заказа
+     */
+    public function order(): void
+    {
+        var_dump($_POST);
+        var_dump($_SESSION);
     }
 }

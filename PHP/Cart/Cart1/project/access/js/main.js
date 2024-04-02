@@ -1,14 +1,58 @@
 async function addToCart(itemId) {
     console.log("js - addToCart(itemId)");
-    let url = "/cart/add/" + itemId + '/';
+    let itemCount = document.getElementById("itemCart_" + itemId).value;
+    let url = "/cart/add/" + itemId + '/' + itemCount + '/';
     let response = await fetch(url);
 
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
+            //shopOneProductView.php + shopMenuLeft.php
             document.getElementById("cartCountItems").textContent = jsData['countItems'];
             document.getElementById("addCart_" + itemId).style.display = "none";
             document.getElementById("removeCart_" + itemId).style.display = "block";
+        }
+    }
+}
+
+async function addToOrder(itemId) {
+    console.log("js - addToOrder(itemId)");
+    let itemCount = document.getElementById("itemCart_" + itemId).textContent;
+    let url = "/cart/add/" + itemId + '/' + itemCount + '/';
+    let response = await fetch(url);
+
+    if (response.ok) {
+        let jsData = await response.json();
+        if (jsData['success']) {
+            //shopCartView.php + shopMenuLeft.php
+            let el = document.getElementById("itemCart_" + itemId);
+            let elText = el.textContent;
+            el.outerHTML = "<input name=\""+ itemId +"\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
+            "min=\"1\" size=\"3\" value=\""+elText+"\" autocomplete=\"off\" onchange=\"conversionPrice(" + itemId + ");\">";
+            document.getElementById("addCart_" + itemId).style.display = "none";
+            document.getElementById("removeCart_" + itemId).style.display = "block";
+            document.getElementById("cartCountItems").textContent = jsData['countItems'];
+        }
+    }
+}
+
+
+async function removeFromOrder(itemId) {
+    console.log("js - removeFromOrder(itemId)");
+    let url = "/cart/remove/" + itemId + '/';
+    let response = await fetch(url);
+
+    if (response.ok) {
+        let jsData = await response.json();
+        if (jsData['success']) {
+            //shopCartView.php + shopMenuLeft.php
+            let el = document.getElementById("itemCart_" + itemId);
+            let elValue = el.value;
+            el.outerHTML = "<span id =\"itemCart_" + itemId + "\">" + elValue + "</span>";
+            document.getElementById("addCart_" + itemId).style.display = "block";
+            document.getElementById("removeCart_" + itemId).style.display = "none";
+            document.getElementById("cartCountItems").textContent = jsData['countItems'];
+
         }
     }
 }
@@ -20,40 +64,39 @@ async function removeFromCart(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
+            //shopMenuLeft.php
             document.getElementById("cartCountItems").textContent = jsData['countItems'];
+            //shopOneProductView.php + shopMenuLeft.php
             document.getElementById("addCart_" + itemId).style.display = "block";
             document.getElementById("removeCart_" + itemId).style.display = "none";
         }
     }
 }
+
 async function updateUserData() {
     console.log("js - updateUserData()");
-    // let phone = document.getElementById("newPhone").value;
-    // let address = document.getElementById("newAddress").value;
-    // let pwd1= document.getElementById("newPwd1").value;
-    // let pwd2 = document.getElementById("newPwd2").value;
-    // let curPwd = document.getElementById("pwd").value;
-    // let name = document.getElementById("newName").value;
-    // let postData = { phone: phone, address: address, pwd1: pwd1, pwd2: pwd2, curPwd: curPwd, name: name};
-    let response = await fetch("/user/update/",{
+    let response = await fetch("/user/update/", {
         method: 'POST',
         body: new FormData(document.querySelector('#userForm'))
-        // body: postData
     });
     if (response.ok) {
         let jsData = await response.json();
         alert(jsData['message']);
-        // if (jsData['success']) {
-        //     document.querySelector('#userLink').innerHTML = jsData.user.displayName;
-        // }
     }
 }
 
-function conversionPrice(itemId) {
+async function conversionPrice(itemId) {
     console.log("js - conversionPrice(itemId)");
-    let newCount = +document.querySelector('#itemCount_' + itemId).value;
+    let newCount = +document.querySelector('#itemCart_' + itemId).value;
     let price = +document.querySelector('#itemPrice_' + itemId).getAttribute('value');
-    document.querySelector("#itemRealPrice_" + itemId).innerText = newCount * price;
+    let url = "/cart/count/" + itemId + '/' + newCount + '/';
+    let response = await fetch(url);
+    if (response.ok) {
+        let jsData = await response.json();
+        if (jsData['success']) {
+            document.querySelector("#itemRealPrice_" + itemId).innerText = newCount * price;
+        }
+    }
 }
 
 async function registerNewUser() {
@@ -103,6 +146,7 @@ function showHiddenRegisterBox() {
         document.querySelector("#registerBoxHidden").style.display = "none";
     }
 }
+
 function showHiddenLoginBox() {
     if (document.querySelector("#loginBox").style.display !== "block") {
         document.querySelector("#loginBox").style.display = "block";

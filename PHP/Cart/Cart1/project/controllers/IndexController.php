@@ -20,4 +20,10 @@ class IndexController extends Controller
         $this->data['products'] =  (new ProductsModel())->getProductsLast();
         echo $this->render('project/views/default/shopProductsView.php');
     }
+    public function d(): void
+    {
+        echo '$_SESSION:';
+        var_dump($_SESSION);
+        var_dump(count($_SESSION['cart']));
+    }
 }

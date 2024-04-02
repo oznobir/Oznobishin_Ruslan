@@ -11,6 +11,7 @@
             <?php if (!isset($products)) : ?>
                 <p>Ваша корзина пуста</p>
             <?php else : ?>
+            <form action="/cart/order/" method="POST">
                 <table>
                     <thead>
                     <tr>
@@ -31,9 +32,10 @@
                             <td><?= $product['id'] ?></td>
                             <td><a href="/product/<?= $product['slug'] ?>/"><?= $product['title'] ?></a></td>
                             <td>
-                                <label for="itemCount_<?= $product['id'] ?>">
-                                    <input name="itemCount_<?= $product['id'] ?>"
-                                           id="itemCount_<?= $product['id'] ?>" type="text" value="1"
+                                <label for="itemCart_<?= $product['id'] ?>">
+                                    <input name="<?= $product['id'] ?>"
+                                           id="itemCart_<?= $product['id'] ?>" type="number" min="1" max="99" size="3"
+                                           value="<?= $_SESSION['cart'][$product['id']] ?>" autocomplete="off"
                                            onchange="conversionPrice(<?= $product['id'] ?>);">
                                 </label>
                             </td>
@@ -42,15 +44,15 @@
                                     <?= $product['price'] ?>
                                 </span>
                             </td>
-                            <td><span id="itemRealPrice_<?= $product['id'] ?>"><?= $product['price'] ?></span></td>
+                            <td><span id="itemRealPrice_<?= $product['id'] ?>"><?= $product['price']*$_SESSION['cart'][$product['id']] ?></span></td>
                             <td>
                                 <a id="removeCart_<?= $product['id'] ?>"
-                                   href="#" onclick="removeFromCart(<?= $product['id'] ?>); return false;"
+                                   href="#" onclick="removeFromOrder(<?= $product['id'] ?>); return false;"
                                    alt="Удалить из корзины">
                                     Удалить
                                 </a>
                                 <a id="addCart_<?= $product['id'] ?>" class="hidden"
-                                   href="#" onclick="addToCart(<?= $product['id'] ?>); return false;"
+                                   href="#" onclick="addToOrder(<?= $product['id'] ?>); return false;"
                                    alt="Вернуть в корзину">
                                     Вернуть
                                 </a>
@@ -59,6 +61,9 @@
                     <?php } ?>
                     </tbody>
                 </table>
+                <br>
+                <input type="submit" value="Оформить заказ">
+            </form>
             <?php endif; ?>
         </div>
     </main>

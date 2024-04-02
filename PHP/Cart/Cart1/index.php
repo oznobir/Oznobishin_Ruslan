@@ -6,6 +6,7 @@ namespace core;
 
 session_start();
 if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
+if (!isset($_SESSION['viewProducts'])) $_SESSION['viewProducts'] = [];
 if (!isset($_SESSION['user'])) $_SESSION['user'] = [];
 
 require 'project/config/config.php';

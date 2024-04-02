@@ -16,8 +16,11 @@ class ProductController extends Controller
 
         $this->data = (new ProductsModel())->getProductBySlug(['slug'=>$this->parameters['slug']]);
         if (!$this->data) $this->redirect('/');
-        $this->data['idInCart'] = 0;
-        if (in_array($this->data['id'], $_SESSION['cart'])) $this->data['idInCart'] = 1;
+        if (!array_key_exists($this->data['id'], $_SESSION['viewProducts']))
+            $_SESSION['viewProducts'][$this->data['id']]= 1;
+
+        $this->data['idInCart'] = false;
+        if (array_key_exists($this->data['id'], $_SESSION['cart'])) $this->data['idInCart'] = true;
         $this->data['arrUser'] = $_SESSION['user'] ?? null;
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         echo $this->render('project/views/default/shopOneProductView.php');
