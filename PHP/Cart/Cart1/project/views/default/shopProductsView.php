@@ -5,7 +5,12 @@
  */ ?>
 <?php include 'shopHeaderLayout.php' ?>
     <main>
-        <?php include 'shopMenuLeft.php' ?>
+        <nav>
+            <div class="left-column">
+                <?php include 'shopCartAndLogin.php' ?>
+                <?php include 'shopCatalogAndViewProducts.php' ?>
+            </div>
+        </nav>
         <div class="center-column">
             <h2><?= $title ?></h2>
             <div class="products-list">

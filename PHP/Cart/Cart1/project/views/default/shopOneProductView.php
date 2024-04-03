@@ -11,7 +11,12 @@
  */ ?>
 <?php include 'shopHeaderLayout.php' ?>
     <main>
-        <?php include 'shopMenuLeft.php' ?>
+        <nav>
+            <div class="left-column">
+                <?php include 'shopCartAndLogin.php' ?>
+                <?php include 'shopCatalogAndViewProducts.php' ?>
+            </div>
+        </nav>
         <div class="center-column">
             <div class="product-card">
                 <h3><?= $title ?></h3>
@@ -31,7 +36,7 @@
                             <?php if ($status == 1) : ?>
                                 <p>В наличии</p>
                                 <p>Цена: <?= $price ?></p>
-                                <div  id="removeCart_<?= $id ?>" <?= (!$idInCart) ? "class=\"hidden\"" : '' ?>>
+                                <div id="removeCart_<?= $id ?>" <?= (!$idInCart) ? "class=\"hidden\"" : '' ?>>
                                     <a href="/" onclick="removeFromCart(<?= $id ?>); return false;"
                                        alt="Удалить из корзины">
                                         Удалить из корзины

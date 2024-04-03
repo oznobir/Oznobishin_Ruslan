@@ -21,5 +21,5 @@
     <div class="header-image">
         <img src="/project/access/img/myshop.png" alt="myshop_by" width="180">
     </div>
-    <div class="header"> Мой интернет-магазин</div>
+    <div class="header">интернет-магазин</div>
 </header>

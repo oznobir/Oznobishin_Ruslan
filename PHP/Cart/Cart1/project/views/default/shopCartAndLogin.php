@@ -6,7 +6,6 @@
  */ ?>
 <nav>
     <div class="left-column">
-        <div class="left-menu">
             <?php if (!empty($_SESSION['user'])) : ?>
                 <div id="userBox">
                     <a href="/user/"><?= $_SESSION['user']['displayName'] ?></a><i> - </i>
@@ -50,27 +49,5 @@
                 <span id="cartCountItems"><?= count($_SESSION['cart']) > 0 ? count($_SESSION['cart']) : 'Пусто' ?></span>
             </div>
             <br>
-            <div class="menu-caption">Каталог:</div>
-            <?php foreach ($menu as $item) { ?>
-                <a href="/category/<?= $item['slug'] ?>/" title=" <?= $item['title'] ?>"><?= $item['title'] ?></a><br>
-                <?php if (isset($item['children'])) {
-                    foreach ($item['children'] as $itemChild) { ?>
-                        -- <a href="/category/<?= $itemChild['slug'] ?>/"
-                              title=" <?= $itemChild['title'] ?>"><?= $itemChild['title'] ?></a><br>
-                    <?php }
-                }
-            } ?>
-            <br>
-            <?php if (isset($viewProducts)) : ?>
-                <div class="menu-caption">Просмотренные товары:</div>
-                <?php foreach ($viewProducts as $viewProduct) { ?>
-                    <a href="/category/<?= $viewProduct['slug'] ?>/"
-                       title=" <?= $viewProduct['title'] ?>"><?= $viewProduct['title'] ?>
-                    </a>
-                    <br><br>
-                <?php }
-            endif; ?>
-        </div>
-        <br>
     </div>
 </nav>
