@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
         new Route('/cart/remove/:id/', 'cart', 'remove'),
         new Route('/user/', 'user', 'index'),
         new Route('/user/logout/', 'user', 'logout'),
-        new Route('/cart/count/:id/:count/', 'cart', 'count'),
 
         new Route('/d/', 'index', 'd'),
     ];

@@ -15,48 +15,6 @@ async function addToCart(itemId) {
     }
 }
 
-async function addToOrder(itemId) {
-    console.log("js - addToOrder(itemId)");
-    let itemCount = document.getElementById("itemCart_" + itemId).textContent;
-    let url = "/cart/add/" + itemId + '/' + itemCount + '/';
-    let response = await fetch(url);
-
-    if (response.ok) {
-        let jsData = await response.json();
-        if (jsData['success']) {
-            //shopCartView.php + shopMenuLeft.php
-            let el = document.getElementById("itemCart_" + itemId);
-            let elText = el.textContent;
-            el.outerHTML = "<input name=\""+ itemId +"\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
-            "min=\"1\" size=\"3\" value=\""+elText+"\" autocomplete=\"off\" onchange=\"conversionPrice(" + itemId + ");\">";
-            document.getElementById("addCart_" + itemId).style.display = "none";
-            document.getElementById("removeCart_" + itemId).style.display = "block";
-            document.getElementById("cartCountItems").textContent = jsData['countItems'];
-        }
-    }
-}
-
-
-async function removeFromOrder(itemId) {
-    console.log("js - removeFromOrder(itemId)");
-    let url = "/cart/remove/" + itemId + '/';
-    let response = await fetch(url);
-
-    if (response.ok) {
-        let jsData = await response.json();
-        if (jsData['success']) {
-            //shopCartView.php + shopMenuLeft.php
-            let el = document.getElementById("itemCart_" + itemId);
-            let elValue = el.value;
-            el.outerHTML = "<span id =\"itemCart_" + itemId + "\">" + elValue + "</span>";
-            document.getElementById("addCart_" + itemId).style.display = "block";
-            document.getElementById("removeCart_" + itemId).style.display = "none";
-            document.getElementById("cartCountItems").textContent = jsData['countItems'];
-
-        }
-    }
-}
-
 async function removeFromCart(itemId) {
     console.log("js - removeFromCart(itemId)");
     let url = "/cart/remove/" + itemId + '/';
@@ -73,6 +31,80 @@ async function removeFromCart(itemId) {
     }
 }
 
+async function addToOrder(itemId) {
+    console.log("js - addToOrder(itemId)");
+    let itemCount = document.getElementById("itemCart_" + itemId).textContent;
+    let url = "/cart/add/" + itemId + '/' + itemCount + '/';
+    let response = await fetch(url);
+
+    if (response.ok) {
+        let jsData = await response.json();
+        if (jsData['success']) {
+            //shopCartView.php + shopMenuLeft.php - корзину убрал
+            let elItem = document.getElementById("itemCart_" + itemId);
+            let itemText = elItem.textContent;
+            let priceText = +document.getElementById("itemRealPrice_" + itemId).textContent;
+            let elTotal = document.getElementById("totalPrice");
+            let totalText = +elTotal.textContent;
+            let newTotal = totalText + priceText;
+            elItem.outerHTML = "<input name=\"" + itemId + "\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
+                "min=\"1\" size=\"3\" value=\"" + itemText + "\" autocomplete=\"off\" onchange=\"conversionPrice(" + itemId + ");\">";
+            elTotal.textContent = String(newTotal);
+            // elItem.closest('tr').classList.add('show');
+            document.getElementById("addCart_" + itemId).style.display = "none";
+            document.getElementById("removeCart_" + itemId).style.display = "block";
+            // document.getElementById("cartCountItems").textContent = jsData['countItems']; - корзину убрал
+        }
+    }
+}
+
+
+async function removeFromOrder(itemId) {
+    console.log("js - removeFromOrder(itemId)");
+    let url = "/cart/remove/" + itemId + '/';
+    let response = await fetch(url);
+
+    if (response.ok) {
+        let jsData = await response.json();
+        if (jsData['success']) {
+            //shopCartView.php + shopMenuLeft.php
+            let elItem = document.getElementById("itemCart_" + itemId);
+            let itemValue = elItem.value;
+            let elTotal = document.getElementById("totalPrice");
+            let totalText = +elTotal.textContent;
+            let priceText = +document.getElementById("itemRealPrice_" + itemId).textContent;
+            elItem.outerHTML = "<span id =\"itemCart_" + itemId + "\">" + itemValue + "</span>";
+            elTotal.textContent = String(totalText - priceText);
+            // elItem.closest('tr').classList.add('show');
+            document.getElementById("addCart_" + itemId).style.display = "block";
+            document.getElementById("removeCart_" + itemId).style.display = "none";
+            // document.getElementById("cartCountItems").textContent = jsData['countItems']; - корзину убрал
+        }
+    }
+}
+
+async function conversionPrice(itemId) {
+    console.log("js - conversionPrice(itemId)");
+    let itemCount = +document.querySelector('#itemCart_' + itemId).value;
+    let url = "/cart/add/" + itemId + '/' + itemCount + '/';
+    let response = await fetch(url);
+    if (response.ok) {
+        let jsData = await response.json();
+        if (jsData['success']) {
+            let itemPrice = +document.querySelector('#itemPrice_' + itemId).textContent;
+            let elItemRealPrice = document.querySelector('#itemRealPrice_' + itemId);
+            let oldItemRealPrice = +elItemRealPrice.textContent;
+            let newItemRealPrice = itemPrice * itemCount;
+            elItemRealPrice.textContent = String(newItemRealPrice);
+            let elTotal = document.getElementById("totalPrice");
+            let totalPrice = +elTotal.textContent;
+            let newTotal = totalPrice - oldItemRealPrice + newItemRealPrice;
+            elTotal.textContent = String(newTotal);
+        }
+    }
+}
+
+
 async function updateUserData() {
     console.log("js - updateUserData()");
     let response = await fetch("/user/update/", {
@@ -82,20 +114,6 @@ async function updateUserData() {
     if (response.ok) {
         let jsData = await response.json();
         alert(jsData['message']);
-    }
-}
-
-async function conversionPrice(itemId) {
-    console.log("js - conversionPrice(itemId)");
-    let newCount = +document.querySelector('#itemCart_' + itemId).value;
-    let price = +document.querySelector('#itemPrice_' + itemId).getAttribute('value');
-    let url = "/cart/count/" + itemId + '/' + newCount + '/';
-    let response = await fetch(url);
-    if (response.ok) {
-        let jsData = await response.json();
-        if (jsData['success']) {
-            document.querySelector("#itemRealPrice_" + itemId).innerText = newCount * price;
-        }
     }
 }
 

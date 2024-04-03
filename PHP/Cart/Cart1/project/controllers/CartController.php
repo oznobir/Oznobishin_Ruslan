@@ -30,8 +30,8 @@ class CartController extends Controller
 
     /** fetch
      * Добавление в корзину (сессию) id продукта
-     * /cart/add/id/
-     * @return void json - success, количество в корзине или "Пусто"
+     * /cart/add/id/itemCount/
+     * @return void json - количество в корзине или null
      */
     public function add(): void
     {
@@ -40,68 +40,31 @@ class CartController extends Controller
         if (!$itemId || !$itemCount) exit();
 
         $jsData = [];
-        if (!array_key_exists($itemId, $_SESSION['viewProducts'])) $_SESSION['viewProducts'][$itemId] = $itemCount;
-        if ($_SESSION['viewProducts'][$itemId] != $itemCount) $_SESSION['viewProducts'][$itemId] = $itemCount;
+        $_SESSION['viewProducts'][$itemId] = $itemCount;
+        $_SESSION['cart'][$itemId] = $itemCount;
+        $jsData['countItems'] = count($_SESSION['cart']);
+        $jsData['success'] = true;
 
-        if (!array_key_exists($itemId, $_SESSION['cart'])) {
-            $_SESSION['cart'][$itemId] = $itemCount;
-            if ($_SESSION['cart'][$itemId] != $itemCount) $_SESSION['cart'][$itemId] = $itemCount;
-            if (count($_SESSION['cart'])) $jsData['countItems'] = count($_SESSION['cart']);
-            else $jsData['countItems'] = 'Пусто';
-            $jsData['success'] = true;
-        } else {
-            $jsData['success'] = false;
-        }
         echo json_encode($jsData);
     }
 
     /** fetch
      * Удаление из корзины (сессии) id продукта
      * /cart/remove/id/
-     * @return void json - success, количество в корзине или "Пусто"
+     * @return void json - количество в корзине или null
      */
-    public function remove(): void
+    public
+    function remove(): void
     {
         $itemId = intval($this->parameters['id']);
         if (!$itemId) exit();
-        $jsData = [];
-        $key = array_key_exists($itemId, $_SESSION['cart']);
-        if ($key) {
-            $_SESSION['viewProducts'][$itemId] = $_SESSION['cart'][$itemId];
-            unset($_SESSION['cart'][$itemId]);
-            if (count($_SESSION['cart'])) {
-                $jsData['countItems'] = count($_SESSION['cart']);
-            } else {
-                $jsData['countItems'] = 'Пусто';
-            }
-            $jsData['success'] = true;
-        } else {
-            $jsData['success'] = false;
-        }
-        echo json_encode($jsData);
-    }
-
-    /** fetch
-     * Изменение количества продукта в корзине (сессию)
-     * /cart/add/id/count/
-     * @return void json - success при ошибке, новое количество в корзине
-     */
-    public function count(): void
-    {
-        $itemId = intval($this->parameters['id']);
-        $itemCount = intval($this->parameters['count']);
-        if (!$itemId || !$itemCount) exit();
-
-        $jsData = [];
-        if (array_key_exists($itemId, $_SESSION['viewProducts']))
-            $_SESSION['viewProducts'][$itemId] = $itemCount;
-
         if (array_key_exists($itemId, $_SESSION['cart'])) {
-            $_SESSION['cart'][$itemId] = $itemCount;
+            unset($_SESSION['cart'][$itemId]);
             $jsData['success'] = true;
         } else {
             $jsData['success'] = false;
         }
+        $jsData['countItems'] = count($_SESSION['cart']);
         echo json_encode($jsData);
     }
 
@@ -109,7 +72,8 @@ class CartController extends Controller
      *
      * @return void страница заказа
      */
-    public function order(): void
+    public
+    function order(): void
     {
         var_dump($_POST);
         var_dump($_SESSION);

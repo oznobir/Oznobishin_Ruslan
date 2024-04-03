@@ -15,6 +15,7 @@ main, header {
     display: flex;
     flex-direction: row;
     gap: 25px;
+    justify-content: center;
     /*background-color: #eee;*/
     /*border: solid #ddd 2px;*/
 }
@@ -81,9 +82,9 @@ main, header {
 /*    color: blue;*/
 /*}*/
 
-/*.show {*/
-/*    display: inline-block;*/
-/*}*/
+.show {
+    display: inline-block;
+}
 @media all and (max-width: 900px) {
     main {
         flex-direction: column;
