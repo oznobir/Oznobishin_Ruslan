@@ -44,7 +44,7 @@ async function addToOrder(itemId) {
             elItemRealPrice.textContent = elItemRealPrice.getAttribute('value');
             let newTotal = +elTotal.textContent + +elItemRealPrice.getAttribute('value');
             elTotal.textContent = String(newTotal);
-            elItem.outerHTML = "<input name=\"" + itemId + "\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
+            elItem.outerHTML = "<input name=\"products[" + itemId + "]\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
                 "min=\"1\" size=\"3\" value=\"" + itemCount + "\" autocomplete=\"off\" onchange=\"conversionPrice(" + itemId + ");\">";
             // elItem.closest('tr').classList.add('show');
             document.getElementById("addCart_" + itemId).classList.toggle("hidden");
