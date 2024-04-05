@@ -70,17 +70,22 @@ main, header {
 .hidden, #registerBoxHidden, #loginBox  {
     display: none;
 }
-#userForm > div {
+.user-form, .order-form {
+    display: flex;
+    gap: 25px;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.user-form .user-basic > div,
+.user-form .user-added > div,
+.order-form .order-basic > div,
+.order-form .order-added > div {
     display: flex;
     gap: 25px;
     flex-direction: row;
     justify-content: space-between;
+    width: 350px;
 }
-/*.as-link {*/
-/*    text-decoration: underline;*/
-/*    cursor: pointer;*/
-/*    color: blue;*/
-/*}*/
 
 .show {
     display: inline-block;

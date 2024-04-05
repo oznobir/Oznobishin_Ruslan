@@ -4,8 +4,8 @@
  * @var array $menu
  * @var int $cartCountItems
  */ ?>
-<nav>
-    <div class="left-column">
+
+    <div>
             <div class="menu-caption">Каталог:</div>
             <?php foreach ($menu as $item) { ?>
                 <a href="/category/<?= $item['slug'] ?>/" title=" <?= $item['title'] ?>"><?= $item['title'] ?></a><br>
@@ -27,4 +27,3 @@
                 <?php }
             endif; ?>
     </div>
-</nav>

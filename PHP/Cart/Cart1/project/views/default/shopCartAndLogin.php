@@ -4,8 +4,8 @@
  * @var array $menu
  * @var int $cartCountItems
  */ ?>
-<nav>
-    <div class="left-column">
+
+    <div>
             <?php if (!empty($_SESSION['user'])) : ?>
                 <div id="userBox">
                     <a href="/user/"><?= $_SESSION['user']['displayName'] ?></a><i> - </i>
@@ -20,7 +20,7 @@
                     <div class="menu-caption">
                         <a href="#" onclick="showHiddenLoginBox(); return false;">Авторизация</a>
                     </div>
-                    <form id="loginBox">
+                    <form id="loginBoxHidden"  class="hidden">
                         <label for="loginEmail">Логин (email):</label><br>
                         <input type="text" id="loginEmail" name="loginEmail" value=""><br>
                         <label for="loginPwd">Введите пароль:</label><br>
@@ -32,7 +32,7 @@
                     <div class="menu-caption">
                         <a href="#" onclick="showHiddenRegisterBox(); return false;">Регистрация</a>
                     </div>
-                    <form id="registerBoxHidden" name="registerBoxHidden">
+                    <form id="registerBoxHidden" name="registerBoxHidden"  class="hidden">
                         <label for="email">Логин (email):</label><br>
                         <input type="text" id="email" name="email" value=""><br>
                         <label for="pwd1">Введите пароль:</label><br>
@@ -50,4 +50,3 @@
             </div>
             <br>
     </div>
-</nav>

@@ -7,10 +7,9 @@ async function addToCart(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
-            //shopOneProductView.php + shopMenuLeft.php
             document.getElementById("cartCountItems").textContent = jsData['countItems'];
-            document.getElementById("addCart_" + itemId).style.display = "none";
-            document.getElementById("removeCart_" + itemId).style.display = "block";
+            document.getElementById("addCart_" + itemId).classList.toggle("hidden");
+            document.getElementById("removeCart_" + itemId).classList.toggle("hidden");
         }
     }
 }
@@ -22,11 +21,9 @@ async function removeFromCart(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
-            //shopMenuLeft.php
             document.getElementById("cartCountItems").textContent = jsData['countItems'];
-            //shopOneProductView.php + shopMenuLeft.php
-            document.getElementById("addCart_" + itemId).style.display = "block";
-            document.getElementById("removeCart_" + itemId).style.display = "none";
+            document.getElementById("addCart_" + itemId).classList.toggle("hidden");
+            document.getElementById("removeCart_" + itemId).classList.toggle("hidden");
         }
     }
 }
@@ -40,19 +37,18 @@ async function addToOrder(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
-            //shopCartView.php + shopMenuLeft.php - корзину убрал
-            let elItem = document.getElementById("itemCart_" + itemId);
-            let itemText = elItem.textContent;
-            let priceText = +document.getElementById("itemRealPrice_" + itemId).textContent;
-            let elTotal = document.getElementById("totalPrice");
-            let totalText = +elTotal.textContent;
-            let newTotal = totalText + priceText;
-            elItem.outerHTML = "<input name=\"" + itemId + "\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
-                "min=\"1\" size=\"3\" value=\"" + itemText + "\" autocomplete=\"off\" onchange=\"conversionPrice(" + itemId + ");\">";
+            const elItem = document.getElementById("itemCart_" + itemId);
+            const elTotal = document.getElementById("totalPrice");
+            const elItemRealPrice = document.getElementById("itemRealPrice_" + itemId);
+
+            elItemRealPrice.textContent = elItemRealPrice.getAttribute('value');
+            let newTotal = +elTotal.textContent + +elItemRealPrice.getAttribute('value');
             elTotal.textContent = String(newTotal);
+            elItem.outerHTML = "<input name=\"" + itemId + "\" id=\"itemCart_" + itemId + "\" type=\"number\" max=\"99\" " +
+                "min=\"1\" size=\"3\" value=\"" + itemCount + "\" autocomplete=\"off\" onchange=\"conversionPrice(" + itemId + ");\">";
             // elItem.closest('tr').classList.add('show');
-            document.getElementById("addCart_" + itemId).style.display = "none";
-            document.getElementById("removeCart_" + itemId).style.display = "block";
+            document.getElementById("addCart_" + itemId).classList.toggle("hidden");
+            document.getElementById("removeCart_" + itemId).classList.toggle("hidden");
             // document.getElementById("cartCountItems").textContent = jsData['countItems']; - корзину убрал
         }
     }
@@ -67,17 +63,17 @@ async function removeFromOrder(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
-            //shopCartView.php + shopMenuLeft.php
-            let elItem = document.getElementById("itemCart_" + itemId);
-            let itemValue = elItem.value;
-            let elTotal = document.getElementById("totalPrice");
-            let totalText = +elTotal.textContent;
-            let priceText = +document.getElementById("itemRealPrice_" + itemId).textContent;
-            elItem.outerHTML = "<span id =\"itemCart_" + itemId + "\">" + itemValue + "</span>";
-            elTotal.textContent = String(totalText - priceText);
+            const elItem = document.getElementById("itemCart_" + itemId);
+            const elTotal = document.getElementById("totalPrice");
+            const elRealPrice = document.getElementById("itemRealPrice_" + itemId);
+
+            elItem.outerHTML = "<span id =\"itemCart_" + itemId + "\">" + elItem.value + "</span>";
+            elTotal.textContent = String(+elTotal.textContent - elRealPrice.textContent);
+            elRealPrice.setAttribute('value', elRealPrice.textContent);
+            elRealPrice.textContent = '0';
             // elItem.closest('tr').classList.add('show');
-            document.getElementById("addCart_" + itemId).style.display = "block";
-            document.getElementById("removeCart_" + itemId).style.display = "none";
+            document.getElementById("addCart_" + itemId).classList.toggle("hidden");
+            document.getElementById("removeCart_" + itemId).classList.toggle("hidden");
             // document.getElementById("cartCountItems").textContent = jsData['countItems']; - корзину убрал
         }
     }
@@ -91,15 +87,14 @@ async function conversionPrice(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         if (jsData['success']) {
+            const elTotal = document.getElementById("totalPrice");
+            const elItemRealPrice = document.querySelector('#itemRealPrice_' + itemId);
+
             let itemPrice = +document.querySelector('#itemPrice_' + itemId).textContent;
-            let elItemRealPrice = document.querySelector('#itemRealPrice_' + itemId);
             let oldItemRealPrice = +elItemRealPrice.textContent;
             let newItemRealPrice = itemPrice * itemCount;
             elItemRealPrice.textContent = String(newItemRealPrice);
-            let elTotal = document.getElementById("totalPrice");
-            let totalPrice = +elTotal.textContent;
-            let newTotal = totalPrice - oldItemRealPrice + newItemRealPrice;
-            elTotal.textContent = String(newTotal);
+            elTotal.textContent = String(+elTotal.textContent - oldItemRealPrice + newItemRealPrice);
         }
     }
 }
@@ -117,7 +112,7 @@ async function updateUserData() {
     }
 }
 
-async function registerNewUser() {
+async function registerNewUser(url = null) {
     console.log("js - registerNewUser(itemId)");
     let response = await fetch("/user/register/", {
         method: 'POST',
@@ -127,17 +122,21 @@ async function registerNewUser() {
         let jsData = await response.json();
         alert(jsData['message']);
         if (jsData['success']) {
-            document.querySelector("#userBox").style.display = "block"
-            document.querySelector('#userLink').innerHTML = jsData.user.displayName;
-            document.querySelector("#authBox").style.display = "none";
-            document.querySelector("#registerBox").style.display = "none";
+            if (url) {
+                document.location.href = url;
+            } else {
+                document.querySelector("#userBox").classList.toggle("hidden");
+                document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+                document.querySelector("#authBox").classList.toggle("hidden");
+                document.querySelector("#registerBox").classList.toggle("hidden");
+            }
         }
     }
 }
 
-async function login() {
+async function login(url = null) {
     console.log("js - login()");
-    let data = new FormData(document.querySelector("#loginBox"));
+    let data = new FormData(document.querySelector("#loginBoxHidden"));
     let response = await fetch("/user/login/", {
         method: 'POST',
         body: data
@@ -146,13 +145,14 @@ async function login() {
         let jsData = await response.json();
         alert(jsData['message']);
         if (jsData['success']) {
-            document.querySelector("#userBox").style.display = "block";
-            document.querySelector("#authBox").style.display = "none";
-            document.querySelector("#registerBox").style.display = "none";
-            document.querySelector('#userLink').innerHTML = jsData.user.displayName;
-            // document.querySelector("#userBox").classList.remove('hidden');
-            // document.querySelector("#registerBox").classList.add('hidden');
-            // document.querySelector("#loginBox").classList.add('hidden');
+            if (url) {
+                document.location.href = url;
+            } else {
+                document.querySelector("#userBox").classList.toggle("hidden");
+                document.querySelector("#authBox").classList.toggle("hidden");
+                document.querySelector("#registerBox").classList.toggle("hidden");
+                document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+            }
         }
     }
 }
@@ -160,15 +160,19 @@ async function login() {
 function showHiddenRegisterBox() {
     if (document.querySelector("#registerBoxHidden").style.display !== "block") {
         document.querySelector("#registerBoxHidden").style.display = "block";
+        document.querySelector("#loginBoxHidden").style.display = "none";
     } else {
         document.querySelector("#registerBoxHidden").style.display = "none";
+        document.querySelector("#loginBoxHidden").style.display = "block";
     }
 }
 
 function showHiddenLoginBox() {
-    if (document.querySelector("#loginBox").style.display !== "block") {
-        document.querySelector("#loginBox").style.display = "block";
+    if (document.querySelector("#loginBoxHidden").style.display !== "block") {
+        document.querySelector("#loginBoxHidden").style.display = "block";
+        document.querySelector("#registerBoxHidden").style.display = "none";
     } else {
-        document.querySelector("#loginBox").style.display = "none";
+        document.querySelector("#loginBoxHidden").style.display = "none";
+        document.querySelector("#registerBoxHidden").style.display = "block";
     }
 }

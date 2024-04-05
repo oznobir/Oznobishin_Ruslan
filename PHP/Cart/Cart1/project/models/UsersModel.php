@@ -118,19 +118,10 @@ class UsersModel extends Model
     {
         $resultCheck = null;
 
-        if (!$email) {
+        if (!$email || !$pwd1 || !$pwd2) {
             $resultCheck['success'] = false;
-            $resultCheck['message'] = 'Введите email';
-        }
-        if (!$pwd1) {
-            $resultCheck['success'] = false;
-            $resultCheck['message'] = 'Введите пароль';
-        }
-        if (!$pwd2) {
-            $resultCheck['success'] = false;
-            $resultCheck['message'] = 'Повторите пароль';
-        }
-        if ($pwd1 !== $pwd2) {
+            $resultCheck['message'] = 'Введите логин, пароль и подтвердите пароль';
+        } elseif ($pwd1 !== $pwd2) {
             $resultCheck['success'] = false;
             $resultCheck['message'] = 'Пароли не совпадают';
         }
