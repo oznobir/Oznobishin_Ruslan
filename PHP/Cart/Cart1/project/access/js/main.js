@@ -92,9 +92,9 @@ async function conversionPrice(itemId) {
 
             let itemPrice = +document.querySelector('#itemPrice_' + itemId).textContent;
             let oldItemRealPrice = +elItemRealPrice.textContent;
-            let newItemRealPrice = itemPrice * itemCount;
+            let newItemRealPrice = Math.round(itemPrice * itemCount * 100) / 100;
             elItemRealPrice.textContent = String(newItemRealPrice);
-            elTotal.textContent = String(+elTotal.textContent - oldItemRealPrice + newItemRealPrice);
+            elTotal.textContent = String(Math.round((+elTotal.textContent - oldItemRealPrice + newItemRealPrice)*100)/100);
         }
     }
 }

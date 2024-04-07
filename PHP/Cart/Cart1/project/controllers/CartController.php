@@ -3,8 +3,10 @@
 namespace Project\Controllers;
 
 use Core\Controller;
+use Project\Models\OrderModel;
 use Project\Models\ProductsModel;
 use Project\Models\CategoriesModel;
+use Project\Models\PurchaseModel;
 
 /**
  * Контроллер для работы с корзиной
@@ -72,10 +74,63 @@ class CartController extends Controller
      *
      * @return void страница заказа
      */
-    public
-    function order(): void
+    public function order(): void
     {
-        var_dump($_POST);
-        var_dump($_SESSION);
+        $userOrder = isset($_POST['userOrder']) ? htmlspecialchars($_POST['userOrder'], ENT_QUOTES, 'UTF-8') : null;
+        $phone = isset($_POST['phone']) ? htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8') : null;
+        $address = isset($_POST['address']) ? htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8') : null;
+        $payment = isset($_POST['payment']) ? htmlspecialchars($_POST['payment'], ENT_QUOTES, 'UTF-8') : null;
+        $delivery = isset($_POST['delivery']) ? htmlspecialchars($_POST['delivery'], ENT_QUOTES, 'UTF-8') : null;
+        $comment = isset($_POST['comment']) ? htmlspecialchars($_POST['comment'], ENT_QUOTES, 'UTF-8') : null;
+
+        if (!$payment || !$delivery) $this->redirect('/cart/');
+        foreach ($_SESSION['cart'] as $id => $count) {
+            $sessionCart[intval($id)] = intval($count); // может излишне
+        }
+        if ($sessionCart != $_POST['products']) $this->redirect('/cart/');
+
+        $info = (new OrderModel())->checkOrderParam($phone, $address, $delivery);
+        if ($info) {
+            $info['success'] = false;
+            $info['message']['alert'] = 'Не заполнены объязательные данные';
+            echo json_encode($info);
+            exit();
+        }
+        $arrProducts = (new ProductsModel())->getProductsFromArray($sessionCart);
+        if (!$arrProducts) {
+            $info['success'] = false;
+            $info['message']['alert'] = 'В ворзине нет товаров';
+            echo json_encode($info);
+            exit();
+        }
+        $idOrder = (new OrderModel())->makeNewOrder($userOrder, $phone, $address, $payment, $delivery, $comment);
+        if (!$idOrder) {
+            $info['success'] = false;
+            $info['message']['alert'] = 'Ошибка создания заказа';
+            echo json_encode($info);
+            exit();
+        }
+        $totalOrder = 0;
+        foreach ($arrProducts as &$item) {
+            unset($item['description']);
+            unset($item['image']);
+            unset($item['title']);
+            unset($item['category_id']);
+            unset($item['slug']);
+            unset($item['status']);
+            $item['orderId'] = $idOrder;
+            $item['count'] = ($sessionCart[$item['id']]);
+            $totalOrder += round($item['price'] * $item['count'], 2);
+        }
+        $result = (new PurchaseModel())->setPurchaseFormOrder($arrProducts);
+        if ($result) {
+            $info['success'] = true;
+            $info['message']['alert'] = "Заказ на сумму $totalOrder руб. сохранен";
+            echo var_dump($info);
+        } else {
+        $info['success'] = false;
+        $info['message']['alert'] = 'Ошибка создания заказа';
+        echo json_encode($info);
+        }
     }
 }

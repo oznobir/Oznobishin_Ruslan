@@ -94,18 +94,20 @@
                                 <div class="order-basic">
                                     <div>
                                         <div>Имя</div>
-                                        <div><label><input type="text" name="user" id="name" size="20"
-                                                           value="<?= $_SESSION['user']['name']??'' ?>"></label></div>
+                                        <div><label><input type="text" name="userOrder" id="userOrder" size="20"
+                                                           value="<?= $_SESSION['user']['name'] ?? '' ?>"></label></div>
                                     </div>
                                     <div>
                                         <div>Телефон</div>
                                         <div><label><input type="text" name="phone" id="phone" size="20"
-                                                           value="<?= $_SESSION['user']['phone']??'' ?>"></label></div>
+                                                           value="<?= $_SESSION['user']['phone'] ?? '' ?>"></label>
+                                        </div>
                                     </div>
                                     <div>
                                         <div>Адрес</div>
                                         <div><label><textarea name="address" id="address"
-                                                              cols="19"><?= $_SESSION['user']['address']??'' ?></textarea></label></div>
+                                                              cols="19"><?= $_SESSION['user']['address'] ?? '' ?></textarea></label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="order-added">
@@ -113,7 +115,7 @@
                                         <div>Оплата</div>
                                         <div>
                                             <label>
-                                                <select name="payment" id="payment" >
+                                                <select name="payment" id="payment">
                                                     <option selected value="cash">наличными</option>
                                                     <option value="card">картой</option>
                                                 </select>
@@ -132,7 +134,8 @@
                                     </div>
                                     <div>
                                         <div>Комментарий</div>
-                                        <div><label><textarea name="comment" id="comment" cols="19"></textarea></label></div>
+                                        <div><label><textarea name="comment" id="comment" cols="19"></textarea></label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +144,6 @@
                     <?php endif; ?>
                 </form>
                 <?php if (empty($_SESSION['user'])) : ?>
-                    <div class="menu-caption">Для оформления заказа нужна регистрация/авторизация</div>
                     <div id="userBox" class="hidden">
                         <!-- Уже не надо, редирект в js   ---->
                         <div>Редактирование данных в личном кабинете: <a href="/user/" id="userLink"></a></div>
@@ -223,6 +225,8 @@
                             </div>
                         </form>
                     </div>
+                    <br>
+                    <div>Оформить заказ <a href="#">без регистрации</a> (потом)</div>
                 <?php endif;
             endif; ?>
         </div>

@@ -71,6 +71,37 @@ class Model
         $pdostmt->execute($parameters);
         return $pdostmt->rowCount();
     }
+    /**
+     * @param string $sql - запрос
+     * @param array $parameters - многомерный массив
+     * @return mixed
+     */
+    public static function execMulti($sql, $parameters = null)
+    {
+        $pdostmt = self::$pdo->prepare($sql);
+        try {
+            self::$pdo->beginTransaction();
+            foreach($parameters as $row) {
+                $pdostmt->execute($row);
+            }
+            self::$pdo->commit();
+        } catch (Exception $e) {
+            self::$pdo->rollback();
+            throw $e;
+        }
+        return $pdostmt->rowCount();
+    }
+    /**
+     * @param string $sql - запрос
+     * @param array $parameters - массив для метода execute ключ - значение
+     * @return mixed id
+     */
+    public static function execId($sql, $parameters = null)
+    {
+        $pdostmt = self::$pdo->prepare($sql);
+        $pdostmt->execute($parameters);
+        return self::$pdo->lastInsertId();
+    }
 
     /**
      * @param string $sql - запрос
