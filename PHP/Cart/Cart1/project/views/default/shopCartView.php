@@ -16,7 +16,7 @@
             <?php if (!isset($products)) : ?>
                 <p>Ваша корзина пуста</p>
             <?php else : ?>
-                <form action="/cart/order/" method="POST">
+                <form  id="cartOrder" method="POST">
                     <table>
                         <thead>
                         <tr>
@@ -81,7 +81,7 @@
                             <td colspan="2"></td>
                             <td colspan="3">Общая стоимость:</td>
                             <td colspan="2">
-                                <span id="totalPrice" data-name="total"><?= $totalPrice ?></span>
+                                <span id="totalPrice"><?= $totalPrice ?></span>
                             </td>
                             <td></td>
                         </tr>
@@ -139,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Оформить заказ">
+                            <input type="button" value="Оформить заказ" onclick="saveOrder();">
                         </div>
                     <?php endif; ?>
                 </form>

@@ -98,8 +98,6 @@ async function conversionPrice(itemId) {
         }
     }
 }
-
-
 async function updateUserData() {
     console.log("js - updateUserData()");
     let response = await fetch("/user/update/", {
@@ -109,6 +107,25 @@ async function updateUserData() {
     if (response.ok) {
         let jsData = await response.json();
         alert(jsData['message']);
+    }
+}
+
+async function saveOrder() {
+    console.log("js - saveOrder()");
+    const totalPrice = +document.querySelector('#totalPrice').textContent;
+    if (totalPrice <= 0) return alert('Корзина пуста');
+    let data =  new FormData(document.querySelector('#cartOrder'));
+    // data.append('totalPrice', String(totalPrice));
+    let response = await fetch("/cart/order/", {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        if (jsData['success']){
+            window.location.href = '/';
+        }
     }
 }
 
@@ -123,7 +140,7 @@ async function registerNewUser(url = null) {
         alert(jsData['message']);
         if (jsData['success']) {
             if (url) {
-                document.location.href = url;
+                window.location.href = url;
             } else {
                 document.querySelector("#userBox").classList.toggle("hidden");
                 document.querySelector('#userLink').innerHTML = jsData.user.displayName;

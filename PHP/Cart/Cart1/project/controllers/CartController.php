@@ -55,8 +55,7 @@ class CartController extends Controller
      * /cart/remove/id/
      * @return void json - количество в корзине или null
      */
-    public
-    function remove(): void
+    public function remove(): void
     {
         $itemId = intval($this->parameters['id']);
         if (!$itemId) exit();
@@ -91,22 +90,20 @@ class CartController extends Controller
 
         $info = (new OrderModel())->checkOrderParam($phone, $address, $delivery);
         if ($info) {
-            $info['success'] = false;
-            $info['message']['alert'] = 'Не заполнены объязательные данные';
             echo json_encode($info);
             exit();
         }
         $arrProducts = (new ProductsModel())->getProductsFromArray($sessionCart);
         if (!$arrProducts) {
             $info['success'] = false;
-            $info['message']['alert'] = 'В ворзине нет товаров';
+            $info['message'] = 'В ворзине нет товаров';
             echo json_encode($info);
             exit();
         }
         $idOrder = (new OrderModel())->makeNewOrder($userOrder, $phone, $address, $payment, $delivery, $comment);
         if (!$idOrder) {
             $info['success'] = false;
-            $info['message']['alert'] = 'Ошибка создания заказа';
+            $info['message'] = 'Ошибка создания заказа';
             echo json_encode($info);
             exit();
         }
@@ -125,11 +122,11 @@ class CartController extends Controller
         $result = (new PurchaseModel())->setPurchaseFormOrder($arrProducts);
         if ($result) {
             $info['success'] = true;
-            $info['message']['alert'] = "Заказ на сумму $totalOrder руб. сохранен";
-            echo var_dump($info);
+            $info['message'] = "Заказ на сумму $totalOrder руб. сохранен";
+            echo json_encode($info);
         } else {
         $info['success'] = false;
-        $info['message']['alert'] = 'Ошибка создания заказа';
+        $info['message'] = 'Ошибка создания заказа';
         echo json_encode($info);
         }
     }

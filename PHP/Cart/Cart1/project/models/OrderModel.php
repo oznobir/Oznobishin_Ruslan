@@ -41,11 +41,15 @@ class OrderModel extends Model
 
         if (!$phone) {
             $resultCheck['success'] = false;
-            $resultCheck['message']['notPhone'] = 'Введите телефон';
+            $resultCheck['message'] = 'Введите телефон';
         }
         if (!$address && $delivery == 'courier') {
             $resultCheck['success'] = false;
-            $resultCheck['message']['notAddress'] = 'Введите адрес';
+            $resultCheck['message'] = 'Введите адрес';
+        }
+        if (!$phone && (!$address && $delivery == 'courier')) {
+            $resultCheck['success'] = false;
+            $resultCheck['message'] = 'Введите телефон и адрес';
         }
 
         return $resultCheck;
