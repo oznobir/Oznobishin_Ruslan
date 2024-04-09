@@ -1,9 +1,13 @@
+/*
+Пароли
+user1 - 111, user2 - 222, user3 - 333 и т.д.
+*/
 -- phpMyAdmin SQL Dump
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Мар 26 2024 г., 23:04
+-- Время создания: Апр 09 2024 г., 15:30
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -50,6 +54,33 @@ INSERT INTO `categories` (`id`, `parent_id`, `slug`, `title`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `orders`
+--
+
+CREATE TABLE `orders` (
+                          `id` int NOT NULL,
+                          `user_id` int NOT NULL,
+                          `data_created` datetime NOT NULL,
+                          `data_payment` datetime DEFAULT NULL,
+                          `data_modification` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                          `status` tinyint NOT NULL DEFAULT '0',
+                          `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                          `user_ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `data_created`, `data_payment`, `data_modification`, `status`, `comment`, `user_ip`) VALUES
+                                                                                                                                (1, 1, '2024-04-08 13:53:17', NULL, '2024-04-09 11:52:28', 0, 'оплата: cash<br>\r\nдоставка: courier<br>\r\nимя получателя: User 1<br>\r\nтел: Телефон 1<br>\r\nадрес: Адрес 1<br>\r\nкомментарий: Комментарий 1<br>', '127.0.0.1'),
+                                                                                                                                (2, 2, '2024-04-09 14:00:30', NULL, '2024-04-09 11:00:30', 0, 'оплата: cash<br>\r\nдоставка: courier<br>\r\nимя получателя: User 2<br>\r\nтел: Телефон 2<br>\r\nадрес: Адрес 2<br>\r\nкомментарий: Комментарий 2<br>', '127.0.0.1'),
+                                                                                                                                (3, 2, '2024-04-09 14:04:18', NULL, '2024-04-09 11:04:18', 0, 'оплата: cash<br>\r\nдоставка: pickUp<br>\r\nимя получателя: <br>\r\nтел: Телефон 2<br>\r\nадрес: <br>\r\nкомментарий: <br>', '127.0.0.1'),
+                                                                                                                                (4, 3, '2024-04-09 15:15:45', NULL, '2024-04-09 12:15:45', 0, 'оплата: cash<br>\r\nдоставка: courier<br>\r\nимя получателя: User 3<br>\r\nтел: Телефон 3<br>\r\nадрес: Адрес 3<br>\r\nкомментарий: Комментарий 3<br>', '127.0.0.1');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `products`
 --
 
@@ -84,6 +115,32 @@ INSERT INTO `products` (`id`, `category_id`, `slug`, `title`, `description`, `pr
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `purchase`
+--
+
+CREATE TABLE `purchase` (
+                            `id` int NOT NULL,
+                            `order_id` int NOT NULL,
+                            `product_id` int NOT NULL,
+                            `price` float NOT NULL,
+                            `amount` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `purchase`
+--
+
+INSERT INTO `purchase` (`id`, `order_id`, `product_id`, `price`, `amount`) VALUES
+                                                                               (1, 1, 6, 3500.5, 2),
+                                                                               (2, 1, 15, 210, 2),
+                                                                               (3, 2, 11, 763.5, 2),
+                                                                               (4, 2, 14, 2976.5, 2),
+                                                                               (5, 3, 3, 2501, 1),
+                                                                               (6, 4, 3, 2501, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `users`
 --
 
@@ -101,7 +158,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `name`, `phone`, `address`) VALUES
-    (1, 'user1', '$argon2id$v=19$m=65536,t=4,p=1$bXIwZUtFYm5XUnhvclpxQg$u5bMjfQlFbYUH88uQH0DEcUmrno1Selo7RjqE070TpI', NULL, NULL, NULL);
+                                                                                (1, 'user1', '$argon2id$v=19$m=65536,t=4,p=1$b0ZWOU9GSXo0TTM1VkZ1VA$ojnyRnIDu3Q8Dkb+u5UwzI9eLXptuicY5UTxPwm4IhU', NULL, NULL, NULL),
+                                                                                (2, 'user2', '$argon2id$v=19$m=65536,t=4,p=1$WjV4TTc0VWxLVldYUjY2ZA$F65uraGRhmS0DYU/JiPPShsWkh9wgREy2ixFOeH3i5M', NULL, NULL, NULL),
+                                                                                (3, 'user3', '$argon2id$v=19$m=65536,t=4,p=1$OXd1NzVsSmY1OWpoS3hxVw$/+f+fQs+gKaZw/30AFFbx1KmFbx8ILGJGQ8C4x6QLyg', NULL, NULL, NULL),
+                                                                                (4, 'user4', '$argon2id$v=19$m=65536,t=4,p=1$OFVWc2RPbjRlZUhIRmJIZg$GwZ6KDC4zNAKXLd6MNwFhpI+3T2gHEqhipA5HWJJbpQ', NULL, NULL, NULL),
+                                                                                (5, 'user5', '$argon2id$v=19$m=65536,t=4,p=1$bHo4eHQxRGhzcnhhRXBOdg$K0gfu02AoGu6k9eedKjMc3UQg+HoB128T/0BbPxhf+Y', NULL, NULL, NULL),
+                                                                                (6, 'user6', '$argon2id$v=19$m=65536,t=4,p=1$N3FpOXVIQTRVbXJBUHpsYg$dyLUe5+/F+BJhNC+cF8Hi6hHgHBbUZY4gUG+QnSn4tQ', NULL, NULL, NULL),
+                                                                                (7, 'user7', '$argon2id$v=19$m=65536,t=4,p=1$ckxOV3ZYOGtjRG1mSjczUQ$5izWfaK/DVC0sKjUTejX0pA1bKjrLN62KxEhzH/1/bU', 'User 7', 'Телефон 7', 'Адрес 7');
 
 --
 -- Индексы сохранённых таблиц
@@ -114,11 +177,23 @@ ALTER TABLE `categories`
     ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `orders`
+--
+ALTER TABLE `orders`
+    ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `products`
 --
 ALTER TABLE `products`
     ADD PRIMARY KEY (`id`),
     ADD KEY `category_id` (`category_id`);
+
+--
+-- Индексы таблицы `purchase`
+--
+ALTER TABLE `purchase`
+    ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `users`
@@ -138,16 +213,28 @@ ALTER TABLE `categories`
     MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT для таблицы `orders`
+--
+ALTER TABLE `orders`
+    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT для таблицы `products`
 --
 ALTER TABLE `products`
     MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT для таблицы `purchase`
+--
+ALTER TABLE `purchase`
+    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+    MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

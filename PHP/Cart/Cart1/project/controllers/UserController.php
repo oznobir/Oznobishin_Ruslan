@@ -4,6 +4,7 @@ namespace Project\Controllers;
 
 use Core\Controller;
 use Project\Models\CategoriesModel;
+use Project\Models\OrdersModel;
 use Project\Models\UsersModel;
 use Project\Models\ProductsModel;
 
@@ -14,6 +15,7 @@ class UserController extends Controller
         if (empty($_SESSION['user'])) $this->redirect('/');
         $this->data['title'] = 'Личный аккаунт';
         $this->data['description'] = 'Гипермаркет myshop.by Личный аккаунт пользователя';
+        $this->data['orders'] = (new OrdersModel())->getOrdersByUser();
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         if (!empty($_SESSION['viewProducts']))
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
@@ -49,7 +51,7 @@ class UserController extends Controller
                 $_SESSION['user']['displayName'] = $userData['user']['name'] ? $userData['user']['name'] : $userData['user']['email'];
                 $info['success'] = true;
                 $info['message'] = 'Пользователь успешно зарегистрирован';
-                $info['user'] = $_SESSION['user'];
+                $info['user'] = $_SESSION['user']['displayName'];
             } else {
                 $info['success'] = false;
                 $info['message'] = 'Ошибка регистрации';
@@ -91,7 +93,7 @@ class UserController extends Controller
                 $_SESSION['user']['displayName'] = $userData['user']['name'] ? $userData['user']['name'] : $userData['user']['email'];
                 $info['success'] = true;
                 $info['message'] = "Здравствуйте, {$_SESSION['user']['displayName']}";
-                $info['user'] = $_SESSION['user'];
+                $info['user'] = $_SESSION['user']['displayName'];
             } else {
                 $info['success'] = false;
                 $info['message'] = 'Неверный логин или пароль';
@@ -115,20 +117,19 @@ class UserController extends Controller
         $phone = (isset($_POST['phone'])) ? htmlspecialchars($_POST['phone'], ENT_QUOTES, 'UTF-8') : null;
         $address = (isset($_POST['address'])) ? htmlspecialchars($_POST['address'], ENT_QUOTES, 'UTF-8') : null;
         $curPwd = (isset($_POST['curPwd'])) ? htmlspecialchars($_POST['curPwd'], ENT_QUOTES, 'UTF-8') : null;
-        $curPwdHash = md5($curPwd);
 
-        $info = (new UsersModel())->checkUpdateParam($curPwdHash, $pwd1, $pwd2);
+        $info = (new UsersModel())->checkUpdateParam($curPwd, $pwd1, $pwd2);
         if (!$info) {
-            $userData = (new UsersModel())->updateUser($name, $phone, $address, $curPwd, $pwd1);
+            $userData = (new UsersModel())->updateUser($name, $phone, $address, $pwd1);
             if ($userData['result']) {
                 $_SESSION['user']['name'] = $name;
                 $_SESSION['user']['phone'] = $phone;
                 $_SESSION['user']['address'] = $address;
-                $_SESSION['user']['password'] = $userData['newPwd'];
+                if ($userData['newPwd']) $_SESSION['user']['password'] = $userData['newPwd'];
                 $_SESSION['user']['displayName'] = $name ? $name : $_SESSION['user']['email'];
                 $info['success'] = true;
                 $info['message'] = 'Данные сохранены';
-                $info['user'] = $_SESSION['user'];
+                $info['user'] = $_SESSION['user']['displayName'];
             } else {
                 $info['success'] = false;
                 $info['message'] = 'Данные не изменены';

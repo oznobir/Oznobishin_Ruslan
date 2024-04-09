@@ -78,12 +78,10 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="2"></td>
-                            <td colspan="3">Общая стоимость:</td>
+                            <td colspan="5">Общая стоимость:</td>
                             <td colspan="2">
                                 <span id="totalPrice"><?= $totalPrice ?></span>
                             </td>
-                            <td></td>
                         </tr>
                         </tfoot>
                     </table>

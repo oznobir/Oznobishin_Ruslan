@@ -86,6 +86,13 @@ main, header {
     justify-content: space-between;
     width: 350px;
 }
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td{
+    border: 1px solid grey;
+}
 
 .show {
     display: inline-block;

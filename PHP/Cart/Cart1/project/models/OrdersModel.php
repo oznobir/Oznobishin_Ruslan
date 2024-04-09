@@ -3,14 +3,39 @@
 namespace Project\Models;
 
 use Core\Model;
+use PDO;
 
-class OrderModel extends Model
+class OrdersModel extends Model
 {
+
+    public function getOrdersByUser(): array
+    {
+        $parameters['userId'] = intval($_SESSION['user']['id']);
+        $query = "SELECT * FROM `orders` WHERE `user_id`=:userId ORDER BY id DESC";
+        $orders = self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
+        $orderWithChildren =[];
+        foreach ($orders as $order) {
+            $child = $this->getPurchaseFormOrder($order['id']);
+            if($child){
+                $order['children'] = $child;
+                $orderWithChildren [] = $order;
+            }
+        }
+        return $orderWithChildren;
+//        return self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
+    }
+    private function getPurchaseFormOrder($id)
+    {
+        $parameters['orderId'] = $id;
+        $query = "SELECT `pe`.product_id, `pe`.price, `pe`.amount, `ps`.slug FROM `purchase` as `pe` 
+                    JOIN `products` as `ps` ON `pe`.product_id= `ps`.id
+                      WHERE `pe`.order_id=:orderId";
+        return self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
+    }
     public function makeNewOrder($userOrder, $phone, $address, $payment, $delivery, $comment)
     {
         $parameters['userId'] = intval($_SESSION['user']['id']);
-        $parameters['commentOrder'] = "id пользователя: {$parameters['userId']}<br>
-оплата: $payment<br>
+        $parameters['commentOrder'] = "оплата: $payment<br>
 доставка: $delivery<br>
 имя получателя: $userOrder<br>
 тел: $phone<br>
@@ -26,6 +51,11 @@ class OrderModel extends Model
         $orderId = self::execId($query, $parameters);
         if ($orderId) return $orderId;
         else return null;
+    }
+    public function setPurchaseFormOrder($parameters)
+    {
+        $query = "INSERT INTO `purchase`(`order_id`, `product_id`, `price`, `amount`) VALUES(:orderId,:id,:price,:count)";
+        return self::execMulti($query, $parameters);
     }
     /** Проверка введены ли телефон, адрес при оформлении заказа
      *

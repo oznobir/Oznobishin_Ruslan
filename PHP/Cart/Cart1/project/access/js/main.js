@@ -143,7 +143,7 @@ async function registerNewUser(url = null) {
                 window.location.href = url;
             } else {
                 document.querySelector("#userBox").classList.toggle("hidden");
-                document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+                document.querySelector('#userLink').innerHTML = jsData.user;
                 document.querySelector("#authBox").classList.toggle("hidden");
                 document.querySelector("#registerBox").classList.toggle("hidden");
             }
@@ -168,7 +168,7 @@ async function login(url = null) {
                 document.querySelector("#userBox").classList.toggle("hidden");
                 document.querySelector("#authBox").classList.toggle("hidden");
                 document.querySelector("#registerBox").classList.toggle("hidden");
-                document.querySelector('#userLink').innerHTML = jsData.user.displayName;
+                document.querySelector('#userLink').innerHTML = jsData.user;
             }
         }
     }
@@ -192,4 +192,7 @@ function showHiddenLoginBox() {
         document.querySelector("#loginBoxHidden").style.display = "none";
         document.querySelector("#registerBoxHidden").style.display = "block";
     }
+}
+function showPurchase(id) {
+    document.querySelector("#productsOrder_"+id).classList.toggle("hidden");
 }

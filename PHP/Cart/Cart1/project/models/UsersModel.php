@@ -19,19 +19,21 @@ class UsersModel extends Model
     public function registerNewUser(string $email, string $pwd1, ?string $name, ?string $phone, ?string $address): ?array
     {
         $parameters1['email'] = $email;
-        $parameters1['pwdHash'] = md5($pwd1);
+//        $parameters1['pwdHash'] = md5($pwd1);
+        $parameters1['pwdHash'] = password_hash($pwd1, 'argon2id');
         $parameters1['name'] = $name;
         $parameters1['phone'] = $phone;
         $parameters1['address'] = $address;
-        $parameters2['email'] = $parameters1['email'];
-        $parameters2['pwdHash'] = $parameters1['pwdHash'];
+//        $parameters2['email'] = $parameters1['email'];
+//        $parameters2['pwdHash'] = $parameters1['pwdHash'];
         $query = "INSERT INTO `users`( `email`, `password`, `name`, `phone`, `address`) 
                 VALUES (:email,:pwdHash,:name,:phone,:address)";
         if (self::exec($query, $parameters1)) {
-            $query = 'SELECT * FROM `users` WHERE email =:email and password =:pwdHash';
-            $userData['user'] = self::selectRow($query, PDO::FETCH_ASSOC, $parameters2);
-            (isset($userData['user'])) ? $userData['success'] = true : $userData['success'] = false;
-            return $userData;
+//            $query = 'SELECT * FROM `users` WHERE email =:email and password =:pwdHash';
+//            $userData['user'] = self::selectRow($query, PDO::FETCH_ASSOC, $parameters2);
+//            (isset($userData['user'])) ? $userData['success'] = true : $userData['success'] = false;
+//            return $userData;
+            return $this->loginUser($email, $pwd1);
         }
         return null;
     }
@@ -45,10 +47,11 @@ class UsersModel extends Model
     public function loginUser(string $email, string $pwd): array
     {
         $parameters['email'] = $email;
-        $parameters['pwdHash'] = md5($pwd);
-        $query = 'SELECT * FROM `users` WHERE email =:email and password =:pwdHash';
+        $query = 'SELECT * FROM `users` WHERE email =:email';
+
         $userData['user'] = self::selectRow($query, PDO::FETCH_ASSOC, $parameters);
-        ($userData['user']) ? $userData['success'] = true : $userData['success'] = false;
+        if ($userData['user'] && password_verify($pwd, $userData['user']['password'])) $userData['success'] = true;
+        else  $userData['success'] = false;
         return $userData;
     }
 
@@ -57,28 +60,26 @@ class UsersModel extends Model
      * @param string|null $name имя
      * @param string|null $phone телефон
      * @param string|null $address адрес
-     * @param string $curPwd текущий пароль
      * @param string|null $pwd1 новый пароль
      * @return array
      */
-    public function updateUser(?string $name, ?string $phone, ?string $address, string $curPwd, ?string $pwd1): array
+    public function updateUser(?string $name, ?string $phone, ?string $address, ?string $pwd1): array
     {
         $parameters['email'] = $_SESSION['user']['email'];
         $parameters['name'] = $name;
         $parameters['phone'] = $phone;
         $parameters['address'] = $address;
-        $parameters['curPwd'] = md5($curPwd);
 
         $query = 'UPDATE `users` SET';
         if ($pwd1) {
-            $parameters['pwdHash'] = md5($pwd1);
+            $parameters['pwdHash'] = password_hash($pwd1, 'argon2id');
             $query .= ' `password`=:pwdHash,';
         }
-        $query .= ' `name` =:name,`phone` =:phone,`address`=:address WHERE `email`=:email AND `password`=:curPwd LIMIT 1';
+        $query .= ' `name` =:name,`phone` =:phone,`address`=:address WHERE `email`=:email LIMIT 1';
 
         return [
             'result' => self::exec($query, $parameters),
-            'newPwd' => $parameters['pwdHash'] ?? $parameters['curPwd']
+            'newPwd' => $parameters['pwdHash'] ?? null
         ];
     }
 
@@ -103,8 +104,8 @@ class UsersModel extends Model
     public function checkEmail(string $email): ?int
     {
         $parameters['email'] = $email;
-        $query['3'] = 'SELECT count(*) FROM `users` WHERE email =:email';
-        return self::selectAllCount($query['3'], $parameters);
+        $query = 'SELECT count(*) FROM `users` WHERE email =:email';
+        return self::selectAllCount($query, $parameters);
     }
 
     /** Проверка введены ли почта, пароли и совпадают ли пароли при регистрации
@@ -153,10 +154,10 @@ class UsersModel extends Model
         return $resultCheck;
     }
 
-    public function checkUpdateParam(string|null $curPwdHash, string|null $pwd1, string|null $pwd2): array|null
+    public function checkUpdateParam(string|null $curPwd, string|null $pwd1, string|null $pwd2): array|null
     {
         $resultCheck = null;
-        if (!$curPwdHash || $_SESSION['user']['password'] != $curPwdHash) {
+        if (!$curPwd || !password_verify($curPwd, $_SESSION['user']['password'])) {
             $resultCheck['success'] = false;
             $resultCheck['message'] = 'Текущий пароль не верный';
         } else if (!$pwd1 && $pwd2 || $pwd1 && !$pwd2 || (($pwd1 && $pwd2) && ($pwd1 != $pwd2))) {
@@ -164,5 +165,6 @@ class UsersModel extends Model
             $resultCheck['message'] = 'Новые пароли не совпадают ';
         }
         return $resultCheck;
+
     }
 }

@@ -3,7 +3,7 @@
 namespace Project\Controllers;
 
 use Core\Controller;
-use Project\Models\OrderModel;
+use Project\Models\OrdersModel;
 use Project\Models\ProductsModel;
 use Project\Models\CategoriesModel;
 use Project\Models\PurchaseModel;
@@ -88,7 +88,7 @@ class CartController extends Controller
         }
         if ($sessionCart != $_POST['products']) $this->redirect('/cart/');
 
-        $info = (new OrderModel())->checkOrderParam($phone, $address, $delivery);
+        $info = (new OrdersModel())->checkOrderParam($phone, $address, $delivery);
         if ($info) {
             echo json_encode($info);
             exit();
@@ -100,7 +100,7 @@ class CartController extends Controller
             echo json_encode($info);
             exit();
         }
-        $idOrder = (new OrderModel())->makeNewOrder($userOrder, $phone, $address, $payment, $delivery, $comment);
+        $idOrder = (new OrdersModel())->makeNewOrder($userOrder, $phone, $address, $payment, $delivery, $comment, $arrProducts);
         if (!$idOrder) {
             $info['success'] = false;
             $info['message'] = 'Ошибка создания заказа';
@@ -119,10 +119,11 @@ class CartController extends Controller
             $item['count'] = ($sessionCart[$item['id']]);
             $totalOrder += round($item['price'] * $item['count'], 2);
         }
-        $result = (new PurchaseModel())->setPurchaseFormOrder($arrProducts);
+        $result = (new OrdersModel())->setPurchaseFormOrder($arrProducts);
         if ($result) {
             $info['success'] = true;
             $info['message'] = "Заказ на сумму $totalOrder руб. сохранен";
+            unset($_SESSION['cart']);
             echo json_encode($info);
         } else {
         $info['success'] = false;
