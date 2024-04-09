@@ -34,7 +34,9 @@ class OrdersModel extends Model
     }
     public function makeNewOrder($userOrder, $phone, $address, $payment, $delivery, $comment)
     {
-        $parameters['userId'] = intval($_SESSION['user']['id']);
+        if (isset($_SESSION['user']['id'])) $userId = intval($_SESSION['user']['id']);
+        else $userId = 1;
+        $parameters['userId'] = $userId;
         $parameters['commentOrder'] = "оплата: $payment<br>
 доставка: $delivery<br>
 имя получателя: $userOrder<br>

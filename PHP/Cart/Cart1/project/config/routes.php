@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
         new Route('/cart/remove/:id/', 'cart', 'remove'),
         new Route('/user/', 'user', 'index'),
         new Route('/user/logout/', 'user', 'logout'),
+        new Route('/user/unregister/', 'user', 'unregister'),
 
-        new Route('/d/', 'index', 'd'),
     ];
 if ($_SERVER['REQUEST_METHOD'] === 'POST')
     return [

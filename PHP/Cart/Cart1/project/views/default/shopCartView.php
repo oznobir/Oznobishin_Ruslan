@@ -224,7 +224,7 @@
                         </form>
                     </div>
                     <br>
-                    <div>Оформить заказ <a href="#">без регистрации</a> (потом)</div>
+                    <div>Оформить заказ <a href="/user/unregister/">без регистрации</a></div>
                 <?php endif;
             endif; ?>
         </div>

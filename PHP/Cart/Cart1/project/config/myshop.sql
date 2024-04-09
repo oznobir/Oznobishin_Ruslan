@@ -1,6 +1,7 @@
 /*
 Пароли
-user1 - 111, user2 - 222, user3 - 333 и т.д.
+unReg - 111 (покупка без регистрации)
+ и далее user2 - 222, user3 - 333 и т.д.
 */
 -- phpMyAdmin SQL Dump
 -- version 5.2.0
@@ -158,7 +159,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `name`, `phone`, `address`) VALUES
-                                                                                (1, 'user1', '$argon2id$v=19$m=65536,t=4,p=1$b0ZWOU9GSXo0TTM1VkZ1VA$ojnyRnIDu3Q8Dkb+u5UwzI9eLXptuicY5UTxPwm4IhU', NULL, NULL, NULL),
+                                                                                (1, 'unReg', '$argon2id$v=19$m=65536,t=4,p=1$b0ZWOU9GSXo0TTM1VkZ1VA$ojnyRnIDu3Q8Dkb+u5UwzI9eLXptuicY5UTxPwm4IhU', NULL, NULL, NULL),
                                                                                 (2, 'user2', '$argon2id$v=19$m=65536,t=4,p=1$WjV4TTc0VWxLVldYUjY2ZA$F65uraGRhmS0DYU/JiPPShsWkh9wgREy2ixFOeH3i5M', NULL, NULL, NULL),
                                                                                 (3, 'user3', '$argon2id$v=19$m=65536,t=4,p=1$OXd1NzVsSmY1OWpoS3hxVw$/+f+fQs+gKaZw/30AFFbx1KmFbx8ILGJGQ8C4x6QLyg', NULL, NULL, NULL),
                                                                                 (4, 'user4', '$argon2id$v=19$m=65536,t=4,p=1$OFVWc2RPbjRlZUhIRmJIZg$GwZ6KDC4zNAKXLd6MNwFhpI+3T2gHEqhipA5HWJJbpQ', NULL, NULL, NULL),

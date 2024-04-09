@@ -21,6 +21,11 @@ class UserController extends Controller
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         echo $this->render('project/views/default/shopUserView.php');
     }
+    public function unregister(): void
+    {
+        $_SESSION['user'] = 'unReg';
+        $this->redirect('/cart/');
+    }
 
     /** Регистрация нового пользователя fetch
      *

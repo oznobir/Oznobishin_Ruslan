@@ -6,7 +6,7 @@
  */ ?>
 
     <div>
-            <?php if (!empty($_SESSION['user'])) : ?>
+            <?php if (!empty($_SESSION['user']) && $_SESSION['user'] != "unReg") : ?>
                 <div id="userBox">
                     <a href="/user/"><?= $_SESSION['user']['displayName'] ?></a><i> - </i>
                     <a href="/user/logout/">Выйти</a><br>
