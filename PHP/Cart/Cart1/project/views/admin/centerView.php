@@ -1,8 +1,18 @@
 <?php
 /**
  * @var array $categories
+ * @var array $allCategories
  * @var string $title
- */ ?>
+ */
+?>
+<?php function tpl($categories, $str, $idParent = null): void
+{
+    $str = '- ' . $str;
+    foreach ($categories as $id => $category) { ?>
+        <option value="<?= $id ?>" <?= (($idParent) && $id == $idParent) ? 'selected' : '' ?>><?= $str . $category['title'] ?></option>
+        <?php if (isset($category['children'])) tpl($category['children'], $str, $idParent);
+    }
+} ?>
 <?php include 'headerLayout.php' ?>
 <main>
     <nav>
@@ -12,29 +22,72 @@
     </nav>
     <div class="center-column">
         <h2>Добавление категории</h2>
-        <form id="formCategories" class="">
-            <label for="newCategoryName">Название категории:</label>
+        <form id="formCategories">
+            <label for="newCategoryName">Название:
             <input name="newCategoryName" id="newCategoryName"
-                   type="text" value=""><br><br>
-            <label for="newCategorySlug"> slug (по-английски): </label>
+                   type="text" value="">
+            </label>
+            <label for="newCategorySlug">slug:
             <input name="newCategorySlug"
                    id="newCategorySlug"
-                   type="text" value=""><br><br>
-            <label>Добавить в
+                   type="text" value="">
+            </label><br><br>
+            <label>в
                 <select name="mainCategoryId">
                     <option value="0">Главная категория</option>
                     <?php tpl($categories, ''); ?>
-                    <?php function tpl($menu, $str): void
-                    {
-                        $str = '- ' . $str;
-                        foreach ($menu as $key => $item) { ?>
-                            <option value="<?= $key ?>"><?= $str . $item['title'] ?></option>
-                            <?php if (isset($item['children'])) tpl($item['children'], $str);
-                        }
-                    } ?>
                 </select>
             </label><br><br>
             <input type="button" onclick="newCategory();" value="Добавить"><br><br>
+        </form>
+        <h2>Редактирование категорий</h2>
+        <form id="formEditCategories">
+            <table>
+                <thead>
+                <tr>
+                    <th>№ п/п</th>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>slug</th>
+                    <th>Родительская категория</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $i = 1;
+                foreach ($allCategories as $category) : ?>
+                    <tr>
+                        <td><?= $i++ ?></td>
+                        <td><?= $category['id'] ?></td>
+                        <td>
+                            <label for="title_<?= $category['id'] ?>">
+                                <input name="title_<?= $category['id'] ?>" id="title_<?= $category['id'] ?>" type="text"
+                                       value="<?= $category['title'] ?>" autocomplete="off">
+                            </label>
+                        </td>
+                        <td>
+                            <label for="slug_<?= $category['id'] ?>">
+                                <input name="slug_<?= $category['id'] ?>" id="slug_<?= $category['id'] ?>" type="text"
+                                       value="<?= $category['slug'] ?>" autocomplete="off">
+                            </label>
+                        </td>
+                        <td><label>
+                                <select name="parentId_<?= $category['id'] ?>" id="parentId_<?= $category['id'] ?>">
+                                    <option value="0">Главная категория</option>
+                                    <?php tpl($categories, '', $category['parent_id']); ?>
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <a href="#" onclick="updateCategory(<?= $category['id'] ?>); return false;"
+                               alt="Сохранить изменения">
+                                Сохранить
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </form>
     </div>
 </main>

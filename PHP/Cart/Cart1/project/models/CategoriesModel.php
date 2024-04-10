@@ -13,7 +13,7 @@ class CategoriesModel extends Model
      */
     public function getSubCategoriesById($parameters): array
     {
-        $query = 'SELECT * FROM `categories` WHERE parent_id=:id';
+        $query = "SELECT * FROM `categories` WHERE parent_id=:id";
         return self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
     }
 
@@ -28,10 +28,19 @@ class CategoriesModel extends Model
         if (!$data) return null;
         return $data;
     }
+    /** Получение массива категорий с подкатегориями
+     * @param $parameters
+     * @return array простой массив категорий с вложенными подкатегориями
+     */
+    public function getCategoriesAll($parameters = null): array
+    {
+        $query = 'SELECT id, parent_id, title, slug FROM `categories`';
+        return self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
+    }
 
     /** Получение массива категорий с подкатегориями
      * @param $parameters
-     * @return array массив категорий с подкатегориями
+     * @return array многомерный массив категорий с вложенными подкатегориями
      */
     public function getCategoriesWithChild($parameters = null): array
     {
@@ -60,12 +69,39 @@ class CategoriesModel extends Model
      * @param int $pid id родительской категории
      * @return int|false id категории
      */
-    public function newCategory(string $slug, string $name, int $pid): int|false
+    public function newCategoryData(string $slug, string $name, int $pid): int|false
     {
         $parameters['slug'] = $slug;
         $parameters['title'] = $name;
         $parameters['parent_id'] = $pid;
         $query = "INSERT INTO `categories`(`parent_id`, `slug`, `title`) VALUES (:parent_id,:slug,:title)";
         return self::execId($query, $parameters);
+    }
+
+    /** Редактирование категории
+     * @param int $id id редактируемой категории
+     * @param string|null $slug новый slug категории
+     * @param string|null $name новое название категории
+     * @param int $pid id родительской категории
+     * @return mixed @return mixed результат
+     */
+    public function updateCategoryData(int $id, string $slug = null, string $name = null, int $pid =-1): mixed
+    {
+        $parameters['id'] = $id;
+        $query = "UPDATE `categories` SET";
+        if ($pid >-1) {
+            $query .= " `parent_id`=:parent_id,";
+            $parameters['parent_id'] = $pid;
+        }
+        if ($slug) {
+            $query .= " `slug`=:slug,";
+            $parameters['slug'] = $slug;
+        }
+        if ($name) {
+            $query .= " `title`=:title ";
+            $parameters['title'] = $name;
+        }
+        $query .= " WHERE `id`=:id";
+        return self::exec($query, $parameters);
     }
 }

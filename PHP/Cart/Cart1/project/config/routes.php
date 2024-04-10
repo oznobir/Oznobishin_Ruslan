@@ -24,4 +24,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         new Route('/user/update/', 'user', 'update'),
         new Route('/cart/order/', 'cart', 'order'),
         new Route('/admin/category/add/', 'admin', 'addcategory'),
+        new Route('/admin/category/update/', 'admin', 'updatecategory'),
     ];
