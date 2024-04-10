@@ -25,6 +25,6 @@ class ProductController extends Controller
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         if (!empty($_SESSION['viewProducts']))
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
-        echo $this->render('project/views/default/shopOneProductView.php');
+        echo $this->render('project/views/shopDefault/oneProductView.php');
     }
 }

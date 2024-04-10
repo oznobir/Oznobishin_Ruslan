@@ -12,6 +12,6 @@ class ErrorController extends Controller
     {
         $this->data['title'] = 'Not Found';
         $this->data['description'] = 'Not Found';
-        echo $this->render('project/views/default/notFound.php');
+        echo $this->render('project/views/shopDefault/notFound.php');
     }
 }

@@ -27,7 +27,7 @@ class CartController extends Controller
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         $this->data['title'] = 'Корзина товаров';
         $this->data['description'] = 'Корзина товаров Гипермаркет myshop.by';
-        echo $this->render('project/views/default/shopCartView.php');
+        echo $this->render('project/views/shopDefault/cartView.php');
     }
 
     /** fetch

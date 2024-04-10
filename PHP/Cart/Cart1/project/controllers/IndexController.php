@@ -20,7 +20,7 @@ class IndexController extends Controller
         if (!empty($_SESSION['viewProducts']))
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         $this->data['products'] =  (new ProductsModel())->getProductsLast();
-        echo $this->render('project/views/default/shopProductsView.php');
+        echo $this->render('project/views/shopDefault/productsView.php');
     }
     public function d(): void
     {

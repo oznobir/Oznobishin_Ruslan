@@ -1,4 +1,4 @@
-<?php include 'shopHeaderLayout.php'?>
+<?php include 'headerLayout.php'?>
 <p>
 	Запрошенная вами страница не найдена!
 </p>
@@ -11,4 +11,4 @@
     Потом в router сделать redirect на главную...
 </p>
 <p><a href="/">Каталог товаров</a></p>
-<?php include 'shopFooterLayout.php'?>
+<?php include 'footerLayout.php'?>

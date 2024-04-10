@@ -4,12 +4,12 @@
  * @var array $orders
  * @var string $title
  */ ?>
-<?php include 'shopHeaderLayout.php' ?>
+<?php include 'headerLayout.php' ?>
     <main>
         <nav>
             <div class="left-column">
-                <?php include 'shopCartAndLogin.php' ?>
-                <?php include 'shopCatalogAndViewProducts.php' ?>
+                <?php include 'cartAndLogin.php' ?>
+                <?php include 'catalogAndViewProducts.php' ?>
             </div>
         </nav>
         <div class="center-column">
@@ -141,4 +141,4 @@
             <?php endif; ?>
         </div>
     </main>
-<?php include 'shopFooterLayout.php' ?>
+<?php include 'footerLayout.php' ?>

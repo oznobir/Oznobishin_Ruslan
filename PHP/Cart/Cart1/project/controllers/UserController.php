@@ -19,7 +19,7 @@ class UserController extends Controller
         $this->data['menu'] = (new CategoriesModel())->getCategoriesWithChild();
         if (!empty($_SESSION['viewProducts']))
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
-        echo $this->render('project/views/default/shopUserView.php');
+        echo $this->render('project/views/shopDefault/userView.php');
     }
     public function unregister(): void
     {

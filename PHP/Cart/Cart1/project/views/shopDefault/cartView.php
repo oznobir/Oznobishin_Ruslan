@@ -3,12 +3,12 @@
  * @var array|null $products
  * @var string $title
  */ ?>
-<?php include 'shopHeaderLayout.php' ?>
+<?php include 'headerLayout.php' ?>
     <main>
         <nav>
             <div class="left-column">
-                <?php if (!empty($_SESSION['user'])) include 'shopCartAndLogin.php';
-                include 'shopCatalogAndViewProducts.php'; ?>
+                <?php if (!empty($_SESSION['user'])) include 'cartAndLogin.php';
+                include 'catalogAndViewProducts.php'; ?>
             </div>
         </nav>
         <div class="center-column">
@@ -229,4 +229,4 @@
             endif; ?>
         </div>
     </main>
-<?php include 'shopFooterLayout.php' ?>
+<?php include 'footerLayout.php' ?>
