@@ -23,7 +23,7 @@ class CategoryController extends Controller
         if (!empty($_SESSION['viewProducts']))
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
         if ($cat['parent_id'] == 0) {
-            $this->data['categories'] = (new CategoriesModel())->geSubCategoriesById($id);
+            $this->data['categories'] = (new CategoriesModel())->getSubCategoriesById($id);
             echo $this->render('project/views/default/shopCategoriesView.php');
         } else {
             $this->data['products'] = (new ProductsModel())->getProductsCategoryById($id);

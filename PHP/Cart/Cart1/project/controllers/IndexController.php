@@ -27,5 +27,8 @@ class IndexController extends Controller
         echo '$_SESSION:';
         var_dump($_SESSION);
         var_dump(count($_SESSION['cart']));
+        echo '<pre>';
+        print_r('$arr');
+        echo '</pre>';
     }
 }

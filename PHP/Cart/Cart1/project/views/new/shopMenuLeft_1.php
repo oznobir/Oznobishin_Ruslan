@@ -9,10 +9,11 @@
     </nav>
 <?php function tpl($menu): void
 {
-    foreach ($menu as $item) { ?>
+
+    foreach ($menu as $item) : ?>
         <li><a href="#" title=" <?= $item['title'] ?>"><?= $item['title'] ?></a></li>
-        <?php if (isset($item['children'])) { ?>
+        <?php if (isset($item['children'])) : ?>
             <ul><?php tpl($item['children']) ?></ul>
-        <?php }
-    }
+        <?php endif;
+    endforeach;
 } ?>

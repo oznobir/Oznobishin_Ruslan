@@ -5,25 +5,29 @@
  * @var int $cartCountItems
  */ ?>
 
-    <div>
-            <div class="menu-caption">Каталог:</div>
-            <?php foreach ($menu as $item) { ?>
-                <a href="/category/<?= $item['slug'] ?>/" title=" <?= $item['title'] ?>"><?= $item['title'] ?></a><br>
-                <?php if (isset($item['children'])) {
-                    foreach ($item['children'] as $itemChild) { ?>
-                        -- <a href="/category/<?= $itemChild['slug'] ?>/"
-                              title=" <?= $itemChild['title'] ?>"><?= $itemChild['title'] ?></a><br>
-                    <?php }
-                }
-            } ?>
-            <br>
-            <?php if (isset($viewProducts)) : ?>
-                <div class="menu-caption">Просмотренные товары:</div>
-                <?php foreach ($viewProducts as $viewProduct) { ?>
+<div>
+    <div class="menu-caption">Каталог:</div>
+    <ul><?php tpl($menu); ?></ul>
+    <?php function tpl($menu): void
+    {
+        foreach ($menu as $item) : ?>
+            <li><a href="/category/<?= $item['slug'] ?>/" title=" <?= $item['title'] ?>"><?= $item['title'] ?></a>
+                <?php if (isset($item['children'])) : ?>
+                    <ul><?php tpl($item['children']) ?></ul>
+                <?php endif; ?>
+            </li>
+        <?php endforeach;
+    } ?>
+    <?php if (isset($viewProducts)) : ?>
+        <div class="menu-caption">Просмотренные товары:</div>
+        <ul>
+            <?php foreach ($viewProducts as $viewProduct) : ?>
+                <li>
                     <a href="/product/<?= $viewProduct['slug'] ?>/"
                        title=" <?= $viewProduct['title'] ?>"><?= $viewProduct['title'] ?>
                     </a>
-                    <br><br>
-                <?php }
-            endif; ?>
-    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>

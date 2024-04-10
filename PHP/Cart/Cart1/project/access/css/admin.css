@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+}
+
+header div, footer {
+    text-align: center;
+}
+header div {
+    font-size: 1.6rem;
+    font-weight: bold;
+
+}
+
+main, header {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: center;
+    background-color: #eee;
+    border: solid #ddd 2px;
+}
+
+.left-column {
+    width: 250px;
+    color: #444;
+    padding: 0.6rem 0.3rem 0.6rem 0.6rem;
+    background-color: #eee;
+}
+
+.hidden {
+    display: none;
+}
+/*.user-form, .order-form {*/
+/*    display: flex;*/
+/*    gap: 25px;*/
+/*    flex-direction: row;*/
+/*    flex-wrap: wrap;*/
+/*}*/
+/*.user-form .user-basic > div,*/
+/*.user-form .user-added > div,*/
+/*.order-form .order-basic > div,*/
+/*.order-form .order-added > div {*/
+/*    display: flex;*/
+/*    gap: 25px;*/
+/*    flex-direction: row;*/
+/*    justify-content: space-between;*/
+/*    width: 350px;*/
+/*}*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td{
+    border: 1px solid grey;
+}
+
+.show {
+    display: inline-block;
+}
+@media all and (max-width: 900px) {
+    main {
+        flex-direction: column;
+    }
+
+    .left-column {
+        padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+    }
+
+    .center-column {
+        padding: 0.3rem 0.6rem 0.6rem 0.6rem;
+    }
+}
+
+@media all and (max-width: 600px) {
+    main{
+        flex-direction: column;
+    }
+
+    .left-column {
+        padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+    }
+
+    .center-column {
+        padding: 0.3rem 0.6rem 0.6rem 0.6rem;
+    }
+}
+
+@media all and (max-width: 400px) {
+
+    main {
+        flex-direction: column;
+    }
+
+    .left-column {
+        padding: 0.6rem 0.6rem 0.3rem 0.6rem;
+    }
+
+    .center-column {
+        padding: 0.3rem 0.6rem 0.6rem 0.6rem;
+    }
+}
+
+
