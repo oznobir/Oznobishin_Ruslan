@@ -2,7 +2,7 @@
 
 namespace core;
 
-//use Throwable;
+use Throwable;
 
 session_start();
 if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
@@ -25,7 +25,6 @@ spl_autoload_register(function ($class) {
     $action = $route['action'];
     Model::init(DB_DSN, DB_USER, DB_PASS);
     $controller->$action();
-//    var_dump($_SESSION);
 //} catch (Throwable $t) {
 //    echo "Ошибка - " . $t->getMessage();
 //}

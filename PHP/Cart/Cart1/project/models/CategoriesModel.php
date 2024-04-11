@@ -28,13 +28,14 @@ class CategoriesModel extends Model
         if (!$data) return null;
         return $data;
     }
+
     /** Получение массива категорий с подкатегориями
      * @param $parameters
      * @return array простой массив категорий с вложенными подкатегориями
      */
     public function getCategoriesAll($parameters = null): array
     {
-        $query = 'SELECT id, parent_id, title, slug FROM `categories`';
+        $query = 'SELECT id, parent_id, title, slug FROM `categories` ORDER BY parent_id';
         return self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
     }
 
@@ -45,7 +46,7 @@ class CategoriesModel extends Model
     public function getCategoriesWithChild($parameters = null): array
     {
         $query = 'SELECT id, parent_id, title, slug FROM `categories`';
-        return $this->getTree(self::selectAll($query, PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC, $parameters));
+        return $this->getTree(self::selectAll($query, PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC, $parameters));
     }
 
     /**
@@ -57,7 +58,7 @@ class CategoriesModel extends Model
     {
         $tree = [];
         foreach ($dataset as $id => &$node) {
-            if (!$node['parent_id'])  $tree[$id] = &$node;
+            if (!$node['parent_id']) $tree[$id] = &$node;
             else $dataset[$node['parent_id']]['children'][$id] = &$node;
         }
         return $tree;
@@ -77,6 +78,37 @@ class CategoriesModel extends Model
         $query = "INSERT INTO `categories`(`parent_id`, `slug`, `title`) VALUES (:parent_id,:slug,:title)";
         return self::execId($query, $parameters);
     }
+//    /** Проверка введены ли название, slug при добавлении категории в админке
+//     * Не нужна - сделал в js
+//     * @param string|null $title название категории
+//     * @param string|null $slug slug категории
+//     * @return array|null массив с success (false), message (сообщение) или null если все ОК
+//     */
+//    public function checkCategoryParam(?string $slug, ?string $title): array|null
+//    {
+//        $resultCheck = null;
+//
+//        if (!$title || !$slug) {
+//            $resultCheck['success'] = false;
+//            $resultCheck['message'] = 'Введены не все данные (сервер)';
+//        }
+//        return $resultCheck;
+//    }
+    /** Проверка есть ли такой slug при добавлении и редактировании категории
+     *
+     * @param string $slug slug категории
+     * @return array|null массив с ошибкой, если есть в базе или null, если нет в базе
+     */
+    public function checkSlugCategory(string $slug): array|null
+    {
+        $parameters['slug'] = $slug;
+        $query = 'SELECT count(*) FROM `categories` WHERE slug =:slug';
+        if (!self::selectAllCount($query, $parameters)) return null;
+        else return [
+            'success' => false,
+            'message' => 'Такой slug категории уже существует'
+        ];
+    }
 
     /** Редактирование категории
      * @param int $id id редактируемой категории
@@ -85,22 +117,24 @@ class CategoriesModel extends Model
      * @param int $pid id родительской категории
      * @return mixed @return mixed результат
      */
-    public function updateCategoryData(int $id, string $slug = null, string $name = null, int $pid =-1): mixed
+    public function updateCategoryData(int $id, string $slug = null, string $name = null, int $pid = -1): mixed
     {
         $parameters['id'] = $id;
         $query = "UPDATE `categories` SET";
-        if ($pid >-1) {
-            $query .= " `parent_id`=:parent_id,";
+        $str = '';
+        if ($pid > -1) {
+            $str .= " `parent_id`=:parent_id,";
             $parameters['parent_id'] = $pid;
         }
         if ($slug) {
-            $query .= " `slug`=:slug,";
+            $str .= " `slug`=:slug,";
             $parameters['slug'] = $slug;
         }
         if ($name) {
-            $query .= " `title`=:title ";
+            $str .= " `title`=:title";
             $parameters['title'] = $name;
         }
+        $query .= trim($str, ',');
         $query .= " WHERE `id`=:id";
         return self::exec($query, $parameters);
     }

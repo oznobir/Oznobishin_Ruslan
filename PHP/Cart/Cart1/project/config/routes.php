@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET')
         new Route('/user/logout/', 'user', 'logout'),
         new Route('/user/unregister/', 'user', 'unregister'),
         new Route('/admin/', 'admin', 'index'),
+        new Route('/admin/products/', 'admin', 'products'),
 
         new Route('/d/', 'index', 'd'),
     ];
@@ -25,4 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         new Route('/cart/order/', 'cart', 'order'),
         new Route('/admin/category/add/', 'admin', 'addcategory'),
         new Route('/admin/category/update/', 'admin', 'updatecategory'),
+        new Route('/admin/product/add/', 'admin', 'addproduct'),
+        new Route('/admin/product/update/', 'admin', 'updateproduct'),
     ];

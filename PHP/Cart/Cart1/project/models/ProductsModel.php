@@ -52,4 +52,48 @@ class ProductsModel extends Model
         $query = 'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC';
         return self::selectAll($query, PDO::FETCH_ASSOC, $id);
     }
+    /** Получение массива всех продуктов
+     * @return array массив продуктов
+     */
+    public function getProductsAll(): array
+    {
+        $query = 'SELECT * FROM `products` ORDER BY category_id DESC';
+        return self::selectAll($query, PDO::FETCH_ASSOC);
+    }
+
+    /** Добавление нового товара
+     * @param string $title название товара
+     * @param string $slug slug товара
+     * @param string $price цена товара
+     * @param string $description название товара
+     * @param int $cid id родительской категории
+     * @return mixed
+     */
+    public function newProductData(string $title, string $slug, string $price, string $description, int $cid): mixed
+    {
+        $parameters['title'] = $title;
+        $parameters['slug'] = $slug;
+        $parameters['price'] = $price;
+        $parameters['description'] = $description;
+        $parameters['category_id'] = $cid;
+
+        $query = "INSERT INTO `products`(`category_id`, `slug`, `title`, `description`, `price`) 
+VALUES (:category_id,:slug,:title,:description,:price)";
+        return self::exec($query, $parameters);
+    }
+    /** Проверка есть ли такой slug при добавлении и редактировании товара
+     *
+     * @param string $slug slug товара
+     * @return array|null массив с ошибкой, если есть в базе или null, если нет в базе
+     */
+    public function checkSlugProduct(string $slug): array|null
+    {
+        $parameters['slug'] = $slug;
+        $query = 'SELECT count(*) FROM `products` WHERE slug =:slug';
+        if (!self::selectAllCount($query, $parameters)) return null;
+        else return [
+            'success' => false,
+            'message' => 'Такой slug товара уже существует'
+        ];
+    }
 }

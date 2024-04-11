@@ -2,7 +2,6 @@
 /**
  * @var array $categories
  * @var array $allCategories
- * @var string $title
  */
 ?>
 <?php function tpl($categories, $str, $idParent = null): void
@@ -21,25 +20,29 @@
         </div>
     </nav>
     <div class="center-column">
-        <h2>Добавление категории</h2>
-        <form id="formCategories">
-            <label for="newCategoryName">Название:
-            <input name="newCategoryName" id="newCategoryName"
-                   type="text" value="">
-            </label>
-            <label for="newCategorySlug">slug:
-            <input name="newCategorySlug"
-                   id="newCategorySlug"
-                   type="text" value="">
-            </label><br><br>
-            <label>в
-                <select name="mainCategoryId">
-                    <option value="0">Главная категория</option>
-                    <?php tpl($categories, ''); ?>
-                </select>
-            </label><br><br>
-            <input type="button" onclick="newCategory();" value="Добавить"><br><br>
-        </form>
+        <h2>Добавление товара</h2>
+
+
+        <label>Название
+            <input type="text" id="newTitle" value="" autocomplete="off">
+        </label>
+        <label>slug
+            <input type="text" id="newSlug" value="" autocomplete="off">
+        </label>
+        <label>Цена
+            <input type="text" id="newPrice" value="" autocomplete="off">
+        </label><br><br>
+        <label>Описание
+            <textarea id="newDescription" cols="69"></textarea><br>
+        </label><br>
+        <label>Категория
+            <select id="newCategoryId">
+                <option value="0">Главная категория</option>
+                <?php tpl($categories, ''); ?>
+            </select>
+        </label>
+        <input type="button" onclick="addProduct();" alt="Добавить новый товар" value="Добавить"><br><br>
+
         <h2>Редактирование категорий</h2>
         <form id="formEditCategories">
             <table>
