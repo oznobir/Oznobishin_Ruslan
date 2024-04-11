@@ -6,7 +6,7 @@ use Core\Controller;
 use Project\Models\CategoriesModel;
 
 
-class adminController extends Controller
+class AdminController extends Controller
 {
     /**
      * @return void

@@ -2,7 +2,6 @@
 /**
  * @var array $viewProducts
  * @var array $menu
- * @var int $cartCountItems
  */ ?>
 
 <div>

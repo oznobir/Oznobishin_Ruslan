@@ -1,10 +1,3 @@
-<?php
-/**
- * @var array $viewProducts
- * @var array $menu
- * @var int $cartCountItems
- */ ?>
-
     <div>
             <?php if (!empty($_SESSION['user']) && $_SESSION['user'] != "unReg") : ?>
                 <div id="userBox">
