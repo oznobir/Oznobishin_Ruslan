@@ -51,9 +51,6 @@ async function updateCategory(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         alert(jsData['message']);
-        if (jsData['success']) {
-            window.location.href = '/admin/';
-        }
     }
 }
 async function addProduct() {
@@ -82,7 +79,58 @@ async function addProduct() {
         let jsData = await response.json();
         alert(jsData['message']);
         if (jsData['success']) {
-            window.location.href = '/admin/';
+            window.location.href = '/admin/products/';
         }
+    }
+}
+async function updateProduct(itemId) {
+    console.log("js - updateProduct(itemId)");
+    const slug = document.querySelector('#slug_' + itemId);
+    const title = document.querySelector('#title_' + itemId);
+    const categoryId = document.querySelector('#categoryId_' + itemId);
+    const status = document.querySelector('#status_' + itemId);
+    const price = document.querySelector('#price_' + itemId);
+    const description = document.querySelector('#description_' + itemId);
+
+
+    let next = false;
+    let data = new FormData();
+    if (slug.dataset.old !== slug.value) {
+        data.append('slug', slug.value);
+        next = true;
+    }
+    if (title.dataset.old !== title.value) {
+        data.append('title', title.value);
+        next = true;
+    }
+    if (categoryId.dataset.old !== categoryId.value) {
+        data.append('categoryId', categoryId.value);
+        next = true;
+    }
+    if (status.dataset.old !== status.value) {
+        data.append('status', status.value);
+        next = true;
+    }
+    if (price.dataset.old !== price.value) {
+        data.append('price', price.value);
+        next = true;
+    }
+    if (description.dataset.old !== description.value) {
+        data.append('description', description.value);
+        next = true;
+    }
+    if (next) {
+        data.append('id', itemId);
+    } else {
+        alert('Данные не редактировались');
+        return;
+    }
+    let response = await fetch("/admin/product/update/", {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
     }
 }

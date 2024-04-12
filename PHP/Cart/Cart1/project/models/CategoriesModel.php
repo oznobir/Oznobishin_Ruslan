@@ -78,22 +78,7 @@ class CategoriesModel extends Model
         $query = "INSERT INTO `categories`(`parent_id`, `slug`, `title`) VALUES (:parent_id,:slug,:title)";
         return self::execId($query, $parameters);
     }
-//    /** Проверка введены ли название, slug при добавлении категории в админке
-//     * Не нужна - сделал в js
-//     * @param string|null $title название категории
-//     * @param string|null $slug slug категории
-//     * @return array|null массив с success (false), message (сообщение) или null если все ОК
-//     */
-//    public function checkCategoryParam(?string $slug, ?string $title): array|null
-//    {
-//        $resultCheck = null;
-//
-//        if (!$title || !$slug) {
-//            $resultCheck['success'] = false;
-//            $resultCheck['message'] = 'Введены не все данные (сервер)';
-//        }
-//        return $resultCheck;
-//    }
+
     /** Проверка есть ли такой slug при добавлении и редактировании категории
      *
      * @param string $slug slug категории

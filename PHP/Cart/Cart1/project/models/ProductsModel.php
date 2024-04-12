@@ -15,11 +15,12 @@ class ProductsModel extends Model
     {
         $parameters = array_keys($parameters);
         $query = "SELECT * FROM `products` WHERE id ";
-        $query .= 'IN ('. str_repeat('?,', count($parameters) - 1) . '?)';
+        $query .= 'IN (' . str_repeat('?,', count($parameters) - 1) . '?)';
         $data = self::selectAll($query, PDO::FETCH_ASSOC, $parameters);
         if (!$data) return null;
         return $data;
     }
+
     /** Получение данных продукта по slug
      * @param $parameters - slug из Router
      * @return array|null массив данных продукта
@@ -31,18 +32,20 @@ class ProductsModel extends Model
         if (!$data) return null;
         return $data;
     }
+
     /** Получение массива продуктов
      * @param $limit - количество последних по id, null - все
      * @return array массив продуктов
      */
     public function getProductsLast($limit = null): array
     {
-        $query ='SELECT * FROM `products` ORDER BY id DESC';
+        $query = 'SELECT * FROM `products` ORDER BY id DESC';
         if ($limit) {
             $query .= " limit $limit";
         }
         return self::selectAll($query, PDO::FETCH_ASSOC);
     }
+
     /** Получение массива всех продуктов в категории по id
      * @param $id - id категории
      * @return array массив продуктов
@@ -52,6 +55,7 @@ class ProductsModel extends Model
         $query = 'SELECT * FROM `products` WHERE category_id =:id ORDER BY id DESC';
         return self::selectAll($query, PDO::FETCH_ASSOC, $id);
     }
+
     /** Получение массива всех продуктов
      * @return array массив продуктов
      */
@@ -81,6 +85,7 @@ class ProductsModel extends Model
 VALUES (:category_id,:slug,:title,:description,:price)";
         return self::exec($query, $parameters);
     }
+
     /** Проверка есть ли такой slug при добавлении и редактировании товара
      *
      * @param string $slug slug товара
@@ -95,5 +100,55 @@ VALUES (:category_id,:slug,:title,:description,:price)";
             'success' => false,
             'message' => 'Такой slug товара уже существует'
         ];
+    }
+
+    /** Редактирование товара
+     * @param int $id id редактируемого товара
+     * @param string|null $slug новый slug товара
+     * @param string|null $title новый название товара
+     * @param string|null $description новое описание товара
+     * @param float|null $price новая цена товара
+     * @param string|null $image новое фото товара
+     * @param int $status новый статус товара
+     * @param int $cid id категории товара
+     * @return mixed @return mixed результат
+     */
+    public function updateProductData(int $id, ?string $slug = null, ?string $title = null,
+                                      ?string $description = null, ?float $price = null,
+                                      ?string $image = null, int $status = -1, int $cid = -1): mixed
+    {
+        $parameters['id'] = $id;
+        $query = "UPDATE `products` SET";
+        $str = '';
+        if ($cid > -1) {
+            $str .= " `category_id`=:category_id,";
+            $parameters['category_id'] = $cid;
+        }
+        if ($status > -1) {
+            $str .= " `status`=:status,";
+            $parameters['status'] = $status;
+        }
+        if ($slug) {
+            $str .= " `slug`=:slug,";
+            $parameters['slug'] = $slug;
+        }
+        if ($title) {
+            $str .= " `title`=:title,";
+            $parameters['title'] = $title;
+        }
+        if ($description) {
+            $str .= " `description`=:description,";
+            $parameters['description'] = $description;
+        }
+        if ($price) {
+            $str .= " `price`=:price,";
+            $parameters['price'] = $price;
+        }
+        if ($image) {
+            $str .= " `image`=:image,";
+            $parameters['image'] = $image;
+        }
+        $query .= trim($str, ',') . " WHERE `id`=:id";
+        return self::exec($query, $parameters);
     }
 }

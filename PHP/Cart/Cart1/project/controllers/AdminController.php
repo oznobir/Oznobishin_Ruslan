@@ -98,7 +98,7 @@ class AdminController extends Controller
             $info = $product->newProductData($title, $slug, $price, $description, $cid);
             if ($info) {
                 $jsData['success'] = true;
-                $jsData['message'] = 'Товар добавлена';
+                $jsData['message'] = 'Товар добавлен';
             } else {
                 $jsData['success'] = false;
                 $jsData['message'] = 'Ошибка добавления товара';
@@ -106,4 +106,34 @@ class AdminController extends Controller
         }
         echo json_encode($jsData);
     }
+
+    /** Формирование сообщения об изменении категории в админке
+     * @return void json success, сообщение
+     */
+    public function updateproduct(): void
+    {
+        $id = $_POST['id'];
+        $slug = $_POST['slug'] ?? null;
+        $title = $_POST['title'] ?? null;
+        $cid = $_POST['categoryId'] ?? -1;
+        $status = $_POST['status'] ?? -1;
+        $price = $_POST['price'] ?? null;
+        $description = $_POST['description'] ?? null;
+        $image = $_POST['image'] ?? null;
+        $product = new ProductsModel();
+        $jsData = null;
+        if ($slug) $jsData = $product->checkSlugProduct($slug);
+        if (!$jsData) {
+            $info = $product->updateProductData($id, $slug, $title, $description, $price, $image, $status, $cid);
+            if ($info) {
+                $jsData['success'] = true;
+                $jsData['message'] = 'Данные о товаре обновлены';
+            } else {
+                $jsData['success'] = false;
+                $jsData['message'] = 'Ошибка обновления';
+            }
+        }
+        echo json_encode($jsData);
+    }
+
 }
