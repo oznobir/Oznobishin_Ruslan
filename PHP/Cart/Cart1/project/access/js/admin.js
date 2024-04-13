@@ -53,6 +53,7 @@ async function updateCategory(itemId) {
         alert(jsData['message']);
     }
 }
+
 async function addProduct() {
     console.log("js - addProduct()");
     const slug = document.querySelector('#newSlug').value;
@@ -83,6 +84,7 @@ async function addProduct() {
         }
     }
 }
+
 async function updateProduct(itemId) {
     console.log("js - updateProduct(itemId)");
     const slug = document.querySelector('#slug_' + itemId);
@@ -91,8 +93,6 @@ async function updateProduct(itemId) {
     const status = document.querySelector('#status_' + itemId);
     const price = document.querySelector('#price_' + itemId);
     const description = document.querySelector('#description_' + itemId);
-
-
     let next = false;
     let data = new FormData();
     if (slug.dataset.old !== slug.value) {
@@ -132,5 +132,25 @@ async function updateProduct(itemId) {
     if (response.ok) {
         let jsData = await response.json();
         alert(jsData['message']);
+    }
+}
+
+async function addProductImage(input, itemId) {
+    console.log("js - addProductImage(input, itemId)");
+    let file = input.files[0];
+    let data = new FormData();
+    data.append('itemId', itemId);
+    data.append('lastModified', file.lastModified);
+    data.append('filename', file, file.name);
+    let response = await fetch("/admin/product/image/", {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        if (jsData['success']) {
+            window.location.href = '/admin/products/';
+        }
     }
 }

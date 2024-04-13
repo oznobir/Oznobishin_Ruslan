@@ -51,8 +51,8 @@
                     <th>ID (код)</th>
                     <th>Данные о товаре</th>
                     <th>Описание товара</th>
-                    <th>Изображение</th>
                     <th>Действия</th>
+                    <th>Изображение</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -95,26 +95,23 @@
                                 <textarea id="description_<?= $product['id'] ?>" rows="8"
                                           data-old='<?= $product['description'] ?>'><?= $product['description'] ?></textarea>
                             </label>
-                        </td>
-                        <td>
-                            <?php if ($product['image']) : ?>
-                                <img src="/project/access/img/<?= $product['image'] ?>" id="image_<?= $product['id'] ?>"
-                                     alt="Фото товара" width="100">
-                            <?php else: ?>
-                            <span>Выберите файл:</span>
-                            <?php endif; ?>
-                            <form method="POST" action="/admin/upload/" enctype="multipart/form-data">
-                                <input type="file" name="filename"><br>
-                                <input type="hidden" name="itemId" value="<?=$product['id']?>">
-                                <input type="submit" value="Загрузить">
-                            </form>
-                        </td>
-
                         <td>
                             <a href="#" onclick="updateProduct(<?= $product['id'] ?>); return false;"
                                alt="Сохранить изменения">
                                 Сохранить
                             </a>
+                        </td>
+                        <td>
+                            <?php if ($product['image']) : ?>
+                                <span><?= $product['image'] ?></span><br>
+                                <img src="/project/access/img/<?= $product['image'] ?>" id="image_<?= $product['id'] ?>"
+                                     width="100" alt="Фото">
+                            <?php else: ?>
+                                <span>Выберите файл:</span>
+                            <?php endif; ?>
+                            <div>
+                                <label>Изменить: <input type="file" name="filename" onchange="addProductImage(this, <?= $product['id'] ?>)"></label><br>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

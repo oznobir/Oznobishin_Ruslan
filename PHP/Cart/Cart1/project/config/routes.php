@@ -28,4 +28,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         new Route('/admin/category/update/', 'admin', 'updatecategory'),
         new Route('/admin/product/add/', 'admin', 'addproduct'),
         new Route('/admin/product/update/', 'admin', 'updateproduct'),
+        new Route('/admin/product/image/', 'admin', 'uploadimage'),
     ];

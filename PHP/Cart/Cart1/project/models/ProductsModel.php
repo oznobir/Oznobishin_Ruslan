@@ -151,4 +151,14 @@ VALUES (:category_id,:slug,:title,:description,:price)";
         $query .= trim($str, ',') . " WHERE `id`=:id";
         return self::exec($query, $parameters);
     }
+
+    /** Сохранение, редактирование изображения товара
+     * @param int $itemId id товара
+     * @param string $name название файла изображения товара
+     * @return mixed
+     */
+    public function updateProductImage(int $itemId, string $name): mixed
+    {
+        return $this->updateProductData($itemId, null, null,null, null, $name,-1,-1);
+    }
 }

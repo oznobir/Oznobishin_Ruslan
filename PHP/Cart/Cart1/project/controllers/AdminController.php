@@ -136,4 +136,46 @@ class AdminController extends Controller
         echo json_encode($jsData);
     }
 
+    /** Сохранение изображения товара в админке
+     * @return void redirect или сообщение об ошибке
+     */
+    public function uploadimage(): void
+    {
+        if ($_FILES['filename']['size'] > 1024 * 150) {
+            $jsData['success'] = false;
+            $jsData['message'] = 'Размер файла превышает 150кБайт';
+            echo json_encode($jsData);
+            exit();
+        }
+        $itemId = $_POST['itemId'];
+        $lastModified = $_POST['lastModified'];
+        // из-за возможного кэша браузера пользователя
+        // idProduct_lastModified.exetension
+        $name = $itemId . '_' . $lastModified . '.' . pathinfo($_FILES['filename']['name'], PATHINFO_EXTENSION);
+        $path = $_SERVER['DOCUMENT_ROOT'] . '/project/access/img/' . $name;
+        $isOld = file_exists($path);
+        if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
+            if (move_uploaded_file($_FILES['filename']['tmp_name'], $path)) {
+                if (!$isOld) {
+                    if ((new ProductsModel())->updateProductImage($itemId, $name)) {
+                        $jsData['success'] = true;
+                        $jsData['message'] = 'Файл сохранен в базе и project/access/img';
+                    } else {
+                        $jsData['success'] = false;
+                        $jsData['message'] = 'Ошибка сохранения файла в базе';
+                    }
+                } else {
+                    $jsData['success'] = true;
+                    $jsData['message'] = 'Файл обновлен в project/access/img';
+                }
+            } else {
+                $jsData['success'] = false;
+                $jsData['message'] = 'Ошибка сохранения файла в project/access/img';
+            }
+        } else {
+            $jsData['success'] = false;
+            $jsData['message'] = 'Ошибка обработки файла';
+        }
+        echo json_encode($jsData);
+    }
 }
