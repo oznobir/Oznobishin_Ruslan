@@ -141,9 +141,9 @@ class AdminController extends Controller
      */
     public function uploadimage(): void
     {
-        if ($_FILES['filename']['size'] > 1024 * 150) {
+        if ($_FILES['filename']['size'] > 1024 * 250) {
             $jsData['success'] = false;
-            $jsData['message'] = 'Размер файла превышает 150кБайт';
+            $jsData['message'] = 'Размер файла превышает 250кБайт';
             echo json_encode($jsData);
             exit();
         }

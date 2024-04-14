@@ -21,8 +21,7 @@ class CategoryController extends Controller
         $this->data['menu'] =  (new CategoriesModel())->getCategoriesWithChild();
         if (!empty($_SESSION['viewProducts']))
             $this->data['viewProducts'] = (new ProductsModel())->getProductsFromArray($_SESSION['viewProducts']);
-        if ($cat['parent_id'] == 0) {
-            $this->data['categories'] = (new CategoriesModel())->getSubCategoriesById($id);
+        if ($this->data['categories'] = (new CategoriesModel())->getSubCategoriesById($id)) {
             echo $this->render('project/views/shopDefault/categoriesView.php');
         } else {
             $this->data['products'] = (new ProductsModel())->getProductsCategoryById($id);

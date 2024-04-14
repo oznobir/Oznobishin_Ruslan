@@ -29,7 +29,7 @@
                 <input type="text" id="newSlug" value="" autocomplete="off">
             </label>
             <label>Цена
-                <input type="text" id="newPrice" value="" autocomplete="off">
+                <input type="number" size="10" min="1" step="0.01" id="newPrice" value="" autocomplete="off">
             </label><br><br>
             <label>Описание
                 <textarea id="newDescription" cols="69"></textarea><br>
@@ -85,7 +85,7 @@
                             </label><br>
                             <label>Цена:
                                 <input id="price_<?= $product['id'] ?>" data-old='<?= $product['price'] ?>'
-                                       type="text" size="5" value="<?= $product['price'] ?>">
+                                       type="number" size="10" min="1" step="0.01" value="<?= $product['price'] ?>">
                             </label>
 
 
