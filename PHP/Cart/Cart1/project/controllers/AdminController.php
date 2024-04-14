@@ -153,20 +153,14 @@ class AdminController extends Controller
         // idProduct_lastModified.exetension
         $name = $itemId . '_' . $lastModified . '.' . pathinfo($_FILES['filename']['name'], PATHINFO_EXTENSION);
         $path = $_SERVER['DOCUMENT_ROOT'] . '/project/access/img/' . $name;
-        $isOld = file_exists($path);
         if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
             if (move_uploaded_file($_FILES['filename']['tmp_name'], $path)) {
-                if (!$isOld) {
-                    if ((new ProductsModel())->updateProductImage($itemId, $name)) {
-                        $jsData['success'] = true;
-                        $jsData['message'] = 'Файл сохранен в базе и project/access/img';
-                    } else {
-                        $jsData['success'] = false;
-                        $jsData['message'] = 'Ошибка сохранения файла в базе';
-                    }
-                } else {
+                if ((new ProductsModel())->updateProductImage($itemId, $name)) {
                     $jsData['success'] = true;
-                    $jsData['message'] = 'Файл обновлен в project/access/img';
+                    $jsData['message'] = 'Файл сохранен в базе и project/access/img';
+                } else {
+                    $jsData['success'] = false;
+                    $jsData['message'] = 'Ошибка сохранения файла в базе';
                 }
             } else {
                 $jsData['success'] = false;
