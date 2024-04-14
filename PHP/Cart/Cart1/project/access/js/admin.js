@@ -154,3 +154,44 @@ async function addProductImage(input, itemId) {
         }
     }
 }
+function showPurchase(id) {
+    document.querySelector("#purchase_"+id).classList.toggle("hidden");
+}
+async function updateOrderStatus(itemId) {
+    console.log("js - updateOrderStatus(itemId)");
+    let status = document.querySelector('#status_' + itemId).checked;
+    if (status) status = '1';
+    else status = '0';
+    let data = new FormData();
+    data.append('id', itemId);
+    data.append('status', status);
+    let response = await fetch("/admin/order/status/", {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        if (jsData['success']) {
+            window.location.href = '/admin/orders/';
+        }
+    }
+}
+async function updateDatePayment(itemId) {
+    console.log("js - updateDatePayment(itemId)");
+    let date = document.querySelector('#date_' + itemId).value;
+    let data = new FormData();
+    data.append('id', itemId);
+    data.append('date', date);
+    let response = await fetch("/admin/order/date/", {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        let jsData = await response.json();
+        alert(jsData['message']);
+        if (jsData['success']) {
+            window.location.href = '/admin/orders/';
+        }
+    }
+}
