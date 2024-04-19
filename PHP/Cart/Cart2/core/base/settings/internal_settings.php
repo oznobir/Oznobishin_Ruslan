@@ -3,7 +3,7 @@
 use core\base\exceptions\RouteException;
 
 defined('W_ACCESS') or die('Нет доступа');
-const BASE_TEMPLATE = 'templates/default/';
+const SITE_TEMPLATE = 'templates/default/';
 const ADMIN_TEMPLATE = 'core/admin/views/';
 const  COOKIE_VERSION = '1.0.0';
 const  COOKIE_TIME = 60;

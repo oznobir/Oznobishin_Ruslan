@@ -24,8 +24,8 @@ spl_autoload_register(
     });
 
 try {
-//    RouteController::getInstance()->route();
-    RouteController::instance();
+    RouteController::instance()->route();
+
 } catch (RouteException $e) {
     exit($e->getMessage());
 }

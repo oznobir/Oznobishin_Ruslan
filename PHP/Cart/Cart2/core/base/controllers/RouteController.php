@@ -6,14 +6,10 @@ use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 use core\plugins\shop\ShopSettings;
 
-class RouteController
+class RouteController extends BaseControllers
 {
     static private RouteController $_instance;
     protected $routes;
-    protected mixed $controller;
-    protected $inputMethod;
-    protected $outputMethod;
-    protected $parameters;
 
     //Паттерн Singleton
     static public function instance(): RouteController
@@ -58,10 +54,12 @@ class RouteController
             throw new RouteException('Сайт не доступен. Повторите попытку');
         }
         // далее в uri == alias admin
-        if (strpos($strUri, $this->routes['admin']['alias']) === strlen(PATH)) {
-            $url = explode('/', substr($strUri, strlen(PATH . $this->routes['admin']['alias']) + 1));
+        $url = explode('/', substr($strUri, strlen(PATH)));
+        if (isset($url[0]) && $url[0] === $this->routes['admin']['alias']) {
+            array_shift($url);
+
             // далее в uri == папке название плагина (name), файл настроек плагина - NameSettings.php
-            if ($url[0] && is_dir($_SERVER['DOCUMENT_ROOT'] . PATH . $this->routes['plugin']['path'] . $url[0])) {
+            if (isset($url[0]) && is_dir($_SERVER['DOCUMENT_ROOT'] . PATH . $this->routes['plugin']['path'] . $url[0])) {
                 $plugin = array_shift($url);
                 $pluginSettings = $this->routes['plugin']['path'] . $plugin . '/' . ucfirst($plugin) . 'Settings';
                 if (file_exists($_SERVER['DOCUMENT_ROOT'] . PATH . $pluginSettings . '.php')) {
@@ -83,7 +81,6 @@ class RouteController
 
             //далее в uri != alias admin
         } else {
-            $url = explode('/', substr($strUri, strlen(PATH)));
             $hrUrl = $this->routes['site']['hrUrl'];
             $this->controller = $this->routes['site']['pathControllers'];
             $nameRoute = 'site';
