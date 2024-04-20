@@ -2,10 +2,11 @@
 
 namespace core\base\settings;
 
+use core\base\controllers\Singleton;
+
 class Settings
 {
-    static private Settings $_instance;
-
+    use Singleton;
 
     private array $routes = [
         'default' => [
@@ -32,20 +33,13 @@ class Settings
             'hrUrl' => false,                                   // default, можно изменить, если есть NameSettings.php
             'routes' => [],                                     // default, можно изменить, если есть NameSettings.php
         ],
-
+        'p' => ['1', '2', '3'],
     ];
 
     static public function get($property)
     {
         if (isset($property)) return self::instance()->$property;
         else return null;
-    }
-
-    //Паттерн Singleton
-    static public function instance(): Settings
-    {
-        if (!isset(self::$_instance)) self::$_instance = new self();
-        return self::$_instance;
     }
 
     public function joinProperties($class): array
@@ -77,13 +71,5 @@ class Settings
             }
         }
         return $base;
-    }
-
-    private function __clone()
-    {
-    }
-
-    private function __construct()
-    {
     }
 }

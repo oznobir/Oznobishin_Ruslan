@@ -4,23 +4,12 @@ namespace core\base\controllers;
 
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
-use core\plugins\shop\ShopSettings;
 
 class RouteController extends BaseControllers
 {
-    static private RouteController $_instance;
-    protected $routes;
-
-    //Паттерн Singleton
-    static public function instance(): RouteController
-    {
-        if (!isset(self::$_instance)) self::$_instance = new self();
-        return self::$_instance;
-    }
-
-    private function __clone()
-    {
-    }
+    use Singleton;
+    use BaseMethods;
+    protected array $routes;
 
     private function getURI($baseURI): string
     {
@@ -41,18 +30,12 @@ class RouteController extends BaseControllers
         }
         // далее в uri const PATH
         $path = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php'));
-        if ($path !== PATH) {
-            try {
-                throw new \Exception('Не существующая директория сайта');
-            } catch (\Exception $e) {
-                exit($e->getMessage());
-            }
-        }
+        if ($path !== PATH)  throw new RouteException('Не существующая директория сайта', 1);
+
         // есть ли routes Settings
         $this->routes = Settings::get('routes');
-        if (!$this->routes) {
-            throw new RouteException('Сайт не доступен. Повторите попытку');
-        }
+        if (!$this->routes) throw new RouteException('Отсутствуют маршруты в базовых настройках', 1);
+
         // далее в uri == alias admin
         $url = explode('/', substr($strUri, strlen(PATH)));
         if (isset($url[0]) && $url[0] === $this->routes['admin']['alias']) {

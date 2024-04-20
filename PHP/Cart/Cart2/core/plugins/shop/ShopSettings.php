@@ -2,11 +2,13 @@
 
 namespace core\plugins\shop;
 
+use core\base\controllers\Singleton;
 use core\base\settings\Settings;
 
 class ShopSettings
 {
-    static private ShopSettings $_instance;
+    use Singleton;
+
     private array $routes = [
         'plugin' => [
             'pathControllers' => 'core/plugins/shop/controllers/',
@@ -23,16 +25,6 @@ class ShopSettings
         else return null;
     }
 
-    protected function setSettings($properties): void
-    {
-        if (isset($properties)) {
-            foreach ($properties as $name => $property) {
-                $this->$name = $property;
-            }
-        }
-    }
-
-    //Паттерн Singleton
     static public function instance(): ShopSettings
     {
         if (!isset(self::$_instance)) {
@@ -42,12 +34,13 @@ class ShopSettings
         }
         return self::$_instance;
     }
-
-    private function __clone()
+    protected function setSettings($properties): void
     {
+        if (isset($properties)) {
+            foreach ($properties as $name => $property) {
+                $this->$name = $property;
+            }
+        }
     }
 
-    private function __construct()
-    {
-    }
 }

@@ -7,15 +7,19 @@ use core\base\settings\Settings;
 
 abstract class BaseControllers
 {
-    protected string $controller;
-    protected $inputMethod;
-    protected $outputMethod;
-    protected $parameters;
-    protected $page;
-    protected $error = null;
-    protected $writeLog = null;
+    use BaseMethods;
 
-    public function route()
+    protected string $controller;
+    protected string $inputMethod;
+    protected string $outputMethod;
+    protected ?array $parameters = null;
+    protected array|string $page;
+    protected ?string $error = null;
+    protected array $styles;
+    protected array $scripts;
+
+
+    public function route(): void
     {
         $controller = str_replace('/', '\\', $this->controller);
         try {
@@ -42,7 +46,7 @@ abstract class BaseControllers
             if ($this->$outputData($data)) $this->page = ($this->$outputData($data));
         } elseif ($data) $this->page = $data;
 
-        if ($this->error) $this->writeLog();
+        if ($this->error) $this->writeLog($this->error);
         $this->getPage();
     }
 
@@ -72,8 +76,22 @@ abstract class BaseControllers
         return ob_get_clean();
     }
 
-    protected function writeLog()
+    protected function init($admin = false): void
     {
-
+        if (!$admin) {
+            if (SITE_CSS_JS['styles']) {
+                foreach (SITE_CSS_JS['styles'] as $item) $this->styles[] = PATH . SITE_TEMPLATE . trim($item, '/');
+            }
+            if (SITE_CSS_JS['scripts']) {
+                foreach (SITE_CSS_JS['scripts'] as $item) $this->scripts[] = PATH . SITE_TEMPLATE . trim($item, '/');
+            }
+        } else {
+            if (ADMIN_CSS_JS['styles']) {
+                foreach (SITE_CSS_JS['styles'] as $item) $this->styles[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
+            }
+            if (ADMIN_CSS_JS['scripts']) {
+                foreach (SITE_CSS_JS['scripts'] as $item) $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
+            }
+        }
     }
 }
