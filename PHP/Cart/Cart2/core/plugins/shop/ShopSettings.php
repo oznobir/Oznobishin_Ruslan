@@ -11,19 +11,15 @@ class ShopSettings
 
     private array $routes = [
         'plugin' => [
+            'path' => 'core/plugins/shop/',
             'pathControllers' => 'core/plugins/shop/controllers/',
             'hrUrl' => false,
-            'routes' => [
-                'product' => 'controller_product/get_hello/set_by',
-            ],
+            'routes' => ['product' => 'controller_product/get_hello/set_by', ],
+
         ],
+        'p' => ['1', '2', '3'],
     ];
 
-    static public function get($property)
-    {
-        if (isset($property)) return self::instance()->$property;
-        else return null;
-    }
 
     static public function instance(): ShopSettings
     {

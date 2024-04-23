@@ -9,6 +9,7 @@ class RouteController extends BaseControllers
 {
     use Singleton;
     use BaseMethods;
+
     protected array $routes;
 
     private function getURI($baseURI): string
@@ -30,7 +31,7 @@ class RouteController extends BaseControllers
         }
         // далее в uri const PATH
         $path = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php'));
-        if ($path !== PATH)  throw new RouteException('Не существующая директория сайта', 1);
+        if ($path !== PATH) throw new RouteException('Не существующая директория сайта', 1);
 
         // есть ли routes Settings
         $this->routes = Settings::get('routes');
@@ -48,11 +49,12 @@ class RouteController extends BaseControllers
                 if (file_exists($_SERVER['DOCUMENT_ROOT'] . PATH . $pluginSettings . '.php')) {
                     $pluginSettings = str_replace('/', '\\', $pluginSettings);
                     $this->routes = $pluginSettings::get('routes');
-                    $this->controller = $this->routes['plugin']['pathControllers'];
+                    $this->controller = $this->routes['plugin']['pathControllers'] ?? $this->routes['admin']['pathControllers'];
+                    $hrUrl = $this->routes['plugin']['hrUrl'] ?? $this->routes['admin']['hrUrl'];;
                 } else {
-                    $this->controller = $this->routes['plugin']['pathControllers'] . $plugin;
+                    $this->controller = $this->routes['admin']['pathControllers'];
+                    $hrUrl = $this->routes['plugin']['hrUrl'];
                 }
-                $hrUrl = $this->routes['plugin']['hrUrl'];
                 $nameRoute = 'plugin';
 
             } else {

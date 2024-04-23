@@ -19,4 +19,9 @@ trait Singleton
         if (!isset(self::$_instance)) self::$_instance = new self();
         return self::$_instance;
     }
+    static public function get($property)
+    {
+        if (isset($property)) return self::instance()->$property;
+        else return null;
+    }
 }

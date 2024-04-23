@@ -1,8 +1,12 @@
 <?php
 
-use core\base\exceptions\RouteException;
-
 defined('W_ACCESS') or die('Нет доступа');
+const HOST = 'localhost';
+const USER = 'root';
+const PASS = '';
+const DB = 'myshop2';
+const SITE_URL = 'http://myshop2.by';
+const PATH = '/';
 const SITE_TEMPLATE = 'templates/default/';
 const ADMIN_TEMPLATE = 'core/admin/views/';
 const  COOKIE_VERSION = '1.0.0';

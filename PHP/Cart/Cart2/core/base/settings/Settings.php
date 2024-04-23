@@ -36,12 +36,6 @@ class Settings
         'p' => ['1', '2', '3'],
     ];
 
-    static public function get($property)
-    {
-        if (isset($property)) return self::instance()->$property;
-        else return null;
-    }
-
     public function joinProperties($class): array
     {
         $baseProperties = [];
