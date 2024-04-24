@@ -4,7 +4,8 @@ use core\base\exceptions\RouteException;
 use core\base\exceptions\DbException;
 use core\base\controllers\RouteController;
 
-const W_ACCESS = true;
+define('W_ACCESS', true);
+
 
 header('Content-Type:text/html;charset:utf-8');
 session_start();

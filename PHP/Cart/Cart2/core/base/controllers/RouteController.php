@@ -12,15 +12,18 @@ class RouteController extends BaseControllers
 
     protected array $routes;
 
-    private function getURI($baseURI): string
-    {
-        $requesturi = $_SERVER["REQUEST_URI"];
-        if (str_starts_with($requesturi, $baseURI)) {
-            $requesturi = substr($requesturi, strlen($baseURI));
-        }
-        return trim($requesturi, '/');
-    }
+//    private function getURI($baseURI): string
+//    {
+//        $requesturi = $_SERVER["REQUEST_URI"];
+//        if (str_starts_with($requesturi, $baseURI)) {
+//            $requesturi = substr($requesturi, strlen($baseURI));
+//        }
+//        return trim($requesturi, '/');
+//    }
 
+    /**
+     * @throws RouteException
+     */
     private function __construct()
     {
         $strUri = $_SERVER['REQUEST_URI'];
@@ -50,7 +53,7 @@ class RouteController extends BaseControllers
                     $pluginSettings = str_replace('/', '\\', $pluginSettings);
                     $this->routes = $pluginSettings::get('routes');
                     $this->controller = $this->routes['plugin']['pathControllers'] ?? $this->routes['admin']['pathControllers'];
-                    $hrUrl = $this->routes['plugin']['hrUrl'] ?? $this->routes['admin']['hrUrl'];;
+                    $hrUrl = $this->routes['plugin']['hrUrl'] ?? $this->routes['admin']['hrUrl'];
                 } else {
                     $this->controller = $this->routes['admin']['pathControllers'];
                     $hrUrl = $this->routes['plugin']['hrUrl'];
