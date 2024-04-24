@@ -1,0 +1,4 @@
+Fault: 24-04-2024 20:15:09 - Ошибка в SQL запросе: SELECT  teaches.id, teaches.name, join_table1.id as j_id, join_table1.name as j_name FROM teaches LEFT JOIN join_table1 ON teachers.id = join_table1.parent_id WHERE teaches.name = 'Petr' AND join_table1.name = 'sasha'  ORDER BY teaches.name DESC LIMIT 1 - 1146 Table 'myshop2.teaches' doesn't exist
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\core\base\models\BaseModel.php 
+in line: 41
+

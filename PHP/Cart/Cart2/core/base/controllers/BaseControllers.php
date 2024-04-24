@@ -18,6 +18,10 @@ abstract class BaseControllers
     protected array $styles;
     protected array $scripts;
 
+    /** Подключение контроллера с помощью Reflection
+     * @return void метод request
+     * @throws RouteException ошибки при подключении
+     */
 
     public function route(): void
     {
@@ -35,7 +39,11 @@ abstract class BaseControllers
         }
     }
 
-    public function request($args): void
+    /**
+     * @param array $args массив аргументов обработки Reflection
+     * @return void запись в свойства: страницы в виде строки или массива, ошибок
+     */
+    public function request(array $args): void
     {
         $this->parameters = $args['parameters'];
         $inputData = $args['inputMethod'];
@@ -50,6 +58,9 @@ abstract class BaseControllers
         $this->getPage();
     }
 
+    /**
+     * @return void вывод свойства page
+     */
     protected function getPage(): void
     {
         if (is_array($this->page)) {
@@ -57,7 +68,13 @@ abstract class BaseControllers
         } else echo $this->page;
     }
 
-    protected function render($path = '', $data = []): false|string
+    /**
+     * @param string $path путь к шаблону, по умолчанию название контроллера по пути SITE_TEMPLATE или ADMIN_TEMPLATE
+     * @param array $data массив данных для формирования шаблона
+     * @return false|string страница в виде строки
+     * @throws RouteException ошибки
+     */
+    protected function render(string $path = '', array $data = []): false|string
     {
         if (!$path) {
             $class = new \ReflectionClass($this);
@@ -76,21 +93,29 @@ abstract class BaseControllers
         return ob_get_clean();
     }
 
-    protected function init($admin = false): void
+    /**
+     * @param bool $admin при false SITE_TEMPLATE,  при true ADMIN_TEMPLATE
+     * @return void
+     */
+    protected function init(bool $admin = false): void
     {
         if (!$admin) {
             if (SITE_CSS_JS['styles']) {
-                foreach (SITE_CSS_JS['styles'] as $item) $this->styles[] = PATH . SITE_TEMPLATE . trim($item, '/');
+                foreach (SITE_CSS_JS['styles'] as $item)
+                    $this->styles[] = PATH . SITE_TEMPLATE . trim($item, '/');
             }
             if (SITE_CSS_JS['scripts']) {
-                foreach (SITE_CSS_JS['scripts'] as $item) $this->scripts[] = PATH . SITE_TEMPLATE . trim($item, '/');
+                foreach (SITE_CSS_JS['scripts'] as $item)
+                    $this->scripts[] = PATH . SITE_TEMPLATE . trim($item, '/');
             }
         } else {
             if (ADMIN_CSS_JS['styles']) {
-                foreach (SITE_CSS_JS['styles'] as $item) $this->styles[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
+                foreach (SITE_CSS_JS['styles'] as $item)
+                    $this->styles[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
             }
             if (ADMIN_CSS_JS['scripts']) {
-                foreach (SITE_CSS_JS['scripts'] as $item) $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
+                foreach (SITE_CSS_JS['scripts'] as $item)
+                    $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
             }
         }
     }

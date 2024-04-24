@@ -12,9 +12,11 @@ class BaseModel
 
     protected mysqli $db;
 
-    /**
-     * @throws DbException
+    /** Конструктор
+     * Устанавливает соединение с БД, флаги, кодировку
+     * @throws DbException ошибки при соединении с БД
      */
+
     private function __construct()
     {
         mysqli_report(MYSQLI_REPORT_OFF);
@@ -25,19 +27,20 @@ class BaseModel
         $this->db->set_charset("utf8");
     }
 
-    //ins sel upd del
-
     /**
-     * @throws DbException
+     * @param string $query - запрос в виде строки
+     * @param string $act insert - 'ins', select - 'sel', update - 'upd ', delete - 'del'
+     * @param bool $return_id true - возвращает id (ins, ...)
+     * @return array|bool|int|string - результат запроса из БД или ошибки
+     * @throws DbException - ошибки при выполнении запроса
      */
-    final public function query($query, $act = 'sel', $insert_id = false): array|bool|int|string
+    final public function query(string $query, string $act = 'sel', bool $return_id = false): array|bool|int|string
     {
         $result = $this->db->query($query);
         if ($this->db->affected_rows === -1) {
             throw new DbException("Ошибка в SQL запросе: $query - {$this->db->errno} {$this->db->error}");
         }
         switch ($act) {
-            //ins sel upd del
             case 'sel':
                 if ($result->num_rows) {
                     $res = [];
@@ -46,7 +49,7 @@ class BaseModel
                 }
                 return false;
             case 'ins':
-                if ($insert_id) return $this->db->insert_id;
+                if ($return_id) return $this->db->insert_id;
                 return true;
             default:
                 return true;
@@ -54,8 +57,8 @@ class BaseModel
     }
 
     /**
-     * @param $table
-     * @param array $set
+     * @param string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
      * 'fields' => ['column', ...],
      * 'where' => ['column' => 'column_value', ...],
      * 'operand' => ['=', '<>', ...],
@@ -63,7 +66,7 @@ class BaseModel
      * 'order' => ['column', ...],
      * 'order_direction' => ['ASC' or 'DESC'],
      * 'limit' => '1' or ...
-     * // 1 вариант записи join:
+     * // 1 вариант записи join (может быть несколько вложенных массивов):
      * 'join' =>
      * [
      *   'name_table' => [
@@ -91,10 +94,10 @@ class BaseModel
      *   ]
      *  ]
      * ]
-     * @return array|bool|int|string
-     * @throws DbException
+     * @return string запрос в виде строки или ошибки
+     * @throws DbException ошибки при построении запроса
      */
-    final public function sel($table, array $set = []): array|bool|int|string
+    final public function sel(string $table, array $set = []): string
     {
         $fields = $this->creatFields($table, $set);
         $where = $this->creatWhere($table, $set);
@@ -112,7 +115,12 @@ class BaseModel
         return $this->query($query);
     }
 
-    protected function creatFields($table = false, $set = []): string
+    /**
+     * @param false|string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
+     * @return string результат построения части запроса
+     */
+    protected function creatFields(false|string $table = false, array $set = []): string
     {
         $set['fields'] = $set['fields'] ?? ['*'];
         if (!is_array($set['fields'])) $set['fields'] = explode(',', $set['fields']);
@@ -124,7 +132,12 @@ class BaseModel
         return $fields;
     }
 
-    protected function creatOrder($table = false, $set = []): string|null
+    /**
+     * @param false|string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
+     * @return string|null результат построения части запроса
+     */
+    protected function creatOrder(false|string $table = false, array $set = []): string|null
     {
         $table = $table ?? '';
         if (isset($set['order'])) {
@@ -146,8 +159,13 @@ class BaseModel
         }
         return null;
     }
-
-    protected function creatWhere($table = false, $set = [], $instruction = 'WHERE'): string|null
+    /**
+     * @param false|string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
+     * @param string $instruction инструкция части запроса, по умолчанию 'WHERE'
+     * @return string|null результат построения части запроса
+     */
+    protected function creatWhere(false|string $table = false, array $set = [], string $instruction = 'WHERE'): string|null
     {
         $table = $table ?? '';
         if (isset($set['where'])) {
@@ -205,7 +223,13 @@ class BaseModel
         return null;
     }
 
-    protected function creatJoin($table, $set, $new_wh = false): array|null
+    /**
+     * @param string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
+     * @param bool $new_wh указывает есть ли часть запроса 'WHERE'
+     * @return array|null результат построения части запроса
+     */
+    protected function creatJoin(string $table, array $set, bool $new_wh = false): array|null
     {
         if (isset($set['join'])) {
             $where = '';
