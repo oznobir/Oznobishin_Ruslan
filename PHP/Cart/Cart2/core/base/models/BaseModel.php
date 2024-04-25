@@ -12,7 +12,7 @@ class BaseModel extends BaseModelMethods
 
     protected mysqli $db;
 
-    /** Конструктор
+    /**
      * Устанавливает соединение с БД, флаги, кодировку
      * @throws DbException ошибки при соединении с БД
      */
@@ -127,9 +127,9 @@ class BaseModel extends BaseModelMethods
      */
     final public function insert(string $table, array $set = []): array|bool|int|string
     {
-        $set['fields'] = (isset($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
-        $set['files'] = (isset($set['files']) && is_array($set['files'])) ? $set['files'] : false;
-        $set['except'] = (isset($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
+        $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
+        $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
         if ($set['fields'] || $set['files']) {
             $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
             $query = "INSERT INTO $table ({$insertArr['fields']}) VALUES ({$insertArr['values']})";
@@ -137,6 +137,7 @@ class BaseModel extends BaseModelMethods
         }
         return false;
     }
+
     /**
      * @param string $table название таблицы БД
      * @param array $set массив значений для построения запроса
@@ -149,18 +150,17 @@ class BaseModel extends BaseModelMethods
      */
     final public function update(string $table, array $set = []): array|bool|int|string
     {
-        $set['fields'] = (isset($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
-        $set['files'] = (isset($set['files']) && is_array($set['files'])) ? $set['files'] : false;
-        $set['except'] = (isset($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
+        $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
+        $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
         if ($set['fields'] || $set['files']) {
-            $where ='';
-            if (!isset($set['all_row'])) {
-                if (isset($set['where'])) {
-                    $where = $this->creatWhere(false, $set);
-                } else {
+            $where = '';
+            if (!empty($set['all_row'])) {
+                $where = $this->creatWhere(false, $set);
+                if (!$where) {
                     $columns = $this->showColumns($table);
-                    if(!$columns) return false;
-                    if($columns['pri'] && $set['fields'][$columns['pri']]) {
+                    if (!$columns) return false;
+                    if ($columns['pri'] && $set['fields'][$columns['pri']]) {
                         $where = "WHERE {$columns['pri']} = {$set['fields'][$columns['pri']]}";
                         unset($set['fields'][$columns['pri']]);
                     }
@@ -168,9 +168,40 @@ class BaseModel extends BaseModelMethods
             }
             $update = $this->creatUpdate($set['fields'], $set['files'], $set['except']);
             $query = "UPDATE $table SET $update $where";
-            return $this->query($query, 'upd', true);
+            return $this->query($query);
         }
         return false;
+    }
+
+    /**
+     * @throws DbException
+     */
+    final public function delete(string $table, array $set = [])
+    {
+        $table = trim($table);
+        $where = $this->creatWhere($table, $set);
+        $columns = $this->showColumns($table);
+        if (!$columns) return false;
+        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : null;
+        if ($set['fields']) {
+            if ($columns['pri']) {
+                $key = array_search($columns['pri'], $set['fields']);
+                if ($key !== false) unset($set['fields'][$key]);
+            }
+            $fields = [];
+            foreach ($set['fields'] as $field) {
+                $fields[$field] = $columns[$field]['Default'];
+            }
+            $update = $this->creatUpdate($fields, false, false);
+            $query = "UPDATE $table SET $update $where";
+
+        } else {
+            $joinArr = $this->creatJoin($table, $set, true);
+            $join = $joinArr['join'];
+            $tables = $joinArr['tables'];
+            $query ="DELETE $table$tables FROM $table $join $where";
+        }
+        return $this->query($query);
     }
 
     /**
@@ -183,10 +214,10 @@ class BaseModel extends BaseModelMethods
         $query = "SHOW COLUMNS FROM $table";
         $res = $this->query($query);
         $columns = [];
-        if($res){
-            foreach ($res as $row){
+        if ($res) {
+            foreach ($res as $row) {
                 $columns[$row['Field']] = $row;
-                if($row['Key'] === 'PRI') $columns['pri'] = $row['Field'];
+                if ($row['Key'] === 'PRI') $columns['pri'] = $row['Field'];
             }
         }
         return $columns;

@@ -14,11 +14,10 @@ abstract class BaseModelMethods
     {
         $set['fields'] = $set['fields'] ?? ['*'];
         if (!is_array($set['fields'])) $set['fields'] = explode(',', $set['fields']);
-        $table = $table ?? '';
+        $table = $table ? $table .'.' :'';
         $fields = '';
         foreach ($set['fields'] as $field)
-            $fields .= " $table.$field,";
-//        return rtrim($fields, ', ');
+            $fields .= " $table$field,";
         return $fields;
     }
 
@@ -29,8 +28,9 @@ abstract class BaseModelMethods
      */
     protected function creatOrder(false|string $table = false, array $set = []): string|null
     {
-        $table = $table ?? '';
-        if (isset($set['order'])) {
+        $table = $table ? $table.'.' :'';
+        $set['order'] = (!empty($set['order']) && is_array($set['order'])) ? $set['order'] : null;
+        if ($set['order']) {
             $set['order_direction'] = $set['order_direction'] ?? ['ASC'];
             if (!is_array($set['order_direction'])) $set['order_direction'] = explode(',', $set['order_direction']);
             $order_by = 'ORDER BY ';
@@ -43,7 +43,7 @@ abstract class BaseModelMethods
                     $order_direction = strtoupper($set['order_direction'][$d_count - 1]);
                 }
                 if (is_int($order)) $order_by .= "$order $order_direction, ";
-                else $order_by .= "$table.$order $order_direction, ";
+                else $order_by .= "$table$order $order_direction, ";
             }
             return rtrim($order_by, ', ');
         }
@@ -59,7 +59,8 @@ abstract class BaseModelMethods
     protected function creatWhere(false|string $table = false, array $set = [], string $instruction = 'WHERE'): string|null
     {
         $table = $table ? $table.'.' :'';
-        if (isset($set['where'])) {
+        $set['where'] = (!empty($set['where']) && is_array($set['where'])) ? $set['where'] : null;
+        if ($set['where']) {
             $set['operand'] = $set['operand'] ?? ['='];
             if (!is_array($set['operand'])) $set['operand'] = explode(',', $set['operand']);
             $set['condition'] = $set['condition'] ?? ['AND'];
@@ -122,10 +123,12 @@ abstract class BaseModelMethods
      */
     protected function creatJoin(string $table, array $set, bool $new_wh = false): array|null
     {
-        if (isset($set['join'])) {
+        $set['join'] = (!empty($set['join']) && is_array($set['join'])) ? $set['join'] : null;
+        if ($set['join']) {
             $where = '';
             $join = '';
             $fields = '';
+            $tables = '';
             $join_table = $table;
             foreach ($set['join'] as $key => $item) {
                 if (!isset($item['on'])) continue; // throw
@@ -143,21 +146,22 @@ abstract class BaseModelMethods
                     default:
                         continue 2; // throw
                 }
-                if (!isset($item['type'])) $join .= 'LEFT JOIN ';
+                if (!empty($item['type'])) $join .= 'LEFT JOIN ';
                 else  $join .= trim(strtoupper($item['type'])) . ' JOIN ';
                 $join .= $key . " ON ";
                 $join .= $item['on']['table'] ?? $join_table;
                 $join .= ".$join_fields[0] = $key.$join_fields[1]";
                 $join_table = $key;
+                $tables .= ', '.trim($join_table);
                 if ($new_wh) {
                     if (isset($item['where'])) $new_wh = false;
                     $group_condition = ' WHERE ';
-                } else $group_condition = isset($item['group_condition']) ? strtoupper($item['group_condition'][0]) : 'AND';
+                } else $group_condition = strtoupper($item['group_condition'][0]) ?? 'AND';
 
                 $fields .= $this->creatFields($key, $item);
                 $where .= $this->creatWhere($key, $item, $group_condition);
             }
-            return compact('fields', 'join', 'where');
+            return compact('fields', 'join', 'where', 'tables' );
         }
         return null;
     }
@@ -189,7 +193,8 @@ abstract class BaseModelMethods
             }
         }
 
-        foreach ($insert_arr as $key => $arr) $insert_arr[$key] = rtrim($arr, ', ');
+        foreach ($insert_arr as $key => $arr)
+            $insert_arr[$key] = rtrim($arr, ', ');
 
         return $insert_arr;
     }
@@ -201,6 +206,7 @@ abstract class BaseModelMethods
                 if ($except && in_array($row, $except)) continue;
                 $update .= $row . '= ';
                 if (in_array($field, $this->sqlFunc)) $update .= $field . ', ';
+                elseif ($field === NULL) $update .= "NULL" . ', ';
                 else $update .= "'" .  $this->mb_escape($field)."', ";
             }
         }

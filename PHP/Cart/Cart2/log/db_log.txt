@@ -1,0 +1,4 @@
+Fault: 25-04-2024 20:43:20 - Ошибка в SQL запросе: UPDATE articles SET 0= 'id', 1= 'name', 2= 'content'  - 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '0= 'id', 1= 'name', 2= 'content'' at line 1
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\core\base\models\BaseModel.php 
+in line: 41
+

@@ -17,7 +17,15 @@ class IndexController extends BaseControllers
     {
         $db = Model::instance();
         $table = 'articles';
-        $res5 = $db->deletee($table);
+
+        $res5 = $db->delete($table,[
+//            'fields' => ['name', 'content',],
+            'where' => ['id' => 13],
+            'join' => [
+                'on' => ['parent_id', 'id']
+            ]
+            ]);
+        exit();
 //        $files['gallery_img'] = [];
 //        $files['img'] = "";
 //        $_POST['id'] = '6';
@@ -38,13 +46,13 @@ class IndexController extends BaseControllers
 //        exit();
 //        $res3 = $db->showColumns($table);
 
-//        $files['gallery_img'] = ["blue_s1111.png", 'red_234.png', 'black_345.png'];
-//        $_POST['name'] = 'name6';
+        $files['gallery_img'] = ["blue7.png", 'red7.png', 'black7.png'];
+        $_POST['name'] = 'name5';
 //        $files['img'] = "ups5.png";
 //        $res2 = $db->insert($table, [
 //            'fields' => [
-//                'name' => 'name6',
-//                'content' => 'west',
+//                'name' => 'name7',
+//                'content' => 'west7',
 //            ],
 //            'except' => ['name'],
 //            'files' => $files,
