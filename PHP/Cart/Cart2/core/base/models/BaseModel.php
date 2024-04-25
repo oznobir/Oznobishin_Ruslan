@@ -32,7 +32,7 @@ class BaseModel extends BaseModelMethods
      * @param string $act insert - 'ins', select - 'sel', update - 'upd ', delete - 'del'
      * @param bool $return_id true - возвращает id (ins, ...)
      * @return array|bool|int|string - результат запроса из БД или ошибки
-     * @throws DbException - ошибки при выполнении запроса
+     * @throws DbException - ошибки
      */
     final public function query(string $query, string $act = 'sel', bool $return_id = false): array|bool|int|string
     {
@@ -95,9 +95,9 @@ class BaseModel extends BaseModelMethods
      *  ]
      * ]
      * @return string запрос в виде строки или ошибки
-     * @throws DbException ошибки при построении запроса
+     * @throws DbException ошибки
      */
-    final public function sel(string $table, array $set = []): string
+    final public function select(string $table, array $set = []): string
     {
         $fields = $this->creatFields($table, $set);
         $where = $this->creatWhere($table, $set);
@@ -122,24 +122,74 @@ class BaseModel extends BaseModelMethods
      *  разрешена передача MySQL-функции строкой, например NOW()
      *  'files' => ['name' => 'value', ...], массив files
      *  'except' => ['except1', ...], исключает данные из массива
-     *  'return_id' => true|false возвращать id вставленной записи        // ???
      * @return array|bool|int|string
-     * @throws DbException
+     * @throws DbException ошибки
      */
-    final public function ins(string $table, array $set = []): array|bool|int|string
+    final public function insert(string $table, array $set = []): array|bool|int|string
     {
-        $set['fields'] = (isset($set['fields']) && is_array($set['fields']))? $set['fields'] : false;;
-        $set['files'] = (isset($set['files']) && is_array($set['files']))? $set['files'] : false;;
-        $set['except'] = (isset($set['except']) && is_array($set['except']))? $set['except'] : false;
-//        $set['return_id'] = isset($set['return_id']);
-
-        $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
-        if($insertArr){
+        $set['fields'] = (isset($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
+        $set['files'] = (isset($set['files']) && is_array($set['files'])) ? $set['files'] : false;
+        $set['except'] = (isset($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        if ($set['fields'] || $set['files']) {
+            $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
             $query = "INSERT INTO $table ({$insertArr['fields']}) VALUES ({$insertArr['values']})";
-//            return $this->query($query, 'ins', $set['return_id']);
             return $this->query($query, 'ins', true);
         }
         return false;
+    }
+    /**
+     * @param string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
+     *  'fields' => ['column' => 'column_value', ...], если не указан, из $_POST
+     *  'files' => ['name' => 'value', ...], массив files
+     *  'except' => ['except1', ...], исключает данные из массива
+     *  'return_id' => true|false возвращать id вставленной записи        // ???
+     * @return array|bool|int|string
+     * @throws DbException ошибки
+     */
+    final public function update(string $table, array $set = []): array|bool|int|string
+    {
+        $set['fields'] = (isset($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
+        $set['files'] = (isset($set['files']) && is_array($set['files'])) ? $set['files'] : false;
+        $set['except'] = (isset($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        if ($set['fields'] || $set['files']) {
+            $where ='';
+            if (!isset($set['all_row'])) {
+                if (isset($set['where'])) {
+                    $where = $this->creatWhere(false, $set);
+                } else {
+                    $columns = $this->showColumns($table);
+                    if(!$columns) return false;
+                    if($columns['pri'] && $set['fields'][$columns['pri']]) {
+                        $where = "WHERE {$columns['pri']} = {$set['fields'][$columns['pri']]}";
+                        unset($set['fields'][$columns['pri']]);
+                    }
+                }
+            }
+            $update = $this->creatUpdate($set['fields'], $set['files'], $set['except']);
+            $query = "UPDATE $table SET $update $where";
+            return $this->query($query, 'upd', true);
+        }
+        return false;
+    }
+
+    /**
+     * @param string $table название таблицы БД
+     * @return array массив с инфо о колонках таблицы БД
+     * @throws DbException ошибки
+     */
+    final public function showColumns(string $table): array
+    {
+        $query = "SHOW COLUMNS FROM $table";
+        $res = $this->query($query);
+        $columns = [];
+        if($res){
+            foreach ($res as $row){
+                $columns[$row['Field']] = $row;
+                if($row['Key'] === 'PRI') $columns['pri'] = $row['Field'];
+            }
+        }
+        return $columns;
     }
 
 }

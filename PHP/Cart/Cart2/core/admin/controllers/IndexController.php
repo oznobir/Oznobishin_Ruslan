@@ -17,18 +17,40 @@ class IndexController extends BaseControllers
     {
         $db = Model::instance();
         $table = 'articles';
-        $files['gallery_img'] = ["blue_s.png", 'red_234.png', 'black_345.png'];
-        $files['img'] = "ups5.png";
-        $res = $db->ins($table, [
-            'fields' => [
-                'name' => 'name4',
-                'content' => 'west',
-            ],
-            'except' => ['name'],
-            'files' => $files,
-        ]);
+        $res5 = $db->deletee($table);
+//        $files['gallery_img'] = [];
+//        $files['img'] = "";
+//        $_POST['id'] = '6';
+//        $_POST['name'] = '';
+//        $_POST['content'] = "<p>New's 5</p>";
+//        $res4 = $db->update($table);
+//        $res4 = $db->update($table,[
+//            'fields' => [
+//                'id' => 2,
+//                'name' => 'name2',
+
+//                'content' => 'west',
+//            ],
+//            'where' => ['id' => 1],
+//                'except' => ['name'],
+//                'files' => $files,
+//            ]);
 //        exit();
-//        $res = $db->sel($table, [
+//        $res3 = $db->showColumns($table);
+
+//        $files['gallery_img'] = ["blue_s1111.png", 'red_234.png', 'black_345.png'];
+//        $_POST['name'] = 'name6';
+//        $files['img'] = "ups5.png";
+//        $res2 = $db->insert($table, [
+//            'fields' => [
+//                'name' => 'name6',
+//                'content' => 'west',
+//            ],
+//            'except' => ['name'],
+//            'files' => $files,
+//        ]);
+//        exit();
+//        $res1 = $db->select($table, [
 //            'fields' => ['id', 'name'],
 //            'where' => ['name' => "Petr"],
 //            'operand' => ['IN', '<>'],

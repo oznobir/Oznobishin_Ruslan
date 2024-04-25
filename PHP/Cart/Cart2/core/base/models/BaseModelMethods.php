@@ -4,6 +4,7 @@ namespace core\base\models;
 // потом trait
 abstract class BaseModelMethods
 {
+    protected array $sqlFunc = ['NOW()'];
     /**
      * @param false|string $table название таблицы БД
      * @param array $set массив значений для построения запроса
@@ -57,7 +58,7 @@ abstract class BaseModelMethods
      */
     protected function creatWhere(false|string $table = false, array $set = [], string $instruction = 'WHERE'): string|null
     {
-        $table = $table ?? '';
+        $table = $table ? $table.'.' :'';
         if (isset($set['where'])) {
             $set['operand'] = $set['operand'] ?? ['='];
             if (!is_array($set['operand'])) $set['operand'] = explode(',', $set['operand']);
@@ -87,7 +88,7 @@ abstract class BaseModelMethods
                         foreach ($item as $value)
                             $str_in .= "'" . trim($this->mb_escape($value)) . "', ";
                     }
-                    $where .= $table . '.' . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition;
+                    $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition;
                 } elseif (str_contains($operand, 'LIKE')) {
                     $likeTemplate = explode('%', $operand);
                     foreach ($likeTemplate as $keyLike => $itemLike) {
@@ -96,16 +97,16 @@ abstract class BaseModelMethods
                             else $item .= '%';
                         }
                     }
-                    $where .= "$table.$key LIKE '{$this->mb_escape($item)}' $condition";
+                    $where .= "$table$key LIKE '{$this->mb_escape($item)}' $condition";
                 } else {
                     if (is_string($item) && str_starts_with($item, 'SELECT')) {
-                        $where .= "$table.$key $operand ($item) $condition";
+                        $where .= "$table$key $operand ($item) $condition";
                     } elseif (is_array($item)) {
                         foreach ($item as $value) {
                             if ($where) $where .= ' ';
-                            $where .= "$table.$key $operand '{$this->mb_escape($value)}' $condition";
+                            $where .= "$table$key $operand '{$this->mb_escape($value)}' $condition";
                         }
-                    } else $where .= "$table.$key $operand '{$this->mb_escape($item)}' $condition";
+                    } else $where .= "$table$key $operand '{$this->mb_escape($item)}' $condition";
                 }
             }
             return substr($where, 0, strrpos($where, $condition));
@@ -169,15 +170,13 @@ abstract class BaseModelMethods
      */
     protected function creatInsert(false|array $fields, false|array $files, false|array $except): array
     {
-        if (!$fields && isset($_POST)) $fields = $_POST; //htmlspecialchars()
         $insert_arr['fields'] = '';
         $insert_arr['values'] = '';
         if($fields) {
-            $sql_func = ['NOW()'];
             foreach ($fields as $row => $field){
                 if ($except && in_array($row, $except)) continue;
                 $insert_arr['fields'] .= $row . ', ';
-                if (in_array($field, $sql_func)) $insert_arr['values'] .= $field . ', ';
+                if (in_array($field, $this->sqlFunc)) $insert_arr['values'] .= $field . ', ';
                 else $insert_arr['values'] .= "'" .  $this->mb_escape($field)."', ";
             }
 
@@ -189,10 +188,30 @@ abstract class BaseModelMethods
                 else $insert_arr['values'] .= "'" .  $this->mb_escape($file)."', ";
             }
         }
-        if($insert_arr) {
-            foreach ($insert_arr as $key => $arr) $insert_arr[$key] = rtrim($arr, ', ');
-        }
+
+        foreach ($insert_arr as $key => $arr) $insert_arr[$key] = rtrim($arr, ', ');
+
         return $insert_arr;
+    }
+    protected function creatUpdate(false|array $fields, false|array $files, false|array $except): string
+    {
+        $update = '';
+        if($fields) {
+            foreach ($fields as $row => $field){
+                if ($except && in_array($row, $except)) continue;
+                $update .= $row . '= ';
+                if (in_array($field, $this->sqlFunc)) $update .= $field . ', ';
+                else $update .= "'" .  $this->mb_escape($field)."', ";
+            }
+        }
+        if($files) {
+            foreach ($files as $row => $file){
+                $update .= $row . '= ';
+                if(is_array($file)) $update .= "'" .  $this->mb_escape(json_encode($file))."', ";
+                else $update .= "'" .  $this->mb_escape($file)."', ";
+            }
+        }
+        return rtrim($update, ', ');
     }
     protected function mb_escape(string $string): string
     {
