@@ -175,11 +175,32 @@ class BaseModel extends BaseModelMethods
         }
         return false;
     }
-
     /**
+     * @param string $table название таблицы БД
+     * @param array $set массив значений для построения запроса
+     * 'fields' => ['column', ...],
+     * 'where' => ['column' => 'column_value', ...],
+     * // 1 вариант записи join (может быть несколько вложенных массивов):
+     * 'join' =>
+     * [
+     *   'name_table' => [
+     *      'table' => 'name_table',
+     *      'where' => ['column' => 'column_value', ...],
+     *      'on' => [
+     *        'table' => 'name_table',
+     *        'fields' => ['column', 'parent_column']
+     *      ],
+     * // 2 вариант записи join:
+     *   [
+     *      'table' => 'name_table',
+     *      'where' => ['column' => 'column_value', ...],
+     *      'on' => ['column', 'parent_column']
+     *   ]
+     * ]
+     * @return array|bool|int|string
      * @throws DbException
      */
-    final public function delete(string $table, array $set = [])
+    final public function delete(string $table, array $set = []): array|bool|int|string
     {
         $table = trim($table);
         $where = $this->creatWhere($table, $set);
