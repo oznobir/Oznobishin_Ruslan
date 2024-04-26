@@ -122,6 +122,7 @@ class BaseModel extends BaseModelMethods
      *  разрешена передача MySQL-функции строкой, например NOW()
      *  'files' => ['name' => 'value', ...], массив files
      *  'except' => ['except1', ...], исключает данные из массива
+     *  'return_id' => true|false возвращать id вставленной записи
      * @return array|bool|int|string
      * @throws DbException ошибки
      */
@@ -130,10 +131,11 @@ class BaseModel extends BaseModelMethods
         $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
         $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
         $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        $set['return_id'] = $set['return_id'] ?? false;
         if ($set['fields'] || $set['files']) {
             $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
             $query = "INSERT INTO $table ({$insertArr['fields']}) VALUES ({$insertArr['values']})";
-            return $this->query($query, 'ins', true);
+            return $this->query($query, 'ins', $set['return_id']);
         }
         return false;
     }
@@ -144,7 +146,7 @@ class BaseModel extends BaseModelMethods
      *  'fields' => ['column' => 'column_value', ...], если не указан, из $_POST
      *  'files' => ['name' => 'value', ...], массив files
      *  'except' => ['except1', ...], исключает данные из массива
-     *  'return_id' => true|false возвращать id вставленной записи        // ???
+     *  'return_id' => true|false возвращать id вставленной записи
      * @return array|bool|int|string
      * @throws DbException ошибки
      */
@@ -153,6 +155,7 @@ class BaseModel extends BaseModelMethods
         $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
         $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
         $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        $set['return_id'] = $set['return_id'] ?? false;
         if ($set['fields'] || $set['files']) {
             $where = '';
             if (!empty($set['all_row'])) {
@@ -168,7 +171,7 @@ class BaseModel extends BaseModelMethods
             }
             $update = $this->creatUpdate($set['fields'], $set['files'], $set['except']);
             $query = "UPDATE $table SET $update $where";
-            return $this->query($query);
+            return $this->query($query, 'ins', $set['return_id']);
         }
         return false;
     }
@@ -196,12 +199,12 @@ class BaseModel extends BaseModelMethods
             $query = "UPDATE $table SET $update $where";
 
         } else {
-            $joinArr = $this->creatJoin($table, $set, true);
-            $join = $joinArr['join'];
-            $tables = $joinArr['tables'];
-            $query ="DELETE $table$tables FROM $table $join $where";
+            $joinArr = $this->creatJoin($table, $set);
+            $join = $joinArr['join'] ?? '';
+            $tables = $joinArr['tables'] ?? '';
+            $query = "DELETE $table$tables FROM $table $join $where";
         }
-        return $this->query($query);
+        return $this->query($query, 'default');
     }
 
     /**

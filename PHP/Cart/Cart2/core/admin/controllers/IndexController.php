@@ -19,11 +19,12 @@ class IndexController extends BaseControllers
         $table = 'articles';
 
         $res5 = $db->delete($table,[
-//            'fields' => ['name', 'content',],
-            'where' => ['id' => 13],
-            'join' => [
-                'on' => ['parent_id', 'id']
-            ]
+            'fields' => ['name', 'content',],
+            'where' => ['id' => 2],
+//            'join' => [
+//                'table' => 'child_articles',
+//                'on' => ['parent_id', 'id']
+//            ]
             ]);
         exit();
 //        $files['gallery_img'] = [];
@@ -46,8 +47,8 @@ class IndexController extends BaseControllers
 //        exit();
 //        $res3 = $db->showColumns($table);
 
-        $files['gallery_img'] = ["blue7.png", 'red7.png', 'black7.png'];
-        $_POST['name'] = 'name5';
+//        $files['gallery_img'] = ["blue7.png", 'red7.png', 'black7.png'];
+//        $_POST['name'] = 'name5';
 //        $files['img'] = "ups5.png";
 //        $res2 = $db->insert($table, [
 //            'fields' => [
