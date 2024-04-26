@@ -1,33 +1,31 @@
 <?php
 
-use Core\Route;
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET')
+if ($_SERVER['REQUEST_METHOD'] == 'GET')
     return [
-        new Route('/', 'index', 'index'),
-        new Route('/category/:slug/', 'category', 'index'),
-        new Route('/product/:slug/', 'product', 'index'),
-        new Route('/cart/', 'cart', 'index'),
-        new Route('/cart/add/:id/:count/', 'cart', 'add'),
-        new Route('/cart/remove/:id/', 'cart', 'remove'),
-        new Route('/user/', 'user', 'index'),
-        new Route('/user/logout/', 'user', 'logout'),
-        new Route('/user/unregister/', 'user', 'unregister'),
-        new Route('/admin/', 'admin', 'index'),
-        new Route('/admin/products/', 'admin', 'products'),
-        new Route('/admin/orders/', 'admin', 'orders'),
+        ['/', 'index', 'index'],
+        ['/category/:slug/', 'category', 'index'],
+        ['/product/:slug/', 'product', 'index'],
+        ['/cart/', 'cart', 'index'],
+        ['/cart/add/:id/:count/', 'cart', 'add'],
+        ['/cart/remove/:id/', 'cart', 'remove'],
+        ['/user/', 'user', 'index'],
+        ['/user/logout/', 'user', 'logout'],
+        ['/user/unregister/', 'user', 'unregister'],
+        ['/admin/', 'admin', 'index'],
+        ['/admin/products/', 'admin', 'products'],
+        ['/admin/orders/', 'admin', 'orders'],
     ];
-if ($_SERVER['REQUEST_METHOD'] === 'POST')
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
     return [
-        new Route('/user/register/', 'user', 'register'),
-        new Route('/user/login/', 'user', 'login'),
-        new Route('/user/update/', 'user', 'update'),
-        new Route('/cart/order/', 'cart', 'order'),
-        new Route('/admin/category/add/', 'admin', 'addcategory'),
-        new Route('/admin/category/update/', 'admin', 'updatecategory'),
-        new Route('/admin/product/add/', 'admin', 'addproduct'),
-        new Route('/admin/product/update/', 'admin', 'updateproduct'),
-        new Route('/admin/product/image/', 'admin', 'uploadimage'),
-        new Route('/admin/order/status/', 'admin', 'orderstatus'),
-        new Route('/admin/order/date/', 'admin', 'orderdate'),
+        ['/user/register/', 'user', 'register'],
+        ['/user/login/', 'user', 'login'],
+        ['/user/update/', 'user', 'update'],
+        ['/cart/order/', 'cart', 'order'],
+        ['/admin/category/add/', 'admin', 'addcategory'],
+        ['/admin/category/update/', 'admin', 'updatecategory'],
+        ['/admin/product/add/', 'admin', 'addproduct'],
+        ['/admin/product/update/', 'admin', 'updateproduct'],
+        ['/admin/product/image/', 'admin', 'uploadimage'],
+        ['/admin/order/status/', 'admin', 'orderstatus'],
+        ['/admin/order/date/', 'admin', 'orderdate'],
     ];

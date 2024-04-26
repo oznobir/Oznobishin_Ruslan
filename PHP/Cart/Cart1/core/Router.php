@@ -13,12 +13,12 @@ class Router
     {
         $uri = $_SERVER['REQUEST_URI'];
         foreach ($routes as $route) {
-            $pattern = $this->createPattern($route->path);
+            $pattern = $this->createPattern($route[0]);
 
             if (preg_match($pattern, $uri, $params)) {
                 $params = $this->clearParams($params);
-                $controller = $route->controller;
-                $action = $route->action;
+                $controller = $route[1];
+                $action = $route[2];
 
                 return ['controller' => 'Project\Controllers\\'.ucfirst($controller).'Controller',
                     'action' => $action, 'parameters' => $params];
