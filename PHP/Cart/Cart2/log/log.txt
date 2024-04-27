@@ -1,0 +1,16 @@
+Fault: 27-04-2024 20:54:38 - Класс core\admin\controllers\ShowController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 17
+
+Fault: 27-04-2024 21:13:00 - Класс core\admin\controllers\AddController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 17
+
+Fault: 27-04-2024 21:13:10 - Класс core\admin\controllers\AddController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 17
+
+Fault: 27-04-2024 21:13:49 - Класс core\site\controllers\LoginController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 17
+

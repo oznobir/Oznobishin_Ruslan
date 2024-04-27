@@ -7,7 +7,9 @@ use core\base\controllers\Singleton;
 class Settings
 {
     use Singleton;
-    private array $projectTables = [];
+    private array $projectTables = [
+        'articles' => ['name' => 'Статьи', 'img' =>'pages.png'],
+    ];
     private string $defaultTable = 'articles';
     private string $expansion = 'core/admin/expansions/';
     private array $routes = [

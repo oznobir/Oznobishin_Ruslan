@@ -364,7 +364,7 @@ label.vg-element {
 }
 
 .vg-menu a {
-    padding: 3.5%;
+    /*padding: 3.5%;*/
     background: #2f3b4c;
     width: 25vw;
     padding: 1vw 0;
@@ -542,9 +542,9 @@ textarea {
     background-color: transparent;
 }
 
-.select-wrapper select::-ms-expand {
-    display: none;
-}
+/*.select-wrapper select::-ms-expand {*/
+/*    display: none;*/
+/*}*/
 
 .select-arrow-3 {
     position: absolute;
@@ -849,14 +849,15 @@ input[type="checkbox"] {
     width: 5px;
     height: 5px;
     border: 2px solid darkblue;
-    -moz-border-radius: 4px;
-    -o-border-radius: 4px;
+    /*-moz-border-radius: 4px;*/
+    /*-o-border-radius: 4px;*/
     -webkit-border-radius: 4px;
     border-radius: 4px;
     opacity: .5;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
-    filter: alpha(opacity=50);
+    /*-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";*/
+    /*filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);*/
+    /*filter: alpha(opacity=50);*/
+    filter: opacity(50%);
     background-color: white;
 }
 .cp-default .pcr-indicator {
@@ -864,12 +865,13 @@ input[type="checkbox"] {
     height: 10px;
     left: -4px;
     opacity: .6;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
-    filter: alpha(opacity=60);
+    filter: opacity(50%);
+    /*-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";*/
+    /*filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);*/
+    /*filter: alpha(opacity=60);*/
     border: 4px solid lightblue;
-    -moz-border-radius: 4px;
-    -o-border-radius: 4px;
+    /*-moz-border-radius: 4px;*/
+    /*-o-border-radius: 4px;*/
     -webkit-border-radius: 4px;
     border-radius: 4px;
     background-color: white;

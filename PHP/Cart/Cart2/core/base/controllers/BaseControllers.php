@@ -10,7 +10,8 @@ abstract class BaseControllers
     use BaseMethods;
 
     protected $header;
-    protected $content;
+    protected $contentMenu;
+    protected $contentCenter;
     protected $footer;
     protected $page;
     protected string $controller;

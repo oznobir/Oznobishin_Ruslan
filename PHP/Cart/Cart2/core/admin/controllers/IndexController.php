@@ -26,7 +26,8 @@ class IndexController extends BaseAdmin
     protected function outputData(): false|string
     {
         if (!$this->template) $this->template = ADMIN_TEMPLATE. 'show';
-        $this->content = $this->render($this->template);
+        $this->contentMenu = $this->render(ADMIN_TEMPLATE.'include/menu');
+        $this->contentCenter = $this->render($this->template);
         return parent::outputData();
     }
 
