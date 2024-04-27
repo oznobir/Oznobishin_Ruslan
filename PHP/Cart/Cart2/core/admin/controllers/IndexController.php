@@ -3,6 +3,7 @@
 namespace core\admin\controllers;
 
 
+use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 use core\plugins\shop\ShopSettings;
 
@@ -13,22 +14,27 @@ class IndexController extends BaseAdmin
      */
     protected function inputData(): void
     {
-        $this->inputDataBase();
+        $this->exec();
         $this->createTableData();
         $this->createData(['fields' => ['price', 'gallery_img']]);
-        $this->expansion(get_defined_vars(), false);
+        $this->expansionBase(get_defined_vars());
     }
 
-    protected function outputData(): void
+    /**
+     * @throws RouteException
+     */
+    protected function outputData(): false|string
     {
-
+        if (!$this->template) $this->template = ADMIN_TEMPLATE. 'show';
+        $this->content = $this->render($this->template);
+        return parent::outputData();
     }
 
     /**
      * @param array $data
      * @return array
      */
-    protected function createData(array $data = []) : array
+    protected function createData(array $data = []): array
     {
         $fields = [];
         $order = [];
@@ -66,11 +72,10 @@ class IndexController extends BaseAdmin
         if (isset($data['order_direction']))
             $order_direction = Settings::instance()->arrayMergeRecursive($order_direction, $data['order_direction']);
 
-        $dataInput = $this->model->select($this->table, [
+        return $this->data = $this->model->select($this->table, [
             'fields' => $fields,
             'order' => $order,
             'order_direction' => $order_direction,
         ]);
-        return $this->data = $dataInput;
     }
 }

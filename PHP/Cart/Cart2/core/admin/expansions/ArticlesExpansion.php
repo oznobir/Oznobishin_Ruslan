@@ -7,8 +7,8 @@ use core\base\controllers\Singleton;
 class ArticlesExpansion
 {
     use Singleton;
-    public function expansionBase($args = [])
+    public function expansion($args = [])
     {
-exit();
+
     }
 }

@@ -9,14 +9,18 @@ abstract class BaseControllers
 {
     use BaseMethods;
 
+    protected $header;
+    protected $content;
+    protected $footer;
+    protected $page;
     protected string $controller;
     protected string $inputMethod;
     protected string $outputMethod;
     protected ?array $parameters = null;
-    protected array|string $page;
     protected ?string $error = null;
-    protected array $styles;
-    protected array $scripts;
+    protected $template;
+    protected $styles;
+    protected $scripts;
 
     /** Подключение контроллера с помощью Reflection
      * @return void метод request
@@ -49,10 +53,10 @@ abstract class BaseControllers
         $inputData = $args['inputMethod'];
         $outputData = $args['outputMethod'];
 
-        $data = $this->$inputData();
         if (method_exists($this, $outputData)) {
-            if ($this->$outputData($data)) $this->page = ($this->$outputData($data));
-        } elseif ($data) $this->page = $data;
+            $this->$inputData();
+            $this->page = $this->$outputData();
+        } else $this->page = $this->$inputData();
 
         if ($this->error) $this->writeLog($this->error);
         $this->getPage();
@@ -110,11 +114,11 @@ abstract class BaseControllers
             }
         } else {
             if (ADMIN_CSS_JS['styles']) {
-                foreach (SITE_CSS_JS['styles'] as $item)
+                foreach (ADMIN_CSS_JS['styles'] as $item)
                     $this->styles[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
             }
             if (ADMIN_CSS_JS['scripts']) {
-                foreach (SITE_CSS_JS['scripts'] as $item)
+                foreach (ADMIN_CSS_JS['scripts'] as $item)
                     $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
             }
         }

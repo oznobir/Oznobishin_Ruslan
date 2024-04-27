@@ -6,6 +6,7 @@ use core\admin\models\Model;
 use core\base\controllers\BaseControllers;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
+use core\admin\expansions\ArticlesExpansion;
 
 abstract class BaseAdmin extends BaseControllers
 {
@@ -13,6 +14,7 @@ abstract class BaseAdmin extends BaseControllers
     protected $table;
     protected $columns;
     protected $data;
+    protected $alias;
     protected $menu;
     protected string $title;
 
@@ -22,12 +24,23 @@ abstract class BaseAdmin extends BaseControllers
         $this->title = 'Admin panel';
         if (!$this->model) $this->model = Model::instance();
         if (!$this->menu) $this->menu = Settings::get('projectTables');
+        if (!$this->alias) $this->alias = Settings::get('routes')['admin']['alias'];
         $this->sendNoCacheHeaders();
     }
-
-    protected function outputData(): void
+    protected function exec(): void
     {
+        self::inputData();
+    }
 
+    /**
+     * @throws RouteException
+     */
+    protected function outputData(): false|string
+    {
+        $this->header = $this->render(ADMIN_TEMPLATE. 'include/header');
+        $this->footer = $this->render(ADMIN_TEMPLATE. 'include/footer');
+
+        return $this->render(ADMIN_TEMPLATE.'layout/default');
     }
 
     protected function sendNoCacheHeaders(): void
@@ -36,11 +49,6 @@ abstract class BaseAdmin extends BaseControllers
         header("Cache-Control: no-cache, must-revalidate");
         header("Cache-Control: max-age=0");
         header("Cache-Control: post-check=0, pre-check=0");
-    }
-
-    protected function inputDataBase(): void
-    {
-        self::inputData();
     }
 
     protected function createTableData(): void
@@ -54,32 +62,30 @@ abstract class BaseAdmin extends BaseControllers
 
     }
 
-    /**
-     * @param array $args
-     * @param false|string|object $settings
-     * @return false|mixed
-     */
-    protected function expansion(array $args = [], false|string|object $settings = false): mixed
+
+    protected function expansionBase($args = [], $settings = false)
     {
         $fileName = explode('_', $this->table);
         $className = '';
-        foreach ($fileName as $name) $className .= ucfirst($name);
+        foreach ($fileName as $name)
+            $className .= ucfirst($name);
 
-        if(!$settings) $path = Settings::get('expansion');
+        if (!$settings) $path = Settings::get('expansion');
         elseif (is_object($settings)) $path = $settings::get('expansion');
-        else $path = $settings ;
+        else $path = $settings;
 
         $class = $path . $className . 'Expansion';
         if (is_readable($_SERVER['DOCUMENT_ROOT'] . PATH . $class . '.php')) {
             $class = str_replace('/', '\\', $class);
             $exp = $class::instance();
-            foreach ($this as $name => $value){
-                $exp->$name = &$this->$value;
+            foreach ($this as $name => $value) {
+                if (!$this->model || !$this->columns)  // ???????? Model, array to string
+                    $exp->$name = &$this->$value;
             }
-            return $exp->expansionBase($args);
+            return $exp->expansion($args);
         } else {
-            $file = $_SERVER['DOCUMENT_ROOT']. PATH . $this->table . '.php';
-            if(is_readable($file)) return include $file;
+            $file = $_SERVER['DOCUMENT_ROOT'] . PATH . $this->table . '.php';
+            if (is_readable($file)) return include $file;
         }
         return false;
     }
