@@ -2,95 +2,75 @@
 
 namespace core\admin\controllers;
 
-use core\admin\models\Model;
-use core\base\controllers\BaseControllers;
-use core\base\exceptions\DbException;
 
+use core\base\settings\Settings;
+use core\plugins\shop\ShopSettings;
 
-class IndexController extends BaseControllers
+class IndexController extends BaseAdmin
 {
-
     /**
-     * @throws DbException
+     * @return void
      */
     protected function inputData(): void
     {
-        $db = Model::instance();
-        $table = 'articles';
+        $this->inputDataBase();
+        $this->createTableData();
+        $this->createData(['fields' => ['price', 'gallery_img']]);
+        $this->expansion(get_defined_vars(), false);
+    }
 
-        $res5 = $db->delete($table,[
-            'fields' => ['name', 'content',],
-            'where' => ['id' => 2],
-//            'join' => [
-//                'table' => 'child_articles',
-//                'on' => ['parent_id', 'id']
-//            ]
-            ]);
-        exit();
-//        $files['gallery_img'] = [];
-//        $files['img'] = "";
-//        $_POST['id'] = '6';
-//        $_POST['name'] = '';
-//        $_POST['content'] = "<p>New's 5</p>";
-//        $res4 = $db->update($table);
-//        $res4 = $db->update($table,[
-//            'fields' => [
-//                'id' => 2,
-//                'name' => 'name2',
+    protected function outputData(): void
+    {
 
-//                'content' => 'west',
-//            ],
-//            'where' => ['id' => 1],
-//                'except' => ['name'],
-//                'files' => $files,
-//            ]);
-//        exit();
-//        $res3 = $db->showColumns($table);
+    }
 
-//        $files['gallery_img'] = ["blue7.png", 'red7.png', 'black7.png'];
-//        $_POST['name'] = 'name5';
-//        $files['img'] = "ups5.png";
-//        $res2 = $db->insert($table, [
-//            'fields' => [
-//                'name' => 'name7',
-//                'content' => 'west7',
-//            ],
-//            'except' => ['name'],
-//            'files' => $files,
-//        ]);
-//        exit();
-//        $res1 = $db->select($table, [
-//            'fields' => ['id', 'name'],
-//            'where' => ['name' => "Petr"],
-//            'operand' => ['IN', '<>'],
-//            'condition' => ['AND', "OR"],
-//            'order' => ['name'],
-//            'order_direction' => ['DESC'],
-//            'limit' => '1',
-//            'join' => [
-//                'join_table1' => [
-//                    'table' => 'join_table1',
-//                    'fields' => ['id as j_id', 'name as j_name'],
-//                    'type' => 'left',
-//                    'where' => ['name' => 'sasha'],
-//                    'operand' => ['='],
-//                    'conditions' => ['OR'],
-//                    'group_condition' => ['AND'],
-//                    'on' => [
-//                        'table' => 'teachers',
-//                        'fields' => ['id', 'parent_id'],
-//                    ],
-//                ],
-//                'join_table2' => [
-//                    'table' => 'join_table2',
-//                    'fields' => ['id as j2_id', 'name as j2_name'],
-//                    'type' => 'left',
-//                    'where' => ['name' => 'sasha'],
-//                    'operand' => ['<>'],
-//                    'conditions' => ['AND'],
-//                    'on' => ['id', 'parent_id'],
-//                ],
-//            ]
-//        ]);
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function createData(array $data = []) : array
+    {
+        $fields = [];
+        $order = [];
+        $order_direction = [];
+
+        if (!$this->columns['pri']) return $this->$data = [];
+        $fields[] = $this->columns['pri'] . ' as id';
+        if ($this->columns['name']) $fields['name'] = 'name';
+        if ($this->columns['img']) $fields['img'] = 'img';
+
+        if (count($fields) > 3) {
+            foreach ($this->columns as $key => $item) {
+                if (!$fields['name'] && str_contains($key, 'name')) {
+                    $fields['name'] = $key . 'as name';
+                }
+                if (!$fields['img'] && str_starts_with($key, 'img')) {
+                    $fields['img'] = $key . 'as img';
+                }
+            }
+        }
+        if (isset($data['fields'])) $fields = Settings::instance()->arrayMergeRecursive($fields, $data['fields']);
+        if ($this->columns['pid']) {
+            if (!in_array('pid', $fields)) $fields[] = 'pid';
+            $order[] = 'pid';
+        }
+        if ($this->columns['position']) {
+            $order[] = 'position';
+        } elseif ($this->columns['date']) {
+            $order[] = 'date';
+            if ($order) $order_direction = ['ASC', 'DESC'];
+            else $order_direction[] = 'DESC';
+        }
+        if (isset($data['order']))
+            $order = Settings::instance()->arrayMergeRecursive($order, $data['order']);
+        if (isset($data['order_direction']))
+            $order_direction = Settings::instance()->arrayMergeRecursive($order_direction, $data['order_direction']);
+
+        $dataInput = $this->model->select($this->table, [
+            'fields' => $fields,
+            'order' => $order,
+            'order_direction' => $order_direction,
+        ]);
+        return $this->data = $dataInput;
     }
 }

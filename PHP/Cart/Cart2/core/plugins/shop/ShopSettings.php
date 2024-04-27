@@ -8,7 +8,7 @@ use core\base\settings\Settings;
 class ShopSettings
 {
     use Singleton;
-
+    private string $expansion = 'core/plugins/shop/';
     private array $routes = [
         'plugin' => [
             'path' => 'core/plugins/shop/',

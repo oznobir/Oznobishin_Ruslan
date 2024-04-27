@@ -2,13 +2,12 @@
 
 namespace core\base\models;
 
-use core\base\controllers\Singleton;
 use core\base\exceptions\DbException;
 use mysqli;
 
-class BaseModel extends BaseModelMethods
+abstract class BaseModel extends BaseModelMethods
 {
-    use Singleton;
+
 
     protected mysqli $db;
 
@@ -17,7 +16,7 @@ class BaseModel extends BaseModelMethods
      * @throws DbException ошибки при соединении с БД
      */
 
-    private function __construct()
+    protected function connect(): void
     {
         mysqli_report(MYSQLI_REPORT_OFF);
         $this->db = @new mysqli(HOST, USER, PASS, DB);
@@ -94,10 +93,10 @@ class BaseModel extends BaseModelMethods
      *   ]
      *  ]
      * ]
-     * @return string запрос в виде строки или ошибки
+     * @return int|bool|array|string результат запроса
      * @throws DbException ошибки
      */
-    final public function select(string $table, array $set = []): string
+    final public function select(string $table, array $set = []): int|bool|array|string
     {
         $fields = $this->creatFields($table, $set);
         $where = $this->creatWhere($table, $set);

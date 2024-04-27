@@ -4,6 +4,7 @@ namespace core\base\controllers;
 
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
+use core\plugins\shop\ShopSettings;
 
 class RouteController extends BaseControllers
 {
@@ -12,14 +13,6 @@ class RouteController extends BaseControllers
 
     protected array $routes;
 
-//    private function getURI($baseURI): string
-//    {
-//        $requesturi = $_SERVER["REQUEST_URI"];
-//        if (str_starts_with($requesturi, $baseURI)) {
-//            $requesturi = substr($requesturi, strlen($baseURI));
-//        }
-//        return trim($requesturi, '/');
-//    }
 
     /**
      * @throws RouteException
@@ -27,15 +20,13 @@ class RouteController extends BaseControllers
     private function __construct()
     {
         $strUri = $_SERVER['REQUEST_URI'];
-
-        // слэш в конце uri
-        if (str_ends_with($strUri, '/') && $strUri !== '/') {
-            $this->redirect(rtrim($strUri, '/'), 301);
-        }
-        // далее в uri const PATH
+        // в uri const PATH
         $path = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php'));
         if ($path !== PATH) throw new RouteException('Не существующая директория сайта', 1);
-
+        // слэш в конце uri
+        if (str_ends_with($strUri, '/') && $strUri !== PATH) {
+            $this->redirect(rtrim($strUri, '/'), 301);
+        }
         // есть ли routes Settings
         $this->routes = Settings::get('routes');
         if (!$this->routes) throw new RouteException('Отсутствуют маршруты в базовых настройках', 1);

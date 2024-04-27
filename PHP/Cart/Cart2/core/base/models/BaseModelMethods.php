@@ -12,7 +12,7 @@ abstract class BaseModelMethods
      */
     protected function creatFields(false|string $table = false, array $set = []): string
     {
-        $set['fields'] = $set['fields'] ?? ['*'];
+        if(isset($set['fields'])) $set['fields'] = ['*'];
         if (!is_array($set['fields'])) $set['fields'] = explode(',', $set['fields']);
         $table = $table ? $table .'.' :'';
         $fields = '';
@@ -31,7 +31,7 @@ abstract class BaseModelMethods
         $table = $table ? $table.'.' :'';
         $set['order'] = (!empty($set['order']) && is_array($set['order'])) ? $set['order'] : null;
         if ($set['order']) {
-            $set['order_direction'] = $set['order_direction'] ?? ['ASC'];
+            if (isset($set['order_direction'])) $set['order_direction'] = ['ASC'];
             if (!is_array($set['order_direction'])) $set['order_direction'] = explode(',', $set['order_direction']);
             $order_by = 'ORDER BY ';
             $d_count = 0;
@@ -61,9 +61,9 @@ abstract class BaseModelMethods
         $table = $table ? $table.'.' :'';
         $set['where'] = (!empty($set['where']) && is_array($set['where'])) ? $set['where'] : null;
         if ($set['where']) {
-            $set['operand'] = $set['operand'] ?? ['='];
+            if (isset($set['operand'])) $set['operand'] = ['='];
             if (!is_array($set['operand'])) $set['operand'] = explode(',', $set['operand']);
-            $set['condition'] = $set['condition'] ?? ['AND'];
+            if (isset($set['condition'])) $set['condition'] = ['AND'];
             if (!is_array($set['condition'])) $set['condition'] = explode(',', $set['condition']);
             $where = $instruction;
             $o_count = 0;
@@ -146,7 +146,7 @@ abstract class BaseModelMethods
                     default:
                         continue 2; // throw
                 }
-                if (!empty($item['type'])) $join .= 'LEFT JOIN ';
+                if (isset($item['type'])) $join .= 'LEFT JOIN ';
                 else  $join .= trim(strtoupper($item['type'])) . ' JOIN ';
                 $join .= $key . " ON ";
                 $join .= $item['on']['table'] ?? $join_table;

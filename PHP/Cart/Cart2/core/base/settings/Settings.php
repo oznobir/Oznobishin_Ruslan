@@ -7,7 +7,9 @@ use core\base\controllers\Singleton;
 class Settings
 {
     use Singleton;
-
+    private array $projectTables = [];
+    private string $defaultTable = 'articles';
+    private string $expansion = 'core/admin/expansions/';
     private array $routes = [
         'default' => [
             'controller' => 'IndexController',
@@ -33,7 +35,6 @@ class Settings
             'hrUrl' => false,                                   // default, можно изменить, если есть NameSettings.php
             'routes' => [],                                     // default, можно изменить, если есть NameSettings.php
         ],
-        'p' => ['1', '2', '3'],
     ];
 
     public function joinProperties($class): array
