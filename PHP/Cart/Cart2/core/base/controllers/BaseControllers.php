@@ -55,7 +55,7 @@ abstract class BaseControllers
         if (method_exists($this, $outputData)) {
             $this->$inputData();
             $this->page = $this->$outputData();
-        } else $this->$inputData();
+        } else $this->page = $this->$inputData();
 
         if ($this->error) $this->writeLog($this->error);
         $this->getPage();
