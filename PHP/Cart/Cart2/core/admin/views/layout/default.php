@@ -16,8 +16,10 @@
 <body>
 <?= $this->header ?>
 <div class="vg-carcass vg-hide">
-    <?= $this->contentMenu ?>
-    <?= $this->contentCenter ?>
+    <div class="vg-main vg-right vg-relative">
+        <?= $this->contentMenu ?>
+        <?= $this->contentCenter ?>
+    </div><!--.vg-main.vg-right-->
 </div><!--.vg-carcass-->
 <?= $this->footer ?>
 </body>

@@ -7,10 +7,20 @@ use core\base\controllers\Singleton;
 class Settings
 {
     use Singleton;
+
     private array $projectTables = [
-        'articles' => ['name' => 'Статьи', 'img' =>'pages.png'],
+        'products' => ['name' => 'Товары', 'img' => 'pages.png'],
+        'categories' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
     ];
-    private string $defaultTable = 'articles';
+    private array $translate = [
+        'name' => [0 => 'Название', 1 => 'Не более 100 символов'],
+    ];
+    private array $blockNeedle = [
+        'vg-row' => [],
+        'vg_img' => ['img'],
+        'vg-content' => ['description'],
+    ];
+    private string $defaultTable = 'products';
     private string $expansion = 'core/admin/expansions/';
     private array $routes = [
         'default' => [

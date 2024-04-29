@@ -9,19 +9,17 @@ abstract class BaseControllers
 {
     use BaseMethods;
 
-    protected $header;
-    protected $contentMenu;
-    protected $contentCenter;
-    protected $footer;
-    protected $page;
+    protected string $header;
+    protected string $footer;
+    protected string|array $page;
     protected string $controller;
     protected string $inputMethod;
     protected string $outputMethod;
     protected ?array $parameters = null;
     protected ?string $error = null;
-    protected $template;
-    protected $styles;
-    protected $scripts;
+    protected ?string $template = null;
+    protected array $styles;
+    protected array $scripts;
 
     /** Подключение контроллера с помощью Reflection
      * @return void метод request
@@ -57,7 +55,7 @@ abstract class BaseControllers
         if (method_exists($this, $outputData)) {
             $this->$inputData();
             $this->page = $this->$outputData();
-        } else $this->page = $this->$inputData();
+        } else $this->$inputData();
 
         if ($this->error) $this->writeLog($this->error);
         $this->getPage();
