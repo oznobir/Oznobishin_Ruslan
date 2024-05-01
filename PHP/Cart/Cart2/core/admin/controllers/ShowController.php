@@ -18,7 +18,7 @@ class ShowController extends BaseAdmin
     {
         if (!$this->userId) $this->exec();
         $this->createTableData();
-        $this->createData(['fields' => ['price', 'gallery_img']]);
+        $this->createData();
         $this->expansionBase(get_defined_vars());
     }
 
@@ -46,33 +46,34 @@ class ShowController extends BaseAdmin
 
         if (!$this->columns['pri']) return $this->$data = [];
         $fields[] = $this->columns['pri'] . ' as id';
-        if (isset($this->columns['name'])) $fields['name'] = 'name';
-        if (isset($this->columns['img'])) $fields['img'] = 'img';
+        if ($this->columns['name']) $fields['name'] = 'name';
+        if ($this->columns['img']) $fields['img'] = 'img';
 
-        if (count($fields) > 3) {
+        if (count($fields) < 3) {
             foreach ($this->columns as $key => $item) {
                 if (!$fields['name'] && str_contains($key, 'name')) {
-                    $fields['name'] = $key . 'as name';
+                    $fields['name'] = $key . ' as name';
                 }
                 if (!$fields['img'] && str_starts_with($key, 'img')) {
-                    $fields['img'] = $key . 'as img';
+                    $fields['img'] = $key . ' as img';
                 }
             }
         }
         if (isset($data['fields'])) $fields = Settings::instance()->arrayMergeRecursive($fields, $data['fields']);
-        if (isset($this->columns['pid'])) {
+        if ($this->columns['pid']) {
             if (!in_array('pid', $fields)) $fields[] = 'pid';
             $order[] = 'pid';
         }
-        if (isset($this->columns['position'])) {
+        if ($this->columns['position']) {
             $order[] = 'position';
-        } elseif (isset($this->columns['date'])) {
+        } elseif ($this->columns['date']) {
             $order[] = 'date';
             if ($order) $order_direction = ['ASC', 'DESC'];
             else $order_direction[] = 'DESC';
         }
         if (isset($data['order']))
             $order = Settings::instance()->arrayMergeRecursive($order, $data['order']);
+
         if (isset($data['order_direction']))
             $order_direction = Settings::instance()->arrayMergeRecursive($order_direction, $data['order_direction']);
 

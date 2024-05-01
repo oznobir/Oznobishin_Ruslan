@@ -57,8 +57,9 @@ abstract class BaseModel extends BaseModelMethods
 
     /**
      * @param string $table название таблицы БД
-     * @param array $set массив значений для построения запроса
+     * @param array|null $set массив значений для построения запроса
      * 'fields' => ['column', ...],
+     * 'no_concat' => false or true не присоединять имя таблицы, false - присоединять
      * 'where' => ['column' => 'column_value', ...],
      * 'operand' => ['=', '<>', ...],
      * 'condition' => ['AND', 'OR', ...],
@@ -96,18 +97,18 @@ abstract class BaseModel extends BaseModelMethods
      * @return int|bool|array|string результат запроса
      * @throws DbException ошибки
      */
-    final public function select(string $table, array $set = []): int|bool|array|string
+    final public function select(string $table, ?array $set): int|bool|array|string
     {
-        $fields = $this->creatFields($table, $set);
-        $where = $this->creatWhere($table, $set);
+        $fields = $this->creatFields($set, $table);
+        $where = $this->creatWhere($set, $table);
         if (!$where) $new_wh = true;
         else $new_wh = false;
-        $join_arr = $this->creatJoin($table, $set, $new_wh);
+        $join_arr = $this->creatJoin($set, $table, $new_wh);
         $fields .= $join_arr['fields'] ?? '';
         $fields = rtrim($fields, ',');
         $where .= $join_arr['where'] ?? '';
         $join = $join_arr['join'] ?? '';
-        $order = $this->creatOrder($table, $set) ?? '';
+        $order = $this->creatOrder($set, $table) ?? '';
         $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         $query = "SELECT $fields FROM $table $join $where $order $limit";
 
@@ -127,16 +128,12 @@ abstract class BaseModel extends BaseModelMethods
      */
     final public function insert(string $table, array $set = []): array|bool|int|string
     {
-        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
-        $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
-        $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
-        $set['return_id'] = $set['return_id'] ?? false;
-        if ($set['fields'] || $set['files']) {
-            $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
-            $query = "INSERT INTO $table ({$insertArr['fields']}) VALUES ({$insertArr['values']})";
-            return $this->query($query, 'ins', $set['return_id']);
-        }
-        return false;
+        $set = $this->getArr($set);
+        if (!$set['fields'] && !$set['files']) return false;
+        $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
+        $query = "INSERT INTO $table {$insertArr['fields']} VALUES {$insertArr['values']}";
+        return $this->query($query, 'ins', $set['return_id']);
+
     }
 
     /**
@@ -151,14 +148,11 @@ abstract class BaseModel extends BaseModelMethods
      */
     final public function update(string $table, array $set = []): array|bool|int|string
     {
-        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
-        $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
-        $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
-        $set['return_id'] = $set['return_id'] ?? false;
+        $set = $this->getArr($set); //htmlspecialchars()
         if ($set['fields'] || $set['files']) {
             $where = '';
             if (!empty($set['all_row'])) {
-                $where = $this->creatWhere(false, $set);
+                $where = $this->creatWhere($set);
                 if (!$where) {
                     $columns = $this->showColumns($table);
                     if (!$columns) return false;
@@ -174,6 +168,7 @@ abstract class BaseModel extends BaseModelMethods
         }
         return false;
     }
+
     /**
      * @param string $table название таблицы БД
      * @param array $set массив значений для построения запроса
@@ -202,7 +197,7 @@ abstract class BaseModel extends BaseModelMethods
     final public function delete(string $table, array $set = []): array|bool|int|string
     {
         $table = trim($table);
-        $where = $this->creatWhere($table, $set);
+        $where = $this->creatWhere($set, $table);
         $columns = $this->showColumns($table);
         if (!$columns) return false;
         $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : null;
@@ -219,7 +214,7 @@ abstract class BaseModel extends BaseModelMethods
             $query = "UPDATE $table SET $update $where";
 
         } else {
-            $joinArr = $this->creatJoin($table, $set);
+            $joinArr = $this->creatJoin($set, $table);
             $join = $joinArr['join'] ?? '';
             $tables = $joinArr['tables'] ?? '';
             $query = "DELETE $table$tables FROM $table $join $where";
@@ -246,4 +241,16 @@ abstract class BaseModel extends BaseModelMethods
         return $columns;
     }
 
+    /**
+     * @param array $set
+     * @return array
+     */
+    private function getArr(array $set): array
+    {
+        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
+        $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
+        $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
+        $set['return_id'] = $set['return_id'] ?? false;
+        return $set;
+    }
 }

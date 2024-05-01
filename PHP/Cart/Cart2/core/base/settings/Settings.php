@@ -18,7 +18,10 @@ class Settings
     ];
     private array $rootItems = [
         'name' => 'Корневая',
-        'tables' => ['products'],
+        'tables' => ['categories'],
+    ];
+    private array $radio = [
+        'visible' => ['Нет', 'Да', 'default' => 'Да'],
     ];
     private array $blockNeedle = [
         'vg-row' => [],
