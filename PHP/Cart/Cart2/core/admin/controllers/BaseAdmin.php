@@ -22,9 +22,12 @@ abstract class BaseAdmin extends BaseControllers
     protected ?string $path = null;
     protected array $menu = [];
     protected $userId;
-    private array $translate = [];
+    protected array $translate = [];
     protected string $title;
     protected array $blocks = [];
+    protected ?string $formTemplates = null;
+    protected array $templateArr = [];
+    protected bool $notDelete = false;
 
     protected function inputData(): void
     {
@@ -34,6 +37,8 @@ abstract class BaseAdmin extends BaseControllers
         if (!$this->menu) $this->menu = Settings::get('projectTables');
         if (!$this->alias) $this->alias = Settings::get('routes')['admin']['alias'];
         if (!$this->path) $this->path = Settings::get('routes')['admin']['alias'] . '/';
+        if (!$this->templateArr) $this->templateArr = Settings::get('templateArr');
+        if (!$this->formTemplates) $this->formTemplates = Settings::get('formTemplates');
         $this->sendNoCacheHeaders();
     }
 
@@ -110,7 +115,7 @@ abstract class BaseAdmin extends BaseControllers
     {
         if (!$setting) $setting = Settings::instance();
         $blocks = $setting::get('blockNeedle');
-        $this->translate = Settings::get('translate');
+        $this->translate = $setting::get('translate');
         if (!$blocks || !is_array($blocks)) {
             foreach ($this->columns as $name => $item) {
                 if ($name === 'pri') continue;
@@ -121,22 +126,20 @@ abstract class BaseAdmin extends BaseControllers
         }
         $default = array_keys($blocks)[0];
 
-        foreach ($this->columns as $name => $item) {
-            if ($name === 'pri') continue;
+        foreach ($this->columns as $column => $item) {
+            if ($column === 'pri') continue;
             $insert = false;
             foreach ($blocks as $block => $value) {
-                if (!array_key_exists($block, $this->blocks))
-                    $this->blocks[$block] = [];
-                if (in_array($name, $value)) {
-                    $this->blocks[$block][] = $name;
+                if (!array_key_exists($block, $this->blocks)) $this->blocks[$block] = [];
+                if (in_array($column, $value)) {
+                    $this->blocks[$block][] = $column;
                     $insert = true;
                     break;
                 }
             }
-            if (!$insert) $this->blocks[$default][] = $name;
-            if (!isset($this->translate[$name])) $this->translate[$name][] = $name;
+            if (!$insert) $this->blocks[$default][] = $column;
+            if (!isset($this->translate[$column])) $this->translate[$column][] = $column;
         }
-        return;
     }
 
     protected function createRadio($setting = false)

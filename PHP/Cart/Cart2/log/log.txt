@@ -1,0 +1,60 @@
+Fault: 03-05-2024 17:01:33 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:33 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:33 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:33 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 03-05-2024 17:01:34 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 04-05-2024 18:22:49 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 04-05-2024 18:22:51 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 04-05-2024 18:22:55 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+
+Fault: 04-05-2024 18:50:36 - Класс core\site\controllers\FilesController не подключен
+file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\index.php 
+in line: 16
+

@@ -8,6 +8,7 @@ use core\base\settings\Settings;
 
 class AddController extends BaseAdmin
 {
+    protected string $action ='add';
     /**
      * @throws DbException
      */
@@ -18,33 +19,15 @@ class AddController extends BaseAdmin
         $this->createForeignData();
         $this->createMenuPosition();
         $this->createRadio();
-        $this->manyAdd();
         $this->createOutputData();
-//exit();
+
     }
     protected function outputData(): false|string
     {
-        if (!$this->template) $this->template = ADMIN_TEMPLATE . 'show';
+        if (!$this->template) $this->template = ADMIN_TEMPLATE . 'add';
         $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
         $this->contentCenter = $this->render($this->template);
         return parent::outputData();
-    }
-
-    /**
-     * @throws DbException
-     */
-    protected function manyAdd(): void
-    {
-//        $fields = ['name' => 'article111'];
-//        $files = [
-//            'img' => '1.png',
-//            'gallery_img' => ['2.png', '4.png']
-//        ];
-//        $this->model->insert('articles', [
-//                'fields' => $fields,
-//                'files' => $files,
-//            ]
-//        );
     }
 
     /**
@@ -81,17 +64,15 @@ class AddController extends BaseAdmin
         if ($columns['name']) $name = 'name';
         else {
             foreach ($columns as $key => $value) {
-                if (str_contains($key, 'name')) {
-                    $name .= $key . ' as name';
-                }
+                if (str_contains($key, 'name'))  $name .= $key . ' as name';
             }
-            if (!$name) $name = $columns['pid'] . 'as name';
+            if (!$name) $name = $columns['pri'] . ' as name';
         }
         $where = [];
         $operand = [];
         if ($this->data) {
             if ($columnsTable['REFERENCED_TABLE_NAME'] === $this->table) {
-                $where[$this->columns['pid']] = $this->columns['pid'];
+                $where[$this->columns['pri']] = $this->data[$this->columns['pri']];
                 $operand[] = '<>';
             }
         }
@@ -101,7 +82,7 @@ class AddController extends BaseAdmin
             'operand' => $operand,
         ]);
         if ($foreign) {
-            if ($this->foreignData[$columnsTable['COLUMN_NAME']]) {
+            if (!empty($this->foreignData[$columnsTable['COLUMN_NAME']])) {
                 foreach ($foreign as $value) {
                     $this->foreignData[$columnsTable['COLUMN_NAME']][] = $value;
                 }
@@ -119,12 +100,12 @@ class AddController extends BaseAdmin
             $rootItems = Settings::get('rootItems');
             $where = '';
             if ($this->columns['pid']) {
-                if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid =0';
+                if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid = 0';
                 else {
                     $parent = $this->model->showForeignKeys($this->table, 'pid')[0];
                     if ($parent) {
                         if ($this->table === $parent['REFERENCED_TABLE_NAME'])
-                            $where = 'pid IS NULL OR pid =0';
+                            $where = 'pid IS NULL OR pid = 0';
                         else {
                             $columns = $this->model->showColumns($parent['REFERENCED_TABLE_NAME']);
                             if ($columns['pid']) $order[] = 'pid';
@@ -132,8 +113,9 @@ class AddController extends BaseAdmin
                             $id = $this->model->select($parent['REFERENCED_TABLE_NAME'], [
                                 'fields' => [$parent['REFERENCED_COLUMN_NAME']],
                                 'order' => $order,
+//                                'order_direction' => ['DESC'],
                                 'limit' => '1',
-                            ])[0][$parent['REFERENCED_TABLE_NAME']];
+                            ])[0][$parent['REFERENCED_COLUMN_NAME']];
                             if ($id) $where = ['pid' => $id];
                         }
                     } else $where = 'pid IS NULL OR pid =0';

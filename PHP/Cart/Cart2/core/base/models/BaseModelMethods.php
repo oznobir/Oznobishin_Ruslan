@@ -60,8 +60,8 @@ abstract class BaseModelMethods
         $table = ($table && empty($set['no_concat'])) ? $table . '.' : '';
 
         if (!empty($set['where'])) {
-            if (!is_array($set['where'])) return $instruction . ' ' . trim($set['where']);
-            else {
+            if (is_string($set['where'])) return $instruction . ' ' . trim($set['where']);
+            if (is_array($set['where'])) {
                 $set['operand'] = (!empty($set['operand'])) ? $set['operand'] : ['='];
                 if (!is_array($set['operand'])) $set['operand'] = explode(',', $set['operand']);
                 $set['conditions'] = (!empty($set['conditions'])) ? $set['conditions'] : ['AND'];
@@ -125,8 +125,7 @@ abstract class BaseModelMethods
      */
     protected function creatJoin(?array $set, string $table, bool $new_wh = false): array|null
     {
-        $set['join'] = (!empty($set['join']) && is_array($set['join'])) ? $set['join'] : null;
-        if ($set['join']) {
+        if (!empty($set['join']) && is_array($set['join'])) {
             $where = '';
             $join = '';
             $fields = '';
@@ -200,10 +199,7 @@ abstract class BaseModelMethods
                 $insert_arr['values'] = rtrim($insert_arr['values'], ', ') . "), ";
                 if (!$check_fields) $check_fields = true;
             }
-
         } else {
-
-
             if ($fields) {
                 $insert_arr['values'] .= '(';
                 foreach ($fields as $row => $field) {

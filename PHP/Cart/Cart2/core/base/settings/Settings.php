@@ -8,24 +8,38 @@ class Settings
 {
     use Singleton;
     private string $expansion = 'core/admin/expansions/';
+
     private string $defaultTable = 'products';
     private array $projectTables = [
         'products' => ['name' => 'Товары', 'img' => 'pages.png'],
         'categories' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
+        'articles' => ['name' => 'Статьи', 'img' => 'pages.png'],
+    ];
+    private string $formTemplates = PATH.'core/admin/views/include/form_templates/';
+    private array $templateArr = [
+        'text' => ['name'],
+        'textarea' => ['description'],
+        'radio' => ['visible', 'status'],
+        'select' => ['position', 'pid'],
+        'img' => ['img'],
+        'gallery_img' => ['gallery_img']
     ];
     private array $translate = [
         'name' => ['Название', 'Не более 100 символов'],
+        'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
+        'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
     ];
     private array $rootItems = [
-        'name' => 'Корневая',
-        'tables' => ['categories'],
+        'name' => 'Корневая категория',
+        'tables' => ['categories', 'articles'],
     ];
     private array $radio = [
         'visible' => ['Нет', 'Да', 'default' => 'Да'],
+        'status' => ['Нет', 'Да', 'default' => 'Нет'],
     ];
     private array $blockNeedle = [
-        'vg-row' => [],
-        'vg_img' => ['img'],
+        'vg-rows' => [],
+        'vg-img' => ['img'],
         'vg-content' => ['description'],
     ];
 
