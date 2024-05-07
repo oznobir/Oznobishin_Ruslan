@@ -88,7 +88,7 @@ abstract class BaseModelMethods
                             if (!is_array($item)) $item = explode(',', $item);
                             $str_in = '';
                             foreach ($item as $value)
-                                $str_in .= "'" . trim($this->mb_escape($value)) . "', ";
+                                $str_in .= "'" . trim(mb_escape($value)) . "', ";
                         }
                         $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition;
                     } elseif (str_contains($operand, 'LIKE')) {
@@ -99,7 +99,7 @@ abstract class BaseModelMethods
                                 else $item .= '%';
                             }
                         }
-                        $where .= "$table$key LIKE '{$this->mb_escape($item)}' $condition";
+                        $where .= "$table$key LIKE '". mb_escape($item) ."' $condition";
                     } else {
                         if (is_string($item) && str_starts_with($item, 'SELECT')) {
                             $where .= "$table$key $operand ($item) $condition";
