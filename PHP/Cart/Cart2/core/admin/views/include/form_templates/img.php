@@ -20,7 +20,7 @@
         </div>
         <div class="vg-wrap vg-element vg-full">
             <div class="vg-element vg-left img_show main_img_show">
-                <img src="<?= PATH . UPLOAD_DIR ?><?= $this->data[$row] ?: 'pages.png' ?>">
+                <img src="<?= PATH . UPLOAD_DIR ?><?= $this->data[$row] ?: 'pages.png' ?>" alt="img">
             </div>
         </div>
     </div>

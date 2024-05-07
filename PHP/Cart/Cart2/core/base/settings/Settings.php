@@ -8,6 +8,7 @@ class Settings
 {
     use Singleton;
     private string $expansion = 'core/admin/expansions/';
+    private string $messages = 'core/base/messages/';
 
     private string $defaultTable = 'products';
     private array $projectTables = [
@@ -25,9 +26,11 @@ class Settings
         'gallery_img' => ['gallery_img']
     ];
     private array $translate = [
-        'name' => ['Название', 'Не более 100 символов'],
+        'name' => ['Название', 'Не более 70 символов'],
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
+        'description' => ['Описание', 'Не более 160 символов'],
+        'pid' => ['Категория', ''],
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
@@ -42,7 +45,13 @@ class Settings
         'vg-img' => ['img'],
         'vg-content' => ['description'],
     ];
-
+    private array $validation = [
+        'name' => ['empty' => true, 'count' => 70, 'trim' => true],
+        'price' => ['int' => true],
+        'login' => ['empty' => true, 'trim' => true],
+        'password' => ['crypt' => true, 'empty' => true],
+        'description' => ['count' => 160, 'trim' => true],
+    ];
     private array $routes = [
         'default' => [
             'controller' => 'IndexController',
@@ -69,6 +78,7 @@ class Settings
             'routes' => [],                                     // default, можно изменить, если есть NameSettings.php
         ],
     ];
+
 
     public function joinProperties($class): array
     {

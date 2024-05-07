@@ -8,20 +8,25 @@ use core\base\settings\Settings;
 
 class AddController extends BaseAdmin
 {
-    protected string $action ='add';
+    protected string $action = 'add';
+
     /**
      * @throws DbException
      */
     protected function inputData(): void
     {
         if (!$this->userId) $this->exec();
-        $this->createTableData();
+
+        if ($this->isPost()) $this->checkPost();
+        else $this->createTableData();
+
         $this->createForeignData();
         $this->createMenuPosition();
         $this->createRadio();
         $this->createOutputData();
 
     }
+
     protected function outputData(): false|string
     {
         if (!$this->template) $this->template = ADMIN_TEMPLATE . 'add';
@@ -64,7 +69,7 @@ class AddController extends BaseAdmin
         if ($columns['name']) $name = 'name';
         else {
             foreach ($columns as $key => $value) {
-                if (str_contains($key, 'name'))  $name .= $key . ' as name';
+                if (str_contains($key, 'name')) $name .= $key . ' as name';
             }
             if (!$name) $name = $columns['pri'] . ' as name';
         }

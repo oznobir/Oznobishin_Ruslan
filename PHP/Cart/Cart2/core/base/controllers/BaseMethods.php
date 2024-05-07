@@ -2,6 +2,8 @@
 
 namespace core\base\controllers;
 
+use JetBrains\PhpStorm\NoReturn;
+
 trait BaseMethods
 {
     protected function clearTags($str): array|string
@@ -27,7 +29,7 @@ trait BaseMethods
 
     }
 
-    protected function redirect($url = false, $code = false): void
+    #[NoReturn] protected function redirect($url = false, $code = false): void
     {
         if ($code) {
             $codes = ['301' => 'HTTP/1.1 301 Moved Permanently'];
@@ -37,6 +39,7 @@ trait BaseMethods
         else $redirect = $_SERVER['HTTP_REFERER'] ?? PATH;
 
         header("Location: $redirect");
+        die();
     }
 
     protected function writeLog($message, $file = 'log.txt', $event = 'Fault'): void

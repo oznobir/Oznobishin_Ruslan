@@ -106,9 +106,9 @@ abstract class BaseModelMethods
                         } elseif (is_array($item)) {
                             foreach ($item as $value) {
                                 if ($where) $where .= ' ';
-                                $where .= "$table$key $operand '{$this->mb_escape($value)}' $condition";
+                                $where .= "$table$key $operand '". mb_escape($value)."' $condition";
                             }
-                        } else $where .= "$table$key $operand '{$this->mb_escape($item)}' $condition";
+                        } else $where .= "$table$key $operand '". mb_escape($item)."' $condition";
                     }
                 }
                 return substr($where, 0, strrpos($where, $condition));
@@ -136,12 +136,12 @@ abstract class BaseModelMethods
                 if (is_int($key) && !isset($item['table'])) continue; // throw
                 else $key = $item['table'];
                 if ($join) $join .= ' ';
-                $count = isset($item['on']['fields']) ? count($item['on']['fields']) : 0;
+//                $count = isset($item['on']['fields']) ? count($item['on']['fields']) : 0;
                 switch (2) {
-                    case $count :
-                        $join_fields = $item['on']['fields'];
+                    case (isset($item['on']['fields']) && count($item['on']['fields'])) :
+                        $join_fields =$item['on']['fields'];
                         break;
-                    case count($item['on']): // 2 вариант записи
+                    case (isset($item['on']) && count($item['on'])): // 2 вариант записи
                         $join_fields = $item['on'];
                         break;
                     default:
@@ -191,7 +191,7 @@ abstract class BaseModelMethods
                     if (!$check_fields) $insert_arr['fields'] .= $row . ', ';
                     if (in_array($field, $this->sqlFunc)) $insert_arr['values'] .= $row . ', ';
                     elseif ($field === 'NULL' || $field === NULL) $insert_arr['values'] .= "NULL" . ', ';
-                    else  $insert_arr['values'] .= "'" . $this->mb_escape($row) . "'" . ', ';
+                    else  $insert_arr['values'] .= "'" . mb_escape($row) . "'" . ', ';
                     $j++;
                     if ($j === $count_fields) break;
                     if ($j < $count_fields) $insert_arr['values'] .= "NULL" . ', ';
@@ -207,14 +207,14 @@ abstract class BaseModelMethods
                     $insert_arr['fields'] .= $row . ', ';
                     if (in_array($field, $this->sqlFunc)) $insert_arr['values'] .= $row . ', ';
                     elseif ($field === 'NULL' || $field === NULL) $insert_arr['values'] .= "NULL" . ', ';
-                    else  $insert_arr['values'] .= "'" . $this->mb_escape($field) . "'" . ', ';
+                    else  $insert_arr['values'] .= "'" . mb_escape($field) . "'" . ', ';
                 }
             }
             if ($files) {
                 foreach ($files as $row => $file) {
                     $insert_arr['fields'] .= $row . ', ';
-                    if (is_array($file)) $insert_arr['values'] .= "'" . $this->mb_escape(json_encode($file)) . "', ";
-                    else $insert_arr['values'] .= "'" . $this->mb_escape($file) . "', ";
+                    if (is_array($file)) $insert_arr['values'] .= "'" . mb_escape(json_encode($file)) . "', ";
+                    else $insert_arr['values'] .= "'" . mb_escape($file) . "', ";
                 }
             }
             $insert_arr['values'] = rtrim($insert_arr['values'], ', ') . ')';
@@ -233,20 +233,16 @@ abstract class BaseModelMethods
                 $update .= $row . '= ';
                 if (in_array($field, $this->sqlFunc)) $update .= $field . ', ';
                 elseif ($field === NULL) $update .= "NULL" . ', ';
-                else $update .= "'" . $this->mb_escape($field) . "', ";
+                else $update .= "'" . mb_escape($field) . "', ";
             }
         }
         if ($files) {
             foreach ($files as $row => $file) {
                 $update .= $row . '= ';
-                if (is_array($file)) $update .= "'" . $this->mb_escape(json_encode($file)) . "', ";
-                else $update .= "'" . $this->mb_escape($file) . "', ";
+                if (is_array($file)) $update .= "'" . mb_escape(json_encode($file)) . "', ";
+                else $update .= "'" . mb_escape($file) . "', ";
             }
         }
         return rtrim($update, ', ');
-    }
-    protected function mb_escape(string $string): string
-    {
-        return preg_replace('~[\x00\x0A\x0D\x1A\x22\x27\x5C]~u', '\\\$0', $string);
     }
 }

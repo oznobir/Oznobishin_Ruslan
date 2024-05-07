@@ -7,29 +7,38 @@ use core\base\settings\Settings;
 
 class ShopSettings
 {
-    use Singleton;
+    use Singleton {
+        instance as traitInstance;
+    }
+
+    private Settings $baseSettings;
+
     private string $expansion = 'core/plugins/shop/';
     private array $routes = [
         'plugin' => [
             'path' => 'core/plugins/shop/',
             'pathControllers' => 'core/plugins/shop/controllers/',
             'hrUrl' => false,
-            'routes' => ['product' => 'controller_product/get_hello/set_by', ],
+            'routes' => ['product' => 'controller_product/get_hello/set_by',],
 
         ],
-        'p' => ['1', '2', '3'],
+    ];
+    private array $templateArr = [
+        'text' => ['name', 'price'],
+
     ];
 
-
-    static public function instance(): ShopSettings
+    static public function instance(): object
     {
         if (!isset(self::$_instance)) {
             self::$_instance = new self();
-            $unionSettings = Settings::instance()->joinProperties(get_class(self::$_instance));
+            self::traitInstance()->baseSettings = Settings::instance();
+            $unionSettings = self::$_instance->baseSettings->joinProperties(get_class(self::$_instance));
             self::$_instance->setSettings($unionSettings);
         }
         return self::$_instance;
     }
+
     protected function setSettings($properties): void
     {
         if (isset($properties)) {

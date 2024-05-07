@@ -15,7 +15,7 @@ abstract class BaseAdmin extends BaseControllers
     protected string $contentCenter;
     protected ?Model $model = null;
     protected ?string $table = null;
-    protected array $columns;
+    protected array $columns = [];
     protected array $data = [];
     protected array $foreignData = [];
     protected ?string $alias = null;
@@ -24,6 +24,7 @@ abstract class BaseAdmin extends BaseControllers
     protected $userId;
     protected array $translate = [];
     protected string $title;
+    protected array $messages = [];
     protected array $blocks = [];
     protected ?string $formTemplates = null;
     protected array $templateArr = [];
@@ -36,9 +37,10 @@ abstract class BaseAdmin extends BaseControllers
         if (!$this->model) $this->model = Model::instance();
         if (!$this->menu) $this->menu = Settings::get('projectTables');
         if (!$this->alias) $this->alias = Settings::get('routes')['admin']['alias'];
-        if (!$this->path) $this->path = Settings::get('routes')['admin']['alias'] . '/';
+        if (!$this->path) $this->path = PATH . Settings::get('routes')['admin']['alias'] . '/';
         if (!$this->templateArr) $this->templateArr = Settings::get('templateArr');
         if (!$this->formTemplates) $this->formTemplates = Settings::get('formTemplates');
+        if (!$this->messages) $this->messages = include $_SERVER['DOCUMENT_ROOT'] . PATH . Settings::get('messages') . 'informationMessages.php';
         $this->sendNoCacheHeaders();
     }
 
@@ -83,6 +85,11 @@ abstract class BaseAdmin extends BaseControllers
 
     }
 
+    /**
+     * @param $args
+     * @param $settings
+     * @return false|mixed
+     */
 
     protected function expansionBase($args = [], $settings = false)
     {
@@ -111,6 +118,10 @@ abstract class BaseAdmin extends BaseControllers
         return false;
     }
 
+    /**
+     * @param $setting
+     * @return void
+     */
     protected function createOutputData($setting = false): void
     {
         if (!$setting) $setting = Settings::instance();
@@ -142,7 +153,11 @@ abstract class BaseAdmin extends BaseControllers
         }
     }
 
-    protected function createRadio($setting = false)
+    /**
+     * @param $setting
+     * @return void
+     */
+    protected function createRadio($setting = false): void
     {
         if (!$setting) $setting = Settings::instance();
         $radio = $setting::get('radio');
@@ -150,5 +165,111 @@ abstract class BaseAdmin extends BaseControllers
             foreach ($radio as $name => $item)
                 if ($radio[$name]) $this->foreignData[$name] = $radio[$name];
         }
+    }
+
+    /**
+     * @param $settings
+     * @return void
+     * @throws DbException
+     */
+    protected function checkPost($settings = false): void
+    {
+        $this->table = $this->clearTags($_POST['table']);
+        unset($_POST['table']);
+        if ($this->table) {
+            $this->createTableData($settings);
+            $this->clearPostFields($settings);
+            $this->editData();
+        }
+    }
+
+    /**
+     * @param $settings
+     * @param $arr
+     * @return void
+     */
+    protected function clearPostFields($settings, &$arr = []): void
+    {
+        if (!$arr) $arr = &$_POST;
+        if (!$settings) $settings = Settings::instance();
+        $id = ($_POST[$this->columns['pri']]) ?? false;
+        $validate = $settings::get('validation');
+        if (!$this->translate) $this->translate = $settings::get('translate');
+        foreach ($arr as $key => $item) {
+            if (is_array($item)) {
+                $this->clearPostFields($settings, $item);
+            } else {
+                if (is_numeric($item)) $arr[$key] = $this->num($item);
+                if (!empty($validate[$key])) {
+                    $answer = $this->translate[$key][0] ?? $key;
+
+                    if (!empty($validate[$key]['crypt'])) {
+                        if ($id) {
+                            if (empty($item)) {
+                                unset($arr[$key]);
+                                continue;
+                            }
+                            $arr[$key] = md5($item);
+                        }
+                    }
+                    if (!empty($validate[$key]['empty']))
+                        $this->emptyFields($item, $answer, $arr);
+                    if (!empty($validate[$key]['trim']))
+                        $arr[$key] = trim($item);
+                    if (!empty($validate[$key]['int']))
+                        $arr[$key] = $this->num($item);
+                    if (!empty($validate[$key]['count']))
+                        $this->countChar($item, $validate[$key]['count'], $answer, $arr);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $str
+     * @param $answer
+     * @param $arr
+     * @return void
+     */
+    protected function emptyFields($str, $answer, $arr = []): void
+    {
+        if (empty($str)) {
+            $_SESSION['res']['answer'] = '<div class="error">' . $this->messages['empty'] . ' ' . $answer . '</div>';
+            $this->addSessionData($arr);
+        }
+    }
+
+    /**
+     * @param $arr
+     * @return void
+     */
+    protected function addSessionData($arr): void
+    {
+        if (!$arr) $arr = $_POST;
+        foreach ($arr as $key => $item)
+            $_SESSION['res'][$key] = $item;
+        $this->redirect();
+    }
+
+    /**
+     * @param $str
+     * @param $counter
+     * @param $answer
+     * @param $arr
+     * @return void
+     */
+    protected function countChar($str, $counter, $answer, $arr = [])
+    {
+        if (mb_strlen($str) > $counter) {
+            $_SESSION['res']['answer'] = '<div class="error">' . sprintf($this->messages['count'], $answer, $counter)
+                . '</div>';
+            $this->addSessionData($arr);
+        }
+
+    }
+
+    protected function editData()
+    {
+
     }
 }

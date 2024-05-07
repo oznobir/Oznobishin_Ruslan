@@ -1,4 +1,4 @@
-<form id="main-form" class="vg-wrap vg-element vg-ninteen-of-twenty" method="post" action="<?=$this->path . $this->alias?>>"
+<form id="main-form" class="vg-wrap vg-element vg-ninteen-of-twenty" method="post" action="<?=$this->path . $this->action?>"
       enctype="multipart/form-data">
     <div class="vg-wrap vg-element vg-full">
         <div class="vg-wrap vg-element vg-full vg-firm-background-color4 vg-box-shadow">
@@ -41,19 +41,6 @@
         if ($class != 'vg-content') echo '</div>';
         echo '</div>';
     } ?>
-    <!--    <div class="vg-wrap vg-element vg-rows">-->
-    <!--        <div class="vg-full vg-firm-background-color4 vg-box-shadow">-->
-    <!---->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--    <div class="vg-wrap vg-element vg-img">-->
-    <!--        <div class="vg-full vg-firm-background-color4 vg-box-shadow">-->
-    <!---->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--    <div class="vg-wrap vg-element vg-content">-->
-    <!---->
-    <!--    </div>-->
     <div class="vg-wrap vg-element vg-full">
         <div class="vg-wrap vg-element vg-full vg-firm-background-color4 vg-box-shadow">
             <div class="vg-element vg-half vg-left">
