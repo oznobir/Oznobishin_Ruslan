@@ -11,6 +11,7 @@ class AddController extends BaseAdmin
     protected string $action = 'add';
 
     /**
+     * @return void
      * @throws DbException
      */
     protected function inputData(): void
@@ -36,12 +37,14 @@ class AddController extends BaseAdmin
     }
 
     /**
+     * @param object|string|false $settings
+     * @return void
      * @throws DbException
      */
-    protected function createForeignData($settings = false): void
+    protected function createForeignData(object|string|false $settings = false): void
     {
         if (!$settings) $settings = Settings::instance();
-        $rootItems = Settings::get('rootItems');
+        $rootItems = $settings::get('rootItems');
         $keys = $this->model->showForeignKeys($this->table);
         if ($keys) {
             foreach ($keys as $item) {
@@ -56,9 +59,12 @@ class AddController extends BaseAdmin
     }
 
     /**
+     * @param array $columnsTable
+     * @param array $rootItems
+     * @return void
      * @throws DbException
      */
-    protected function createForeignProperty($columnsTable, $rootItems): void
+    protected function createForeignProperty(array $columnsTable, array $rootItems): void
     {
         if (in_array($this->table, $rootItems['tables'])) {
             $this->foreignData[$columnsTable['COLUMN_NAME']][0]['id'] = 0;
@@ -96,13 +102,15 @@ class AddController extends BaseAdmin
     }
 
     /**
+     * @param object|string|false $settings
+     * @return void
      * @throws DbException
      */
-    protected function createMenuPosition($settings = false): void
+    protected function createMenuPosition(object|string|false $settings = false): void
     {
         if ($this->columns['position']) {
             if (!$settings) $settings = Settings::instance();
-            $rootItems = Settings::get('rootItems');
+            $rootItems = $settings::get('rootItems');
             $where = '';
             if ($this->columns['pid']) {
                 if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid = 0';

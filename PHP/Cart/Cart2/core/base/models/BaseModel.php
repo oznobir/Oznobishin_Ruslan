@@ -126,7 +126,7 @@ abstract class BaseModel extends BaseModelMethods
      * @return array|bool|int|string
      * @throws DbException ошибки
      */
-    final public function insert(string $table, array $set = []): array|bool|int|string
+    final public function add(string $table, array $set = []): array|bool|int|string
     {
         $set = $this->getArr($set);
         if (!$set['fields'] && !$set['files']) return false;
@@ -146,12 +146,12 @@ abstract class BaseModel extends BaseModelMethods
      * @return array|bool|int|string
      * @throws DbException ошибки
      */
-    final public function update(string $table, array $set = []): array|bool|int|string
+    final public function edit(string $table, array $set = []): array|bool|int|string
     {
         $set = $this->getArr($set); //htmlspecialchars()
         if ($set['fields'] || $set['files']) {
             $where = '';
-            if (!empty($set['all_row'])) {
+            if (empty($set['all_row'])) {
                 $where = $this->creatWhere($set);
                 if (!$where) {
                     $columns = $this->showColumns($table);
@@ -239,6 +239,23 @@ abstract class BaseModel extends BaseModelMethods
             }
         }
         return $columns;
+    }
+
+    /**
+     * @return array массив с инфо о таблицах БД
+     * @throws DbException
+     */
+    final public function showTables(): array
+    {
+        $query = "SHOW TABLES";
+        $res = $this->query($query);
+        $tables = [];
+        if ($res) {
+            foreach ($res as $table) {
+                $tables[] = reset($table);
+            }
+        }
+        return $tables;
     }
 
     /**

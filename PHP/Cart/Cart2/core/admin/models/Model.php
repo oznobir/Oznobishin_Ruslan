@@ -20,9 +20,12 @@ class Model extends BaseModel
     }
 
     /**
+     * @param string $table
+     * @param string|false $key
+     * @return int|bool|array|string
      * @throws DbException
      */
-    public function showForeignKeys($table, $key = false): int|bool|array|string
+    public function showForeignKeys(string $table, string|false $key = false): int|bool|array|string
     {
         $db = DB;
         $where = '';

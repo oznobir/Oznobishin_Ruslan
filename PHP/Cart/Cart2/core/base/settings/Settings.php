@@ -9,7 +9,6 @@ class Settings
     use Singleton;
     private string $expansion = 'core/admin/expansions/';
     private string $messages = 'core/base/messages/';
-
     private string $defaultTable = 'products';
     private array $projectTables = [
         'products' => ['name' => 'Товары', 'img' => 'pages.png'],
@@ -19,7 +18,7 @@ class Settings
     private string $formTemplates = PATH.'core/admin/views/include/form_templates/';
     private array $templateArr = [
         'text' => ['name'],
-        'textarea' => ['description'],
+        'textarea' => ['description', 'content'],
         'radio' => ['visible', 'status'],
         'select' => ['position', 'pid'],
         'img' => ['img'],
@@ -27,6 +26,7 @@ class Settings
     ];
     private array $translate = [
         'name' => ['Название', 'Не более 70 символов'],
+        'content' => ['Контент', 'Не более 70 символов'],
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
         'description' => ['Описание', 'Не более 160 символов'],

@@ -205,7 +205,7 @@ abstract class BaseModelMethods
                 foreach ($fields as $row => $field) {
                     if ($except && in_array($row, $except)) continue;
                     $insert_arr['fields'] .= $row . ', ';
-                    if (in_array($field, $this->sqlFunc)) $insert_arr['values'] .= $row . ', ';
+                    if (in_array($field, $this->sqlFunc)) $insert_arr['values'] .= $field . ', ';
                     elseif ($field === 'NULL' || $field === NULL) $insert_arr['values'] .= "NULL" . ', ';
                     else  $insert_arr['values'] .= "'" . mb_escape($field) . "'" . ', ';
                 }
