@@ -17,14 +17,14 @@
                 <div>
                     <img src="<?= PATH . ADMIN_TEMPLATE ?>img/search.png" alt="">
                 </div>
-                <form method="post" action="<?= PATH . $this->alias ?>/search" autocomplete="off">
+                <form method="post" action="<?= PATH . $this->adminAlias ?>/search" autocomplete="off">
                     <input type="text" name="search" class="vg-input vg-text">
                     <div class="vg-element vg-firm-background-color4 vg-box-shadow search_links search_res"></div>
                 </form>
             </div>
         </div>
         <!--кнопка-->
-        <a href="<?= PATH . $this->alias ?>/createsitemap" class="vg-element vg-box-shadow sitemap-button">
+        <a href="<?= PATH . $this->adminAlias ?>/createsitemap" class="vg-element vg-box-shadow sitemap-button">
                             <span class="vg-text vg-firm-color1">
                                 Карта сайта
                             </span>
@@ -36,7 +36,7 @@
                     <span class="vg-firm-color5">admin</span>
                 </div>
             </div>
-            <a href="/login/<?= $this->alias ?>/logout/1" class="vg-element vg-half vg-center">
+            <a href="/login/<?= $this->adminAlias ?>/logout/1" class="vg-element vg-half vg-center">
                 <div>
                     <img src="<?= PATH . ADMIN_TEMPLATE ?>img/out.png" alt="">
                 </div>
