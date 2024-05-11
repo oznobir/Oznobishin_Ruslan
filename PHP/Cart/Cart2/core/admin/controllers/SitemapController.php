@@ -1,0 +1,293 @@
+<?php
+
+namespace core\admin\controllers;
+
+use core\base\controllers\BaseMethods;
+use core\base\exceptions\DbException;
+use DOMException;
+
+
+class SitemapController extends BaseAdmin
+{
+    use BaseMethods;
+
+    protected array $all_links = [];
+    protected array $temp_links = [];
+    protected int $maxLinks = 3000;
+    protected string $parsingLogFile = 'parsing_log.txt';
+    protected array $extFiles = ['jpg', 'png', 'jpeg', 'gif', 'pdf'];
+    protected array $messages = [];
+    protected array $filterArr = [
+        'url' => [],
+        'get' => []
+    ];
+
+
+    /**
+     * @throws DbException
+     * @throws DOMException
+     */
+    protected function inputData($linksCounter = 1): void
+    {
+//        file_get_contents();
+//        get_headers();
+        if (!$this->userId) $this->exec();
+        if (!function_exists('curl_init'))
+            $this->cancel(0, $this->messages['curlFail'], '', true);
+
+        if (!$this->checkParsingTable())
+            $this->cancel(0, $this->messages['parsingTableFail'], '', true);
+
+        set_time_limit(0);
+
+        $reserve = $this->model->select('parsing_table');
+        if (!empty($reserve)) {
+            foreach ($reserve[0] as $name => $item) {
+                if ($item) $this->$name = json_decode($item);
+                else $this->$name = [SITE_URL];
+            }
+        } else $this->all_links = $this->temp_links = [SITE_URL];
+
+        $this->maxLinks = (int)$linksCounter > 1 ? ceil($this->maxLinks / $linksCounter) : $this->maxLinks;
+        while ($this->temp_links) {
+            $countTempLinks = count($this->temp_links);
+            $links = $this->temp_links;
+            $this->temp_links = [];
+            if ($countTempLinks > $this->maxLinks) {
+                $links = array_chunk($links, ceil($countTempLinks / $this->maxLinks));
+                $countChink = count($links);
+                for ($i = 0; $i < $countChink; $i++) {
+                    $this->parsing($links[$i]);
+                    unset($links[$i]);
+                    if ($links) {
+                        $this->model->add('parsing_table', [
+                            'fields' => [
+                                'temp_links' => json_encode(array_merge(...$links)),
+                                'all_links' => json_encode($this->all_links)
+                            ]
+                        ]);
+                    }
+                }
+            } else {
+                $this->parsing($links);
+            }
+            $this->model->add('parsing_table', [
+                'fields' => [
+                    'temp_links' => json_encode($this->temp_links),
+                    'all_links' => json_encode($this->all_links)
+                ]
+            ]);
+        }
+        $this->model->edit('parsing_table', [
+            'fields' => [
+                'temp_links' => '',
+                'all_links' => ''
+            ]
+        ]);
+        if ($this->all_links) {
+            foreach ($this->all_links as $key => $link) {
+                if (!$this->filter($link)) unset($this->all_links[$key]);
+            }
+        }
+        $this->createSitemap();
+        if (isset($_SESSION['res']['answer']))
+            $_SESSION['res']['answer'] = '<div class="success">' . $this->messages['curlSuccess'] . '</div>';
+//        $this->redirect();
+    }
+
+    /**
+     * @param array $urls
+     * @return void
+     */
+    protected function parsing(array $urls): void
+    {
+        if (!$urls) return;
+        $curlMulti = curl_multi_init();
+        $curl = [];
+        foreach ($urls as $i => $url) {
+            $curl[$i] = curl_init();
+            curl_setopt($curl[$i], CURLOPT_URL, $url);
+            curl_setopt($curl[$i], CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl[$i], CURLOPT_HEADER, true);
+            curl_setopt($curl[$i], CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($curl[$i], CURLOPT_TIMEOUT, 120);
+
+            curl_multi_add_handle($curlMulti, $curl[$i]);
+        }
+
+        do {
+            $status = curl_multi_exec($curlMulti, $active);
+            $info = curl_multi_info_read($curlMulti);
+            if (false !== $info) {
+                if ($info['result'] !== 0) {
+                    $i = array_search($info['handle'], $curl);
+                    $error = curl_errno($curl[$i]);
+                    $message = curl_error($curl[$i]);
+                    $header = curl_getinfo($curl[$i]);
+                    if ($error != 0) {
+                        $this->cancel(0, sprintf($this->messages['mesCurlFail'], $header['url'],
+                            $header['http_code'], $error, $message));
+                    }
+                }
+            }
+            if ($status > 0) $this->cancel(0, curl_multi_strerror($status));
+        } while ($status === CURLM_CALL_MULTI_PERFORM || $active);
+
+//        $result = [];
+        foreach ($urls as $i => $url) {
+            $result[$i] = curl_multi_getcontent($curl[$i]);
+            curl_multi_remove_handle($curlMulti, $curl[$i]);
+            curl_close($curl[$i]);
+            if (!preg_match('/content-type:\s+text\/html/ui', $result[$i])) {
+                $this->cancel(0, sprintf($this->messages['typeCurlFail'], $url));
+                continue;
+            }
+            if (!preg_match('/HTTP\/\d\.?\d?\s+20\d/ui', $result[$i])) {
+                $this->cancel(0, sprintf($this->messages['codeCurlFail'], $url));
+                continue;
+            }
+            $this->createLinks($result[$i]);
+        }
+        curl_multi_close($curlMulti);
+    }
+
+    /**
+     * @param $content
+     * @return void
+     */
+    private function createLinks($content): void
+    {
+        if ($content) {
+            /*  $str = "<a class=\"main\" href =   'my/href' data-id='12'>";
+                preg_match_all('/<a\s*?[^>]*?href\s*?=\s*?(["\'])(.+?)\1[^>]*?>/ui', $str, $links);     */
+
+            preg_match_all('/<a\s*?[^>]*?href\s*?=\s*?(["\'])(.+?)\1[^>]*?>/ui', $content, $links);
+            if ($links[2]) {
+                foreach ($links[2] as $link) {
+                    if ($link === '/' || $link === SITE_URL . '/') continue;
+                    foreach ($this->extFiles as $ext) {
+                        if ($ext) {
+                            $ext = preg_quote($ext, '/');
+                            if (preg_match('/' . $ext . '(\s*?$|\?[^\/]*$)/ui', $link))
+                                continue 2;
+                        }
+                    }
+                    if (str_starts_with($link, '/'))
+                        $link = SITE_URL . $link;
+                    $strUrl = str_replace('.', '\.', str_replace('/', '\/', SITE_URL));
+                    if (!in_array($link, $this->all_links)
+                        && !preg_match('/^(' . $strUrl . ')?\/?#[^\/]*?$/ui', $link)
+                        && str_starts_with($link, SITE_URL)) {
+
+                        $this->temp_links[] = $link;
+                        $this->all_links[] = $link;
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * @param $link
+     * @return bool
+     */
+    protected function filter($link): bool
+    {
+        if ($this->filterArr) {
+            foreach ($this->filterArr as $type => $values) {
+                if ($values) {
+                    foreach ($values as $item) {
+                        $item = str_replace('/', '\/', $item);
+                        if ($type === 'url') {
+                            if (preg_match('/^[^\?]*' . $item . '/ui', $link))
+                                return false;
+                        }
+                        if ($type === 'get') {
+                            if (preg_match('/(\?|&amp;|=|&)' . $item . '(\?|&amp;|=|&|$)/ui', $link))
+                                return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param int $success
+     * @param string $messageAdmin
+     * @param string $messageLog
+     * @param bool $exit
+     * @return void
+     */
+    protected function cancel(int $success = 0, string $messageAdmin = '', string $messageLog = '', bool $exit = false): void
+    {
+        $exitArr = [];
+        $exitArr['success'] = $success;
+        $exitArr['message'] = $messageAdmin ?: $this->messages['parsingFail'];
+        $messageLog = $messageLog ?: $exitArr['message'];
+        $class = 'success';
+        if (!$exitArr['success']) {
+            $class = 'error';
+            $this->writeLog($messageLog, $this->parsingLogFile);
+        }
+        if ($exit) {
+            $exitArr['message'] = '<div class="' . $class . '">' . $exitArr['message'] . '</div>';
+            echo json_encode($exitArr);
+            exit();
+        }
+    }
+
+    /**
+     * @throws DOMException
+     */
+    protected function createSitemap(): void
+    {
+        $dom = new \DOMDocument('1.0', 'utf-8');
+        $dom->formatOutput = true;
+
+        $root = $dom->createElement('urlset');
+        $root->setAttribute('xmlns:xsi', 'http://w3.org/2001/XMLSchema-instance');
+        $root->setAttribute('xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd');
+        $root->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $dom->appendChild($root);
+        $sxe = simplexml_import_dom($dom);
+        if ($this->all_links) {
+            $lastMod = (new \DateTime())->format('c');
+            foreach ($this->all_links as $link) {
+                $elem = trim(mb_substr($link, mb_strlen(SITE_URL)), '/');
+                $elem = explode('/', $elem);
+                $count = '0.' . (count($elem) - 1);
+                $priority = 1 - (float)$count;
+                if ($priority == 1) $priority = '1.0';
+                $urlMain = $sxe->addChild('url');
+                $urlMain->addChild('loc', htmlspecialchars($link));
+                $urlMain->addChild('lastmod', $lastMod);
+                $urlMain->addChild('changefreg', 'weekly');
+                $urlMain->addChild('priority', $priority);
+                $urlMain->addChild('lastmod', $lastMod);
+            }
+        }
+        $dom->save($_SERVER['DOCUMENT_ROOT'] . PATH . 'sitemap.xml');
+    }
+
+    /**
+     * @return bool true - в БД есть (создана/очищена) пустая таблица parsing_table (all_links, temp_links)
+     * @throws DbException
+     */
+
+    private function checkParsingTable(): bool
+    {
+        $tables = $this->model->showTables();
+        if (!in_array('parsing_table', $tables)) {
+            $query = 'CREATE TABLE parsing_table (all_links text, temp_links text)';
+            if (!$this->model->query($query, 'default') || !$this->model->add('parsing_table', [
+                    'fields' => ['all_links' => '', 'temp_links' => '']
+                ])) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

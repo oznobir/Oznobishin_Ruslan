@@ -24,7 +24,7 @@
             </div>
         </div>
         <!--кнопка-->
-        <a href="<?= PATH . $this->adminAlias ?>/createsitemap" class="vg-element vg-box-shadow sitemap-button">
+        <a href="<?= PATH . $this->adminAlias ?>/sitemap" class="vg-element vg-box-shadow sitemap-button">
                             <span class="vg-text vg-firm-color1">
                                 Карта сайта
                             </span>

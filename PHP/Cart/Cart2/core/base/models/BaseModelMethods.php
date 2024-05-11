@@ -5,12 +5,13 @@ namespace core\base\models;
 abstract class BaseModelMethods
 {
     protected array $sqlFunc = ['NOW()'];
+
     /**
      * @param array $set массив значений для построения запроса
-     * @param false|string $table название таблицы БД
+     * @param string|null $table название таблицы БД
      * @return string результат построения части запроса
      */
-    protected function creatFields(array $set, false|string $table = false): string
+    protected function creatFields(array $set, null|string $table = null): string
     {
         $set['fields'] = (!empty($set['fields'])) ? $set['fields'] : ['*'];
         if (!is_array($set['fields'])) $set['fields'] = explode(',', $set['fields']);
@@ -23,10 +24,10 @@ abstract class BaseModelMethods
 
     /**
      * @param array|null $set массив значений для построения запроса
-     * @param false|string $table название таблицы БД
+     * @param string|null $table название таблицы БД
      * @return string|null результат построения части запроса
      */
-    protected function creatOrder(?array $set, false|string $table = false): string|null
+    protected function creatOrder(?array $set, ?string $table = null): string|null
     {
         $table = ($table && empty($set['no_concat'])) ? $table . '.' : '';
         if (!empty($set['order']) && is_array($set['order'])) {
@@ -51,11 +52,11 @@ abstract class BaseModelMethods
 
     /**
      * @param array|null $set массив значений для построения запроса
-     * @param false|string $table название таблицы БД
+     * @param string|null $table название таблицы БД
      * @param string $instruction инструкция части запроса, по умолчанию 'WHERE'
      * @return string|null результат построения части запроса
      */
-    protected function creatWhere(?array $set, false|string $table = false, string $instruction = 'WHERE'): string|null
+    protected function creatWhere(?array $set, null|string $table = null, string $instruction = 'WHERE'): string|null
     {
         $table = ($table && empty($set['no_concat'])) ? $table . '.' : '';
 

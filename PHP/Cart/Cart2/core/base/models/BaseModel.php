@@ -57,7 +57,7 @@ abstract class BaseModel extends BaseModelMethods
 
     /**
      * @param string $table название таблицы БД
-     * @param array|null $set массив значений для построения запроса
+     * @param array $set массив значений для построения запроса
      * 'fields' => ['column', ...],
      * 'no_concat' => false or true не присоединять имя таблицы, false - присоединять
      * 'where' => ['column' => 'column_value', ...],
@@ -97,7 +97,7 @@ abstract class BaseModel extends BaseModelMethods
      * @return int|bool|array|string результат запроса
      * @throws DbException ошибки
      */
-    final public function select(string $table, ?array $set): int|bool|array|string
+    final public function select(string $table, array $set = []): int|bool|array|string
     {
         $fields = $this->creatFields($set, $table);
         $where = $this->creatWhere($set, $table);
@@ -156,7 +156,7 @@ abstract class BaseModel extends BaseModelMethods
                 if (!$where) {
                     $columns = $this->showColumns($table);
                     if (!$columns) return false;
-                    if ($columns['pri'] && $set['fields'][$columns['pri']]) {
+                    if (isset($columns['pri']) && $set['fields'][$columns['pri']]) {
                         $where = "WHERE {$columns['pri']} = {$set['fields'][$columns['pri']]}";
                         unset($set['fields'][$columns['pri']]);
                     }
