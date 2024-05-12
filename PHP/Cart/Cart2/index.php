@@ -2,7 +2,7 @@
 
 use core\base\exceptions\RouteException;
 use core\base\exceptions\DbException;
-use core\base\controllers\RouteController;
+use core\base\controllers\BaseRoute;
 
 define('W_ACCESS', true);
 
@@ -17,8 +17,9 @@ spl_autoload_register(/** @throws RouteException */ function ($class) {
     if (!@include_once $file) throw new RouteException("Класс $class не подключен");
 //    if (is_readable($file)) return include $file; else throw new RouteException("Класс $class не найден");
 });
+
 try {
-    RouteController::instance()->route();
+   BaseRoute::routeDirection();
 } catch (RouteException|DbException $e) {
     exit($e->getMessage());
 }

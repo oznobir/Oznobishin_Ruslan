@@ -9,9 +9,7 @@
     <meta name="publisher-email" content="oznobir@gmail.com">
     <link rel="shortcut icon" type="image/x-icon" href="<?= PATH ?>favicon.ico">
     <title>Управление сайтом</title>
-    <?php foreach ($this->styles as $style): ?>
-        <link rel="stylesheet" href="<?= $style ?>">
-    <?php endforeach; ?>
+    <?php $this->getStyles(); ?>
 </head>
 <body>
 <?= $this->header ?>
@@ -19,8 +17,13 @@
     <div class="vg-main vg-right vg-relative">
         <?= $this->contentMenu ?>
         <?= $this->contentCenter ?>
-    </div><!--.vg-main.vg-right-->
-</div><!--.vg-carcass-->
+    </div>
+</div>
 <?= $this->footer ?>
+<script>
+    const PATH = '<?=PATH?>';
+    const ADMIN_MODE = 1;
+</script>
+<?php $this->getScripts(); ?>
 </body>
 </html>

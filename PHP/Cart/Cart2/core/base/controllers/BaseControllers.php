@@ -4,6 +4,9 @@ namespace core\base\controllers;
 
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 
 abstract class BaseControllers
 {
@@ -16,6 +19,7 @@ abstract class BaseControllers
     protected string $inputMethod;
     protected string $outputMethod;
     protected ?array $parameters = null;
+    protected array $data = [];
     protected ?string $error = null;
     protected ?string $template = null;
     protected array $styles;
@@ -30,14 +34,14 @@ abstract class BaseControllers
     {
         $controller = str_replace('/', '\\', $this->controller);
         try {
-            $reflection = new \ReflectionMethod($controller, 'request');
+            $reflection = new ReflectionMethod($controller, 'request');
             $args = [
                 'parameters' => $this->parameters,
                 'inputMethod' => $this->inputMethod,
                 'outputMethod' => $this->outputMethod,
             ];
             $reflection->invoke(new $controller, $args);
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             throw new RouteException($e->getMessage());
         }
     }
@@ -80,7 +84,7 @@ abstract class BaseControllers
     protected function render(string $path = '', array $data = []): false|string
     {
         if (!$path) {
-            $class = new \ReflectionClass($this);
+            $class = new ReflectionClass($this);
             $space = str_replace('\\', '/', $class->getNamespaceName() . '\\');
             $routes = Settings::get('routes');
 

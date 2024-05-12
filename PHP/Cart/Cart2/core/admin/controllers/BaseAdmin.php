@@ -19,7 +19,6 @@ abstract class BaseAdmin extends BaseControllers
     protected ?Model $model = null;
     protected ?string $table = null;
     protected array $columns = [];
-    protected array $data = [];
     protected array $foreignData = [];
     protected ?string $adminAlias = null;
     protected ?string $alias = null;

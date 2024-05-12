@@ -6,13 +6,12 @@ const USER = 'root';
 const PASS = '';
 const DB = 'myshop2';
 const SITE_URL = '1http://myshop2.by';
-//const SITE_URL = 'https://k12.by';
 const PATH = '/';
 const SITE_TEMPLATE = 'templates/default/';
 const ADMIN_TEMPLATE = 'core/admin/views/';
 const UPLOAD_DIR = 'files/';
-const  COOKIE_VERSION = '1.0.0';
-const  COOKIE_TIME = 60;
+const COOKIE_VERSION = '1.0.0';
+const COOKIE_TIME = 60;
 const CRYPT_KEY = '';
 const BLOCK_TIME = 3;
 
@@ -21,7 +20,7 @@ const QTY_LINKS = 3;
 
 const ADMIN_CSS_JS = [
     'styles' => ['css/main.css'],
-    'scripts' => [],
+    'scripts' => ['js/functions.js', 'js/scripts.js'],
 ];
 const SITE_CSS_JS = [
     'styles' => ['css/main.css'],
