@@ -8,6 +8,9 @@ use core\base\exceptions\RouteException;
 class IndexController extends BaseControllers
 {
 
+    /**
+     * @throws RouteException
+     */
     protected function inputData(): array
     {
         $name = 'Это страница';

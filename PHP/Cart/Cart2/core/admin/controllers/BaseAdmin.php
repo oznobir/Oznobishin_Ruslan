@@ -123,7 +123,7 @@ abstract class BaseAdmin extends BaseControllers
             $class = str_replace('/', '\\', $class);
             $exp = $class::instance();
             foreach ($this as $name => $value) {
-                if (!$this->model)//
+                if (!$this->model)
                     $exp->$name = &$this->$value;
             }
             return $exp->expansion($args);
@@ -326,7 +326,7 @@ abstract class BaseAdmin extends BaseControllers
             $answerFail = $this->messages['editFail'];
         }
         $this->expansionBase(get_defined_vars());
-        $result = $this->checkAlias($_POST[$this->columns['pri']]);
+        $this->checkAlias($_POST[$this->columns['pri']]);
         if ($resId) {
             $_SESSION['res']['answer'] = '<div class="success">' . $answerSuccess . '</div>';
             if (!$returnId) $this->redirect();

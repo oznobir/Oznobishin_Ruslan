@@ -8,7 +8,7 @@ const Ajax = (set) => {
     let body = '';
     if (typeof set.data !== 'undefined' && set.data) {
         for (let i in set.data) {
-            body += '&' + i + set.data[i];
+            body += '&' + i + '=' + set.data[i];
         }
         body = body.substring(1);
     }
@@ -33,7 +33,7 @@ const Ajax = (set) => {
         if (!contentType) {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         }
-        xhr.setRequestHeader('X-Requested-With','AjaxRequest');
+        xhr.setRequestHeader('X-Requested-With', 'AjaxRequest');
         xhr.onload = function () {
             if (this.status >= 200 && this.status < 300) {
                 if (/fatal\s+?error/ui.test(this.response)) {

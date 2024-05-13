@@ -4,6 +4,8 @@ namespace core\admin\controllers;
 
 use core\base\controllers\BaseMethods;
 use core\base\exceptions\DbException;
+use DateTime;
+use DOMDocument;
 use DOMException;
 
 
@@ -13,9 +15,10 @@ class SitemapController extends BaseAdmin
 
     protected array $all_links = [];
     protected array $temp_links = [];
-    protected int $maxLinks = 3000;
+    protected array $bad_links = [];
+    protected int $maxLinks = 4000;
     protected string $parsingLogFile = 'parsing_log.txt';
-    protected array $extFiles = ['jpg', 'png', 'jpeg', 'gif', 'pdf'];
+    protected array $extFiles = ['mp4', 'jpg', 'png', 'jpeg', 'gif', 'pdf'];
     protected array $messages = [];
     protected array $filterArr = [
         'url' => [],
@@ -24,10 +27,13 @@ class SitemapController extends BaseAdmin
 
 
     /**
-     * @throws DbException
+     * @param int $linksCounter
+     * @param bool $redirect
+     * @return void
      * @throws DOMException
+     * @throws DbException
      */
-    protected function inputData($linksCounter = 1): void
+    public function inputData(int $linksCounter = 1, bool $redirect = true): void
     {
 //        file_get_contents();
 //        get_headers();
@@ -40,14 +46,17 @@ class SitemapController extends BaseAdmin
 
         set_time_limit(0);
 
+        $table_rows = [];
         $reserve = $this->model->select('parsing_table');
         if (!empty($reserve)) {
             foreach ($reserve[0] as $name => $item) {
+                $table_rows[$name] = '';
                 if ($item) $this->$name = json_decode($item);
-                else $this->$name = [SITE_URL];
+                elseif ($name === 'temp_links' || $name === 'all_links') $this->$name = [SITE_URL];
             }
         } else $this->all_links = $this->temp_links = [SITE_URL];
 
+        $linksCounter = $this->num($linksCounter);
         $this->maxLinks = (int)$linksCounter > 1 ? ceil($this->maxLinks / $linksCounter) : $this->maxLinks;
         while ($this->temp_links) {
             $countTempLinks = count($this->temp_links);
@@ -60,39 +69,44 @@ class SitemapController extends BaseAdmin
                     $this->parsing($links[$i]);
                     unset($links[$i]);
                     if ($links) {
+                        foreach ($table_rows as $name => $item) {
+                            if ($name === 'temp_links') $table_rows[$name] = json_encode(array_merge(...$links));
+                            else $table_rows[$name] = json_encode($this->$name);
+                        }
                         $this->model->add('parsing_table', [
-                            'fields' => [
-                                'temp_links' => json_encode(array_merge(...$links)),
-                                'all_links' => json_encode($this->all_links)
-                            ]
+                            'fields' => $table_rows
                         ]);
                     }
                 }
             } else {
                 $this->parsing($links);
             }
+            foreach ($table_rows as $name => $item)
+                $table_rows[$name] = json_encode($this->$name);
+
             $this->model->add('parsing_table', [
-                'fields' => [
-                    'temp_links' => json_encode($this->temp_links),
-                    'all_links' => json_encode($this->all_links)
-                ]
+                'fields' => $table_rows
             ]);
         }
+        foreach ($table_rows as $name => $item)
+            $table_rows[$name] = '';
+
         $this->model->edit('parsing_table', [
-            'fields' => [
-                'temp_links' => '',
-                'all_links' => ''
-            ]
+            'fields' => $table_rows
         ]);
         if ($this->all_links) {
             foreach ($this->all_links as $key => $link) {
-                if (!$this->filter($link)) unset($this->all_links[$key]);
+                if (!$this->filter($link) || in_array($link, $this->bad_links))
+                    unset($this->all_links[$key]);
             }
         }
         $this->createSitemap();
-        if (isset($_SESSION['res']['answer']))
-            $_SESSION['res']['answer'] = '<div class="success">' . $this->messages['curlSuccess'] . '</div>';
-//        $this->redirect();
+        if ($redirect) {
+            $_SESSION['res']['answer'] = '<div class="success">' . sprintf($this->messages['curlSuccess'], count($this->all_links)) . '</div>';
+            $this->redirect();
+        } else {
+            $this->cancel(1, sprintf($this->messages['curlSuccess'], count($this->all_links)), '', true);
+        }
     }
 
     /**
@@ -139,13 +153,16 @@ class SitemapController extends BaseAdmin
             curl_multi_remove_handle($curlMulti, $curl[$i]);
             curl_close($curl[$i]);
             if (!preg_match('/content-type:\s+text\/html/ui', $result[$i])) {
+                $this->bad_links[] = $url;
                 $this->cancel(0, sprintf($this->messages['typeCurlFail'], $url));
                 continue;
             }
             if (!preg_match('/HTTP\/\d\.?\d?\s+20\d/ui', $result[$i])) {
+                $this->bad_links[] = $url;
                 $this->cancel(0, sprintf($this->messages['codeCurlFail'], $url));
                 continue;
             }
+
             $this->createLinks($result[$i]);
         }
         curl_multi_close($curlMulti);
@@ -175,9 +192,10 @@ class SitemapController extends BaseAdmin
                     if (str_starts_with($link, '/'))
                         $link = SITE_URL . $link;
                     $strUrl = str_replace('.', '\.', str_replace('/', '\/', SITE_URL));
-                    if (!in_array($link, $this->all_links)
+                    if (!in_array($link, $this->bad_links)
                         && !preg_match('/^(' . $strUrl . ')?\/?#[^\/]*?$/ui', $link)
-                        && str_starts_with($link, SITE_URL)) {
+                        && str_starts_with($link, SITE_URL)
+                        && !in_array($link, $this->all_links)) {
 
                         $this->temp_links[] = $link;
                         $this->all_links[] = $link;
@@ -244,7 +262,7 @@ class SitemapController extends BaseAdmin
      */
     protected function createSitemap(): void
     {
-        $dom = new \DOMDocument('1.0', 'utf-8');
+        $dom = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
 
         $root = $dom->createElement('urlset');
@@ -254,7 +272,7 @@ class SitemapController extends BaseAdmin
         $dom->appendChild($root);
         $sxe = simplexml_import_dom($dom);
         if ($this->all_links) {
-            $lastMod = (new \DateTime())->format('c');
+            $lastMod = (new DateTime())->format('c');
             foreach ($this->all_links as $link) {
                 $elem = trim(mb_substr($link, mb_strlen(SITE_URL)), '/');
                 $elem = explode('/', $elem);
@@ -281,9 +299,9 @@ class SitemapController extends BaseAdmin
     {
         $tables = $this->model->showTables();
         if (!in_array('parsing_table', $tables)) {
-            $query = 'CREATE TABLE parsing_table (all_links text, temp_links text)';
+            $query = 'CREATE TABLE parsing_table (all_links longtext, temp_links longtext, bad_links longtext)';
             if (!$this->model->query($query, 'default') || !$this->model->add('parsing_table', [
-                    'fields' => ['all_links' => '', 'temp_links' => '']
+                    'fields' => ['all_links' => '', 'temp_links' => '', 'bad_links' => '']
                 ])) {
                 return false;
             }
