@@ -6,9 +6,12 @@ namespace core\admin\controllers;
 use core\base\exceptions\DbException;
 use core\base\settings\Settings;
 
+/**
+ * @uses AddController
+ */
 class AddController extends BaseAdmin
 {
-    protected string $action = 'add';
+//    protected string $action = 'add';
 
     /**
      * @return void

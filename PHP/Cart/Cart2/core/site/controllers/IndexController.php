@@ -2,22 +2,27 @@
 
 namespace core\site\controllers;
 
-use \core\base\controllers\BaseControllers;
+use core\base\controllers\BaseControllers;
 use core\base\exceptions\RouteException;
+use core\base\models\Crypt;
 
+/**
+ * @uses IndexController
+ */
 class IndexController extends BaseControllers
 {
 
     /**
      * @throws RouteException
      */
-    protected function inputData(): array
+    protected function inputData(): string
     {
-        $name = 'Это страница';
-        $content = $this->render('', compact('name'));
+        $str = '12345';
+        $name = Crypt::instance()->encrypt($str);
+        $name1 = Crypt::instance()->decrypt($name);
         $header = $this->render(SITE_TEMPLATE . 'header');
         $footer = $this->render(SITE_TEMPLATE . 'footer');
-        return compact('header', 'content','footer');
+        return $this->render('', compact('name', 'name1','header', 'footer'));
     }
 
 //    protected function outputData(): false|string

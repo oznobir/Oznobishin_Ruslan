@@ -49,6 +49,7 @@ abstract class BaseControllers
     /**
      * @param array $args массив аргументов обработки Reflection
      * @return void запись в свойства: страницы в виде строки или массива, ошибок
+     * @uses request
      */
     public function request(array $args): void
     {
