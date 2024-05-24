@@ -7,6 +7,9 @@ use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 
+/**
+ * @uses ShowController
+ */
 
 class ShowController extends BaseAdmin
 {
@@ -45,7 +48,7 @@ class ShowController extends BaseAdmin
         $order_direction = [];
 
         if (!$this->columns['pri']) return $this->$data = [];
-        $fields[] = $this->columns['pri'] . ' as id';
+        $fields[] = $this->columns['pri'][0] . ' as id';
         if ($this->columns['name']) $fields['name'] = 'name';
         if ($this->columns['img']) $fields['img'] = 'img';
 

@@ -66,10 +66,10 @@ abstract class BaseModel extends BaseModelMethods
      * 'order' => ['column', ...],
      * 'order_direction' => ['ASC' or 'DESC'],
      * 'limit' => '1' or ...
+     * 'join_structure' => false or true - возвращать обработанный массив данных
      * // 1 вариант записи join (может быть несколько вложенных массивов):
      * 'join' =>
-     * [
-     *   'name_table' => [
+     * ['name_table' => [
      *      'table' => 'name_table',
      *      'fields' => ['column as alias_column', ...],
      *      'type' => 'left' or ...,
@@ -82,8 +82,7 @@ abstract class BaseModel extends BaseModelMethods
      *        'fields' => ['column', 'parent_column']
      *      ],
      * // 2 вариант записи join:
-     *   [
-     *      'table' => 'name_table',
+     *   ['table' => 'name_table',
      *      'fields' => ['column as alias_column', ...],
      *      'type' => 'left' or ...,
      *      'where' => ['column' => 'column_value', ...],
@@ -91,28 +90,28 @@ abstract class BaseModel extends BaseModelMethods
      *      'conditions' => ['AND', ...],
      *      'group_conditions' => ['AND' or ...]
      *      'on' => ['column', 'parent_column']
-     *   ]
-     *  ]
-     * ]
+     *   ]]]
      * @return int|bool|array|string результат запроса
      * @throws DbException ошибки
      */
     final public function select(string $table, array $set = []): int|bool|array|string
     {
-        $fields = $this->creatFields($set, $table);
-        $where = $this->creatWhere($set, $table);
-        if (!$where) $new_wh = true;
-        else $new_wh = false;
-        $join_arr = $this->creatJoin($set, $table, $new_wh);
+        $fields = $this->createFields($set, $table);
+        $where = $this->createWhere($set, $table);
+        $join_arr = $this->createJoin($set, $table, !$where);
         $fields .= $join_arr['fields'] ?? '';
-        $fields = rtrim($fields, ',');
+        $fields = rtrim($fields, ', ');
         $where .= $join_arr['where'] ?? '';
         $join = $join_arr['join'] ?? '';
-        $order = $this->creatOrder($set, $table) ?? '';
+        $order = $this->createOrder($set, $table) ?? '';
         $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         $query = "SELECT $fields FROM $table $join $where $order $limit";
 
-        return $this->query($query);
+        $res = $this->query($query);
+        if (!empty($set['join_structure']) && $res) {
+            $res = $this->joinStructure($res, $table);
+        }
+        return $res;
     }
 
     /**
@@ -130,7 +129,7 @@ abstract class BaseModel extends BaseModelMethods
     {
         $set = $this->getArr($set);
         if (!$set['fields'] && !$set['files']) return false;
-        $insertArr = $this->creatInsert($set['fields'], $set['files'], $set['except']);
+        $insertArr = $this->createInsert($set['fields'], $set['files'], $set['except']);
         $query = "INSERT INTO $table {$insertArr['fields']} VALUES {$insertArr['values']}";
         return $this->query($query, 'ins', $set['return_id']);
 
@@ -152,7 +151,7 @@ abstract class BaseModel extends BaseModelMethods
         if ($set['fields'] || $set['files']) {
             $where = '';
             if (empty($set['all_row'])) {
-                $where = $this->creatWhere($set);
+                $where = $this->createWhere($set);
                 if (!$where) {
                     $columns = $this->showColumns($table);
                     if (!$columns) return false;
@@ -162,7 +161,7 @@ abstract class BaseModel extends BaseModelMethods
                     }
                 }
             }
-            $update = $this->creatUpdate($set['fields'], $set['files'], $set['except']);
+            $update = $this->createUpdate($set['fields'], $set['files'], $set['except']);
             $query = "UPDATE $table SET $update $where";
             return $this->query($query, 'ins', $set['return_id']);
         }
@@ -193,28 +192,29 @@ abstract class BaseModel extends BaseModelMethods
      * ]
      * @return array|bool|int|string
      * @throws DbException
+     * @noinspection SqlWithoutWhere
      */
     final public function delete(string $table, array $set = []): array|bool|int|string
     {
         $table = trim($table);
-        $where = $this->creatWhere($set, $table);
+        $where = $this->createWhere($set, $table);
         $columns = $this->showColumns($table);
         if (!$columns) return false;
         $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : null;
         if ($set['fields']) {
             if ($columns['pri']) {
-                $key = array_search($columns['pri'], $set['fields']);
+                $key = array_search($columns['pri'][0], $set['fields']);
                 if ($key !== false) unset($set['fields'][$key]);
             }
             $fields = [];
             foreach ($set['fields'] as $field) {
                 $fields[$field] = $columns[$field]['Default'];
             }
-            $update = $this->creatUpdate($fields, false, false);
+            $update = $this->createUpdate($fields, false, false);
             $query = "UPDATE $table SET $update $where";
 
         } else {
-            $joinArr = $this->creatJoin($set, $table);
+            $joinArr = $this->createJoin($set, $table);
             $join = $joinArr['join'] ?? '';
             $tables = $joinArr['tables'] ?? '';
             $query = "DELETE $table$tables FROM $table $join $where";
@@ -229,16 +229,18 @@ abstract class BaseModel extends BaseModelMethods
      */
     final public function showColumns(string $table): array
     {
-        $query = "SHOW COLUMNS FROM $table";
-        $res = $this->query($query);
-        $columns = [];
-        if ($res) {
-            foreach ($res as $row) {
-                $columns[$row['Field']] = $row;
-                if ($row['Key'] === 'PRI') $columns['pri'] = $row['Field'];
+        if (empty($this->columnsTables[$table])) {
+            $query = "SHOW COLUMNS FROM $table";
+            $res = $this->query($query);
+            $this->columnsTables[$table] = [];
+            if ($res) {
+                foreach ($res as $row) {
+                    $this->columnsTables[$table][$row['Field']] = $row;
+                    if ($row['Key'] === 'PRI') $this->columnsTables[$table]['pri'][] = $row['Field'];
+                }
             }
         }
-        return $columns;
+        return $this->columnsTables[$table];
     }
 
     /**

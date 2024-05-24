@@ -11,3 +11,17 @@ if (!function_exists('mb_escape')) {
         return preg_replace('~[\x00\x0A\x0D\x1A\x22\x27\x5C]~u', '\\\$0', $string);
     }
 }
+function d($var): void
+{
+    echo '<pre>';
+    print_r($var);
+    echo '</pre>';
+}
+function d_str($var): false|string
+{
+    ob_start();
+    echo '<pre>';
+    print_r($var);
+    echo '</pre>';
+    return ob_get_clean();
+}

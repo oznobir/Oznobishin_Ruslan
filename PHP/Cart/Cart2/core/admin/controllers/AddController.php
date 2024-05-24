@@ -55,7 +55,7 @@ class AddController extends BaseAdmin
             }
         } elseif ($this->columns['pid']) {
             $arr['COLUMN_NAME'] = 'pid';
-            $arr['REFERENCED_COLUMN_NAME'] = $this->columns['pri'];
+            $arr['REFERENCED_COLUMN_NAME'] = $this->columns['pri'][0];
             $arr['REFERENCED_TABLE_NAME'] = $this->table;
             $this->createForeignProperty($arr, $rootItems);
         }
@@ -80,13 +80,13 @@ class AddController extends BaseAdmin
             foreach ($columns as $key => $value) {
                 if (str_contains($key, 'name')) $name .= $key . ' as name';
             }
-            if (!$name) $name = $columns['pri'] . ' as name';
+            if (!$name) $name = $columns['pri'][0] . ' as name';
         }
         $where = [];
         $operand = [];
         if ($this->data) {
             if ($columnsTable['REFERENCED_TABLE_NAME'] === $this->table) {
-                $where[$this->columns['pri']] = $this->data[$this->columns['pri']];
+                $where[$this->columns['pri'][0]] = $this->data[$this->columns['pri'][0]];
                 $operand[] = '<>';
             }
         }

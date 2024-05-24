@@ -18,8 +18,7 @@
 </head>
 <body>
 <?= $header ?>
-<h1><?= $name ?></h1>
-<h1><?= $name1 ?></h1>
+<?php d($name); ?>
 <?= $footer ?>
 </body>
 </html>
