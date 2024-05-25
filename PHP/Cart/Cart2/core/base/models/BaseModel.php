@@ -230,15 +230,22 @@ abstract class BaseModel extends BaseModelMethods
     final public function showColumns(string $table): array
     {
         if (empty($this->columnsTables[$table])) {
-            $query = "SHOW COLUMNS FROM $table";
+            $arrTable = $this->createTableAlias($table);
+            if(!empty($this->columnsTables[$arrTable['table']])){
+                return $this->columnsTables[$arrTable['alias']] = $this->columnsTables[$arrTable['table']];
+            }
+            $query = "SHOW COLUMNS FROM {$arrTable['table']}";
             $res = $this->query($query);
-            $this->columnsTables[$table] = [];
+            $this->columnsTables[$arrTable['table']] = [];
             if ($res) {
                 foreach ($res as $row) {
-                    $this->columnsTables[$table][$row['Field']] = $row;
-                    if ($row['Key'] === 'PRI') $this->columnsTables[$table]['pri'][] = $row['Field'];
+                    $this->columnsTables[$arrTable['table']][$row['Field']] = $row;
+                    if ($row['Key'] === 'PRI') $this->columnsTables[$arrTable['table']]['pri'][] = $row['Field'];
                 }
             }
+        }
+        if(isset($arrTable) && $arrTable['table'] !== $arrTable['alias']) {
+            return $this->columnsTables[$arrTable['alias']] = $this->columnsTables[$arrTable['table']];
         }
         return $this->columnsTables[$table];
     }

@@ -49,27 +49,27 @@ class ShowController extends BaseAdmin
 
         if (!$this->columns['pri']) return $this->$data = [];
         $fields[] = $this->columns['pri'][0] . ' as id';
-        if ($this->columns['name']) $fields['name'] = 'name';
-        if ($this->columns['img']) $fields['img'] = 'img';
+        if (isset($this->columns['name'])) $fields['name'] = 'name';
+        if (isset($this->columns['img'])) $fields['img'] = 'img';
 
         if (count($fields) < 3) {
             foreach ($this->columns as $key => $item) {
-                if (!$fields['name'] && str_contains($key, 'name')) {
+                if (!isset($fields['name']) && str_contains($key, 'name')) {
                     $fields['name'] = $key . ' as name';
                 }
-                if (!$fields['img'] && str_starts_with($key, 'img')) {
+                if (!isset($fields['img']) && str_starts_with($key, 'img')) {
                     $fields['img'] = $key . ' as img';
                 }
             }
         }
         if (isset($data['fields'])) $fields = Settings::instance()->arrayMergeRecursive($fields, $data['fields']);
-        if ($this->columns['pid']) {
+        if (isset($this->columns['pid'])) {
             if (!in_array('pid', $fields)) $fields[] = 'pid';
             $order[] = 'pid';
         }
-        if ($this->columns['position']) {
+        if (isset($this->columns['position'])) {
             $order[] = 'position';
-        } elseif ($this->columns['date']) {
+        } elseif (isset($this->columns['date'])) {
             $order[] = 'date';
             if ($order) $order_direction = ['ASC', 'DESC'];
             else $order_direction[] = 'DESC';

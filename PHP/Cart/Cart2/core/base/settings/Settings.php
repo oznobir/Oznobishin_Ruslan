@@ -13,7 +13,11 @@ class Settings
     private array $projectTables = [
         'products' => ['name' => 'Товары', 'img' => 'pages.png'],
         'categories' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
-        'articles' => ['name' => 'Статьи', 'img' => 'pages.png'],
+        'goods' => ['name' => 'Товары-тест', 'img' => 'pages.png'],
+        'filters' => ['name' => 'Размеры-тест', 'img' => 'pages.png'],
+        'cat_goods' => ['name' => 'Категории-тест', 'img' => 'pages.png'],
+        'manufacturer' => ['name' => 'Производители-тест', 'img' => 'pages.png'],
+        'color' => ['name' => 'Цвет-тест', 'img' => 'pages.png'],
     ];
     private string $formTemplates = PATH.'core/admin/views/include/form_templates/';
     private array $templateArr = [
@@ -34,7 +38,7 @@ class Settings
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
-        'tables' => ['categories', 'articles'],
+        'tables' => ['categories', 'goods'],
     ];
     private array $radio = [
         'visible' => ['Нет', 'Да', 'default' => 'Да'],
