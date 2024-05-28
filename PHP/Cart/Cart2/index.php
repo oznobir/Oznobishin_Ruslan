@@ -1,7 +1,6 @@
 <?php
 
 use core\base\exceptions\RouteException;
-use core\base\exceptions\DbException;
 use core\base\controllers\BaseRoute;
 
 define('W_ACCESS', true);
@@ -20,6 +19,6 @@ spl_autoload_register(/** @throws RouteException */ function ($class) {
 
 try {
    BaseRoute::routeDirection();
-} catch (RouteException|DbException $e) {
+} catch (RouteException $e) {
     exit($e->getMessage());
 }

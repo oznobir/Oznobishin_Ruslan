@@ -14,10 +14,12 @@ use libraries\TextModify;
 
 abstract class BaseAdmin extends BaseControllers
 {
+    /** @uses $notDelete */
     protected string $contentMenu;
     protected string $contentCenter;
     protected ?Model $model = null;
     protected ?string $table = null;
+    protected ?object $settings = null;
     protected array $columns = [];
     protected array $foreignData = [];
     protected ?string $adminAlias = null;
@@ -208,7 +210,7 @@ abstract class BaseAdmin extends BaseControllers
     {
         if (!$arr) $arr = &$_POST;
         if (!$settings) $settings = Settings::instance();
-        $id = ($_POST[$this->columns['pri']]) ?? false;
+        $id = ($_POST[$this->columns['pri'][0]]) ?? false;
         $validate = $settings::get('validation');
         if (!$this->translate) $this->translate = $settings::get('translate');
         foreach ($arr as $key => $item) {
@@ -274,7 +276,7 @@ abstract class BaseAdmin extends BaseControllers
      * @param array $arr
      * @return void
      */
-    protected function countChar(string $str, int|string $counter,string $answer, array $arr = []): void
+    protected function countChar(string $str, int|string $counter, string $answer, array $arr = []): void
     {
         if (mb_strlen($str) > $counter) {
             $_SESSION['res']['answer'] = '<div class="error">' . sprintf($this->messages['count'], $answer, $counter)
@@ -285,17 +287,20 @@ abstract class BaseAdmin extends BaseControllers
     }
 
     /**
+     * @param bool $returnId
+     * @return mixed|string|null
      * @throws DbException
      */
-    protected function editData($returnId = false)
+
+    protected function editData(bool $returnId = false): mixed
     {
         $id = false;
         $method = 'add';
         $where = [];
-        if (isset($_POST[$this->columns['pri']])) {
-            $id = $this->num($_POST[$this->columns['pri']]);
+        if (isset($_POST[$this->columns['pri'][0]])) {
+            $id = $this->num($_POST[$this->columns['pri'][0]]);
             if ($id) {
-                $where = [$this->columns['pri'] => $id];
+                $where = [$this->columns['pri'][0] => $id];
                 $method = 'edit';
             }
         }
@@ -318,19 +323,20 @@ abstract class BaseAdmin extends BaseControllers
             'except' => $except,
         ]);
         if (!$id && $method === 'add') {
-            $_POST[$this->columns['pri']] = $resId;
+            $_POST[$this->columns['pri'][0]] = $resId;
             $answerSuccess = $this->messages['addSuccess'];
             $answerFail = $this->messages['addFail'];
         } else {
             $answerSuccess = $this->messages['editSuccess'];
             $answerFail = $this->messages['editFail'];
         }
+        $this->checkManyToMany();
         $this->expansionBase(get_defined_vars());
-        $this->checkAlias($_POST[$this->columns['pri']]);
+        $this->checkAlias($_POST[$this->columns['pri'][0]]);
         if ($resId) {
             $_SESSION['res']['answer'] = '<div class="success">' . $answerSuccess . '</div>';
             if (!$returnId) $this->redirect();
-            return $_POST[$this->columns['pri']];
+            return $_POST[$this->columns['pri'][0]];
         } else {
             $_SESSION['res']['answer'] = '<div class="error">' . $answerFail . '</div>';
             if (!$returnId) $this->redirect();
@@ -338,6 +344,9 @@ abstract class BaseAdmin extends BaseControllers
         }
     }
 
+    /**
+     * @return void
+     */
     protected function createFile(): void
     {
         $fileEdit = new FileEdit();
@@ -371,7 +380,7 @@ abstract class BaseAdmin extends BaseControllers
             $where ['alias'] = $alias;
             $operand[] = '=';
             if ($id) {
-                $where [$this->columns['pri']] = $id;
+                $where [$this->columns['pri'][0]] = $id;
                 $operand[] = '<>';
             }
             $resAlias = $this->model->select($this->table, [
@@ -404,7 +413,7 @@ abstract class BaseAdmin extends BaseControllers
                 $this->alias .= '-' . $id;
                 $this->model->edit($this->table, [
                     'fields' => ['alias' => $this->alias],
-                    'where' => [$this->columns['pri'] => $id],
+                    'where' => [$this->columns['pri'][0] => $id],
                 ]);
                 return true;
             }
@@ -426,9 +435,241 @@ abstract class BaseAdmin extends BaseControllers
         $except = [];
         if ($arr) {
             foreach ($arr as $key => $item) {
-                if (!$this->columns[$key]) $except = $key;
+                if (!isset($this->columns[$key])) $except[] = $key;
             }
         }
         return $except;
+    }
+
+    /**
+     * @param $table
+     * @return array
+     * @throws DbException
+     * @throws RouteException
+     */
+
+    protected function createOrderData($table): array
+    {
+        $columns = $this->model->showColumns($table);
+        if (empty($columns)) throw new RouteException ('Отсутствуют поля в таблице ' . $table);
+        $name = '';
+        $orderName = '';
+        if (isset($columns['name'])) $orderName = $name = 'name';
+        else {
+            foreach ($columns as $key => $value) {
+                if (str_contains($key, 'name')) {
+                    $orderName = $key;
+                    $name .= $key . ' as name';
+                }
+            }
+            if (!$name) $name = $columns['pri'][0] . ' as name';
+        }
+        $pid = '';
+        $order = [];
+        if (isset($columns['pid'])) $order[] = $pid = 'pid';
+
+        if (isset($columns['position'])) $order[] = 'position';
+        else $order[] = $orderName;
+
+        return compact('name', 'pid', 'order', 'columns');
+    }
+
+    /**
+     * @throws RouteException
+     * @throws DbException
+     */
+    protected function createManyToMany(object|bool $settings = false): void
+    {
+        if (!$settings) $settings = $this->settings ?: Settings::instance();
+        $manyToMany = $settings::get('manyToMany');
+        $blocks = $settings::get('blockNeedle');
+        if ($manyToMany) {
+            foreach ($manyToMany as $mTable => $tables) {
+                $targetKey = array_search($this->table, $tables);
+                if ($targetKey !== false) {
+                    $otherKey = $targetKey ? 0 : 1;
+                    $checkboxList = $settings::get('templateArr')['checkboxlist'];
+                    if (!$checkboxList || !in_array($tables[$otherKey], $checkboxList)) continue;
+                    if (!isset($this->translate[$tables[$otherKey]])) {
+                        if (isset($settings::get('projectTables')[$tables[$otherKey]])) {
+                            $this->translate[$tables[$otherKey]] = [$settings::get('projectTables')[$tables[$otherKey]]['name']];
+                        }
+                    }
+                    $orderData = $this->createOrderData($tables[$otherKey]);
+                    $insert = false;
+                    if ($blocks) {
+                        foreach ($blocks as $key => $item) {
+                            if (in_array($tables[$otherKey], $item)) {
+                                $this->blocks[$key][] = $tables[$otherKey];
+                                $insert = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$insert) $this->blocks[array_keys($this->blocks)[0]][] = $tables[$otherKey];
+                    $foreign = [];
+                    if ($this->data) {
+                        $res = $this->model->select($mTable, [
+                            'fields' => [$tables[$otherKey] . '_' . $orderData['columns']['pri'][0]],
+                            'where' => [$this->table . '_' . $this->columns['pri'][0] . '=' . $this->data[$this->columns['pri'][0]]],
+                        ]);
+                        if ($res) {
+                            foreach ($res as $item) {
+                                $foreign[] = $item[$tables[$otherKey]] . '_' . $orderData['columns']['pri'][0];
+                            }
+                        }
+                    }
+                    if (isset($tables['type'])) {
+                        $data = $this->model->select($tables[$otherKey], [
+                            'fields' => [$orderData['columns']['pri'][0] . ' as id', $orderData['name'], $orderData['pid']],
+                            'order' => $orderData['order'],
+                        ]);
+                        if ($data) {
+                            $this->foreignData[$tables[$otherKey]][$tables[$otherKey]]['name'] = 'Выбрать';
+                            foreach ($data as $value) {
+                                if ($tables['type'] === 'root' && $orderData['pid']) {
+                                    if ($value[$orderData['pid']] === null)
+                                        $this->foreignData[$tables[$otherKey]][$tables[$otherKey]]['sub'][] = $value;
+                                } elseif ($tables['type'] === 'child' && $orderData['pid']) {
+                                    if ($value[$orderData['pid']] !== null)
+                                        $this->foreignData[$tables[$otherKey]][$tables[$otherKey]]['sub'][] = $value;
+                                } else $this->foreignData[$tables[$otherKey]][$tables[$otherKey]]['sub'][] = $value;
+
+                                if (in_array($value['id'], $foreign))
+                                    $this->data[$tables[$otherKey]][$tables[$otherKey]][] = $value['id'];
+                            }
+                        }
+                    } elseif ($orderData['pid']) {
+                        $parent = $tables[$otherKey];
+                        $keys = $this->model->showForeignKeys($tables[$otherKey]);
+                        if ($keys) {
+                            foreach ($keys as $key) {
+                                if ($key['COLUMN_NAME'] === 'pid') {
+                                    $parent = $key['REFERENCED_TABLE_NAME'];
+                                    break;
+                                }
+                            }
+                        }
+                        if ($parent === $tables[$otherKey]) {
+                            $data = $this->model->select($tables[$otherKey], [
+                                'fields' => [$orderData['columns']['pri'][0] . ' as id', $orderData['name'], $orderData['pid']],
+                                'order' => $orderData['order'],
+                            ]);
+                            if ($data) {
+                                while (($key = key($data)) !== null) {
+                                    if (!$data[$key]['pid']) {
+                                        $this->foreignData[$tables[$otherKey]][$data[$key]['id']]['name'] = $data[$key]['name'];
+
+                                        unset($data[$key]);
+                                        reset($data);
+                                        //continue;
+                                    } else {
+                                        if (isset($this->foreignData[$tables[$otherKey]][$data[$key][$orderData['pid']]])) {
+                                            $this->foreignData[$tables[$otherKey]][$data[$key][$orderData['pid']]]['sub'][$data[$key]['id']] = $data[$key];
+                                            if (in_array($data[$key]['id'], $foreign))
+                                                $this->data[$tables[$otherKey]][$data[$key][$orderData['pid']]][] = $data[$key]['id'];
+
+                                            unset($data[$key]);
+                                            reset($data);
+                                            continue;
+                                        } else {
+                                            foreach ($this->foreignData[$tables[$otherKey]] as $id => $item) {
+                                                if (isset($item['sub'][$data[$key][$orderData['pid']]])) {
+                                                    $this->foreignData[$tables[$otherKey]][$id]['sub'][$data[$key]['id']] = $data[$key];
+                                                    if (in_array($data[$key]['id'], $foreign))
+                                                        $this->data[$tables[$otherKey]][$id][] = $data[$key]['id'];
+                                                    unset($data[$key]);
+                                                    reset($data);
+                                                    continue 2;
+                                                }
+                                            }
+                                        }
+                                        next($data);
+                                    }
+                                }
+                            }
+                        } else {
+                            $parentOrderData = $this->createOrderData($parent);
+                            $data = $this->model->select($parent, [
+                                'fields' => [$parentOrderData['name']],
+                                'join' => [
+                                    $tables[$otherKey] => [
+                                        'fields' => [$orderData['columns']['pri'][0] . ' as id', $orderData['name']],
+                                        'on' => [$parentOrderData['columns']['pri'][0], $orderData['pid']],
+                                    ],
+                                ],
+                                'join_structure' => true,
+                            ]);
+                            foreach ($data as $key => $item) {
+                                if (isset($item['join'][$tables[$otherKey]])) {
+                                    $this->foreignData[$tables[$otherKey]][$key]['name'] = $item['name'];
+                                    $this->foreignData[$tables[$otherKey]][$key]['sub'] = $item['join'][$tables[$otherKey]];
+                                    foreach ($item['join'][$tables[$otherKey]] as $value) {
+                                        if (in_array($value['id'], $foreign))
+                                            $this->data[$tables[$otherKey]][$key][] = $value['id'];
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $data = $this->model->select($tables[$otherKey], [
+                            'fields' => [$orderData['columns']['pri'][0] . ' as id', $orderData['name'], $orderData['pid']],
+                            'order' => $orderData['order'],
+                        ]);
+                        if ($data) {
+                            $this->foreignData[$tables[$otherKey]][$tables[$otherKey]]['name'] = 'Выбрать';
+                            foreach ($data as $item) {
+                                $this->foreignData[$tables[$otherKey]][$tables[$otherKey]]['sub'][] = $item;
+                                if (in_array($item['id'], $foreign))
+                                    $this->data[$tables[$otherKey]][$tables[$otherKey]][] = $item['id'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @throws DbException
+     */
+    protected function checkManyToMany(object|bool $settings = false): void
+    {
+        if (!$settings) $settings = $this->settings ?: Settings::instance();
+        $manyToMany = $settings::get('manyToMany');
+        if ($manyToMany) {
+            foreach ($manyToMany as $mTable => $tables) {
+                $targetKey = array_search($this->table, $tables);
+                if ($targetKey !== false) {
+                    $otherKey = $targetKey ? 0 : 1;
+                    $checkboxList = $settings::get('templateArr')['checkboxlist'];
+                    if (!$checkboxList || !in_array($tables[$otherKey], $checkboxList)) continue;
+                    $columns = $this->model->showColumns($tables[$otherKey]);
+                    $targetRow = $this->table . '_' . $this->columns['pri'][0];
+                    $otherRow = $tables[$otherKey] . '_' . $columns['pri'][0];
+                    $this->model->delete($mTable, [
+                        'where' => [$targetRow => $_POST[$this->columns['pri'][0]]],
+                    ]);
+                    if (isset($_POST[$tables[$otherKey]])){
+                        $insertArr = [];
+                        $i =0;
+                        foreach ($_POST[$tables[$otherKey]] as $value){
+                            foreach ($value as $item){
+                                if($item){
+                                    $insertArr[$i][$targetRow] = $_POST[$this->columns['pri'][0]];
+                                    $insertArr[$i][$otherRow] = $item;
+                                    $i++;
+                                }
+                            }
+                        }
+                        if(!empty($insertArr)) {
+                            $this->model->add($mTable, [
+                                'fields' => $insertArr,
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

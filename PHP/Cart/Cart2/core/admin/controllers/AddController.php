@@ -4,18 +4,19 @@ namespace core\admin\controllers;
 
 
 use core\base\exceptions\DbException;
+use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 
-/**
- * @uses AddController
- */
+/** @uses AddController */
 class AddController extends BaseAdmin
 {
-//    protected string $action = 'add';
+    /** @uses $action */
+    protected string $action = 'add';
 
     /**
      * @return void
      * @throws DbException
+     * @throws RouteException
      */
     protected function inputData(): void
     {
@@ -28,6 +29,7 @@ class AddController extends BaseAdmin
         $this->createMenuPosition();
         $this->createRadio();
         $this->createOutputData();
+        $this->createManyToMany();
 
     }
 
@@ -43,6 +45,7 @@ class AddController extends BaseAdmin
      * @param object|string|false $settings
      * @return void
      * @throws DbException
+     * @throws RouteException
      */
     protected function createForeignData(object|string|false $settings = false): void
     {
@@ -53,7 +56,7 @@ class AddController extends BaseAdmin
             foreach ($keys as $item) {
                 $this->createForeignProperty($item, $rootItems);
             }
-        } elseif ($this->columns['pid']) {
+        } elseif (isset($this->columns['pid'])) {
             $arr['COLUMN_NAME'] = 'pid';
             $arr['REFERENCED_COLUMN_NAME'] = $this->columns['pri'][0];
             $arr['REFERENCED_TABLE_NAME'] = $this->table;
@@ -66,6 +69,7 @@ class AddController extends BaseAdmin
      * @param array $rootItems
      * @return void
      * @throws DbException
+     * @throws RouteException
      */
     protected function createForeignProperty(array $columnsTable, array $rootItems): void
     {
@@ -73,15 +77,8 @@ class AddController extends BaseAdmin
             $this->foreignData[$columnsTable['COLUMN_NAME']][0]['id'] = 0;
             $this->foreignData[$columnsTable['COLUMN_NAME']][0]['name'] = $rootItems['name'];
         }
-        $columns = $this->model->showColumns($columnsTable['REFERENCED_TABLE_NAME']);
-        $name = '';
-        if ($columns['name']) $name = 'name';
-        else {
-            foreach ($columns as $key => $value) {
-                if (str_contains($key, 'name')) $name .= $key . ' as name';
-            }
-            if (!$name) $name = $columns['pri'][0] . ' as name';
-        }
+        $orderData = $this->createOrderData($columnsTable['REFERENCED_TABLE_NAME']);
+
         $where = [];
         $operand = [];
         if ($this->data) {
@@ -91,9 +88,10 @@ class AddController extends BaseAdmin
             }
         }
         $foreign = $this->model->select($columnsTable['REFERENCED_TABLE_NAME'], [
-            'fields' => [$columnsTable['REFERENCED_COLUMN_NAME'] . ' as id', $name],
+            'fields' => [$columnsTable['REFERENCED_COLUMN_NAME'] . ' as id', $orderData['name'], $orderData['pid']],
             'where' => $where,
             'operand' => $operand,
+            'order' => $orderData['order'],
         ]);
         if ($foreign) {
             if (!empty($this->foreignData[$columnsTable['COLUMN_NAME']])) {
@@ -111,11 +109,11 @@ class AddController extends BaseAdmin
      */
     protected function createMenuPosition(object|string|false $settings = false): void
     {
-        if ($this->columns['position']) {
+        if (isset($this->columns['position'])) {
             if (!$settings) $settings = Settings::instance();
             $rootItems = $settings::get('rootItems');
             $where = '';
-            if ($this->columns['pid']) {
+            if (isset($this->columns['pid'])) {
                 if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid = 0';
                 else {
                     $parent = $this->model->showForeignKeys($this->table, 'pid')[0];

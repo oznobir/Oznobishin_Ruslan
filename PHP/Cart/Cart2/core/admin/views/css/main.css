@@ -249,18 +249,18 @@ label.vg-element {
 }
 
 .vg-text {
-    font-size: 1vw;
+    font-size: 1.1vw;
     text-decoration: none;
 }
 
 @media (max-width: 1200px) {
     .vg-text {
-        font-size: 12px;
+        font-size: 14px;
     }
 }
 
 .vg-text2 {
-    font-size: 1vw;
+    font-size: 1.1vw;
 }
 
 .vg-left {
@@ -675,7 +675,6 @@ textarea {
     right: 12px;
     height: 8px;
     border: 8px solid transparent;
-    border-top: 8px solid;
 }
 
 .select_all {
@@ -684,7 +683,7 @@ textarea {
 
 .option_wrap {
     display: -webkit-flex;
-    display: none;
+    /*display: none;*/
     -webkit-flex-direction: column;
     flex-direction: column;
 }

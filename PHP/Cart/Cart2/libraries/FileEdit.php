@@ -4,7 +4,7 @@ namespace libraries;
 
 class FileEdit
 {
-    protected array $imgArr;
+    protected array $imgArr = [];
     protected string $directory;
 
     public function addFile($directory = false): array

@@ -7,6 +7,7 @@ use core\base\controllers\Singleton;
 class Settings
 {
     use Singleton;
+
     private string $expansion = 'core/admin/expansions/';
     private string $messages = 'core/base/messages/';
     private string $defaultTable = 'products';
@@ -19,14 +20,15 @@ class Settings
         'manufacturer' => ['name' => 'Производители-тест', 'img' => 'pages.png'],
         'color' => ['name' => 'Цвет-тест', 'img' => 'pages.png'],
     ];
-    private string $formTemplates = PATH.'core/admin/views/include/form_templates/';
+    private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
         'text' => ['name'],
         'textarea' => ['description', 'content'],
         'radio' => ['visible', 'status'],
         'select' => ['position', 'pid'],
         'img' => ['img'],
-        'gallery_img' => ['gallery_img']
+        'gallery_img' => ['gallery_img'],
+        'checkboxlist' => ['filters'],
     ];
     private array $translate = [
         'name' => ['Название', 'Не более 70 символов'],
@@ -34,11 +36,11 @@ class Settings
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
         'description' => ['Описание', 'Не более 160 символов'],
-        'pid' => ['Категория', ''],
+        'pid' => ['Родительская категория', ''],
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
-        'tables' => ['categories', 'goods'],
+        'tables' => ['categories', 'cat_goods', 'cat_filters'],
     ];
     private array $radio = [
         'visible' => ['Нет', 'Да', 'default' => 'Да'],
@@ -48,6 +50,11 @@ class Settings
         'vg-rows' => [],
         'vg-img' => ['img'],
         'vg-content' => ['description'],
+    ];
+    private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all
+        'filters_goods' => ['goods', 'filters'],
+        'manufacturer_goods' => ['goods', 'manufacturer'],
+        'color_goods' => ['goods', 'color'],
     ];
     private array $validation = [
         'name' => ['empty' => true, 'count' => 70, 'trim' => true],

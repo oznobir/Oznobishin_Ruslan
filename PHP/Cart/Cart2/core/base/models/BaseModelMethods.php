@@ -41,6 +41,7 @@ abstract class BaseModelMethods
             }
         } else {
             $id_field = false;
+            $set['fields'] = (array)$set['fields'];
             foreach ($set['fields'] as $field) {
                 if ($join_structure && !$id_field && $this->columnsTables[$aliasTable]['pri'][0] === $field) $id_field = true;
                 if ($field) {
@@ -226,19 +227,21 @@ abstract class BaseModelMethods
         if (is_int($arr_type)) {
             $check_fields = false;
             $count_fields = 0;
-            foreach ($fields as $key => $value) {
+            foreach ($fields as $item) {
                 $insert_arr['values'] .= '(';
-                if (!$count_fields) $count_fields = count($value[$key]);
+                if (!$count_fields) $count_fields = count($item);
                 $j = 0;
-                foreach ($value as $row => $field) {
+                foreach ($item as $row => $value) {
                     if ($except && in_array($row, $except)) continue;
                     if (!$check_fields) $insert_arr['fields'] .= $row . ', ';
-                    if (in_array($field, $this->sqlFunc)) $insert_arr['values'] .= $row . ', ';
-                    elseif ($field === 'NULL' || $field === NULL) $insert_arr['values'] .= "NULL" . ', ';
-                    else  $insert_arr['values'] .= "'" . mb_escape($row) . "'" . ', ';
+                    if (in_array($value, $this->sqlFunc)) $insert_arr['values'] .= $value . ', ';
+                    elseif ($value === 'NULL' || $value === NULL) $insert_arr['values'] .= "NULL" . ', ';
+                    else  $insert_arr['values'] .= "'" . mb_escape($value) . "'" . ', ';
                     $j++;
                     if ($j === $count_fields) break;
-                    if ($j < $count_fields) $insert_arr['values'] .= "NULL" . ', ';
+                }
+                for (; $j < $count_fields; $j++) {
+                    $insert_arr['values'] .= "NULL" . ', ';
                 }
                 $insert_arr['values'] = rtrim($insert_arr['values'], ', ') . "), ";
                 if (!$check_fields) $check_fields = true;
