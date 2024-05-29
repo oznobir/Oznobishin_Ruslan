@@ -151,6 +151,9 @@ abstract class BaseModelMethods
                                 if ($where) $where .= ' ';
                                 $where .= "$table$key $operand '" . mb_escape($value) . "' $condition";
                             }
+                        } elseif ($item === null || $item === 'NULL') {
+                            if ($operand === '=') $where .= "$table$key $operand IS NULL $condition";
+                            else $where .= "$table$key $operand IS NOT NULL $condition";
                         } else $where .= "$table$key $operand '" . mb_escape($item) . "' $condition";
                     }
                 }

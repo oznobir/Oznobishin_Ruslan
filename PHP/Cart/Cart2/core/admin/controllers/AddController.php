@@ -74,7 +74,7 @@ class AddController extends BaseAdmin
     protected function createForeignProperty(array $columnsTable, array $rootItems): void
     {
         if (in_array($this->table, $rootItems['tables'])) {
-            $this->foreignData[$columnsTable['COLUMN_NAME']][0]['id'] = 0;
+            $this->foreignData[$columnsTable['COLUMN_NAME']][0]['id'] = 'NULL';
             $this->foreignData[$columnsTable['COLUMN_NAME']][0]['name'] = $rootItems['name'];
         }
         $orderData = $this->createOrderData($columnsTable['REFERENCED_TABLE_NAME']);
@@ -122,7 +122,7 @@ class AddController extends BaseAdmin
                             $where = 'pid IS NULL OR pid = 0';
                         else {
                             $columns = $this->model->showColumns($parent['REFERENCED_TABLE_NAME']);
-                            if ($columns['pid']) $order[] = 'pid';
+                            if (isset($columns['pid'])) $order[] = 'pid';
                             else $order[] = $parent['REFERENCED_COLUMN_NAME'];
                             $id = $this->model->select($parent['REFERENCED_TABLE_NAME'], [
                                 'fields' => [$parent['REFERENCED_COLUMN_NAME']],

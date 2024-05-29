@@ -313,7 +313,7 @@ abstract class BaseAdmin extends BaseControllers
         }
         $this->createFile();
         $this->createAlias($id);
-        $this->updateMenuPosition();
+        $this->updateMenuPosition($id);
         $except = $this->checkExceptFields();
 
         $resId = $this->model->$method($this->table, [
@@ -360,7 +360,7 @@ abstract class BaseAdmin extends BaseControllers
      */
     protected function createAlias(int|string|false $id = false): void
     {
-        if ($this->columns['alias']) {
+        if (isset($this->columns['alias'])) {
             $aliasStr = '';
             if (empty($_POST['alias'])) {
                 if ($_POST['name']) $aliasStr = $this->clearTags($_POST['name']);
@@ -421,8 +421,19 @@ abstract class BaseAdmin extends BaseControllers
         return false;
     }
 
-    protected function updateMenuPosition()
+    protected function updateMenuPosition(int|false $id = false)
     {
+        if (isset($_POST['position'])) {
+            $where = false;
+            if ($id && $this->columns['pri'][0]) $where = [$this->columns['pri'][0] => $id];
+
+            $updateRows = !empty($_POST['pid']) ? ['where' => 'pid'] : [];
+            $this->model->updatePosition($this->table, 'position', $where, $_POST['position'], $updateRows);
+
+
+        }
+
+
     }
 
     /**
@@ -650,19 +661,19 @@ abstract class BaseAdmin extends BaseControllers
                     $this->model->delete($mTable, [
                         'where' => [$targetRow => $_POST[$this->columns['pri'][0]]],
                     ]);
-                    if (isset($_POST[$tables[$otherKey]])){
+                    if (isset($_POST[$tables[$otherKey]])) {
                         $insertArr = [];
-                        $i =0;
-                        foreach ($_POST[$tables[$otherKey]] as $value){
-                            foreach ($value as $item){
-                                if($item){
+                        $i = 0;
+                        foreach ($_POST[$tables[$otherKey]] as $value) {
+                            foreach ($value as $item) {
+                                if ($item) {
                                     $insertArr[$i][$targetRow] = $_POST[$this->columns['pri'][0]];
                                     $insertArr[$i][$otherRow] = $item;
                                     $i++;
                                 }
                             }
                         }
-                        if(!empty($insertArr)) {
+                        if (!empty($insertArr)) {
                             $this->model->add($mTable, [
                                 'fields' => $insertArr,
                             ]);

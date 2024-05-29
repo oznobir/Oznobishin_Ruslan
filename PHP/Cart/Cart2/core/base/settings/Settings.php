@@ -22,25 +22,29 @@ class Settings
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
-        'text' => ['name'],
+        'text' => ['name', 'filters_name'],
         'textarea' => ['description', 'content'],
         'radio' => ['visible', 'status'],
         'select' => ['position', 'pid'],
         'img' => ['img'],
         'gallery_img' => ['gallery_img'],
-        'checkboxlist' => ['filters'],
+        'checkboxlist' => ['filters', 'manufacturer', 'color'],
     ];
     private array $translate = [
         'name' => ['Название', 'Не более 70 символов'],
+        'filters_name' => ['Название фильтра', 'Не более 50 символов'],
         'content' => ['Контент', 'Не более 70 символов'],
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
         'description' => ['Описание', 'Не более 160 символов'],
         'pid' => ['Родительская категория', ''],
+        'position' => ['Позиция в меню', ''],
+        'gallery_img' => ['Галерея изображений', ''],
+        'img' => ['Основное изображение', ''],
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
-        'tables' => ['categories', 'cat_goods', 'cat_filters'],
+        'tables' => ['categories', 'cat_filters'],
     ];
     private array $radio = [
         'visible' => ['Нет', 'Да', 'default' => 'Да'],
@@ -53,8 +57,8 @@ class Settings
     ];
     private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all
         'filters_goods' => ['goods', 'filters'],
-        'manufacturer_goods' => ['goods', 'manufacturer'],
-        'color_goods' => ['goods', 'color'],
+        'manufacturer_goods' => ['goods', 'manufacturer', 'type' => 'all'],
+        'color_goods' => ['goods', 'color', 'type' => 'child'],
     ];
     private array $validation = [
         'name' => ['empty' => true, 'count' => 70, 'trim' => true],
