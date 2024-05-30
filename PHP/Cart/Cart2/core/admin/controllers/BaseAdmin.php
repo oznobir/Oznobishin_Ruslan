@@ -527,7 +527,10 @@ abstract class BaseAdmin extends BaseControllers
         return false;
     }
 
-    protected function updateMenuPosition(int|false $id = false)
+    /**
+     * @throws DbException
+     */
+    protected function updateMenuPosition(int|false $id = false): void
     {
         if (isset($_POST['position'])) {
             $where = false;
