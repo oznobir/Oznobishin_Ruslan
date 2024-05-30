@@ -39,10 +39,10 @@ class SitemapController extends BaseAdmin
 //        get_headers();
         if (!$this->userId) $this->exec();
         if (!function_exists('curl_init'))
-            $this->cancel(0, $this->messages['curlFail'], '', true);
+            $this->cancel(0, $this->info['curlFail'], '', true);
 
         if (!$this->checkParsingTable())
-            $this->cancel(0, $this->messages['parsingTableFail'], '', true);
+            $this->cancel(0, $this->info['parsingTableFail'], '', true);
 
         set_time_limit(0);
 
@@ -102,10 +102,10 @@ class SitemapController extends BaseAdmin
         }
         $this->createSitemap();
         if ($redirect) {
-            $_SESSION['res']['answer'] = '<div class="success">' . sprintf($this->messages['curlSuccess'], count($this->all_links)) . '</div>';
+            $_SESSION['res']['answer'] = '<div class="success">' . sprintf($this->info['curlSuccess'], count($this->all_links)) . '</div>';
             $this->redirect();
         } else {
-            $this->cancel(1, sprintf($this->messages['curlSuccess'], count($this->all_links)), '', true);
+            $this->cancel(1, sprintf($this->info['curlSuccess'], count($this->all_links)), '', true);
         }
     }
 
@@ -139,7 +139,7 @@ class SitemapController extends BaseAdmin
                     $message = curl_error($curl[$i]);
                     $header = curl_getinfo($curl[$i]);
                     if ($error != 0) {
-                        $this->cancel(0, sprintf($this->messages['mesCurlFail'], $header['url'],
+                        $this->cancel(0, sprintf($this->info['mesCurlFail'], $header['url'],
                             $header['http_code'], $error, $message));
                     }
                 }
@@ -154,12 +154,12 @@ class SitemapController extends BaseAdmin
             curl_close($curl[$i]);
             if (!preg_match('/content-type:\s+text\/html/ui', $result[$i])) {
                 $this->bad_links[] = $url;
-                $this->cancel(0, sprintf($this->messages['typeCurlFail'], $url));
+                $this->cancel(0, sprintf($this->info['typeCurlFail'], $url));
                 continue;
             }
             if (!preg_match('/HTTP\/\d\.?\d?\s+20\d/ui', $result[$i])) {
                 $this->bad_links[] = $url;
-                $this->cancel(0, sprintf($this->messages['codeCurlFail'], $url));
+                $this->cancel(0, sprintf($this->info['codeCurlFail'], $url));
                 continue;
             }
 
@@ -243,7 +243,7 @@ class SitemapController extends BaseAdmin
     {
         $exitArr = [];
         $exitArr['success'] = $success;
-        $exitArr['message'] = $messageAdmin ?: $this->messages['parsingFail'];
+        $exitArr['message'] = $messageAdmin ?: $this->info['parsingFail'];
         $messageLog = $messageLog ?: $exitArr['message'];
         $class = 'success';
         if (!$exitArr['success']) {

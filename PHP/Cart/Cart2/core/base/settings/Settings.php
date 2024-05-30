@@ -9,7 +9,7 @@ class Settings
     use Singleton;
 
     private string $expansion = 'core/admin/expansions/';
-    private string $messages = 'core/base/messages/';
+    private string $info = 'core/base/messages/';
     private string $defaultTable = 'products';
     private array $projectTables = [
         'products' => ['name' => 'Товары', 'img' => 'pages.png'],

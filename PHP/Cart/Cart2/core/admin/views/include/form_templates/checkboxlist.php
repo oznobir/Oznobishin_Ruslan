@@ -16,8 +16,8 @@
                         <label class="custom_label" for="<?= $name ?>_<?= $item['id'] ?>">
                             <input id="<?= $name ?>_<?= $item['id'] ?>" type="checkbox"
                                    name="<?= $row ?>[<?= $name ?>][]"
-                                   value="<?= $item['id'] ?>"<?= (isset($this->data[$row]['name'])
-                                && in_array($item['id'], $this->data[$row]['name'])) ? ' checked' : '' ?>>
+                                   value="<?= $item['id'] ?>"<?= (isset($this->data[$row][$name])
+                                && in_array($item['id'], $this->data[$row][$name])) ? ' checked' : '' ?>>
                             <span class="custom_check backgr_bef"></span>
                             <span class="label"><?= $item['name'] ?></span>
                         </label>

@@ -131,7 +131,9 @@ abstract class BaseModel extends BaseModelMethods
         if (!$set['fields'] && !$set['files']) return false;
         $insertArr = $this->createInsert($set['fields'], $set['files'], $set['except']);
         $query = "INSERT INTO $table {$insertArr['fields']} VALUES {$insertArr['values']}";
-        return $this->query($query, 'ins', $set['return_id']);
+        $return_id = !empty($set['return_id']) ? $set['return_id'] : false;
+
+        return $this->query($query, 'ins', $return_id);
 
     }
 
@@ -162,8 +164,9 @@ abstract class BaseModel extends BaseModelMethods
                 }
             }
             $update = $this->createUpdate($set['fields'], $set['files'], $set['except']);
+            $return_id = !empty($set['return_id']) ? $set['return_id'] : false;
             $query = "UPDATE $table SET $update $where";
-            return $this->query($query, 'ins', $set['return_id']);
+            return $this->query($query, 'ins', $return_id);
         }
         return false;
     }

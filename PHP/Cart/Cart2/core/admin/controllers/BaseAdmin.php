@@ -30,7 +30,7 @@ abstract class BaseAdmin extends BaseControllers
     protected array $fileArray = [];
     protected array $translate = [];
     protected string $title;
-    protected array $messages = [];
+    protected array $info = [];
     protected array $blocks = [];
     protected ?string $formTemplates = null;
     protected array $templateArr = [];
@@ -49,7 +49,7 @@ abstract class BaseAdmin extends BaseControllers
         if (!$this->path) $this->path = PATH . Settings::get('routes')['admin']['alias'] . '/';
         if (!$this->templateArr) $this->templateArr = Settings::get('templateArr');
         if (!$this->formTemplates) $this->formTemplates = Settings::get('formTemplates');
-        if (!$this->messages) $this->messages = include $_SERVER['DOCUMENT_ROOT'] . PATH . Settings::get('messages') . 'informationMessages.php';
+        if (!$this->info) $this->info = include $_SERVER['DOCUMENT_ROOT'] . PATH . Settings::get('info') . 'informationMessages.php';
         $this->sendNoCacheHeaders();
     }
 
@@ -101,6 +101,112 @@ abstract class BaseAdmin extends BaseControllers
         $this->columns = $this->model->showColumns($this->table);
         if (!$this->columns) new RouteException('Не найдены поля в таблице - ' . $this->table, 2);
 
+    }
+
+    /**
+     * @param object|string|false $settings
+     * @return void
+     * @throws DbException
+     * @throws RouteException
+     */
+    protected function createForeignData(object|string|false $settings = false): void
+    {
+        if (!$settings) $settings = Settings::instance();
+        $rootItems = $settings::get('rootItems');
+        $keys = $this->model->showForeignKeys($this->table);
+        if ($keys) {
+            foreach ($keys as $item) {
+                $this->createForeignProperty($item, $rootItems);
+            }
+        } elseif (isset($this->columns['pid'])) {
+            $arr['COLUMN_NAME'] = 'pid';
+            $arr['REFERENCED_COLUMN_NAME'] = $this->columns['pri'][0];
+            $arr['REFERENCED_TABLE_NAME'] = $this->table;
+            $this->createForeignProperty($arr, $rootItems);
+        }
+    }
+
+    /**
+     * @param array $columnsTable
+     * @param array $rootItems
+     * @return void
+     * @throws DbException
+     * @throws RouteException
+     */
+    protected function createForeignProperty(array $columnsTable, array $rootItems): void
+    {
+        if (in_array($this->table, $rootItems['tables'])) {
+            $this->foreignData[$columnsTable['COLUMN_NAME']][0]['id'] = 'NULL';
+            $this->foreignData[$columnsTable['COLUMN_NAME']][0]['name'] = $rootItems['name'];
+        }
+        $orderData = $this->createOrderData($columnsTable['REFERENCED_TABLE_NAME']);
+
+        $where = [];
+        $operand = [];
+        if ($this->data) {
+            if ($columnsTable['REFERENCED_TABLE_NAME'] === $this->table) {
+                $where[$this->columns['pri'][0]] = $this->data[$this->columns['pri'][0]];
+                $operand[] = '<>';
+            }
+        }
+        $foreign = $this->model->select($columnsTable['REFERENCED_TABLE_NAME'], [
+            'fields' => [$columnsTable['REFERENCED_COLUMN_NAME'] . ' as id', $orderData['name'], $orderData['pid']],
+            'where' => $where,
+            'operand' => $operand,
+            'order' => $orderData['order'],
+        ]);
+        if ($foreign) {
+            if (!empty($this->foreignData[$columnsTable['COLUMN_NAME']])) {
+                foreach ($foreign as $value) {
+                    $this->foreignData[$columnsTable['COLUMN_NAME']][] = $value;
+                }
+            } else $this->foreignData[$columnsTable['COLUMN_NAME']] = $foreign;
+        }
+    }
+
+    /**
+     * @param object|string|false $settings
+     * @return void
+     * @throws DbException
+     */
+    protected function createMenuPosition(object|string|false $settings = false): void
+    {
+        if (isset($this->columns['position'])) {
+            if (!$settings) $settings = Settings::instance();
+            $rootItems = $settings::get('rootItems');
+            $where = '';
+            if (isset($this->columns['pid'])) {
+                if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid = 0';
+                else {
+                    $parent = $this->model->showForeignKeys($this->table, 'pid')[0];
+                    if ($parent) {
+                        if ($this->table === $parent['REFERENCED_TABLE_NAME'])
+                            $where = 'pid IS NULL OR pid = 0';
+                        else {
+                            $columns = $this->model->showColumns($parent['REFERENCED_TABLE_NAME']);
+                            if (isset($columns['pid'])) $order[] = 'pid';
+                            else $order[] = $parent['REFERENCED_COLUMN_NAME'];
+                            $id = $this->model->select($parent['REFERENCED_TABLE_NAME'], [
+                                'fields' => [$parent['REFERENCED_COLUMN_NAME']],
+                                'order' => $order,
+//                                'order_direction' => ['DESC'],
+                                'limit' => '1',
+                            ])[0][$parent['REFERENCED_COLUMN_NAME']];
+                            if ($id) $where = ['pid' => $id];
+                        }
+                    } else $where = 'pid IS NULL OR pid =0';
+                }
+            }
+            $menuPosition = $this->model->select($this->table, [
+                    'fields' => ['COUNT(*) as count'],
+                    'where' => $where,
+                    'no_concat' => true,
+                ])[0]['count'] + (int)!$this->data;
+            for ($i = 1; $i <= $menuPosition; $i++) {
+                $this->foreignData['position'][$i - 1]['id'] = $i;
+                $this->foreignData['position'][$i - 1]['name'] = $i;
+            }
+        }
     }
 
     /**
@@ -252,7 +358,7 @@ abstract class BaseAdmin extends BaseControllers
     protected function emptyFields(string $str, string $answer, array $arr = []): void
     {
         if (empty($str)) {
-            $_SESSION['res']['answer'] = '<div class="error">' . $this->messages['empty'] . ' ' . $answer . '</div>';
+            $_SESSION['res']['answer'] = '<div class="error">' . $this->info['empty'] . ' ' . $answer . '</div>';
             $this->addSessionData($arr);
         }
     }
@@ -279,7 +385,7 @@ abstract class BaseAdmin extends BaseControllers
     protected function countChar(string $str, int|string $counter, string $answer, array $arr = []): void
     {
         if (mb_strlen($str) > $counter) {
-            $_SESSION['res']['answer'] = '<div class="error">' . sprintf($this->messages['count'], $answer, $counter)
+            $_SESSION['res']['answer'] = '<div class="error">' . sprintf($this->info['count'], $answer, $counter)
                 . '</div>';
             $this->addSessionData($arr);
         }
@@ -324,16 +430,16 @@ abstract class BaseAdmin extends BaseControllers
         ]);
         if (!$id && $method === 'add') {
             $_POST[$this->columns['pri'][0]] = $resId;
-            $answerSuccess = $this->messages['addSuccess'];
-            $answerFail = $this->messages['addFail'];
+            $answerSuccess = $this->info['addSuccess'];
+            $answerFail = $this->info['addFail'];
         } else {
-            $answerSuccess = $this->messages['editSuccess'];
-            $answerFail = $this->messages['editFail'];
+            $answerSuccess = $this->info['editSuccess'];
+            $answerFail = $this->info['editFail'];
         }
-        $this->checkManyToMany();
+        $resMany = $this->checkManyToMany();
         $this->expansionBase(get_defined_vars());
-        $this->checkAlias($_POST[$this->columns['pri'][0]]);
-        if ($resId) {
+        $resAlias = $this->checkAlias($_POST[$this->columns['pri'][0]]);
+        if ($resId || $resMany || $resAlias) {
             $_SESSION['res']['answer'] = '<div class="success">' . $answerSuccess . '</div>';
             if (!$returnId) $this->redirect();
             return $_POST[$this->columns['pri'][0]];
@@ -522,11 +628,11 @@ abstract class BaseAdmin extends BaseControllers
                     if ($this->data) {
                         $res = $this->model->select($mTable, [
                             'fields' => [$tables[$otherKey] . '_' . $orderData['columns']['pri'][0]],
-                            'where' => [$this->table . '_' . $this->columns['pri'][0] . '=' . $this->data[$this->columns['pri'][0]]],
+                            'where' => [$this->table . '_' . $this->columns['pri'][0] => $this->data[$this->columns['pri'][0]]],
                         ]);
                         if ($res) {
                             foreach ($res as $item) {
-                                $foreign[] = $item[$tables[$otherKey]] . '_' . $orderData['columns']['pri'][0];
+                                $foreign[] = $item[$tables[$otherKey] . '_' . $orderData['columns']['pri'][0]];
                             }
                         }
                     }
@@ -644,10 +750,11 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @throws DbException
      */
-    protected function checkManyToMany(object|bool $settings = false): void
+    protected function checkManyToMany(object|bool $settings = false) : bool|int
     {
         if (!$settings) $settings = $this->settings ?: Settings::instance();
         $manyToMany = $settings::get('manyToMany');
+        $res = false;
         if ($manyToMany) {
             foreach ($manyToMany as $mTable => $tables) {
                 $targetKey = array_search($this->table, $tables);
@@ -674,13 +781,15 @@ abstract class BaseAdmin extends BaseControllers
                             }
                         }
                         if (!empty($insertArr)) {
-                            $this->model->add($mTable, [
+                            $res = $this->model->add($mTable, [
                                 'fields' => $insertArr,
+                                'return_id' => true,
                             ]);
                         }
                     }
                 }
             }
         }
+       return $res;
     }
 }

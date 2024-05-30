@@ -19,8 +19,8 @@
         </div>
     </div>
     <?php if ($this->data): ?>
-        <input id="tableId" type="hidden" name="<?= $this->columns['pri'] ?>"
-               value="<?= $this->data[$this->columns['pri']] ?>">
+        <input id="tableId" type="hidden" name="<?= $this->columns['pri'][0] ?>"
+               value="<?= $this->data[$this->columns['pri'][0]] ?>">
     <?php endif; ?>
     <input type="hidden" name="table" value="<?= $this->table ?>">
     <?php foreach ($this->blocks as $class => $block) {

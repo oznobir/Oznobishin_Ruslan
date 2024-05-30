@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 25 2024 г., 19:54
+-- Время создания: Май 30 2024 г., 21:02
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -56,28 +56,49 @@ INSERT INTO `categories` (`id`, `pid`, `slug`, `name`, `position`, `img`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `cat_filters`
+--
+
+CREATE TABLE `cat_filters` (
+  `id` int NOT NULL,
+  `name` text COLLATE utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `cat_filters`
+--
+
+INSERT INTO `cat_filters` (`id`, `name`) VALUES
+(1, 'height'),
+(2, 'width'),
+(3, 'weight net'),
+(4, 'weight gross');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `cat_goods`
 --
 
 CREATE TABLE `cat_goods` (
   `id` int NOT NULL,
-  `pid` int DEFAULT NULL,
   `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `alias` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `alias` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `cat_goods`
 --
 
-INSERT INTO `cat_goods` (`id`, `pid`, `name`, `img`, `alias`) VALUES
-(1, 0, 'категория 1', 'img_17_1713087825459.webp', 'category 1'),
-(2, 0, 'категория 2', 'img_17_1713087825459.webp', 'category 2'),
-(3, 0, 'категория 3', 'img_17_1713087825459.webp', 'category 3'),
-(10, 1, 'категория 1-1', 'img_17_1713087825459.webp', 'category 1-1'),
-(11, 3, 'категория 3-1', 'img_17_1713087825459.webp', 'category 3-1'),
-(12, 1, 'категория 1-2', 'img_17_1713087825459.webp', 'category 1-2');
+INSERT INTO `cat_goods` (`id`, `name`, `img`, `alias`, `position`) VALUES
+(1, 'категория 1', 'img_17_1713087825459.webp', 'category 1', 2),
+(2, 'категория 2', 'img_17_1713087825459.webp', 'category 2', 1),
+(3, 'категория 3', 'img_17_1713087825459.webp', 'category 3', 4),
+(4, 'категория 4', 'img_17_1713087825459.webp', 'category 4', 3),
+(5, 'категория 5', 'img_17_1713087825459.webp', 'category 5', 5),
+(6, 'категория 6', 'img_17_1713087825459.webp', 'category 6', 6);
 
 -- --------------------------------------------------------
 
@@ -123,11 +144,36 @@ CREATE TABLE `color_goods` (
 --
 
 INSERT INTO `color_goods` (`id`, `goods_id`, `color_id`) VALUES
-(1, 3, 1),
-(2, 3, 2),
-(3, 3, 3),
 (4, 5, 4),
-(5, 5, 5);
+(5, 5, 5),
+(9, 4, 8),
+(52, 3, 2),
+(53, 3, 1),
+(54, 3, 3),
+(55, 9, 4),
+(56, 8, 4),
+(57, 10, 6),
+(58, 10, 7);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `country_manufacturers`
+--
+
+CREATE TABLE `country_manufacturers` (
+  `id` int NOT NULL,
+  `name` text COLLATE utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `country_manufacturers`
+--
+
+INSERT INTO `country_manufacturers` (`id`, `name`) VALUES
+(1, 'USA'),
+(2, 'Korea'),
+(3, 'China');
 
 -- --------------------------------------------------------
 
@@ -137,21 +183,30 @@ INSERT INTO `color_goods` (`id`, `goods_id`, `color_id`) VALUES
 
 CREATE TABLE `filters` (
   `id` int NOT NULL,
+  `filters_name` text COLLATE utf8mb4_general_ci NOT NULL,
   `pid` int DEFAULT NULL,
-  `filters_name` text COLLATE utf8mb4_general_ci NOT NULL
+  `position` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `filters`
 --
 
-INSERT INTO `filters` (`id`, `pid`, `filters_name`) VALUES
-(1, NULL, 'height'),
-(2, NULL, 'width'),
-(5, 1, '300mm'),
-(6, 1, '400mm'),
-(7, 2, '4500mm'),
-(8, 2, '3500mm');
+INSERT INTO `filters` (`id`, `filters_name`, `pid`, `position`) VALUES
+(5, '300mm', 1, 6),
+(6, '400mm', 1, 5),
+(7, '4500mm', 2, 4),
+(8, '3500mm', 2, 2),
+(9, '500mm', 1, 2),
+(13, '1kg', 3, 4),
+(14, '5kg', 3, 3),
+(15, '10kg', 3, 2),
+(16, '1.5kg', 4, 4),
+(17, '6kg', 4, 3),
+(18, '12kg', 4, 2),
+(19, '100mm', 1, 4),
+(21, '6000mm', 2, 3),
+(23, 'CPU', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -171,8 +226,27 @@ CREATE TABLE `filters_goods` (
 INSERT INTO `filters_goods` (`goods_id`, `filters_id`) VALUES
 (3, 5),
 (5, 6),
+(9, 6),
+(10, 6),
 (3, 7),
-(5, 8);
+(9, 7),
+(5, 8),
+(8, 8),
+(10, 8),
+(8, 9),
+(9, 13),
+(10, 14),
+(3, 15),
+(4, 15),
+(8, 15),
+(9, 16),
+(10, 17),
+(3, 18),
+(4, 18),
+(8, 18),
+(4, 19),
+(3, 21),
+(4, 21);
 
 -- --------------------------------------------------------
 
@@ -199,13 +273,16 @@ CREATE TABLE `goods` (
 --
 
 INSERT INTO `goods` (`id`, `name`, `content`, `price`, `img`, `gallery_img`, `pid`, `position`, `date`, `datetime`, `alias`) VALUES
-(1, 'имя1', 'content name1', 2, 'img_1_1711039208066.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 10, 1, NULL, NULL, 'name1'),
-(2, 'имя2', 'content name2', 3, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 11, 2, NULL, NULL, 'name2'),
-(3, 'имя3', 'content name3', 4, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 12, 3, NULL, NULL, 'name3'),
-(4, 'имя4', 'content name4', 5, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 11, 4, NULL, NULL, 'name4'),
-(5, 'имя5', 'content name5', 4, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 10, 5, NULL, NULL, 'name5'),
-(6, 'имя6', 'content name6', 6, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 12, 6, NULL, NULL, 'name6'),
-(7, 'имя7', 'content name7', 6, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 11, 7, NULL, NULL, 'name7');
+(1, 'имя1', 'content name1', 2, 'img_1_1711039208066.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 1, 2, NULL, NULL, 'name1'),
+(2, 'имя2', 'content name2', 3, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 2, 1, NULL, NULL, 'name2'),
+(3, 'имя3', 'content name3', 4, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 4, 1, '2024-05-30', '2024-05-30 20:23:31', 'imya3'),
+(4, 'имя4', 'content name4', 5, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 1, 4, '2024-05-30', '2024-05-30 16:19:19', 'imya4'),
+(5, 'имя5', 'content name5', 4, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 2, 2, NULL, NULL, 'name5'),
+(6, 'имя6', 'content name6', 6, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 3, 1, NULL, NULL, 'name6'),
+(7, 'имя7', 'content name7', 6, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 1, 5, NULL, NULL, 'name7'),
+(8, 'имя8', 'Контент 8', NULL, 'img_18_1713088418727_4a4f7f4c.webp', NULL, 2, 3, '2024-05-30', '2024-05-30 20:28:03', 'imya8'),
+(9, 'имя9', 'Контент 9', NULL, 'img_10_1711041932595_0efa52f0.webp', NULL, 1, 1, '2024-05-30', '2024-05-30 20:25:46', 'imya9'),
+(10, 'имя10', 'Контент 10', NULL, 'img_22_1713090477061_4bf88377.webp', NULL, 1, 3, '2024-05-30', '2024-05-30 20:29:15', 'imya10');
 
 -- --------------------------------------------------------
 
@@ -215,16 +292,17 @@ INSERT INTO `goods` (`id`, `name`, `content`, `price`, `img`, `gallery_img`, `pi
 
 CREATE TABLE `manufacturer` (
   `id` int NOT NULL,
-  `name` text COLLATE utf8mb4_general_ci
+  `name` text COLLATE utf8mb4_general_ci,
+  `pid` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `manufacturer`
 --
 
-INSERT INTO `manufacturer` (`id`, `name`) VALUES
-(1, 'Apple'),
-(2, 'Samsung');
+INSERT INTO `manufacturer` (`id`, `name`, `pid`) VALUES
+(1, 'Apple', 1),
+(2, 'Samsung', 2);
 
 -- --------------------------------------------------------
 
@@ -243,7 +321,11 @@ CREATE TABLE `manufacturer_goods` (
 
 INSERT INTO `manufacturer_goods` (`goods_id`, `manufacturer_id`) VALUES
 (3, 1),
-(5, 2);
+(4, 1),
+(8, 1),
+(9, 1),
+(5, 2),
+(10, 2);
 
 -- --------------------------------------------------------
 
@@ -325,11 +407,16 @@ ALTER TABLE `categories`
   ADD KEY `categories_categories_id_fk` (`pid`);
 
 --
+-- Индексы таблицы `cat_filters`
+--
+ALTER TABLE `cat_filters`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `cat_goods`
 --
 ALTER TABLE `cat_goods`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pid` (`pid`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `color`
@@ -346,11 +433,17 @@ ALTER TABLE `color_goods`
   ADD KEY `id_manyarticles` (`color_id`);
 
 --
+-- Индексы таблицы `country_manufacturers`
+--
+ALTER TABLE `country_manufacturers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `filters`
 --
 ALTER TABLE `filters`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `filters_filters_id_fk` (`pid`);
+  ADD KEY `filters_cat_filters_id_fk` (`pid`);
 
 --
 -- Индексы таблицы `filters_goods`
@@ -370,7 +463,8 @@ ALTER TABLE `goods`
 -- Индексы таблицы `manufacturer`
 --
 ALTER TABLE `manufacturer`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `manufacturer_country_manufacturers_id_fk` (`pid`);
 
 --
 -- Индексы таблицы `manufacturer_goods`
@@ -392,6 +486,12 @@ ALTER TABLE `products`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `cat_filters`
+--
+ALTER TABLE `cat_filters`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT для таблицы `cat_goods`
 --
 ALTER TABLE `cat_goods`
@@ -407,19 +507,25 @@ ALTER TABLE `color`
 -- AUTO_INCREMENT для таблицы `color_goods`
 --
 ALTER TABLE `color_goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+
+--
+-- AUTO_INCREMENT для таблицы `country_manufacturers`
+--
+ALTER TABLE `country_manufacturers`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `filters`
 --
 ALTER TABLE `filters`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT для таблицы `goods`
 --
 ALTER TABLE `goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `manufacturer`
@@ -438,12 +544,6 @@ ALTER TABLE `categories`
   ADD CONSTRAINT `categories_categories_id_fk` FOREIGN KEY (`pid`) REFERENCES `categories` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `cat_goods`
---
-ALTER TABLE `cat_goods`
-  ADD CONSTRAINT `cat_goods_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `cat_goods` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
 -- Ограничения внешнего ключа таблицы `color_goods`
 --
 ALTER TABLE `color_goods`
@@ -454,7 +554,7 @@ ALTER TABLE `color_goods`
 -- Ограничения внешнего ключа таблицы `filters`
 --
 ALTER TABLE `filters`
-  ADD CONSTRAINT `filters_filters_id_fk` FOREIGN KEY (`pid`) REFERENCES `filters` (`id`);
+  ADD CONSTRAINT `filters_cat_filters_id_fk` FOREIGN KEY (`pid`) REFERENCES `cat_filters` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `filters_goods`
@@ -468,6 +568,12 @@ ALTER TABLE `filters_goods`
 --
 ALTER TABLE `goods`
   ADD CONSTRAINT `goods_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `cat_goods` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Ограничения внешнего ключа таблицы `manufacturer`
+--
+ALTER TABLE `manufacturer`
+  ADD CONSTRAINT `manufacturer_country_manufacturers_id_fk` FOREIGN KEY (`pid`) REFERENCES `country_manufacturers` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `manufacturer_goods`

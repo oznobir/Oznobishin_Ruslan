@@ -22,15 +22,15 @@ class ShowController extends BaseAdmin
         if (!$this->userId) $this->exec();
         $this->createTableData();
         $this->createData();
-        $this->expansionBase(get_defined_vars());
+        $this->template = ADMIN_TEMPLATE . 'show';
+        $this->expansionBase();
     }
 
     /**
      * @throws RouteException
      */
-    protected function outputData(): false|string
+    protected function outputData(): false|string // перенести в parent::outputData()
     {
-        if (!$this->template) $this->template = ADMIN_TEMPLATE . 'show';
         $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
         $this->contentCenter = $this->render($this->template);
         return parent::outputData();
