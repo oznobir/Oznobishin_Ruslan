@@ -750,7 +750,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @throws DbException
      */
-    protected function checkManyToMany(object|bool $settings = false) : bool|int
+    protected function checkManyToMany(object|bool $settings = false) : bool
     {
         if (!$settings) $settings = $this->settings ?: Settings::instance();
         $manyToMany = $settings::get('manyToMany');
@@ -781,10 +781,11 @@ abstract class BaseAdmin extends BaseControllers
                             }
                         }
                         if (!empty($insertArr)) {
-                            $res = $this->model->add($mTable, [
+                            $result = $this->model->add($mTable, [
                                 'fields' => $insertArr,
                                 'return_id' => true,
                             ]);
+                            if(!$res && $result) $res = true;
                         }
                     }
                 }
