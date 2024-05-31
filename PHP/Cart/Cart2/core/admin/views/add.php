@@ -9,7 +9,7 @@
                 </div>
                 <?php if (!$this->notDelete && $this->data): ?>
                     <div class="vg-element vg-padding-in-px">
-                        <a href="/admin/delete/goods/53"
+                        <a href="<?= $this->path . 'delete/' . $this->table . '/'.$this->data[$this->columns['pri'][0]]?>"
                            class="vg-text vg-firm-color1 vg-firm-background-color4 vg-input vg-button vg-center vg_delete">
                             <span>Удалить</span>
                         </a>

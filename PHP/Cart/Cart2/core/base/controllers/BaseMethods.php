@@ -25,7 +25,7 @@ trait BaseMethods
      */
     protected function num($num): float|int
     {
-        return (!empty($num) && preg_match('/\d./', $num)) ?
+        return (!empty($num) && preg_match('/\d/', $num)) ?
             preg_replace('/[^\d.]/', '', $num) * 1 : 0;
     }
 

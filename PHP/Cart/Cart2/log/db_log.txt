@@ -1,4 +1,0 @@
-Fault: 29-05-2024 22:10:53 - Ошибка в SQL запросе: INSERT INTO filters (filters_name, pid, position) VALUES ('CPU', '0', '1') - 1452 Cannot add or update a child row: a foreign key constraint fails (`myshop2`.`filters`, CONSTRAINT `filters_cat_filters_id_fk` FOREIGN KEY (`pid`) REFERENCES `cat_filters` (`id`))
-file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\core\base\models\BaseModel.php 
-in line: 40
-

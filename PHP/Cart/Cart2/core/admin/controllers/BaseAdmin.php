@@ -404,7 +404,9 @@ abstract class BaseAdmin extends BaseControllers
         $method = 'add';
         $where = [];
         if (isset($_POST[$this->columns['pri'][0]])) {
-            $id = $this->num($_POST[$this->columns['pri'][0]]);
+            if(is_numeric($_POST[$this->columns['pri'][0]]))
+                $id = $this->num($_POST[$this->columns['pri'][0]]);
+            else $id = $this->clearTags($_POST[$this->columns['pri'][0]]);
             if ($id) {
                 $where = [$this->columns['pri'][0] => $id];
                 $method = 'edit';
@@ -419,7 +421,7 @@ abstract class BaseAdmin extends BaseControllers
         }
         $this->createFile();
         $this->createAlias($id);
-        $this->updateMenuPosition($id);
+        $resPos = $this->updateMenuPosition($id);
         $except = $this->checkExceptFields();
 
         $resId = $this->model->$method($this->table, [
@@ -439,7 +441,7 @@ abstract class BaseAdmin extends BaseControllers
         $resMany = $this->checkManyToMany();
         $this->expansionBase(get_defined_vars());
         $resAlias = $this->checkAlias($_POST[$this->columns['pri'][0]]);
-        if ($resId || $resMany || $resAlias) {
+        if ($resId || $resMany || $resAlias || $resPos) {
             $_SESSION['res']['answer'] = '<div class="success">' . $answerSuccess . '</div>';
             if (!$returnId) $this->redirect();
             return $_POST[$this->columns['pri'][0]];
@@ -530,7 +532,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @throws DbException
      */
-    protected function updateMenuPosition(int|false $id = false): void
+    protected function updateMenuPosition(int|false $id = false): bool
     {
         if (isset($_POST['position'])) {
             $where = false;
@@ -538,10 +540,9 @@ abstract class BaseAdmin extends BaseControllers
 
             $updateRows = !empty($_POST['pid']) ? ['where' => 'pid'] : [];
             $this->model->updatePosition($this->table, 'position', $where, $_POST['position'], $updateRows);
-
-
+            return true;
         }
-
+        return false;
 
     }
 

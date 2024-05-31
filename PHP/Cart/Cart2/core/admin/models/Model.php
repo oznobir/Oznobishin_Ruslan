@@ -51,7 +51,8 @@ class Model extends BaseModel
                     'where' => $where,
                 ])[0];
                 $start = $oldData[$field];
-                if ($oldData[$updateRows['where']] !== $_POST[$updateRows['where']]) {
+
+                if (isset($_POST[$updateRows['where']]) && $oldData[$updateRows['where']] != $_POST[$updateRows['where']]) {
                     $pos = $this->select($table, [
                         'fields' => ['COUNT(*) as count'],
                         'where' => [$updateRows['where'] => $oldData[$updateRows['where']]],

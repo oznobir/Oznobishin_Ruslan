@@ -50,7 +50,10 @@ class EditController extends BaseAdmin
      */
     protected function createEditData(): void
     {
-        $id = $this->num($this->parameters[$this->table]);
+        if(is_numeric($this->parameters[$this->table]))
+            $id = $this->num($this->parameters[$this->table]);
+        else $id = $this->clearTags($this->parameters[$this->table]);
+
         if (!$id) throw new RouteException('Некорректный ID - ' . $id . 'при редактировании таблицы ' . $this->table);
         $this->data = $this->model->select($this->table, [
             'where' => [$this->columns['pri'][0] => $id],
@@ -70,7 +73,7 @@ class EditController extends BaseAdmin
         if (in_array('old_alias', $tables)) {
             $oldAlias = $this->model->select($this->table, [
                 'fields' => ['alias'],
-                'where' => [$this->columns['pri'] => $id],
+                'where' => [$this->columns['pri'][0] => $id],
             ])[0]['alias'];
             if ($oldAlias && $oldAlias !== $_POST['alias']) {
                 $this->model->delete('old_alias', [

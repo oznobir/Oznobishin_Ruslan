@@ -27,14 +27,14 @@ class TextModify
                 if (array_key_exists($char, $this->translitArr)) {
                     switch ($char) {
                         case 'ъ':
-                            if ($tempArr[$key + 1] == 'е') $link .= 'y';
+                            if (isset($tempArr[$key + 1]) && $tempArr[$key + 1] == 'е') $link .= 'y';
                             break;
                         case 'ы':
-                            if ($tempArr[$key + 1] == 'й') $link .= 'i';
+                            if (isset($tempArr[$key + 1]) && $tempArr[$key + 1] == 'й') $link .= 'i';
                             else $link .= $this->translitArr[$char];
                             break;
                         case 'ь':
-                            if (($key + 1) != count($tempArr) && in_array($tempArr[$key + 1], $this->lowerLetter)) {
+                            if (isset($tempArr[$key + 1]) && in_array($tempArr[$key + 1], $this->lowerLetter)) {
                                 $link .= $this->translitArr[$char];
                             }
                             break;

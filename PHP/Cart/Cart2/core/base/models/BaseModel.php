@@ -107,7 +107,7 @@ abstract class BaseModel extends BaseModelMethods
         $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         $query = "SELECT $fields FROM $table $join $where $order $limit";
 
-        $res = $this->query($query);
+        $res = $this->query(trim($query));
         if (!empty($set['join_structure']) && $res) {
             $res = $this->joinStructure($res, $table);
         }
@@ -133,7 +133,7 @@ abstract class BaseModel extends BaseModelMethods
         $query = "INSERT INTO $table {$insertArr['fields']} VALUES {$insertArr['values']}";
         $return_id = !empty($set['return_id']) ? $set['return_id'] : false;
 
-        return $this->query($query, 'ins', $return_id);
+        return $this->query(trim($query), 'ins', $return_id);
 
     }
 
@@ -166,7 +166,7 @@ abstract class BaseModel extends BaseModelMethods
             $update = $this->createUpdate($set['fields'], $set['files'], $set['except']);
             $return_id = !empty($set['return_id']) ? $set['return_id'] : false;
             $query = "UPDATE $table SET $update $where";
-            return $this->query($query, 'ins', $return_id);
+            return $this->query(trim($query), 'ins', $return_id);
         }
         return false;
     }
@@ -222,7 +222,7 @@ abstract class BaseModel extends BaseModelMethods
             $tables = $joinArr['tables'] ?? '';
             $query = "DELETE $table$tables FROM $table $join $where";
         }
-        return $this->query($query, 'default');
+        return $this->query(trim($query), 'default');
     }
 
     /**

@@ -30,6 +30,7 @@ class Settings
         'gallery_img' => ['gallery_img'],
         'checkboxlist' => ['filters', 'manufacturer', 'color'],
     ];
+    private array $templateFiles = ['img', 'gallery_img'];
     private array $translate = [
         'name' => ['Название', 'Не более 70 символов'],
         'filters_name' => ['Название фильтра', 'Не более 50 символов'],
