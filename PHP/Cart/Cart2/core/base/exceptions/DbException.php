@@ -3,8 +3,9 @@
 namespace core\base\exceptions;
 
 use core\base\controllers\BaseMethods;
+use Exception;
 
-class DbException extends \Exception
+class DbException extends Exception
 {
     protected mixed $messages;
     use BaseMethods;

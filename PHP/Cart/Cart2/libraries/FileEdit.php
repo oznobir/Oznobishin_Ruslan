@@ -22,14 +22,14 @@ class FileEdit
                         $file_arr['error'] = $file['error'][$i];
                         $file_arr['size'] = $file['size'][$i];
 
-                        $res_name = $this->createFile($file_arr);
+                        $res_name = $this->createNameFile($file_arr);
                         if ($res_name) $this->imgArr[$key][] = $res_name;
 
                     }
                 }
             } else {
                 if ($file['name']) {
-                    $res_name = $this->createFile($file);
+                    $res_name = $this->createNameFile($file);
                     if ($res_name) $this->imgArr[$key] = $res_name;
                 }
             }
@@ -42,7 +42,7 @@ class FileEdit
         return $this->imgArr;
     }
 
-    protected function createFile($file): false|string
+    protected function createNameFile($file): false|string
     {
 //        $pathInfo =pathinfo($file['name']);
 //        $ext = $pathInfo['extension'];
@@ -52,7 +52,7 @@ class FileEdit
         unset($fileNameArr[count($fileNameArr) - 1]);
         $fileName = implode('.', $fileNameArr);
         $fileName = (new TextModify())->translit($fileName);
-        $fileName = $this->checkFile($fileName, $ext);
+        $fileName = $this->checkNameFile($fileName, $ext);
         $fileFullName = $this->directory . $fileName;
         if ($this->uploadFile($file['tmp_name'], $fileFullName))
             return $fileName;
@@ -66,11 +66,11 @@ class FileEdit
         return false;
     }
 
-    protected function checkFile($fileName, $ext, $fileLastName = ''): string
+    protected function checkNameFile($fileName, $ext, $fileLastName = ''): string
     {
         if (!file_exists($this->directory . $fileName . $fileLastName . '.' . $ext))
             return $fileName . $fileLastName . '.' . $ext;
 
-        else return $this->checkFile($fileName, $ext, '_' . hash('crc32', time() . mt_rand(1, 1000)));
+        else return $this->checkNameFile($fileName, $ext, '_' . hash('crc32', time() . mt_rand(1, 1000)));
     }
 }

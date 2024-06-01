@@ -18,7 +18,8 @@
             </label>
             <?php if ($this->data[$row]): $this->data[$row] = json_decode($this->data[$row]) ?>
                 <?php foreach ($this->data[$row] as $img): ?>
-                    <a href="" class="vg-dotted-square vg-center" draggable="true">
+                    <a href="<?= $this->path . 'delete/' . $this->table . '/' . $this->data[$this->columns['pri'][0]] . '/' . $row . '/' . base64_encode($img) ?>"
+                       class="vg-dotted-square vg-center" draggable="true">
                         <img class="vg_delete"
                              src="<?= PATH . UPLOAD_DIR . $img ?>"
                              draggable="false" alt="img">

@@ -38,6 +38,7 @@ abstract class BaseAdmin extends BaseControllers
 
     /**
      * @return void
+     * @throws RouteException
      */
     protected function inputData(): void
     {
@@ -55,6 +56,7 @@ abstract class BaseAdmin extends BaseControllers
 
     /**
      * @return void
+     * @throws RouteException
      */
     protected function exec(): void
     {
@@ -87,7 +89,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @param object|string|false $setting
      * @return void
-     * @throws DbException
+     * @throws DbException|RouteException
      */
     protected function createTableData(object|string|false $setting = false): void
     {
@@ -167,7 +169,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @param object|string|false $settings
      * @return void
-     * @throws DbException
+     * @throws DbException|RouteException
      */
     protected function createMenuPosition(object|string|false $settings = false): void
     {
@@ -213,6 +215,7 @@ abstract class BaseAdmin extends BaseControllers
      * @param array $args
      * @param object|string|bool $settings
      * @return false|mixed
+     * @throws RouteException
      */
 
     protected function expansionBase(array $args = [], object|string|bool $settings = false): mixed
@@ -245,6 +248,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @param object|string|bool $setting
      * @return void
+     * @throws RouteException
      */
     protected function createOutputData(object|string|bool $setting = false): void
     {
@@ -280,6 +284,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @param object|string|bool $setting
      * @return void
+     * @throws RouteException
      */
     protected function createRadio(object|string|bool $setting = false): void
     {
@@ -294,7 +299,7 @@ abstract class BaseAdmin extends BaseControllers
     /**
      * @param object|string|bool $settings
      * @return void
-     * @throws DbException
+     * @throws DbException|RouteException
      */
     protected function checkPost(object|string|bool $settings = false): void
     {
@@ -311,6 +316,7 @@ abstract class BaseAdmin extends BaseControllers
      * @param object|string|bool $settings
      * @param array $arr
      * @return void
+     * @throws RouteException
      */
     protected function clearPostFields(object|string|bool $settings, array &$arr = []): void
     {
@@ -392,19 +398,19 @@ abstract class BaseAdmin extends BaseControllers
 
     }
 
+
     /**
      * @param bool $returnId
-     * @return mixed|string|null
-     * @throws DbException
+     * @return mixed|void
+     * @throws DbException|RouteException
      */
-
-    protected function editData(bool $returnId = false): mixed
+    protected function editData(bool $returnId = false)
     {
         $id = false;
         $method = 'add';
         $where = [];
         if (isset($_POST[$this->columns['pri'][0]])) {
-            if(is_numeric($_POST[$this->columns['pri'][0]]))
+            if (is_numeric($_POST[$this->columns['pri'][0]]))
                 $id = $this->num($_POST[$this->columns['pri'][0]]);
             else $id = $this->clearTags($_POST[$this->columns['pri'][0]]);
             if ($id) {
@@ -420,6 +426,7 @@ abstract class BaseAdmin extends BaseControllers
             }
         }
         $this->createFile();
+        if ($method === 'edit') $this->checkFiles($id);
         $this->createAlias($id);
         $resPos = $this->updateMenuPosition($id);
         $except = $this->checkExceptFields();
@@ -430,25 +437,17 @@ abstract class BaseAdmin extends BaseControllers
             'return_id' => true,
             'except' => $except,
         ]);
-        if (!$id && $method === 'add') {
-            $_POST[$this->columns['pri'][0]] = $resId;
-            $answerSuccess = $this->info['addSuccess'];
-            $answerFail = $this->info['addFail'];
-        } else {
-            $answerSuccess = $this->info['editSuccess'];
-            $answerFail = $this->info['editFail'];
-        }
+        if (!$id && $method === 'add') $_POST[$this->columns['pri'][0]] = $resId;
         $resMany = $this->checkManyToMany();
         $this->expansionBase(get_defined_vars());
         $resAlias = $this->checkAlias($_POST[$this->columns['pri'][0]]);
         if ($resId || $resMany || $resAlias || $resPos) {
-            $_SESSION['res']['answer'] = '<div class="success">' . $answerSuccess . '</div>';
+            $_SESSION['res']['answer'] = '<div class="success">' . $this->info[$method . 'Success'] . '</div>';
             if (!$returnId) $this->redirect();
             return $_POST[$this->columns['pri'][0]];
         } else {
-            $_SESSION['res']['answer'] = '<div class="error">' . $answerFail . '</div>';
+            $_SESSION['res']['answer'] = '<div class="error">' . $this->info[$method . 'Fail'] . '</div>';
             if (!$returnId) $this->redirect();
-            return null;
         }
     }
 
@@ -752,9 +751,9 @@ abstract class BaseAdmin extends BaseControllers
     }
 
     /**
-     * @throws DbException
+     * @throws DbException|RouteException
      */
-    protected function checkManyToMany(object|bool $settings = false) : bool
+    protected function checkManyToMany(object|bool $settings = false): bool
     {
         if (!$settings) $settings = $this->settings ?: Settings::instance();
         $manyToMany = $settings::get('manyToMany');
@@ -789,12 +788,39 @@ abstract class BaseAdmin extends BaseControllers
                                 'fields' => $insertArr,
                                 'return_id' => true,
                             ]);
-                            if(!$res && $result) $res = true;
+                            if (!$res && $result) $res = true;
                         }
                     }
                 }
             }
         }
-       return $res;
+        return $res;
+    }
+    /**
+     * @throws DbException
+     */
+    protected function checkFiles($id): void
+    {
+        if ($id && $this->fileArray) {
+            $data = $this->model->select($this->table, [
+                'fields' => array_keys($this->fileArray),
+                'where' => [$this->columns['pri'][0] => $id]
+            ]);
+            if (is_array($data)) {
+                $data = $data[0];
+                foreach ($this->fileArray as $key => $item) {
+                    if (is_array($item) && !empty($data[$key])) {
+                        $fileArr = json_decode($data[$key]);
+                        if ($fileArr) {
+                            foreach ($fileArr as $file) {
+                                $this->fileArray[$key][] = $file;
+                            }
+                        }
+                    } elseif (!empty($data[$key])) {
+                        @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $data[$key]);
+                    }
+                }
+            }
+        }
     }
 }

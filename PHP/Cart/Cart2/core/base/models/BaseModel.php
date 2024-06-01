@@ -157,16 +157,16 @@ abstract class BaseModel extends BaseModelMethods
                 if (!$where) {
                     $columns = $this->showColumns($table);
                     if (!$columns) return false;
-                    if (isset($columns['pri']) && $set['fields'][$columns['pri']]) {
-                        $where = "WHERE {$columns['pri']} = {$set['fields'][$columns['pri']]}";
-                        unset($set['fields'][$columns['pri']]);
+                    if (isset($columns['pri'][0]) && $set['fields'][$columns['pri'][0]]) {
+                        $where = "WHERE {$columns['pri'][0]} = {$set['fields'][$columns['pri'][0]]}";
+                        unset($set['fields'][$columns['pri'][0]]);
                     }
                 }
             }
             $update = $this->createUpdate($set['fields'], $set['files'], $set['except']);
-            $return_id = !empty($set['return_id']) ? $set['return_id'] : false;
+//            $return_id = !empty($set['return_id']) ? $set['return_id'] : false;
             $query = "UPDATE $table SET $update $where";
-            return $this->query(trim($query), 'ins', $return_id);
+            return $this->query(trim($query), 'ins');
         }
         return false;
     }

@@ -289,7 +289,7 @@ abstract class BaseModelMethods
                 if ($except && in_array($row, $except)) continue;
                 $update .= $row . '= ';
                 if (in_array($field, $this->sqlFunc)) $update .= $field . ', ';
-                elseif ($field === NULL) $update .= "NULL" . ', ';
+                elseif ($field === NULL || $field === 'NULL') $update .= "NULL" . ', ';
                 else $update .= "'" . mb_escape($field) . "', ";
             }
         }

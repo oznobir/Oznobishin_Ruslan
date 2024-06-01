@@ -1,10 +1,12 @@
 <?php
 namespace core\base\exceptions;
 use core\base\controllers\BaseMethods;
+use Exception;
 
-class RouteException extends \Exception
+class RouteException extends Exception
 {
     protected mixed $messages;
+
     use BaseMethods;
 
     public function __construct($messages = '', $code = 0)

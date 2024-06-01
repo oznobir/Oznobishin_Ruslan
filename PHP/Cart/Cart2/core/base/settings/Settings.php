@@ -14,11 +14,12 @@ class Settings
     private array $projectTables = [
         'products' => ['name' => 'Товары', 'img' => 'pages.png'],
         'categories' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
-        'goods' => ['name' => 'Товары-тест', 'img' => 'pages.png'],
-        'filters' => ['name' => 'Размеры-тест', 'img' => 'pages.png'],
-        'cat_goods' => ['name' => 'Категории-тест', 'img' => 'pages.png'],
-        'manufacturer' => ['name' => 'Производители-тест', 'img' => 'pages.png'],
-        'color' => ['name' => 'Цвет-тест', 'img' => 'pages.png'],
+        'goods' => ['name' => 'Товары - тест', 'img' => 'pages.png'],
+        'cat_goods' => ['name' => 'Категории товаров - тест', 'img' => 'pages.png'],
+        'filters' => ['name' => 'Характеристики товаров - тест', 'img' => 'pages.png'],
+        'cat_filters' => ['name' => 'Категории характеристик - тест', 'img' => 'pages.png'],
+        'manufacturer' => ['name' => 'Производители - тест', 'img' => 'pages.png'],
+        'color' => ['name' => 'Цвет - тест', 'img' => 'pages.png'],
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [

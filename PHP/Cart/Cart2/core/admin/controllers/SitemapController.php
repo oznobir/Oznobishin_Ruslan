@@ -4,6 +4,7 @@ namespace core\admin\controllers;
 
 use core\base\controllers\BaseMethods;
 use core\base\exceptions\DbException;
+use core\base\exceptions\RouteException;
 use DateTime;
 use DOMDocument;
 use DOMException;
@@ -19,7 +20,6 @@ class SitemapController extends BaseAdmin
     protected int $maxLinks = 4000;
     protected string $parsingLogFile = 'parsing_log.txt';
     protected array $extFiles = ['mp4', 'jpg', 'png', 'jpeg', 'gif', 'pdf'];
-    protected array $messages = [];
     protected array $filterArr = [
         'url' => [],
         'get' => []
@@ -31,7 +31,7 @@ class SitemapController extends BaseAdmin
      * @param bool $redirect
      * @return void
      * @throws DOMException
-     * @throws DbException
+     * @throws DbException|RouteException
      */
     public function inputData(int $linksCounter = 1, bool $redirect = true): void
     {

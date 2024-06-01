@@ -15,7 +15,7 @@ class ShowController extends BaseAdmin
 {
     /**
      * @return void
-     * @throws DbException
+     * @throws DbException|RouteException
      */
     protected function inputData(): void
     {
@@ -47,7 +47,7 @@ class ShowController extends BaseAdmin
         $order = [];
         $order_direction = [];
 
-        if (!$this->columns['pri']) return $this->$data = [];
+        if (!$this->columns['pri'][0]) return $this->data = [];
         $fields[] = $this->columns['pri'][0] . ' as id';
         if (isset($this->columns['name'])) $fields['name'] = 'name';
         if (isset($this->columns['img'])) $fields['img'] = 'img';
@@ -80,10 +80,11 @@ class ShowController extends BaseAdmin
         if (isset($data['order_direction']))
             $order_direction = Settings::instance()->arrayMergeRecursive($order_direction, $data['order_direction']);
 
-        return $this->data = $this->model->select($this->table, [
+        $res = $this->model->select($this->table, [
             'fields' => $fields,
             'order' => $order,
             'order_direction' => $order_direction,
         ]);
+        return $this->data = $res ?: [];
     }
 }

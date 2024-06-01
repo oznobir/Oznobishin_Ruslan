@@ -2,12 +2,14 @@
 
 namespace core\base\controllers;
 
+use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 
 class BaseAsync extends BaseControllers
 {
     /**
      * @return mixed
+     * @throws RouteException
      */
     public function routeAsync(): mixed
     {
@@ -25,6 +27,7 @@ class BaseAsync extends BaseControllers
     }
 
     /**
+     * @uses createAsyncData
      * @param array|null $data
      * @return void
      */
