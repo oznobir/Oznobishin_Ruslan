@@ -26,7 +26,9 @@
                     </a>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <div class="vg-dotted-square vg-center empty_container" draggable="false"></div>
+            <div class="vg-dotted-square vg-center empty_container" draggable="false">
+
+            </div>
         </div>
     </div>
 </div>
