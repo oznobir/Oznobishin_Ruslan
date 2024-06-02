@@ -23,7 +23,7 @@ class Settings
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
-        'text' => ['name', 'filters_name'],
+        'text' => ['name', 'filters_name', 'price', 'alias'],
         'textarea' => ['description', 'content'],
         'radio' => ['visible', 'status'],
         'select' => ['position', 'pid'],
@@ -40,6 +40,8 @@ class Settings
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
         'description' => ['Описание', 'Не более 160 символов'],
         'pid' => ['Родительская категория', ''],
+        'price' => ['Цена за единицу', ''],
+        'alias' => ['Alias', 'Если не заполнено, формируется автоматически'],
         'position' => ['Позиция в меню', ''],
         'gallery_img' => ['Галерея изображений', ''],
         'img' => ['Основное изображение', ''],
@@ -54,7 +56,7 @@ class Settings
     ];
     private array $blockNeedle = [
         'vg-rows' => [],
-        'vg-img' => ['img'],
+        'vg-img' => ['img', 'gallery_img'],
         'vg-content' => ['description'],
     ];
     private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all

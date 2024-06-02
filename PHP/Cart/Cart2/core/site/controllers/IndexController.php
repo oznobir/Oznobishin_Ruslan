@@ -21,7 +21,7 @@ class IndexController extends BaseControllers
         $model = Model::instance();
         $name = $model->select('goods', [
 //            'fields' => ['id', 'name'],
-            'where' => ['id' => '3, 5'],
+            'where' => ['id' => '23, 24, 25'],
             'operand' => ['IN'],
             'join' => [
                 'color_goods' => [

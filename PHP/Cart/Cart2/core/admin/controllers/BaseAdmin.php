@@ -810,7 +810,7 @@ abstract class BaseAdmin extends BaseControllers
                 $data = $data[0];
                 foreach ($this->fileArray as $key => $item) {
                     if (is_array($item) && !empty($data[$key])) {
-                        $fileArr = json_decode($data[$key]);
+                        $fileArr = json_decode($data[$key], true);
                         if ($fileArr) {
                             foreach ($fileArr as $file) {
                                 $this->fileArray[$key][] = $file;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 30 2024 г., 21:02
+-- Время создания: Июн 02 2024 г., 14:00
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -69,10 +69,11 @@ CREATE TABLE `cat_filters` (
 --
 
 INSERT INTO `cat_filters` (`id`, `name`) VALUES
-(1, 'height'),
-(2, 'width'),
-(3, 'weight net'),
-(4, 'weight gross');
+(1, 'CPU'),
+(2, 'Display'),
+(3, 'ROM'),
+(4, 'OS'),
+(5, 'RAM');
 
 -- --------------------------------------------------------
 
@@ -93,12 +94,10 @@ CREATE TABLE `cat_goods` (
 --
 
 INSERT INTO `cat_goods` (`id`, `name`, `img`, `alias`, `position`) VALUES
-(1, 'категория 1', 'img_17_1713087825459.webp', 'category 1', 2),
-(2, 'категория 2', 'img_17_1713087825459.webp', 'category 2', 1),
-(3, 'категория 3', 'img_17_1713087825459.webp', 'category 3', 4),
-(4, 'категория 4', 'img_17_1713087825459.webp', 'category 4', 3),
-(5, 'категория 5', 'img_17_1713087825459.webp', 'category 5', 5),
-(6, 'категория 6', 'img_17_1713087825459.webp', 'category 6', 6);
+(1, 'Телефоны', 'telefony.webp', 'telefony', 1),
+(2, 'Планшеты', 'planshety.webp', 'planshety', 2),
+(3, 'Мониторы', 'monitory.webp', 'monitory', 4),
+(4, 'Ноутбуки', 'noutbuki.webp', 'noutbuki', 3);
 
 -- --------------------------------------------------------
 
@@ -118,14 +117,14 @@ CREATE TABLE `color` (
 --
 
 INSERT INTO `color` (`id`, `name`, `img`, `alias`) VALUES
-(1, 'красный', 'img_19_1713088786380.webp', 'red'),
-(2, 'желтый', 'img_19_1713088786380.webp', 'yellow'),
-(3, 'черный', 'img_19_1713088786380.webp', 'black'),
-(4, 'белый', 'img_19_1713088786380.webp', 'white'),
-(5, 'зеленый', 'img_19_1713088786380.webp', 'green'),
-(6, 'голубой', 'img_19_1713088786380.webp', 'blue'),
-(7, 'розовый', 'img_19_1713088786380.webp', 'pink'),
-(8, 'коричневый', 'img_19_1713088786380.webp', 'brown');
+(1, 'красный', 'img_red.jpg', 'krasniy'),
+(2, 'желтый', 'img_yellow.jpg', 'zheltiy'),
+(3, 'черный', 'img_black.jpg', 'cherniy'),
+(4, 'белый', 'img_white.jpg', 'beliy'),
+(5, 'зеленый', 'img_green.jpg', 'zeleniy'),
+(6, 'голубой', 'img_blue.jpg', 'goluboy'),
+(7, 'розовый', 'img_pink.jpg', 'rozoviy'),
+(8, 'коричневый', 'img_brown.jpg', 'korichneviy');
 
 -- --------------------------------------------------------
 
@@ -144,16 +143,20 @@ CREATE TABLE `color_goods` (
 --
 
 INSERT INTO `color_goods` (`id`, `goods_id`, `color_id`) VALUES
-(4, 5, 4),
-(5, 5, 5),
-(9, 4, 8),
-(52, 3, 2),
-(53, 3, 1),
-(54, 3, 3),
-(55, 9, 4),
-(56, 8, 4),
-(57, 10, 6),
-(58, 10, 7);
+(111, 25, 4),
+(112, 25, 8),
+(113, 25, 1),
+(114, 25, 3),
+(115, 26, 4),
+(116, 26, 3),
+(117, 27, 4),
+(118, 27, 7),
+(119, 27, 3),
+(120, 23, 8),
+(121, 23, 3),
+(122, 24, 4),
+(123, 24, 6),
+(124, 24, 7);
 
 -- --------------------------------------------------------
 
@@ -193,20 +196,19 @@ CREATE TABLE `filters` (
 --
 
 INSERT INTO `filters` (`id`, `filters_name`, `pid`, `position`) VALUES
-(5, '300mm', 1, 6),
-(6, '400mm', 1, 5),
-(7, '4500mm', 2, 4),
-(8, '3500mm', 2, 2),
-(9, '500mm', 1, 2),
-(13, '1kg', 3, 4),
-(14, '5kg', 3, 3),
-(15, '10kg', 3, 2),
-(16, '1.5kg', 4, 4),
-(17, '6kg', 4, 3),
-(18, '12kg', 4, 2),
-(19, '100mm', 1, 4),
-(21, '6000mm', 2, 3),
-(23, 'CPU', NULL, 1);
+(5, 'Snapdragon', 1, 4),
+(6, 'Apple', 1, 3),
+(7, 'TN+Film', 2, 4),
+(8, 'Amoled', 2, 2),
+(9, 'Intel', 1, 1),
+(13, 'HDD 1000', 3, 4),
+(14, 'UFS 256', 3, 3),
+(15, 'SSD 512', 3, 2),
+(16, 'Android', 4, 4),
+(17, 'iOS', 4, 3),
+(18, 'Windows', 4, 2),
+(19, 'AMD', 1, 2),
+(21, 'IPS', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -224,29 +226,26 @@ CREATE TABLE `filters_goods` (
 --
 
 INSERT INTO `filters_goods` (`goods_id`, `filters_id`) VALUES
-(3, 5),
-(5, 6),
-(9, 6),
-(10, 6),
-(3, 7),
-(9, 7),
-(5, 8),
-(8, 8),
-(10, 8),
-(8, 9),
-(9, 13),
-(10, 14),
-(3, 15),
-(4, 15),
-(8, 15),
-(9, 16),
-(10, 17),
-(3, 18),
-(4, 18),
-(8, 18),
-(4, 19),
-(3, 21),
-(4, 21);
+(23, 5),
+(24, 5),
+(26, 5),
+(25, 6),
+(27, 6),
+(23, 8),
+(24, 8),
+(25, 8),
+(27, 8),
+(23, 14),
+(24, 15),
+(25, 15),
+(26, 15),
+(27, 15),
+(23, 16),
+(24, 16),
+(25, 16),
+(26, 16),
+(27, 17),
+(26, 21);
 
 -- --------------------------------------------------------
 
@@ -273,16 +272,11 @@ CREATE TABLE `goods` (
 --
 
 INSERT INTO `goods` (`id`, `name`, `content`, `price`, `img`, `gallery_img`, `pid`, `position`, `date`, `datetime`, `alias`) VALUES
-(1, 'имя1', 'content name1', 2, 'img_1_1711039208066.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 1, 2, NULL, NULL, 'name1'),
-(2, 'имя2', 'content name2', 3, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 2, 1, NULL, NULL, 'name2'),
-(3, 'имя3', 'content name3', 4, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 4, 1, '2024-05-30', '2024-05-30 20:23:31', 'imya3'),
-(4, 'имя4', 'content name4', 5, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 1, 4, '2024-05-30', '2024-05-30 16:19:19', 'imya4'),
-(5, 'имя5', 'content name5', 4, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 2, 2, NULL, NULL, 'name5'),
-(6, 'имя6', 'content name6', 6, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 3, 1, NULL, NULL, 'name6'),
-(7, 'имя7', 'content name7', 6, 'img_2_1711039396535.png', '[\"img_1_1711039208066.png\",\"img_2_1711039396535.png\"]', 1, 5, NULL, NULL, 'name7'),
-(8, 'имя8', 'Контент 8', NULL, 'img_18_1713088418727_4a4f7f4c.webp', NULL, 2, 3, '2024-05-30', '2024-05-30 20:28:03', 'imya8'),
-(9, 'имя9', 'Контент 9', NULL, 'img_10_1711041932595_0efa52f0.webp', NULL, 1, 1, '2024-05-30', '2024-05-30 20:25:46', 'imya9'),
-(10, 'имя10', 'Контент 10', NULL, 'img_22_1713090477061_4bf88377.webp', NULL, 1, 3, '2024-05-30', '2024-05-30 20:29:15', 'imya10');
+(23, 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия', 'Android, экран 6.67\" AMOLED (1220x2712) 144 Гц, Mediatek Dimensity 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68 ', 2500, 'img_4_1711041124918_f36f0810.webp', '[\"img_5_1711041487549_7fda290e.webp\"]', 1, 1, '2024-06-02', '2024-06-02 13:57:44', 'smartfon-xiaomi-13t-pro-12gb512gb-mezhdunarodnaya-versiya'),
+(24, 'Смартфон Samsung Galaxy Z Flip5 SM-F731B/DS 8GB/256GB', 'Android, экран 6.7\" AMOLED (1080x2640) 120 Гц, Qualcomm Snapdragon 8 Gen2 SM8550, ОЗУ 8 ГБ, память 256 ГБ, камера 12 Мп, аккумулятор 3700 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IPX8', 2980, 'img_14_1711042460430_48eabf6a.webp', '[\"img_6_1711041613282_f4dba200.webp\"]', 1, 2, '2024-06-02', '2024-06-02 13:59:22', 'smartfon-samsung-galaxy-z-flip5-sm-f731bds-8gb256gb'),
+(25, 'Смартфон Apple iPhone 15 128GB', 'Apple iOS, экран 6.1\" OLED (1179x2556) 60 Гц, Apple A16 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 48 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68', 3500.05, 'img_6_1711041613282.webp', '[\"img_5_1711041487549_3f0b8b8f.webp\",\"img_6_1711041613282_2bc5cd81.webp\"]', 1, 3, '2024-06-02', '2024-06-02 13:30:52', 'smartfon-apple-iphone-15-128gb'),
+(26, 'Планшет Lenovo Tab P11 Plus TB-J616X 6GB/128GB LTE', '11\" IPS, 60 Гц (2000x1200), Android, MediaTek Helio G90T, ОЗУ 6 ГБ, флэш-память 128 ГБ, цвет серый', 1500.15, '17_1713087825459.webp', '[\"img_16_1713087551260_2801c961.webp\",\"img_17_1713087825459_76a9a15f.webp\"]', 2, 1, '2024-06-02', '2024-06-02 13:31:48', 'planshet-lenovo-tab-p11-plus-tb-j616x-6gb128gb-lte'),
+(27, 'Ноутбук Apple Macbook Air 13', '13.3\" 2560 x 1600, IPS, 60 Гц, Apple M1, 8 ГБ, SSD 256 ГБ, видеокарта встроенная, Mac OS, цвет крышки серый, аккумулятор 49.9 Вт·ч', 3700, '22_1713090477061.webp', '[\"img_20_1713089106633_86f478d7.webp\",\"img_21_1713089225500_1071bc07.webp\",\"img_22_1713090477061_b67206f1.webp\"]', 4, 1, '2024-06-02', '2024-06-02 13:32:38', 'noutbuk-apple-macbook-air-13');
 
 -- --------------------------------------------------------
 
@@ -302,7 +296,9 @@ CREATE TABLE `manufacturer` (
 
 INSERT INTO `manufacturer` (`id`, `name`, `pid`) VALUES
 (1, 'Apple', 1),
-(2, 'Samsung', 2);
+(2, 'Samsung', 2),
+(3, 'Xiaomi', 3),
+(4, 'Lenovo', 3);
 
 -- --------------------------------------------------------
 
@@ -320,12 +316,37 @@ CREATE TABLE `manufacturer_goods` (
 --
 
 INSERT INTO `manufacturer_goods` (`goods_id`, `manufacturer_id`) VALUES
-(3, 1),
-(4, 1),
-(8, 1),
-(9, 1),
-(5, 2),
-(10, 2);
+(25, 1),
+(27, 1),
+(24, 2),
+(23, 3),
+(26, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `old_alias`
+--
+
+CREATE TABLE `old_alias` (
+  `alias` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `table_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `table_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `old_alias`
+--
+
+INSERT INTO `old_alias` (`alias`, `table_name`, `table_id`) VALUES
+('green', 'color', 5),
+('red', 'color', 1),
+('yellow', 'color', 2),
+('white', 'color', 4),
+('black', 'color', 3),
+('pink', 'color', 7),
+('brown', 'color', 8),
+('blue', 'color', 6);
 
 -- --------------------------------------------------------
 
@@ -489,7 +510,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT для таблицы `cat_filters`
 --
 ALTER TABLE `cat_filters`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `cat_goods`
@@ -507,7 +528,7 @@ ALTER TABLE `color`
 -- AUTO_INCREMENT для таблицы `color_goods`
 --
 ALTER TABLE `color_goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT для таблицы `country_manufacturers`
@@ -525,13 +546,13 @@ ALTER TABLE `filters`
 -- AUTO_INCREMENT для таблицы `goods`
 --
 ALTER TABLE `goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT для таблицы `manufacturer`
 --
 ALTER TABLE `manufacturer`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
