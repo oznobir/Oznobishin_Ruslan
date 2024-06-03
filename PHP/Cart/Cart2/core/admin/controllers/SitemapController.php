@@ -237,9 +237,9 @@ class SitemapController extends BaseAdmin
      * @param string $messageAdmin
      * @param string $messageLog
      * @param bool $exit
-     * @return void
+     * @return array|void
      */
-    protected function cancel(int $success = 0, string $messageAdmin = '', string $messageLog = '', bool $exit = false): void
+    protected function cancel(int $success = 0, string $messageAdmin = '', string $messageLog = '', bool $exit = false)
     {
         $exitArr = [];
         $exitArr['success'] = $success;
@@ -252,8 +252,7 @@ class SitemapController extends BaseAdmin
         }
         if ($exit) {
             $exitArr['message'] = '<div class="' . $class . '">' . $exitArr['message'] . '</div>';
-            echo json_encode($exitArr);
-            exit();
+            return $exitArr;
         }
     }
 

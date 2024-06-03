@@ -14,7 +14,8 @@ trait BaseMethods
     protected function clearTags($str): array|string
     {
         if (is_array($str)) {
-            foreach ($str as $key => $itemStr) $str[$key] = trim(strip_tags($itemStr));
+            foreach ($str as $key => $itemStr)
+                $str[$key] = trim(strip_tags($itemStr));
             return $str;
         } else return trim(strip_tags($str));
     }

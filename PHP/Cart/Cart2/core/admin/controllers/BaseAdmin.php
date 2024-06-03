@@ -167,57 +167,11 @@ abstract class BaseAdmin extends BaseControllers
     }
 
     /**
-     * @param object|string|false $settings
-     * @return void
-     * @throws DbException|RouteException
-     */
-    protected function createMenuPosition(object|string|false $settings = false): void
-    {
-        if (isset($this->columns['position'])) {
-            if (!$settings) $settings = Settings::instance();
-            $rootItems = $settings::get('rootItems');
-            $where = '';
-            if (isset($this->columns['pid'])) {
-                if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid = 0';
-                else {
-                    $parent = $this->model->showForeignKeys($this->table, 'pid')[0];
-                    if ($parent) {
-                        if ($this->table === $parent['REFERENCED_TABLE_NAME'])
-                            $where = 'pid IS NULL OR pid = 0';
-                        else {
-                            $columns = $this->model->showColumns($parent['REFERENCED_TABLE_NAME']);
-                            if (isset($columns['pid'])) $order[] = 'pid';
-                            else $order[] = $parent['REFERENCED_COLUMN_NAME'];
-                            $id = $this->model->select($parent['REFERENCED_TABLE_NAME'], [
-                                'fields' => [$parent['REFERENCED_COLUMN_NAME']],
-                                'order' => $order,
-//                                'order_direction' => ['DESC'],
-                                'limit' => '1',
-                            ])[0][$parent['REFERENCED_COLUMN_NAME']];
-                            if ($id) $where = ['pid' => $id];
-                        }
-                    } else $where = 'pid IS NULL OR pid =0';
-                }
-            }
-            $menuPosition = $this->model->select($this->table, [
-                    'fields' => ['COUNT(*) as count'],
-                    'where' => $where,
-                    'no_concat' => true,
-                ])[0]['count'] + (int)!$this->data;
-            for ($i = 1; $i <= $menuPosition; $i++) {
-                $this->foreignData['position'][$i - 1]['id'] = $i;
-                $this->foreignData['position'][$i - 1]['name'] = $i;
-            }
-        }
-    }
-
-    /**
      * @param array $args
      * @param object|string|bool $settings
      * @return false|mixed
      * @throws RouteException
      */
-
     protected function expansionBase(array $args = [], object|string|bool $settings = false): mixed
     {
         $fileName = explode('_', $this->table);
@@ -279,6 +233,38 @@ abstract class BaseAdmin extends BaseControllers
             if (!$insert) $this->blocks[$default][] = $column;
             if (!isset($this->translate[$column])) $this->translate[$column][] = $column;
         }
+    }
+
+    /**
+     * @param $table
+     * @return array
+     * @throws DbException
+     * @throws RouteException
+     */
+    protected function createOrderData($table): array
+    {
+        $columns = $this->model->showColumns($table);
+        if (empty($columns)) throw new RouteException ('Отсутствуют поля в таблице ' . $table);
+        $name = '';
+        $orderName = '';
+        if (isset($columns['name'])) $orderName = $name = 'name';
+        else {
+            foreach ($columns as $key => $value) {
+                if (str_contains($key, 'name')) {
+                    $orderName = $key;
+                    $name .= $key . ' as name';
+                }
+            }
+            if (!$name) $name = $columns['pri'][0] . ' as name';
+        }
+        $pid = '';
+        $order = [];
+        if (isset($columns['pid'])) $order[] = $pid = 'pid';
+
+        if (isset($columns['position'])) $order[] = 'position';
+        else $order[] = $orderName;
+
+        return compact('name', 'pid', 'order', 'columns');
     }
 
     /**
@@ -398,17 +384,18 @@ abstract class BaseAdmin extends BaseControllers
 
     }
 
-
     /**
      * @param bool $returnId
-     * @return mixed|void
-     * @throws DbException|RouteException
+     * @return void
+     * @throws DbException
+     * @throws RouteException
      */
-    protected function editData(bool $returnId = false)
+    protected function editData(bool $returnId = false): void
     {
         $id = false;
         $method = 'add';
         $where = [];
+        if (!empty($_POST['return_id'])) $returnId = true;
         if (isset($_POST[$this->columns['pri'][0]])) {
             if (is_numeric($_POST[$this->columns['pri'][0]]))
                 $id = $this->num($_POST[$this->columns['pri'][0]]);
@@ -443,12 +430,12 @@ abstract class BaseAdmin extends BaseControllers
         $resAlias = $this->checkAlias($_POST[$this->columns['pri'][0]]);
         if ($resId || $resMany || $resAlias || $resPos) {
             $_SESSION['res']['answer'] = '<div class="success">' . $this->info[$method . 'Success'] . '</div>';
-            if (!$returnId) $this->redirect();
-            return $_POST[$this->columns['pri'][0]];
+            //            return $_POST[$this->columns['pri'][0]];
         } else {
             $_SESSION['res']['answer'] = '<div class="error">' . $this->info[$method . 'Fail'] . '</div>';
-            if (!$returnId) $this->redirect();
+            //            return null;
         }
+        if (!$returnId) $this->redirect();
     }
 
     /**
@@ -458,6 +445,62 @@ abstract class BaseAdmin extends BaseControllers
     {
         $fileEdit = new FileEdit();
         $this->fileArray = $fileEdit->addFile();
+    }
+
+    /**
+     * @throws DbException
+     */
+    protected function checkFiles($id): void
+    {
+        if ($id && $this->fileArray) {
+            $data = $this->model->select($this->table, [
+                'fields' => array_keys($this->fileArray),
+                'where' => [$this->columns['pri'][0] => $id]
+            ]);
+            if (is_array($data)) {
+                $data = $data[0];
+                foreach ($this->fileArray as $key => $item) {
+                    if (is_array($item) && !empty($data[$key])) {
+                        $fileArr = json_decode($data[$key], true);
+                        if ($fileArr) {
+                            foreach ($fileArr as $file) {
+                                $this->fileArray[$key][] = $file;
+                            }
+                        }
+                    } elseif (!empty($data[$key])) {
+                        @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $data[$key]);
+                    }
+                }
+            }
+        }
+    }
+
+    /** Таблица old_alias
+     * поля: alias, table_name, table_id
+     * @param $id
+     * @return void
+     * @throws DbException
+     */
+    protected function checkOldAlias($id): void
+    {
+        $tables = $this->model->showTables();
+        if (in_array('old_alias', $tables)) {
+            $oldAlias = $this->model->select($this->table, [
+                'fields' => ['alias'],
+                'where' => [$this->columns['pri'][0] => $id],
+            ])[0]['alias'];
+            if ($oldAlias && $oldAlias !== $_POST['alias']) {
+                $this->model->delete('old_alias', [
+                    'where' => ['alias' => $oldAlias, 'table_name' => $this->table]
+                ]);
+                $this->model->delete('old_alias', [
+                    'where' => ['alias' => $_POST['alias'], 'table_name' => $this->table]
+                ]);
+                $this->model->add('old_alias', [
+                    'fields' => ['alias' => $oldAlias, 'table_name' => $this->table, 'table_id' => $id]
+                ]);
+            }
+        }
     }
 
     /**
@@ -507,7 +550,6 @@ abstract class BaseAdmin extends BaseControllers
         }
     }
 
-
     /**
      * @param int|string $id
      * @return bool
@@ -526,6 +568,51 @@ abstract class BaseAdmin extends BaseControllers
             }
         }
         return false;
+    }
+
+    /**
+     * @param object|string|false $settings
+     * @return void
+     * @throws DbException|RouteException
+     */
+    protected function createMenuPosition(object|string|false $settings = false): void
+    {
+        if (isset($this->columns['position'])) {
+            if (!$settings) $settings = Settings::instance();
+            $rootItems = $settings::get('rootItems');
+            $where = '';
+            if (isset($this->columns['pid'])) {
+                if (in_array($this->table, $rootItems['tables'])) $where = 'pid IS NULL OR pid = 0';
+                else {
+                    $parent = $this->model->showForeignKeys($this->table, 'pid')[0];
+                    if ($parent) {
+                        if ($this->table === $parent['REFERENCED_TABLE_NAME'])
+                            $where = 'pid IS NULL OR pid = 0';
+                        else {
+                            $columns = $this->model->showColumns($parent['REFERENCED_TABLE_NAME']);
+                            if (isset($columns['pid'])) $order[] = 'pid';
+                            else $order[] = $parent['REFERENCED_COLUMN_NAME'];
+                            $id = $this->model->select($parent['REFERENCED_TABLE_NAME'], [
+                                'fields' => [$parent['REFERENCED_COLUMN_NAME']],
+                                'order' => $order,
+//                                'order_direction' => ['DESC'],
+                                'limit' => '1',
+                            ])[0][$parent['REFERENCED_COLUMN_NAME']];
+                            if ($id) $where = ['pid' => $id];
+                        }
+                    } else $where = 'pid IS NULL OR pid =0';
+                }
+            }
+            $menuPosition = $this->model->select($this->table, [
+                    'fields' => ['COUNT(*) as count'],
+                    'where' => $where,
+                    'no_concat' => true,
+                ])[0]['count'] + (int)!$this->data;
+            for ($i = 1; $i <= $menuPosition; $i++) {
+                $this->foreignData['position'][$i - 1]['id'] = $i;
+                $this->foreignData['position'][$i - 1]['name'] = $i;
+            }
+        }
     }
 
     /**
@@ -559,39 +646,6 @@ abstract class BaseAdmin extends BaseControllers
             }
         }
         return $except;
-    }
-
-    /**
-     * @param $table
-     * @return array
-     * @throws DbException
-     * @throws RouteException
-     */
-
-    protected function createOrderData($table): array
-    {
-        $columns = $this->model->showColumns($table);
-        if (empty($columns)) throw new RouteException ('Отсутствуют поля в таблице ' . $table);
-        $name = '';
-        $orderName = '';
-        if (isset($columns['name'])) $orderName = $name = 'name';
-        else {
-            foreach ($columns as $key => $value) {
-                if (str_contains($key, 'name')) {
-                    $orderName = $key;
-                    $name .= $key . ' as name';
-                }
-            }
-            if (!$name) $name = $columns['pri'][0] . ' as name';
-        }
-        $pid = '';
-        $order = [];
-        if (isset($columns['pid'])) $order[] = $pid = 'pid';
-
-        if (isset($columns['position'])) $order[] = 'position';
-        else $order[] = $orderName;
-
-        return compact('name', 'pid', 'order', 'columns');
     }
 
     /**
@@ -795,32 +849,5 @@ abstract class BaseAdmin extends BaseControllers
             }
         }
         return $res;
-    }
-    /**
-     * @throws DbException
-     */
-    protected function checkFiles($id): void
-    {
-        if ($id && $this->fileArray) {
-            $data = $this->model->select($this->table, [
-                'fields' => array_keys($this->fileArray),
-                'where' => [$this->columns['pri'][0] => $id]
-            ]);
-            if (is_array($data)) {
-                $data = $data[0];
-                foreach ($this->fileArray as $key => $item) {
-                    if (is_array($item) && !empty($data[$key])) {
-                        $fileArr = json_decode($data[$key], true);
-                        if ($fileArr) {
-                            foreach ($fileArr as $file) {
-                                $this->fileArray[$key][] = $file;
-                            }
-                        }
-                    } elseif (!empty($data[$key])) {
-                        @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $data[$key]);
-                    }
-                }
-            }
-        }
     }
 }

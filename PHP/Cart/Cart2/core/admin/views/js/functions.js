@@ -5,14 +5,14 @@ const Ajax = (set) => {
     }
     if (typeof set.type === 'undefined' || !set.type) set.type = 'GET';
     set.type = set.type.toUpperCase();
-    if (typeof set.ajax === 'undefined')  set.ajax = true;
+    if (typeof set.ajax === 'undefined') set.ajax = true;
     let body = '';
-    if(typeof set.processData !== 'undefined' && !set.processData) {
+    if (typeof set.processData !== 'undefined' && !set.processData) {
         body = set.data
     } else {
         if (typeof set.data !== 'undefined' && set.data) {
             for (let i in set.data) {
-                if(set.data.hasOwnProperty(i)) body += '&' + i + '=' + set.data[i];
+                if (set.data.hasOwnProperty(i)) body += '&' + i + '=' + set.data[i];
             }
             body = body.substring(1);
         }
@@ -33,17 +33,16 @@ const Ajax = (set) => {
         let contentType = false;
         if (typeof set.headers !== 'undefined' && set.headers) {
             for (let i in set.headers) {
-                if(set.headers){
+                if (set.headers) {
                     xhr.setRequestHeader(i, set.headers[i]);
-                    if (i.toLowerCase() === 'content-type')
-                        contentType = true;
+                    if (i.toLowerCase() === 'content-type') contentType = true;
                 }
             }
         }
         if (!contentType && (typeof set.contentType === 'undefined' || set.contentType)) {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         }
-        if(set.ajax) {
+        if (set.ajax) {
             xhr.setRequestHeader('X-Requested-With', 'AjaxRequest');
         }
         xhr.onload = function () {
@@ -67,4 +66,9 @@ function isEmpty(arr) {
         return false
     }
     return true;
+}
+
+function errorAlert() {
+    alert('Произошла внутренняя ошибка')
+    return false;
 }

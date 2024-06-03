@@ -62,32 +62,4 @@ class EditController extends BaseAdmin
         if (is_array($data)) $this->data = $data[0];
         else throw new RouteException('Ошибка получения данных при редактировании таблицы ' . $this->table);
     }
-
-    /** Таблица old_alias
-     * поля: alias, table_name, table_id
-     * @param $id
-     * @return void
-     * @throws DbException
-     */
-    protected function checkOldAlias($id): void
-    {
-        $tables = $this->model->showTables();
-        if (in_array('old_alias', $tables)) {
-            $oldAlias = $this->model->select($this->table, [
-                'fields' => ['alias'],
-                'where' => [$this->columns['pri'][0] => $id],
-            ])[0]['alias'];
-            if ($oldAlias && $oldAlias !== $_POST['alias']) {
-                $this->model->delete('old_alias', [
-                    'where' => ['alias' => $oldAlias, 'table_name' => $this->table]
-                ]);
-                $this->model->delete('old_alias', [
-                    'where' => ['alias' => $_POST['alias'], 'table_name' => $this->table]
-                ]);
-                $this->model->add('old_alias', [
-                    'fields' => ['alias' => $oldAlias, 'table_name' => $this->table, 'table_id' => $id]
-                ]);
-            }
-        }
-    }
 }

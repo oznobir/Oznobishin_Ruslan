@@ -20,6 +20,7 @@ abstract class BaseControllers
     protected string $outputMethod;
     protected ?array $parameters = null;
     protected array $data = [];
+    protected array $asyncData = [];
     protected ?string $error = null;
     protected ?string $template = null;
     protected array $styles;

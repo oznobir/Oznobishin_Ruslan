@@ -8,31 +8,25 @@ use core\base\settings\Settings;
 class BaseAsync extends BaseControllers
 {
     /**
-     * @return mixed
      * @throws RouteException
      */
-    public function routeAsync(): mixed
+    public function routeAsync(): void
     {
         $route = Settings::get('routes');
-        $this->controller = $route['site']['pathControllers'] . 'AsyncController';
+        $controller = $route['site']['pathControllers'] . 'AsyncController';
         $data = $this->isPost() ? $_POST : $_GET;
-        if ($data['ADMIN_MODE'] == 1) {
-            $this->controller = $route['admin']['pathControllers'] . 'AsyncController';
+//        $referer = str_replace('/', '\/', $_SERVER['REQUEST_SCHEMA'].'://'.$_SERVER['SERVER_NAME'].PATH.$route['admin']['alias']);
+//        if ((isset($data['ADMIN_MODE'] && $data['ADMIN_MODE'] == 1)
+//             || preg_match('/^'.$referer.'(\/?|$)/', $_SERVER['HTTP_REFERER'])) {
+        if (isset($data['ADMIN_MODE']) && $data['ADMIN_MODE'] == 1) {
+            $controller = $route['admin']['pathControllers'] . 'AsyncController';
             unset($data['ADMIN_MODE']);
         }
-        $controller = str_replace('/', '\\', $this->controller);
+        $controller = str_replace('/', '\\', $controller);
         $async = new $controller;
-        $async->createAsyncData($data);
-        return $async->async();
-    }
-
-    /**
-     * @uses createAsyncData
-     * @param array|null $data
-     * @return void
-     */
-    protected function createAsyncData(?array $data): void
-    {
-        $this->data = $data;
+        $async->asyncData = $data;
+        $result = $async->async();
+        if (is_array($result) || is_object($result)) $result = json_encode($result);
+        echo $result;
     }
 }

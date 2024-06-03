@@ -1,7 +1,8 @@
 siteMap()
 createAddFiles()
+changePosition()
 
-function siteMap(){
+function siteMap() {
     document.querySelector('.sitemap-button').onclick = (e) => {
         e.preventDefault();
         createSitemap();
@@ -20,7 +21,8 @@ function siteMap(){
             });
     }
 }
-function createAddFiles(){
+
+function createAddFiles() {
     let files = document.querySelectorAll('input[type=file]');
     let fileStore = [];
     if (files.length) {
@@ -63,14 +65,14 @@ function createAddFiles(){
                 }
             }
         })
-        let form =document.querySelector('#main-form')
-        if(form){
-            form.onsubmit = function (e){
-                if(!isEmpty(fileStore)){
+        let form = document.querySelector('#main-form')
+        if (form) {
+            form.onsubmit = function (e) {
+                if (!isEmpty(fileStore)) {
                     e.preventDefault()
                     let fData = new FormData(this)
-                    for (let i in fileStore){
-                        if(fileStore.hasOwnProperty(i)){
+                    for (let i in fileStore) {
+                        if (fileStore.hasOwnProperty(i)) {
                             fData.delete(i)
                             let rowName = i.replace(/[\[\]]/g, '')
                             fileStore[i].forEach((item, index) => {
@@ -78,7 +80,7 @@ function createAddFiles(){
                             })
                         }
                     }
-                    if (typeof ADMIN_MODE !== 'undefined'){
+                    if (typeof ADMIN_MODE !== 'undefined') {
                         fData.append('ADMIN_MODE', String(ADMIN_MODE))
                     }
                     fData.append('ajax', 'editData')
@@ -88,15 +90,22 @@ function createAddFiles(){
                         data: fData,
                         processData: false,
                         contentType: false
-                    }).then(res=>{
-                        console.log(res)
-                        })
+                    }).then(res => {
+                        try {
+                            res = JSON.parse(res)
+                            console.log(res)
+                            if (!res.success) throw new Error()
+                            location.reload()
+                        } catch (e) {
+                            errorAlert()
+                        }
+                    })
                 }
 
             }
         }
 
-        function deleteNewFiles(elId, fileName, attributeName, container){
+        function deleteNewFiles(elId, fileName, attributeName, container) {
             container.addEventListener('click', function () {
                 this.remove()
                 delete fileStore[fileName][elId]
@@ -116,3 +125,51 @@ function createAddFiles(){
     }
 }
 
+function changePosition() {
+    let form = document.querySelector('#main-form')
+    if (form) {
+        let selectParent = form.querySelector('select[name=pid]')
+        let selectPosition = form.querySelector('select[name=position]')
+        if (selectParent && selectPosition) {
+            let defaultParent = selectParent.value
+            let defaultPosition = +selectPosition.value
+            selectParent.addEventListener('change', function () {
+                let defaultChoose = false
+                if (this.value === defaultParent) defaultChoose = true
+                Ajax({
+                    // type: 'get',
+                    data: {
+                        table: form.querySelector('input[name=table]').value,
+                        pid: this.value,
+                        ajax: 'changeParent',
+                        iteration: !form.querySelector('#tableId') ? 1 : +!defaultChoose
+                    }
+
+                }).then(res => {
+                    try {
+                        res = JSON.parse(res)
+                        console.log(res)
+                        if (!res.success) throw new Error()
+                        res = +res.pid
+                        let newSelect = document.createElement('select')
+                        newSelect.setAttribute('name', 'position')
+                        newSelect.classList.add('vg-input', 'vg-text', 'vg-full', 'vg-firm-color1')
+                        for (let i = 1; i <= res; i++) {
+                            let selected = defaultChoose && i === defaultPosition ? 'selected' : ''
+                            newSelect.insertAdjacentHTML('beforeend', `<option ${selected} value="${i}">${i}</option>`)
+                        }
+                        selectPosition.before(newSelect)
+                        selectPosition.remove()
+                        selectPosition = newSelect
+
+                    } catch (e) {
+                        errorAlert()
+                    }
+                })
+
+            })
+
+        }
+    }
+
+}
