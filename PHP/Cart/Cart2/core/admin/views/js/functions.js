@@ -72,3 +72,29 @@ function errorAlert() {
     alert('Произошла внутренняя ошибка')
     return false;
 }
+
+
+Element.prototype.slideToggle = function (time, callback) {
+    let _time = typeof time === 'number' ? time : 400
+    callback = typeof time === 'function' ? time : callback
+    // if (!this.style.maxHeight || +this.style.maxHeight.replace(/\D/, '') === 0) {
+    if (getComputedStyle(this)['display'] === 'none') {
+        this.style.transition = null
+        this.style.overflow = 'hidden'
+        this.style.maxHeight = 0
+        this.style.display = 'block'
+        this.style.transition = _time + 'ms'
+        this.style.maxHeight = this.scrollHeight + 'px'
+        setTimeout(() => {
+            callback && callback()
+        }, _time)
+    } else {
+        this.style.transition = _time + 'ms'
+        this.style.maxHeight = 0
+        setTimeout(() => {
+            this.style.transition = null
+            this.style.display = 'none'
+            callback && callback()
+        }, _time)
+    }
+}

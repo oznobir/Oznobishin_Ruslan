@@ -1,6 +1,7 @@
 siteMap()
 createAddFiles()
 changePosition()
+blockParameters()
 
 function siteMap() {
     document.querySelector('.sitemap-button').onclick = (e) => {
@@ -64,6 +65,10 @@ function createAddFiles() {
                     }
                 }
             }
+            let area = item.closest('.img_wrapper')
+            if (area) {
+                dragAndDrop(area, item)
+            }
         })
         let form = document.querySelector('#main-form')
         if (form) {
@@ -93,7 +98,6 @@ function createAddFiles() {
                     }).then(res => {
                         try {
                             res = JSON.parse(res)
-                            console.log(res)
                             if (!res.success) throw new Error()
                             location.reload()
                         } catch (e) {
@@ -122,6 +126,23 @@ function createAddFiles() {
                 container.classList.remove('empty_container')
             }
         }
+
+        function dragAndDrop(area, input) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName, index) => {
+                area.addEventListener(eventName, e => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (index < 2) area.style.background = 'lightblue'
+                    else {
+                        area.style.background = '#fff'
+                        if (index === 3) {
+                            input.files = e.dataTransfer.files
+                            input.dispatchEvent(new Event('change'))
+                        }
+                    }
+                })
+            })
+        }
     }
 }
 
@@ -144,13 +165,11 @@ function changePosition() {
                         ajax: 'changeParent',
                         iteration: !form.querySelector('#tableId') ? 1 : +!defaultChoose
                     }
-
                 }).then(res => {
                     try {
                         res = JSON.parse(res)
-                        console.log(res)
-                        if (!res.success) throw new Error()
-                        res = +res.pid
+                        if (!res['pos']) throw new Error()
+                        res = +res['pos']
                         let newSelect = document.createElement('select')
                         newSelect.setAttribute('name', 'position')
                         newSelect.classList.add('vg-input', 'vg-text', 'vg-full', 'vg-firm-color1')
@@ -171,5 +190,26 @@ function changePosition() {
 
         }
     }
+}
 
+function blockParameters() {
+    let wraps = document.querySelectorAll('.select_wrap')
+    if (wraps.length) {
+        let selectAllIndexes = []
+        wraps.forEach(item => {
+            let next = item.nextElementSibling
+            if (next && next.classList.contains('option_wrap')) {
+                item.addEventListener('click', e => {
+                    if (!e.target.classList.contains('select_all')) {
+                        next.slideToggle()
+                    } else {
+                        let index = [...document.querySelectorAll('.select_all')].indexOf(e.target)
+                        if (typeof selectAllIndexes[index] === 'undefined') selectAllIndexes[index] = false
+                        selectAllIndexes[index] = !selectAllIndexes[index]
+                        next.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = selectAllIndexes[index])
+                    }
+                })
+            }
+        })
+    }
 }

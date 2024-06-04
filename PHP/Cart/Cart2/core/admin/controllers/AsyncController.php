@@ -39,7 +39,7 @@ class AsyncController extends BaseAdmin
                         'where' => ['pid' => $this->asyncData['pid']],
                         'no_concat' => true,
                     ])[0]['count'] + $this->asyncData['iteration'];
-                    return ['success' => '1', 'pid' => $count];
+                    return ['pos' => $count];
 //                    break;
                 default :
                     return ['success' => '0', 'message' => 'Ajax variable is invalid'];

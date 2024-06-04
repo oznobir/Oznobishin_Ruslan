@@ -15,7 +15,7 @@ trait BaseMethods
     {
         if (is_array($str)) {
             foreach ($str as $key => $itemStr)
-                $str[$key] = trim(strip_tags($itemStr));
+                $str[$key] = $this->clearTags($itemStr);
             return $str;
         } else return trim(strip_tags($str));
     }
