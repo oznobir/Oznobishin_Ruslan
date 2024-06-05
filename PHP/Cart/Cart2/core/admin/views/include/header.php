@@ -18,9 +18,13 @@
                     <img src="<?= PATH . ADMIN_TEMPLATE ?>img/search.png" alt="">
                 </div>
                 <form method="post" action="<?= PATH . $this->adminAlias ?>/search" autocomplete="off">
-                    <input type="text" name="search" class="vg-input vg-text">
+                    <input type="text" name="search" class="vg-input vg-text" value="">
                     <div class="vg-element vg-firm-background-color4 vg-box-shadow search_links search_res">
-
+                        <a href="\">link-1</a>
+                        <a href="\">link-2</a>
+                        <a href="\">link-3</a>
+                        <a href="\">link-4</a>
+                        <a href="\">link-5</a>
                     </div>
                 </form>
             </div>

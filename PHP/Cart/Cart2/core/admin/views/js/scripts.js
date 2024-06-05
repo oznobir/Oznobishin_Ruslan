@@ -1,8 +1,3 @@
-siteMap()
-createAddFiles()
-changePosition()
-blockParameters()
-
 function siteMap() {
     document.querySelector('.sitemap-button').onclick = (e) => {
         e.preventDefault();
@@ -12,14 +7,17 @@ function siteMap() {
 
     function createSitemap() {
         linksCounter++;
-        Ajax({data: {ajax: 'sitemap', linksCounter: linksCounter}})
-            .then((res) => {
-                console.log('success - ' + res)
-            })
-            .catch((res) => {
-                console.log('error - ' + res)
-                createSitemap();
-            });
+        Ajax({
+            data: {
+                ajax: 'sitemap',
+                linksCounter: linksCounter
+            }
+        }).then((res) => {
+            console.log('success - ' + res.success)
+        }).catch((res) => {
+            console.log('error - ' + res.success)
+            createSitemap();
+        });
     }
 }
 
@@ -56,7 +54,11 @@ function createAddFiles() {
                             }
                             let elId = fileStore[fileName].push(this.files[i]) - 1
                             container[i].setAttribute(`data-deleteFileId-${attributeName}`, elId)
-                            showImage(this.files[i], container[i])
+                            showImage(this.files[i], container[i], function () {
+                                parentContainer.sortable({
+                                    excludedElements: 'label, .empty_container'
+                                })
+                            })
                             deleteNewFiles(elId, fileName, attributeName, container[i])
                         } else {
                             container = this.closest('.img_container').querySelector('.img_show')
@@ -73,6 +75,7 @@ function createAddFiles() {
         let form = document.querySelector('#main-form')
         if (form) {
             form.onsubmit = function (e) {
+                createJsSortable(form)
                 if (!isEmpty(fileStore)) {
                     e.preventDefault()
                     let fData = new FormData(this)
@@ -97,7 +100,7 @@ function createAddFiles() {
                         contentType: false
                     }).then(res => {
                         try {
-                            res = JSON.parse(res)
+                            // res = JSON.parse(res)
                             if (!res.success) throw new Error()
                             location.reload()
                         } catch (e) {
@@ -116,7 +119,7 @@ function createAddFiles() {
             })
         }
 
-        function showImage(item, container) {
+        function showImage(item, container, callback) {
             let reader = new FileReader()
             container.innerHTML = ''
             reader.readAsDataURL(item)
@@ -124,6 +127,7 @@ function createAddFiles() {
                 container.innerHTML = '<img class="img_item" src="" alt="img">'
                 container.querySelector('img').setAttribute('src', e.target.result)
                 container.classList.remove('empty_container')
+                callback && callback()
             }
         }
 
@@ -167,7 +171,7 @@ function changePosition() {
                     }
                 }).then(res => {
                     try {
-                        res = JSON.parse(res)
+                        // res = JSON.parse(res)
                         if (!res['pos']) throw new Error()
                         res = +res['pos']
                         let newSelect = document.createElement('select')
@@ -213,3 +217,127 @@ function blockParameters() {
         })
     }
 }
+
+function showHideMenuSearch() {
+    document.querySelector('#hideButton').addEventListener('click', () => {
+        document.querySelector('.vg-carcass').classList.toggle('vg-hide')
+    })
+    let searchBtn = document.querySelector('#searchButton')
+    let searchInput = searchBtn.querySelector('input[name=search]')
+    searchBtn.addEventListener('click', () => {
+        searchBtn.classList.add('vg-search-reverse')
+        searchInput.focus()
+    })
+    searchInput.addEventListener('blur', () => {
+        searchBtn.classList.remove('vg-search-reverse')
+    })
+}
+
+let searchResultHover = (() => {
+    let searchRes = document.querySelector('.search_res')
+    let searchInput = document.querySelector('#searchButton input[name=search]')
+    let defaultInputValue = ''
+
+    function searchKeyDown(e) {
+        if (!(document.querySelector('#searchButton input[name=search]').classList.contains('vg-search-reverse'))
+            || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+        let children = [...searchRes.children];
+        if (children.length) {
+            e.preventDefault()
+            let activeItem = searchRes.querySelector('.search_act')
+            let activeIndex = activeItem ? children.indexOf(activeItem) : -1
+            if (e.key === 'ArrowUp') {
+                activeIndex = activeIndex <= 0 ? children.length - 1 : --activeIndex
+            } else {
+                activeIndex = activeIndex === children.length - 1 ? 0 : ++activeIndex
+            }
+            children.forEach(item => item.classList.remove('search_act'))
+            children[activeIndex].classList.add('search_act')
+            searchInput.value = children[activeIndex].innerText
+        }
+    }
+
+    function setDefaultValue() {
+        searchInput.value = defaultInputValue
+    }
+
+    searchRes.addEventListener('mouseleave', setDefaultValue)
+    window.addEventListener('keydown', searchKeyDown)
+    return () => {
+        defaultInputValue = searchInput.value
+        if (searchRes.children.length) {
+            let children = [...searchRes.children]
+            children.forEach(item => {
+                item.addEventListener('mouseover', () => {
+                    children.forEach(el => el.classList.remove('search_act'))
+                    item.classList.add('search_act')
+                    searchInput.value = item.innerText
+                })
+            })
+        }
+    }
+})()
+
+function sortableGallery() {
+    let galleries = document.querySelectorAll('.gallery_container')
+    if (galleries.length) {
+        galleries.forEach(item => {
+            item.sortable({
+                excludedElements: 'label, .empty_container',
+                stop: function (dragEl) {
+                    console.log(this)
+                    console.log(dragEl)
+                }
+            })
+        })
+    }
+}
+
+function createJsSortable(form) {
+    if (form) {
+        let sortable = form.querySelectorAll('input[type=file][multiple]')
+        if (sortable.length) {
+            sortable.forEach(item => {
+                let container = item.closest('.gallery_container')
+                let name = item.getAttribute('name')
+                if (name && container) {
+                    name = name.replace(/[\[\]]/g, '')
+                    let inputSorting = form.querySelector(`input[name="js-sorting[${name}]"]`)
+                    if (!inputSorting) {
+                        inputSorting = document.createElement('input')
+                        inputSorting.name = `js-sorting[${name}]`
+                        form.append(inputSorting)
+                    }
+                    let res = []
+                    for (let i in container.children) {
+                        if (container.children.hasOwnProperty(i)) {
+                            if(!container.children[i].matches('label') &&
+                                !container.children[i].matches('.empty_container')) {
+                                if (container.children[i].tagName === 'A') {
+                                    res.push(container.children[i].querySelector('img').getAttribute('src'))
+                                } else {
+                                    res.push(container.children[i].getAttribute(`data-deletefileid-${name}`))
+
+                                }
+                            }
+                        }
+                    }
+                    console.log(res)
+                    console.log(name)
+                    inputSorting.value = JSON.stringify(res)
+                    console.log(inputSorting.value)
+                }
+            })
+        }
+    }
+
+}
+
+document.querySelector('.vg-rows > div').sortable({})
+siteMap()
+sortableGallery()
+createAddFiles()
+changePosition()
+blockParameters()
+showHideMenuSearch()
+searchResultHover()
