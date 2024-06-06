@@ -30,7 +30,7 @@ class AsyncController extends BaseAdmin
                     if (!$this->userId) $this->exec();
                     $_POST['return_id'] = true;
                     $this->checkPost();
-                    return ['success' => '1', 'message' => 'OK'] ;
+                    return ['success' => '1', 'url' => $this->path . 'show/' . $this->table];
 //                    break;
                 case 'changeParent':
                     if (!$this->userId) $this->exec();

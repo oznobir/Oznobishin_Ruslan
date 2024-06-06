@@ -102,7 +102,7 @@ function createAddFiles() {
                         try {
                             // res = JSON.parse(res)
                             if (!res.success) throw new Error()
-                            location.reload()
+                            location.href = res.url
                         } catch (e) {
                             errorAlert()
                         }
@@ -322,10 +322,7 @@ function createJsSortable(form) {
                             }
                         }
                     }
-                    console.log(res)
-                    console.log(name)
                     inputSorting.value = JSON.stringify(res)
-                    console.log(inputSorting.value)
                 }
             })
         }

@@ -390,6 +390,7 @@ abstract class BaseAdmin extends BaseControllers
      * @throws DbException
      * @throws RouteException
      */
+
     protected function editData(bool $returnId = false): void
     {
         $id = false;
@@ -412,8 +413,7 @@ abstract class BaseAdmin extends BaseControllers
                 }
             }
         }
-        $this->createFile();
-        if ($method === 'edit') $this->checkFiles($id);
+        $this->createFiles($id);
         $this->createAlias($id);
         $resPos = $this->updateMenuPosition($id);
         $except = $this->checkExceptFields();
@@ -424,27 +424,62 @@ abstract class BaseAdmin extends BaseControllers
             'return_id' => true,
             'except' => $except,
         ]);
-        if (!$id && $method === 'add') $_POST[$this->columns['pri'][0]] = $resId;
+        if (!$id && $method === 'add')
+            $_POST[$this->columns['pri'][0]] = $resId;
         $resMany = $this->checkManyToMany();
         $this->expansionBase(get_defined_vars());
         $resAlias = $this->checkAlias($_POST[$this->columns['pri'][0]]);
+
         if ($resId || $resMany || $resAlias || $resPos) {
             $_SESSION['res']['answer'] = '<div class="success">' . $this->info[$method . 'Success'] . '</div>';
-            //            return $_POST[$this->columns['pri'][0]];
+            $url = $this->path . 'show/' . $this->table;
         } else {
             $_SESSION['res']['answer'] = '<div class="error">' . $this->info[$method . 'Fail'] . '</div>';
-            //            return null;
+            $url = false;
         }
-        if (!$returnId) $this->redirect();
+
+        if (!$returnId) $this->redirect($url);
+//        else return $url;
+//        else return $_POST[$this->columns['pri'][0]];
     }
 
     /**
+     * @param $id
      * @return void
+     * @throws DbException
      */
-    protected function createFile(): void
+    protected function createFiles($id): void
     {
         $fileEdit = new FileEdit();
         $this->fileArray = $fileEdit->addFile();
+        if ($id) $this->checkFiles($id);
+        if (!empty($_POST['js-sorting'])) {
+            foreach ($_POST['js-sorting'] as $key => $item) {
+                if (!empty($item)) {
+                    $fileArr = json_decode($item, true);
+                    if ($fileArr) {
+                        $this->fileArray[$key] = $this->sortingFiles($fileArr, $this->fileArray[$key]);
+                    }
+                }
+            }
+
+        }
+    }
+
+    /**
+     * @param array $fileArr
+     * @param array $arr
+     * @return array
+     */
+    protected function sortingFiles(array $fileArr, array $arr): array
+    {
+        $res = [];
+        foreach ($fileArr as $file) {
+            if (!is_numeric($file)) $file = substr($file, strlen(PATH . UPLOAD_DIR));
+            else $file = $arr[$file];
+            if ($file && in_array($file, $arr)) $res[] = $file;
+        }
+        return $res;
     }
 
     /**
@@ -452,23 +487,31 @@ abstract class BaseAdmin extends BaseControllers
      */
     protected function checkFiles($id): void
     {
-        if ($id && $this->fileArray) {
-            $data = $this->model->select($this->table, [
-                'fields' => array_keys($this->fileArray),
-                'where' => [$this->columns['pri'][0] => $id]
-            ]);
-            if (is_array($data)) {
-                $data = $data[0];
-                foreach ($this->fileArray as $key => $item) {
-                    if (is_array($item) && !empty($data[$key])) {
-                        $fileArr = json_decode($data[$key], true);
-                        if ($fileArr) {
-                            foreach ($fileArr as $file) {
-                                $this->fileArray[$key][] = $file;
+        if ($id) {
+            $arrKeys = [];
+            if (!empty($this->fileArray)) $arrKeys = array_keys($this->fileArray);
+            if (!empty($_POST['js-sorting'])) $arrKeys = array_merge($arrKeys, array_keys($_POST['js-sorting']));
+            if (!empty($arrKeys)) {
+                $arrKeys = array_unique($arrKeys);
+
+                $data = $this->model->select($this->table, [
+                    'fields' => $arrKeys,
+                    'where' => [$this->columns['pri'][0] => $id]
+                ]);
+                if (is_array($data)) {
+                    $data = $data[0];
+                    foreach ($data as $key => $item) {
+                        if (!empty($this->fileArray[$key]) && is_array($this->fileArray[$key])
+                            || !empty($_POST['js-sorting'][$key])) {
+                            $fileArr = json_decode($item, true);
+                            if ($fileArr) {
+                                foreach ($fileArr as $file) {
+                                    $this->fileArray[$key][] = $file;
+                                }
                             }
+                        } elseif (!empty($this->fileArray[$key])) {
+                            @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $item);
                         }
-                    } elseif (!empty($data[$key])) {
-                        @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $data[$key]);
                     }
                 }
             }
