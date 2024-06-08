@@ -182,8 +182,8 @@ class Model extends BaseModel
         ]);
         if ($result) {
             foreach ($result as $index => $item) {
-                $result[$index]['name'] .= '(' . ($projectTables[$item['table_name']]['name'] ?? $item['table_name']) . ')';
-                $result[$index]['alias'] = PATH . Settings::get('routes')['admin']['alias'] . '/edit/' . $item['table_name'] . '/' . $item['id'];
+                $result[$index]['table_alias'] = $projectTables[$item['table_name']]['name'] ?? $item['table_name'];
+                $result[$index]['path_edit'] = PATH . Settings::get('routes')['admin']['alias'] . '/edit/' . $item['table_name'] . '/' . $item['id'];
             }
         }
         return $result ?:[];

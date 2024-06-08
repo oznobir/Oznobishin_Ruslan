@@ -20,7 +20,7 @@ class RouteController extends BaseControllers
     {
         $strUri = $_SERVER['REQUEST_URI'];
         if ($_SERVER['QUERY_STRING']) {
-            $strUri = substr($strUri, 0, strpos($strUri, $_SERVER['REQUEST_URI']) - 1);
+            $strUri = substr($strUri, 0, strpos($strUri, $_SERVER['QUERY_STRING']) - 1);
         }
         // в uri const PATH
         $path = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php'));

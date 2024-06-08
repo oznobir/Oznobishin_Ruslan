@@ -15,7 +15,7 @@ function siteMap() {
             console.log('success - ' + res.success)
             console.log(res.message)
             if (res.redirect) location.reload();
-        }).catch((res) => {
+        }).catch(() => {
             console.log('error - server')
             createSitemap(++linksCounter);
         });
@@ -166,24 +166,17 @@ function changePosition() {
                         iteration: !form.querySelector('#tableId') ? 1 : +!defaultChoose
                     }
                 }).then(res => {
-                    try {
-                        // res = JSON.parse(res)
-                        if (!res['pos']) throw new Error()
-                        res = +res['pos']
-                        let newSelect = document.createElement('select')
-                        newSelect.setAttribute('name', 'position')
-                        newSelect.classList.add('vg-input', 'vg-text', 'vg-full', 'vg-firm-color1')
-                        for (let i = 1; i <= res; i++) {
-                            let selected = defaultChoose && i === defaultPosition ? 'selected' : ''
-                            newSelect.insertAdjacentHTML('beforeend', `<option ${selected} value="${i}">${i}</option>`)
-                        }
-                        selectPosition.before(newSelect)
-                        selectPosition.remove()
-                        selectPosition = newSelect
-
-                    } catch (e) {
-                        errorAlert()
+                    res = +res['pos']
+                    let newSelect = document.createElement('select')
+                    newSelect.setAttribute('name', 'position')
+                    newSelect.classList.add('vg-input', 'vg-text', 'vg-full', 'vg-firm-color1')
+                    for (let i = 1; i <= res; i++) {
+                        let selected = defaultChoose && i === defaultPosition ? 'selected' : ''
+                        newSelect.insertAdjacentHTML('beforeend', `<option ${selected} value="${i}">${i}</option>`)
                     }
+                    selectPosition.before(newSelect)
+                    selectPosition.remove()
+                    selectPosition = newSelect
                 })
 
             })
@@ -224,7 +217,8 @@ function showHideMenuSearch() {
         searchBtn.classList.add('vg-search-reverse')
         searchInput.focus()
     })
-    searchInput.addEventListener('blur', () => {
+    searchInput.addEventListener('blur', e => {
+        if (e.relatedTarget && e.relatedTarget.tagName === 'A') return
         searchBtn.classList.remove('vg-search-reverse')
     })
 }
@@ -249,6 +243,7 @@ let searchResultHover = (() => {
             }
             children.forEach(item => item.classList.remove('search_act'))
             children[activeIndex].classList.add('search_act')
+            // searchInput.value = children[activeIndex].innerText.replace(/\(.+?\)\s*$/, '')
             searchInput.value = children[activeIndex].innerText
         }
     }
@@ -338,11 +333,23 @@ function search() {
                         ajax: 'search'
                     }
                 }).then(res => {
-                    console.log(res)
-                }).catch()
-                {
-                    errorAlert()
-                }
+                    try {
+                        // console.log(res)
+                        let resBlock = document.querySelector('.search_res')
+                        let counter = res.length > 20 ? 20 : res.length
+                        if (resBlock) {
+                            resBlock.innerHTML = '';
+                            for (let i = 0; i < counter; i++) {
+                                resBlock.insertAdjacentHTML('beforeend', `<a href="${res[i]['path_edit']}">` +
+                                    `${res[i]['name']} в разделе ${res[i]['table_alias']}</a>`)
+                            }
+                            searchResultHover();
+                        }
+                    } catch (e) {
+                        console.log(e)
+                        errorAlert()
+                    }
+                })
             }
         }
 

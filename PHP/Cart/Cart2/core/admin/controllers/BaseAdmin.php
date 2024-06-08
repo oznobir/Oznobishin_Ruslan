@@ -174,6 +174,7 @@ abstract class BaseAdmin extends BaseControllers
      */
     protected function expansionBase(array $args = [], object|string|bool $settings = false): mixed
     {
+        if(!$this->table) return false;
         $fileName = explode('_', $this->table);
         $className = '';
         foreach ($fileName as $name)
