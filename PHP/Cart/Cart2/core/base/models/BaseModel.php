@@ -3,6 +3,7 @@
 namespace core\base\models;
 
 use core\base\exceptions\DbException;
+use core\base\exceptions\RouteException;
 use mysqli;
 
 abstract class BaseModel extends BaseModelMethods
@@ -107,6 +108,7 @@ abstract class BaseModel extends BaseModelMethods
         $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         $query = "SELECT $fields FROM $table $join $where $order $limit";
 
+        if (!empty($set['return_query'])) return $query;
         $res = $this->query(trim($query));
         if (!empty($set['join_structure']) && $res) {
             $res = $this->joinStructure($res, $table);
@@ -226,6 +228,92 @@ abstract class BaseModel extends BaseModelMethods
     }
 
     /**
+     * @throws DbException
+     */
+    public function buildUnion($table, $set): static
+    {
+        if ((array_key_exists('fields', $set)) && $set['fields'] === null) return $this;
+        if (empty($set['fields'])) {
+            $set['fields'] = [];
+            $columns = $this->showColumns($table);
+            unset($columns['pri']);
+            foreach ($columns as $column => $item)
+                $set['fields'][] = $column;
+        }
+        $this->union[$table] = $set;
+        $this->union[$table]['return_query'] = true;
+        return $this;
+    }
+
+    /**
+     * @param array $set
+     * 'type' => 'all',
+     * 'pagination' => [],
+     * 'limit' => 5,
+     * 'order' => $order,
+     * 'order_direction' => $orderDirection,
+     * @return array|bool|int|string
+     * @throws DbException
+     * @throws RouteException
+     */
+    public function getUnion(array $set = []): array|bool|int|string
+    {
+        if (!$this->union) throw new RouteException('Отсутствует свойство "union" модели ' . $this::class);
+        $unionType = ' UNION ' . (!empty($set['type']) ? strtoupper($set['type']) . ' ' : '');
+        $maxCount = 0;
+        $maxTableCount = '';
+        foreach ($this->union as $key => $item) {
+            $count = count($item['fields']);
+            $joinFields = '';
+            if (!empty($item['join'])) {
+                foreach ($item['join'] as $table => $data) {
+                    if (array_key_exists('fields', $data) && $data['fields']) {
+                        $count += count($data['fields']);
+                        $joinFields = $table;
+                    } elseif (array_key_exists('fields', $data) || $data['fields'] === null) {
+                        $columns = $this->showColumns($table);
+                        unset($columns['pri']);
+                        $count += count($columns);
+                        foreach ($columns as $field => $value)
+                            $this->union[$key]['join'][$table]['fields'][] = $field;
+                        $joinFields = $table;
+                    }
+                }
+            } else {
+                $this->union[$key]['no_concat'] = true;
+            }
+            if ($count > $maxCount || ($count == $maxCount && $joinFields)) {
+                $maxCount = $count;
+                $maxTableCount = $key;
+            }
+            $this->union[$key]['lastJoinTable'] = $joinFields;
+            $this->union[$key]['countFields'] = $count;
+        }
+        $query = '';
+        if ($maxCount && $maxTableCount) {
+            $query .= '(' . $this->select($maxTableCount, $this->union[$maxTableCount]) . ')';
+            unset($this->union[$maxTableCount]);
+        }
+        foreach ($this->union as $key => $item) {
+            if (isset($item['countFields']) && $item['countFields'] < $maxCount) {
+                for ($i = 0; $i < $maxCount - $item['countFields']; $i++) {
+                    if ($item['lastJoinTable']) $item['join'][$item['lastJoinTable']]['fields'][] = null;
+                    else $item['fields'][] = null;
+                }
+            }
+            $query && $query .= $unionType;
+            $query .= '(' . $this->select($key, $item) . ')';
+        }
+        $order = $this->createOrder($set);
+        $limit = !empty($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
+        if (method_exists($this, 'createPagination'))
+            $this->createPagination($set, "($query)", $limit);
+        $query .= " $order $limit";
+        $this->union = [];
+        return $this->query(trim($query));
+    }
+
+    /**
      * @param string $table название таблицы БД
      * @return array массив с инфо о колонках таблицы БД
      * @throws DbException ошибки
@@ -234,7 +322,7 @@ abstract class BaseModel extends BaseModelMethods
     {
         if (empty($this->columnsTables[$table])) {
             $arrTable = $this->createTableAlias($table);
-            if(!empty($this->columnsTables[$arrTable['table']])){
+            if (!empty($this->columnsTables[$arrTable['table']])) {
                 return $this->columnsTables[$arrTable['alias']] = $this->columnsTables[$arrTable['table']];
             }
             $query = "SHOW COLUMNS FROM {$arrTable['table']}";
@@ -247,7 +335,7 @@ abstract class BaseModel extends BaseModelMethods
                 }
             }
         }
-        if(isset($arrTable) && $arrTable['table'] !== $arrTable['alias']) {
+        if (isset($arrTable) && $arrTable['table'] !== $arrTable['alias']) {
             return $this->columnsTables[$arrTable['alias']] = $this->columnsTables[$arrTable['table']];
         }
         return $this->columnsTables[$table];

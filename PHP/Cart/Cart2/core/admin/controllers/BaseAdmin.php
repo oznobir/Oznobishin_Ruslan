@@ -284,17 +284,18 @@ abstract class BaseAdmin extends BaseControllers
 
     /**
      * @param object|string|bool $settings
-     * @return void
-     * @throws DbException|RouteException
+     * @return false|string|void|null
+     * @throws DbException
+     * @throws RouteException
      */
-    protected function checkPost(object|string|bool $settings = false): void
+    protected function checkPost(object|string|bool $settings = false)
     {
         $this->table = $this->clearTags($_POST['table']);
         unset($_POST['table']);
         if ($this->table) {
             $this->createTableData($settings);
             $this->clearPostFields($settings);
-            $this->editData();
+            return $this->editData();
         }
     }
 
@@ -385,18 +386,18 @@ abstract class BaseAdmin extends BaseControllers
     }
 
     /**
-     * @param bool $returnId
-     * @return void
+     * @param bool $redirect
+     * @return false|string|null
      * @throws DbException
      * @throws RouteException
      */
 
-    protected function editData(bool $returnId = false): void
+    protected function editData(bool $redirect = false): false|string|null
     {
         $id = false;
         $method = 'add';
         $where = [];
-        if (!empty($_POST['return_id'])) $returnId = true;
+        if (!empty($_POST['return_id'])) $redirect = true;
         if (isset($_POST[$this->columns['pri'][0]])) {
             if (is_numeric($_POST[$this->columns['pri'][0]]))
                 $id = $this->num($_POST[$this->columns['pri'][0]]);
@@ -438,8 +439,8 @@ abstract class BaseAdmin extends BaseControllers
             $url = false;
         }
 
-        if (!$returnId) $this->redirect($url);
-//        else return $url;
+        if (!$redirect) $this->redirect($url);
+        else return $url;
 //        else return $_POST[$this->columns['pri'][0]];
     }
 

@@ -20,8 +20,7 @@ class EditController extends BaseAdmin
         if (!$this->userId) $this->exec();
 
         if ($this->isPost()) $this->checkPost();
-        else $this->createTableData();
-
+        $this->createTableData();
         $this->createEditData();
         $this->createForeignData();
         $this->createMenuPosition();

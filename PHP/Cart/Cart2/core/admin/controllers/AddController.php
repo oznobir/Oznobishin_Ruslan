@@ -22,8 +22,7 @@ class AddController extends BaseAdmin
         if (!$this->userId) $this->exec();
 
         if ($this->isPost()) $this->checkPost();
-        else $this->createTableData();
-
+        $this->createTableData();
         $this->createForeignData();
         $this->createMenuPosition();
         $this->createRadio();

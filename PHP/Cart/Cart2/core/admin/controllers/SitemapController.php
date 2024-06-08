@@ -4,7 +4,6 @@ namespace core\admin\controllers;
 
 use core\base\controllers\BaseMethods;
 use core\base\exceptions\DbException;
-use core\base\exceptions\RouteException;
 use DateTime;
 use DOMDocument;
 use DOMException;
@@ -28,21 +27,20 @@ class SitemapController extends BaseAdmin
 
     /**
      * @param int $linksCounter
-     * @param bool $redirect
-     * @return void
+     * @return array
      * @throws DOMException
-     * @throws DbException|RouteException
+     * @throws DbException
      */
-    public function inputData(int $linksCounter = 1, bool $redirect = true): void
+    public function inputAsyncData(int $linksCounter = 1): array
     {
 //        file_get_contents();
 //        get_headers();
-        if (!$this->userId) $this->exec();
+//        if (!$this->userId) $this->exec();
         if (!function_exists('curl_init'))
-            $this->cancel(0, $this->info['curlFail'], '', true);
+            return $this->cancel(0, $this->info['curlFail'], '', true);
 
         if (!$this->checkParsingTable())
-            $this->cancel(0, $this->info['parsingTableFail'], '', true);
+            return $this->cancel(0, $this->info['parsingTableFail'], '', true);
 
         set_time_limit(0);
 
@@ -101,12 +99,7 @@ class SitemapController extends BaseAdmin
             }
         }
         $this->createSitemap();
-        if ($redirect) {
-            $_SESSION['res']['answer'] = '<div class="success">' . sprintf($this->info['curlSuccess'], count($this->all_links)) . '</div>';
-            $this->redirect();
-        } else {
-            $this->cancel(1, sprintf($this->info['curlSuccess'], count($this->all_links)), '', true);
-        }
+        return $this->cancel(1, sprintf($this->info['curlSuccess'], count($this->all_links)), '', true);
     }
 
     /**
@@ -239,19 +232,20 @@ class SitemapController extends BaseAdmin
      * @param bool $exit
      * @return array|void
      */
+
     protected function cancel(int $success = 0, string $messageAdmin = '', string $messageLog = '', bool $exit = false)
     {
         $exitArr = [];
         $exitArr['success'] = $success;
+        $exitArr['redirect'] = $exit;
         $exitArr['message'] = $messageAdmin ?: $this->info['parsingFail'];
         $messageLog = $messageLog ?: $exitArr['message'];
-        $class = 'success';
+        $class = $exitArr['success'] ? 'success' : 'error';
         if (!$exitArr['success']) {
-            $class = 'error';
             $this->writeLog($messageLog, $this->parsingLogFile);
         }
         if ($exit) {
-            $exitArr['message'] = '<div class="' . $class . '">' . $exitArr['message'] . '</div>';
+            $_SESSION['res']['answer'] = '<div class="' . $class . '">' . $exitArr['message'] . '</div>';
             return $exitArr;
         }
     }

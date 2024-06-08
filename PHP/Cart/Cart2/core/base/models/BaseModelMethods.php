@@ -8,6 +8,7 @@ abstract class BaseModelMethods
 {
     protected array $sqlFunc = ['NOW()'];
     protected array $columnsTables = [];
+    protected array $union = [];
 
     /**
      * @param array $set массив значений для построения запроса
@@ -44,12 +45,16 @@ abstract class BaseModelMethods
             $set['fields'] = (array)$set['fields'];
             foreach ($set['fields'] as $field) {
                 if ($join_structure && !$id_field && $this->columnsTables[$aliasTable]['pri'][0] === $field) $id_field = true;
+                if ($field === null) {
+                    $fields .= "NULL" . ', ';
+                    continue;
+                }
                 if ($field) {
                     if ($join) {
                         if (preg_match('/^(.+)?\s+AS\s+(.+)/i', $field, $matches)) {
                             $fields .= $concatTable . $matches[1] . ' AS JT_' . $aliasTable . '_JF_' . $matches[2] . ', ';
                         } else $fields .= $concatTable . $field . ' AS JT_' . $aliasTable . '_JF_' . $field . ', ';
-                    } else $fields .= $concatTable . $field . ', ';
+                    } else $fields .= (!preg_match('/(\([^()]*\))|(case\s+.+?\s+end)/i', $field) ? $concatTable : '') . $field . ', ';
                 }
             }
             if (!$id_field && $join_structure) {

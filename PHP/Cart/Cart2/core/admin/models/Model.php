@@ -4,7 +4,9 @@ namespace core\admin\models;
 
 use core\base\controllers\Singleton;
 use core\base\exceptions\DbException;
+use core\base\exceptions\RouteException;
 use core\base\models\BaseModel;
+use core\base\settings\Settings;
 
 
 class Model extends BaseModel
@@ -79,7 +81,7 @@ class Model extends BaseModel
                         'no_concat' => true,
                     ])[0]['count'] + 1;
             }
-            if(array_key_exists($updateRows['where'], $_POST)) $whereEqual = $_POST[$updateRows['where']];
+            if (array_key_exists($updateRows['where'], $_POST)) $whereEqual = $_POST[$updateRows['where']];
             elseif (isset($oldData[$updateRows['where']])) $whereEqual = $oldData[$updateRows['where']];
             else $whereEqual = null;
             $dbWhere = $this->createWhere([
@@ -100,7 +102,7 @@ class Model extends BaseModel
             }
         }
         $dbWhere = isset($dbWhere) ? $dbWhere . ' AND' : 'WHERE';
-        if($start < $end)
+        if ($start < $end)
             $query = "UPDATE $table SET $field = $field - 1 $dbWhere $field <= $end AND $field > $start";
         elseif ($start > $end)
             $query = "UPDATE $table SET $field = $field + 1 $dbWhere $field >= $end AND $field < $start";
@@ -108,4 +110,112 @@ class Model extends BaseModel
         return $this->query($query, 'default');
     }
 
+    /**
+     * @param string $data
+     * @param string|false $curTable
+     * @param int|false $qty
+     * @return array|false
+     * @throws DbException
+     * @throws RouteException
+     */
+    public function searchData(string $data, string|false $curTable = false, int|false $qty = false): array|false
+    {
+        $dbTables = $this->showTables();
+        $data = addslashes($data);
+        $arr = preg_split('/([,.])?\s+/', $data, 0, PREG_SPLIT_NO_EMPTY);
+        $searchArr = [];
+        for (; ;) {
+            if (!$arr) break;
+            $searchArr[] = implode(' ', $arr);
+            unset($arr[count($arr) - 1]);
+        }
+        $order = [];
+        $correctCurTable = false;
+        $projectTables = Settings::get('projectTables');
+        foreach ($projectTables as $table => $item) {
+            if (!in_array($table, $dbTables)) continue;
+            $searchRows = [];
+            $orderRows = ['name'];
+            $fields = [];
+            $columns = $this->showColumns($table);
+            $fields[] = $columns['pri'][0] . ' as id';
+            $fieldName = isset($columns['name']) ? "CASE WHEN $table.name <> '' THEN $table.name " : '';
+            foreach ($columns as $col => $value) {
+                if ($col !== 'name' && stripos($col, 'name') !== false) {
+                    if (!$fieldName) $fieldName = 'CASE ';
+                    $fieldName .= "WHEN $table.$col <> '' THEN $table.$col ";
+                }
+                if (isset($value['Type']) &&
+                    (stripos($value['Type'], 'char') !== false ||
+                        stripos($value['Type'], 'text') !== false)) {
+                    $searchRows[] = $col;
+                }
+            }
+            if ($fieldName) $fields[] = $fieldName . 'END as name';
+            else $fields[] = $columns['pri'][0] . ' as name';
+            $fields[] = "('$table') as table_name";
+
+            $res = $this->createWhereOrder($searchRows, $searchArr, $orderRows, $table);
+            $where = $res['where'];
+            !$order && $order = $res['order'];
+            if ($table === $curTable) {
+                $correctCurTable = true;
+                $fields[] = "('current_table') as current_table";
+            }
+            if ($where) $this->buildUnion($table, [
+                'fields' => $fields,
+                'where' => $where,
+                'no_concat' => true,
+            ]);
+        }
+        $orderDirection = '';
+        if ($order) {
+            $order = ($correctCurTable ? 'current_table DESC, ' : '') . ' (' . implode('+', $order) . ') ';
+            $orderDirection = 'DESC';
+        }
+        $result = $this->getUnion([
+//            'type' => 'all',
+//            'pagination' => [],
+//            'limit' => $qty,
+            'order' => $order,
+            'order_direction' => $orderDirection,
+        ]);
+        if ($result) {
+            foreach ($result as $index => $item) {
+                $result[$index]['name'] .= '(' . ($projectTables[$item['table_name']]['name'] ?? $item['table_name']) . ')';
+                $result[$index]['alias'] = PATH . Settings::get('routes')['admin']['alias'] . '/edit/' . $item['table_name'] . '/' . $item['id'];
+            }
+        }
+        return $result ?:[];
+    }
+
+    /**
+     * @throws DbException
+     */
+    protected function createWhereOrder($searchRows, $searchArr, $orderRows, $table): array
+    {
+        $where = '';
+        $order = [];
+        if ($searchRows && $searchArr) {
+            $columns = $this->showColumns($table);
+            if ($columns) {
+                $where = '(';
+                foreach ($searchRows as $row) {
+                    $where .= '(';
+                    foreach ($searchArr as $item) {
+                        if (in_array($row, $orderRows)) {
+                            $str = "($row LIKE '%$item%')";
+                            if (!in_array($str, $order)) $order[] = $str;
+                        }
+                        if (isset($columns[$row])) {
+                            $where .= "$table.$row LIKE '%$item%' OR ";
+                        }
+                    }
+                    $where = preg_replace('/\)?\s*or\s*\(?$/i', '', $where) . ') OR ';
+                }
+                $where && $where = preg_replace('/\s*or\s*$/i', '', $where) . ')';
+            }
+        }
+        return compact('where', 'order');
+    }
 }

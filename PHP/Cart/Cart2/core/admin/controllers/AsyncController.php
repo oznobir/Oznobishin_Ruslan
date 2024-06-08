@@ -12,40 +12,57 @@ use DOMException;
 class AsyncController extends BaseAdmin
 {
     /**
-     * @return array|void
+     * @return array
      * @throws DOMException
      * @throws DbException
      * @throws RouteException
      * @uses async
      */
-    public function async()
+    public function async(): array
     {
         if (isset($this->asyncData['ajax'])) {
             $this->asyncData = $this->clearTags($this->asyncData);
+            if (!$this->userId) $this->exec();
             switch ($this->asyncData['ajax']) {
                 case 'sitemap':
-                    (new SitemapController())->inputData($this->asyncData['linksCounter'], false);
-                    break;
+                    return (new SitemapController())->inputAsyncData($this->asyncData['linksCounter']);
                 case 'editData':
-                    if (!$this->userId) $this->exec();
                     $_POST['return_id'] = true;
-                    $this->checkPost();
-                    return ['success' => '1', 'url' => $this->path . 'show/' . $this->table];
-//                    break;
+                    return ['url' => $this->checkPost()];
                 case 'changeParent':
-                    if (!$this->userId) $this->exec();
-                    $count = $this->model->select($this->asyncData['table'], [
-                        'fields' => ['COUNT(*) as count'],
-                        'where' => ['pid' => $this->asyncData['pid']],
-                        'no_concat' => true,
-                    ])[0]['count'] + $this->asyncData['iteration'];
-                    return ['pos' => $count];
-//                    break;
+                    return ['pos' => $this->changeParent() + $this->asyncData['iteration']];
+                case 'search':
+                    return $this->search();
                 default :
                     return ['success' => '0', 'message' => 'Ajax variable is invalid'];
-//                    break;
             }
         } else return ['success' => '0', 'message' => 'No ajax variable'];
+    }
+
+    /**
+     * @return int|null
+     * @throws DbException
+     */
+    protected function changeParent(): null|int
+    {
+        return $this->model->select($this->asyncData['table'], [
+            'fields' => ['COUNT(*) as count'],
+            'where' => ['pid' => $this->asyncData['pid']],
+            'no_concat' => true,
+        ])[0]['count'];
+    }
+
+    /**
+     * @return array
+     * @throws DbException
+     * @throws RouteException
+     */
+    protected function search(): array
+    {
+        $data = $this->asyncData['data'];
+        $table = $this->asyncData['table'];
+        $link = 20;
+        return $this->model->searchData($data, $table, $link);
     }
 
 }

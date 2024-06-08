@@ -1,12 +1,11 @@
 function siteMap() {
     document.querySelector('.sitemap-button').onclick = (e) => {
         e.preventDefault();
-        createSitemap();
+        let linksCounter = 0;
+        createSitemap(linksCounter);
     }
-    let linksCounter = 0;
 
-    function createSitemap() {
-        linksCounter++;
+    function createSitemap(linksCounter) {
         Ajax({
             data: {
                 ajax: 'sitemap',
@@ -14,9 +13,11 @@ function siteMap() {
             }
         }).then((res) => {
             console.log('success - ' + res.success)
+            console.log(res.message)
+            if (res.redirect) location.reload();
         }).catch((res) => {
-            console.log('error - ' + res.success)
-            createSitemap();
+            console.log('error - server')
+            createSitemap(++linksCounter);
         });
     }
 }
@@ -99,13 +100,8 @@ function createAddFiles() {
                         processData: false,
                         contentType: false
                     }).then(res => {
-                        try {
-                            // res = JSON.parse(res)
-                            if (!res.success) throw new Error()
-                            location.href = res.url
-                        } catch (e) {
-                            errorAlert()
-                        }
+                        if (res.url) location.href = res.url
+                        else location.reload()
                     })
                 }
 
@@ -311,7 +307,7 @@ function createJsSortable(form) {
                     let res = []
                     for (let i in container.children) {
                         if (container.children.hasOwnProperty(i)) {
-                            if(!container.children[i].matches('label') &&
+                            if (!container.children[i].matches('label') &&
                                 !container.children[i].matches('.empty_container')) {
                                 if (container.children[i].tagName === 'A') {
                                     res.push(container.children[i].querySelector('img').getAttribute('src'))
@@ -330,7 +326,31 @@ function createJsSortable(form) {
 
 }
 
-document.querySelector('.vg-rows > div').sortable({})
+function search() {
+    let searchInput = document.querySelector('input[name=search]')
+    if (searchInput) {
+        searchInput.oninput = () => {
+            if (searchInput.value.length > 1) {
+                Ajax({
+                    data: {
+                        data: searchInput.value,
+                        table: document.querySelector('input[name="search_table"]').value,
+                        ajax: 'search'
+                    }
+                }).then(res => {
+                    console.log(res)
+                }).catch()
+                {
+                    errorAlert()
+                }
+            }
+        }
+
+    }
+
+}
+
+search()
 siteMap()
 sortableGallery()
 createAddFiles()

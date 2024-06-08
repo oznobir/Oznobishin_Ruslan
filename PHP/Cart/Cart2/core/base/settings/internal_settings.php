@@ -7,6 +7,7 @@ const PASS = '';
 const DB = 'myshop2';
 const SITE_URL = 'http://myshop2.by';
 //const SITE_URL = 'https://k12.by';
+//const SITE_URL = 'https://oknaminsk24.by';
 const PATH = '/';
 const SITE_TEMPLATE = 'templates/default/';
 const ADMIN_TEMPLATE = 'core/admin/views/';

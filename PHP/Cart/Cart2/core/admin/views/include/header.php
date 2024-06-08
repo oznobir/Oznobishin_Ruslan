@@ -19,6 +19,7 @@
                 </div>
                 <form method="post" action="<?= PATH . $this->adminAlias ?>/search" autocomplete="off">
                     <input type="text" name="search" class="vg-input vg-text" value="">
+                    <input type="hidden" name="search_table" value="<?=$this->table?>">
                     <div class="vg-element vg-firm-background-color4 vg-box-shadow search_links search_res">
                         <a href="\">link-1</a>
                         <a href="\">link-2</a>
