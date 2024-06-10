@@ -453,7 +453,7 @@ abstract class BaseAdmin extends BaseControllers
     protected function createFiles($id): void
     {
         $fileEdit = new FileEdit();
-        $this->fileArray = $fileEdit->addFile();
+        $this->fileArray = $fileEdit->addFile($this->table);
         if ($id) $this->checkFiles($id);
         if (!empty($_POST['js-sorting'])) {
             foreach ($_POST['js-sorting'] as $key => $item) {

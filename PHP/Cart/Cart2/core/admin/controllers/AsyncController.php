@@ -5,6 +5,7 @@ namespace core\admin\controllers;
 use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
 use DOMException;
+use libraries\FileEdit;
 
 /**
  * @uses AsyncController
@@ -33,6 +34,11 @@ class AsyncController extends BaseAdmin
                     return ['pos' => $this->changeParent() + $this->asyncData['iteration']];
                 case 'search':
                     return $this->search();
+                case 'tinymceFile':
+                    $fileEdit = new FileEdit();
+                    $fileEdit->setUniqueFile(false);
+                    $file = $fileEdit->addFile($this->asyncData['table'] . '/content_files/');
+                    return ['url' =>PATH . UPLOAD_DIR . $file['file']];
                 default :
                     return ['success' => '0', 'message' => 'Ajax variable is invalid'];
             }

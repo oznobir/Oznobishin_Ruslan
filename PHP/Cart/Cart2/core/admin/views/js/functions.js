@@ -9,6 +9,9 @@ const Ajax = (set) => {
     let body = '';
     if (typeof set.processData !== 'undefined' && !set.processData) {
         body = set.data
+        if (typeof ADMIN_MODE !== 'undefined') {
+            body.append('ADMIN_MODE', String(ADMIN_MODE))
+        }
     } else {
         if (typeof set.data !== 'undefined' && set.data) {
             for (let i in set.data) {
@@ -135,7 +138,7 @@ Element.prototype.sortable = (function () {
         if (target && target !== dragEl && target.parentElement === this) {
             let rect = target.getBoundingClientRect()
             let next = (e.clientY - rect.top) / (rect.bottom - rect.top) > .5;
-            this.insertBefore(dragEl, next && target.nextSibling || target)
+            this.insertBefore(dragEl, next && target || target.previousSibling)
         }
     }
 

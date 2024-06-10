@@ -22,7 +22,12 @@ const QTY_LINKS = 3;
 
 const ADMIN_CSS_JS = [
     'styles' => ['css/main.css'],
-    'scripts' => ['js/functions.js', 'js/scripts.js'],
+    'scripts' => [
+        'js/functions.js',
+        'js/scripts.js',
+        'js/tinymce/tinymce.min.js',
+        'js/tinymce/tinymce_init.js'
+    ],
 ];
 const SITE_CSS_JS = [
     'styles' => ['css/main.css'],

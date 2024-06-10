@@ -35,7 +35,7 @@ class Settings
     private array $translate = [
         'name' => ['Название', 'Не более 70 символов'],
         'filters_name' => ['Название фильтра', 'Не более 50 символов'],
-        'content' => ['Контент', 'Не более 70 символов'],
+        'content' => ['Описание', 'Не более 70 символов'],
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
         'description' => ['Описание', 'Не более 160 символов'],
@@ -57,7 +57,7 @@ class Settings
     private array $blockNeedle = [
         'vg-rows' => [],
         'vg-img' => ['img', 'gallery_img'],
-        'vg-content' => ['description'],
+        'vg-content' => ['description', 'content'],
     ];
     private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all
         'filters_goods' => ['goods', 'filters'],

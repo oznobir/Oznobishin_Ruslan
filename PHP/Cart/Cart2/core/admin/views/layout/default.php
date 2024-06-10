@@ -23,6 +23,7 @@
 <script>
     const PATH = '<?=PATH?>';
     const ADMIN_MODE = 1;
+    const TINYMCE_DEFAULT = '<?=implode(',', $this->blocks['vg-content'])?>';
 </script>
 <?php $this->getScripts(); ?>
 </body>

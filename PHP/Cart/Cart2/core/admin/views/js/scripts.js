@@ -89,9 +89,6 @@ function createAddFiles() {
                             })
                         }
                     }
-                    if (typeof ADMIN_MODE !== 'undefined') {
-                        fData.append('ADMIN_MODE', String(ADMIN_MODE))
-                    }
                     fData.append('ajax', 'editData')
                     Ajax({
                         url: this.getAttribute('action'),
@@ -274,11 +271,11 @@ function sortableGallery() {
     if (galleries.length) {
         galleries.forEach(item => {
             item.sortable({
-                excludedElements: 'label, .empty_container',
-                stop: function (dragEl) {
-                    console.log(this)
-                    console.log(dragEl)
-                }
+                excludedElements: 'label, .empty_container'
+                // stop: function (dragEl) {
+                //     console.log(this)
+                //     console.log(dragEl)
+                // }
             })
         })
     }
