@@ -186,6 +186,7 @@ class Model extends BaseModel
                 $result[$index]['path_edit'] = PATH . Settings::get('routes')['admin']['alias'] . '/edit/' . $item['table_name'] . '/' . $item['id'];
             }
         }
+
         return $result ?:[];
     }
 
