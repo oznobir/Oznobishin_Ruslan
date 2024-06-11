@@ -29,16 +29,16 @@ class AsyncController extends BaseAdmin
                     return (new SitemapController())->inputAsyncData($this->asyncData['linksCounter']);
                 case 'editData':
                     $_POST['return_id'] = true;
-                    return ['url' => $this->checkPost()];
+                    return ['success' => '1', 'url' => $this->checkPost()];
                 case 'changeParent':
-                    return ['pos' => $this->changeParent() + $this->asyncData['iteration']];
+                    return ['success' => '1', 'pos' => $this->changeParent() + $this->asyncData['iteration']];
                 case 'search':
-                    return $this->search();
+                    return ['success' => '1', 'search' => $this->search()];
                 case 'tinymceFile':
                     $fileEdit = new FileEdit();
                     $fileEdit->setUniqueFile(false);
                     $file = $fileEdit->addFile($this->asyncData['table'] . '/content_files/');
-                    return ['url' =>PATH . UPLOAD_DIR . $file['file']];
+                    return ['success' => '1', 'url' =>PATH . UPLOAD_DIR . $file['file']];
                 default :
                     return ['success' => '0', 'message' => 'Ajax variable is invalid'];
             }

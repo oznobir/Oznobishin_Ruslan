@@ -97,6 +97,7 @@ function createAddFiles() {
                         processData: false,
                         contentType: false
                     }).then(res => {
+                        if(!res.success) console.log(res.message)
                         if (res.url) location.href = res.url
                         else location.reload()
                     })
@@ -163,7 +164,8 @@ function changePosition() {
                         iteration: !form.querySelector('#tableId') ? 1 : +!defaultChoose
                     }
                 }).then(res => {
-                    res = +res['pos']
+                    if(!res.success) console.log(res.message)
+                    res = +res.pos
                     let newSelect = document.createElement('select')
                     newSelect.setAttribute('name', 'position')
                     newSelect.classList.add('vg-input', 'vg-text', 'vg-full', 'vg-firm-color1')
@@ -331,7 +333,8 @@ function search() {
                     }
                 }).then(res => {
                     try {
-                        // console.log(res)
+                        if(!res.success) console.log(res.message)
+                        res = res.search
                         let resBlock = document.querySelector('.search_res')
                         let counter = res.length > 20 ? 20 : res.length
                         if (resBlock) {
