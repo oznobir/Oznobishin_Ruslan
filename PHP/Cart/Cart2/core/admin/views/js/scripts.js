@@ -310,7 +310,7 @@ function createJsSortable(form) {
                             }
                         }
                     }
-                    inputSorting.value = JSON.stringify(res)
+                    res.length ? inputSorting.value = JSON.stringify(res) : ''
                 }
             })
         }

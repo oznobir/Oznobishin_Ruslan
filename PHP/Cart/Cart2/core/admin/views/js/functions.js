@@ -135,10 +135,11 @@ Element.prototype.sortable = (function () {
             this.tempTarget = e.target
             target = e.target.closest('[draggable=true]')
         }
+
         if (target && target !== dragEl && target.parentElement === this) {
             let rect = target.getBoundingClientRect()
-            let next = (e.clientY - rect.top) / (rect.bottom - rect.top) > .5;
-            this.insertBefore(dragEl, next && target || target.previousSibling)
+            let next = (rect.right - e.clientX) > (e.clientY - rect.top)
+            this.insertBefore(dragEl, next && target.nextSibling || target)
         }
     }
 
