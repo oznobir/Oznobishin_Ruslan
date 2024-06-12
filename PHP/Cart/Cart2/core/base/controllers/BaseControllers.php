@@ -2,7 +2,9 @@
 
 namespace core\base\controllers;
 
+use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
+use core\base\models\UsersModel;
 use core\base\settings\Settings;
 use ReflectionClass;
 use ReflectionException;
@@ -23,6 +25,7 @@ abstract class BaseControllers
     protected array $asyncData = [];
     protected ?string $error = null;
     protected ?string $template = null;
+    protected string|int|false $userId = false;
     protected array $styles;
     protected array $scripts;
 
@@ -126,6 +129,22 @@ abstract class BaseControllers
                 foreach (ADMIN_CSS_JS['scripts'] as $item)
                     $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
             }
+        }
+    }
+
+    /**
+     * @param bool $type
+     * @return void
+     * @throws DbException
+     * @throws RouteException
+     */
+    protected function checkAuth(bool $type = false): void
+    {
+        if(!$this->userId = UsersModel::instance()->checkUser(false, $type)){
+            $type && $this->redirect(PATH);
+        }
+        if(property_exists($this, 'usersModel')){
+            $this->usersModel = UsersModel::instance();
         }
     }
 }

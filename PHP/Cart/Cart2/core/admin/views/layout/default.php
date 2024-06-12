@@ -8,7 +8,7 @@
     <meta name="author" content="Oznor">
     <meta name="publisher-email" content="oznobir@gmail.com">
     <link rel="shortcut icon" type="image/x-icon" href="<?= PATH ?>favicon.ico">
-    <title>Управление сайтом</title>
+    <title><?= $this->title ?></title>
     <?php $this->getStyles(); ?>
 </head>
 <body>

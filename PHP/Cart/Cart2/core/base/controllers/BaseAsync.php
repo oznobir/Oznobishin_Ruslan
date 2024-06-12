@@ -8,13 +8,17 @@ use core\base\settings\Settings;
 class BaseAsync extends BaseControllers
 {
     /**
+     * @return false|string
      * @throws RouteException
      */
-    public function routeAsync(): void
+    public function routeAsync(): false|string
     {
         $route = Settings::get('routes');
         $controller = $route['site']['pathControllers'] . 'AsyncController';
         $data = $this->isPost() ? $_POST : $_GET;
+        if (isset($data['ajax']) && $data['ajax'] === 'token') {
+            return $this->generateToken();
+        }
 //        $referer = str_replace('/', '\/', $_SERVER['REQUEST_SCHEMA'].'://'.$_SERVER['SERVER_NAME'].PATH.$route['admin']['alias']);
 //        if ((isset($data['ADMIN_MODE'] && $data['ADMIN_MODE'] == 1)
 //             || preg_match('/^'.$referer.'(\/?|$)/', $_SERVER['HTTP_REFERER'])) {
@@ -27,6 +31,14 @@ class BaseAsync extends BaseControllers
         $async->asyncData = $data;
         $result = $async->async();
         if (is_array($result) || is_object($result)) $result = json_encode($result);
-        echo $result;
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    protected function generateToken(): string
+    {
+        return $_SESSION['token'] = md5(mt_rand(0, 999999) . microtime());
     }
 }

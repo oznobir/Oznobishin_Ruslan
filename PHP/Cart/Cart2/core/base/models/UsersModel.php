@@ -16,12 +16,20 @@ class UsersModel extends BaseModel
     use Singleton, BaseMethods;
 
     private string $cookieName = 'identifier';
-    private string $cookieAdminName = 'identifier';
+    private string $cookieAdminName = 'AdminUsers';
     private array $userData = [];
     private ?string $error;
     private string $usersTable = 'visitors';
     private string $adminTable = 'users';
     private string $blockedTable = 'blocked_access';
+
+    /**
+     * @throws DbException
+     */
+    private function __construct()
+    {
+        $this->connect();
+    }
 
     public function getAdminTable(): string
     {
@@ -88,7 +96,7 @@ class UsersModel extends BaseModel
      * @throws DbException
      * @throws RouteException
      */
-    public function checkUser(false $id = false, false $admin = false): false|array
+    public function checkUser(false|int $id = false, false|string $admin = false): false|array
     {
         $admin && $this->usersTable !== $this->adminTable && $this->setAdmin();
         $method = 'unPackage';
@@ -158,6 +166,7 @@ class UsersModel extends BaseModel
             throw new AuthException('Нет данных в таблице - ' . $this->usersTable . ' по ID пользователя - '
                 . $data['id'], 1);
         }
+        $this->userData = $this->userData[0];
         return true;
     }
 

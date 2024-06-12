@@ -15,7 +15,8 @@ const Ajax = (set) => {
     } else {
         if (typeof set.data !== 'undefined' && set.data) {
             for (let i in set.data) {
-                if (set.data.hasOwnProperty(i)) body += '&' + i + '=' + set.data[i];
+                if (set.data.hasOwnProperty(i))
+                    body += '&' + i + '=' + set.data[i];
             }
             body = body.substring(1);
         }
@@ -24,11 +25,11 @@ const Ajax = (set) => {
             body += 'ADMIN_MODE=' + ADMIN_MODE;
         }
     }
-
     if (set.type === 'GET') {
         set.url += '?' + body;
         body = null;
     }
+    if (typeof set.res === 'undefined' || !set.res) set.res = 'json';
 
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
@@ -45,10 +46,9 @@ const Ajax = (set) => {
         if (!contentType && (typeof set.contentType === 'undefined' || set.contentType)) {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         }
-        if (set.ajax) {
-            xhr.setRequestHeader('X-Requested-With', 'AjaxRequest');
-        }
-        xhr.responseType = 'json'
+        if (set.ajax) xhr.setRequestHeader('X-Requested-With', 'AjaxRequest');
+        if (set.res) xhr.responseType = set.res
+
         xhr.onload = function () {
             if (this.status >= 200 && this.status < 300) {
                 if (/fatal\s+?error/ui.test(this.response)) {

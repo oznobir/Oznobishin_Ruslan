@@ -14,7 +14,7 @@ class BaseRoute
     public static function routeDirection(): void
     {
         if (self::instance()->isAjax()) {
-            (new BaseAsync())->routeAsync();
+            echo (new BaseAsync())->routeAsync();
             exit();
         }
         RouteController::instance()->route();

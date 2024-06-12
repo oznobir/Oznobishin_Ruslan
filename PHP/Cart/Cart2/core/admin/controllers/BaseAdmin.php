@@ -26,7 +26,6 @@ abstract class BaseAdmin extends BaseControllers
     protected ?string $alias = null;
     protected ?string $path = null;
     protected array $menu = [];
-    protected string|int|null $userId = null;
     protected array $fileArray = [];
     protected array $translate = [];
     protected string $title;
@@ -43,7 +42,7 @@ abstract class BaseAdmin extends BaseControllers
     protected function inputData(): void
     {
         $this->init(true);
-        $this->title = 'Admin panel';
+        $this->title = 'Управление сайтом';
         if (!$this->model) $this->model = Model::instance();
         if (!$this->menu) $this->menu = Settings::get('projectTables');
         if (!$this->adminAlias) $this->adminAlias = Settings::get('routes')['admin']['alias'];
