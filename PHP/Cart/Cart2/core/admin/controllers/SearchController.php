@@ -26,16 +26,4 @@ class SearchController extends BaseAdmin
         $this->template = ADMIN_TEMPLATE . 'search';
         $this->expansionBase();
     }
-
-    /**
-     * @throws RouteException
-     */
-    protected function outputData(): false|string // перенести в parent::outputData()
-    {
-        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
-        $this->contentCenter = $this->render($this->template);
-        return parent::outputData();
-    }
-
-
 }

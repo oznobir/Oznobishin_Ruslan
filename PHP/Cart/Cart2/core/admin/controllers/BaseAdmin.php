@@ -15,8 +15,8 @@ use libraries\TextModify;
 abstract class BaseAdmin extends BaseControllers
 {
     /** @uses $notDelete */
-    protected string $contentMenu;
-    protected string $contentCenter;
+    protected string $menu;
+    protected string $content;
     protected ?Model $model = null;
     protected ?string $table = null;
     protected ?object $settings = null;
@@ -25,7 +25,7 @@ abstract class BaseAdmin extends BaseControllers
     protected ?string $adminAlias = null;
     protected ?string $alias = null;
     protected ?string $path = null;
-    protected array $menu = [];
+    protected array $menuTables = [];
     protected array $fileArray = [];
     protected array $translate = [];
     protected string $title;
@@ -41,10 +41,11 @@ abstract class BaseAdmin extends BaseControllers
      */
     protected function inputData(): void
     {
+        $this->checkAuth(true);
         $this->init(true);
         $this->title = 'Управление сайтом';
         if (!$this->model) $this->model = Model::instance();
-        if (!$this->menu) $this->menu = Settings::get('projectTables');
+        if (!$this->menuTables) $this->menuTables = Settings::get('projectTables');
         if (!$this->adminAlias) $this->adminAlias = Settings::get('routes')['admin']['alias'];
         if (!$this->path) $this->path = PATH . Settings::get('routes')['admin']['alias'] . '/';
         if (!$this->templateArr) $this->templateArr = Settings::get('templateArr');
@@ -68,6 +69,8 @@ abstract class BaseAdmin extends BaseControllers
      */
     protected function outputData(): false|string
     {
+        $this->menu = $this->render(ADMIN_TEMPLATE . 'include/menu');
+        $this->content = $this->render($this->template);
         $this->header = $this->render(ADMIN_TEMPLATE . 'include/header');
         $this->footer = $this->render(ADMIN_TEMPLATE . 'include/footer');
 
@@ -893,5 +896,14 @@ abstract class BaseAdmin extends BaseControllers
             }
         }
         return $res;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTinymceDefault()
+    {
+        return !empty($this->blocks['vg-content']) ? implode(',', $this->blocks['vg-content']) : '';
+
     }
 }

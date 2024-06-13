@@ -12,7 +12,6 @@ class IndexController extends BaseAdmin
     protected function inputData(): void
     {
         if (!$this->userId) $this->exec();
-        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
-        $this->contentCenter = $this->render(ADMIN_TEMPLATE . 'index');
+        $this->template = ADMIN_TEMPLATE . 'index';
     }
 }

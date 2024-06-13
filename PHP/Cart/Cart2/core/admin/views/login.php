@@ -1,8 +1,5 @@
 <?php /**
  * @var string $adminPath
- * @var string $name1
- * @var string $header
- * @var string $footer
  */ ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,6 +51,7 @@
             background: #fff;
             padding: 5px 15px;
             border: 1px solid black;
+            cursor: pointer;
         }
     </style>
 </head>

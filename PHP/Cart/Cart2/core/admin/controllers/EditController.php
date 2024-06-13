@@ -33,17 +33,6 @@ class EditController extends BaseAdmin
     }
 
     /**
-     * @return false|string
-     * @throws RouteException
-     */
-    protected function outputData(): false|string // перенести в parent::outputData()
-    {
-        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
-        $this->contentCenter = $this->render($this->template);
-        return parent::outputData();
-    }
-
-    /**
      * @throws RouteException
      * @throws DbException
      */

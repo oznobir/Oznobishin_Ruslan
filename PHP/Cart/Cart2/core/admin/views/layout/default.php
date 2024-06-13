@@ -15,15 +15,15 @@
 <?= $this->header ?>
 <div class="vg-carcass vg-hide">
     <div class="vg-main vg-right vg-relative">
-        <?= $this->contentMenu ?>
-        <?= $this->contentCenter ?>
+        <?= $this->menu ?>
+        <?= $this->content ?>
     </div>
 </div>
 <?= $this->footer ?>
 <script>
     const PATH = '<?=PATH?>';
     const ADMIN_MODE = 1;
-    const TINYMCE_DEFAULT = '<?=implode(',', $this->blocks['vg-content'])?>';
+    const TINYMCE_DEFAULT = '<?= $this->getTinymceDefault()?>';
 </script>
 <?php $this->getScripts(); ?>
 </body>

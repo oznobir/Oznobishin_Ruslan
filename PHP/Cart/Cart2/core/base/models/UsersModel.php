@@ -16,7 +16,7 @@ class UsersModel extends BaseModel
     use Singleton, BaseMethods;
 
     private string $cookieName = 'identifier';
-    private string $cookieAdminName = 'AdminUsers';
+    private string $cookieAdminName = 'W_identifier';
     private array $userData = [];
     private ?string $error;
     private string $usersTable = 'visitors';
@@ -91,12 +91,12 @@ class UsersModel extends BaseModel
 
     /**
      * @param false|int $id
-     * @param false|string $admin
+     * @param bool $admin
      * @return false|array
      * @throws DbException
      * @throws RouteException
      */
-    public function checkUser(false|int $id = false, false|string $admin = false): false|array
+    public function checkUser(false|int $id = false, bool $admin = false): false|array
     {
         $admin && $this->usersTable !== $this->adminTable && $this->setAdmin();
         $method = 'unPackage';

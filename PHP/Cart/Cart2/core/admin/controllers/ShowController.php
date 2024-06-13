@@ -27,16 +27,6 @@ class ShowController extends BaseAdmin
     }
 
     /**
-     * @throws RouteException
-     */
-    protected function outputData(): false|string // перенести в parent::outputData()
-    {
-        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
-        $this->contentCenter = $this->render($this->template);
-        return parent::outputData();
-    }
-
-    /**
      * @param array $data
      * @return array
      * @throws DbException

@@ -32,15 +32,10 @@ class AddController extends BaseAdmin
         $this->expansionBase();
 
     }
-
-    /**
-     * @return false|string
-     * @throws RouteException
-     */
-    protected function outputData(): false|string // перенести в parent::outputData()
-    {
-        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
-        $this->contentCenter = $this->render($this->template);
-        return parent::outputData();
-    }
+//    protected function outputData(): false|string
+//    {
+//        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
+//        $this->contentCenter = $this->render($this->template);
+//        return parent::outputData();
+//    }
 }

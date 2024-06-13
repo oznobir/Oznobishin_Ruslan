@@ -25,7 +25,7 @@ abstract class BaseControllers
     protected array $asyncData = [];
     protected ?string $error = null;
     protected ?string $template = null;
-    protected string|int|false $userId = false;
+    protected array|false $userId = false;
     protected array $styles;
     protected array $scripts;
 

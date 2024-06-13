@@ -121,23 +121,12 @@ class DeleteController extends BaseAdmin
                 }
             }
         }
-        if($updateFlag) {
+        if ($updateFlag) {
             $this->model->edit($this->table, [
                 'fields' => $this->data
             ]);
             $_SESSION['res']['answer'] = '<div class="success">' . $this->info['editSuccess'] . '</div>';
         } else $_SESSION['res']['answer'] = '<div class="error">' . $this->info['editFail'] . '</div>';
         $this->redirect();
-    }
-
-    /**
-     * @return false|string
-     * @throws RouteException
-     */
-    protected function outputData(): false|string // перенести в parent::outputData()
-    {
-        $this->contentMenu = $this->render(ADMIN_TEMPLATE . 'include/menu');
-        $this->contentCenter = $this->render($this->template);
-        return parent::outputData();
     }
 }

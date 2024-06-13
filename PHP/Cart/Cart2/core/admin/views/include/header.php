@@ -19,7 +19,7 @@
                 </div>
                 <form action="<?= PATH . $this->adminAlias ?>/search" autocomplete="off">
                     <input type="text" name="search" class="vg-input vg-text" value="">
-                    <input type="hidden" name="search_table" value="<?=$this->table?>">
+                    <input type="hidden" name="search_table" value="<?= $this->table ?>">
                     <div class="vg-element vg-firm-background-color4 vg-box-shadow search_links search_res">
 
                     </div>
@@ -34,10 +34,10 @@
         <div class="vg-element vg-fifth">
             <div class="vg-element vg-half vg-right">
                 <div class="vg-element vg-text vg-center">
-                    <span class="vg-firm-color5">admin</span>
+                    <span class="vg-firm-color5"><?=$this->userId['name']?></span>
                 </div>
             </div>
-            <a href="/login/<?= $this->adminAlias ?>/logout/1" class="vg-element vg-half vg-center">
+            <a href="<?= PATH . $this->adminAlias ?>/login/logout/<?= $this->userId['id']?>" class="vg-element vg-half vg-center">
                 <div>
                     <img src="<?= PATH . ADMIN_TEMPLATE ?>img/out.png" alt="">
                 </div>
