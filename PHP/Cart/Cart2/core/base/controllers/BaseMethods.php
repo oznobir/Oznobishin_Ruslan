@@ -4,6 +4,7 @@ namespace core\base\controllers;
 
 use DateTime;
 use JetBrains\PhpStorm\NoReturn;
+use ReflectionClass;
 
 trait BaseMethods
 {
@@ -17,7 +18,7 @@ trait BaseMethods
             foreach ($str as $key => $itemStr)
                 $str[$key] = $this->clearTags($itemStr);
             return $str;
-        } else return trim(strip_tags($str));
+        } else return trim(htmlspecialchars($str, ENT_QUOTES, 'UTF-8'));
     }
 
     /**
@@ -46,13 +47,20 @@ trait BaseMethods
         return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'ajaxrequest');
     }
 
+    protected function getController()
+    {
+        return  preg_split('/_?controller/',
+                strtolower(preg_replace('/([^A-Z])([A_Z])/', '$1_$2', (new ReflectionClass($this))->getShortName())),
+                0, PREG_SPLIT_NO_EMPTY)[0];
+    }
+
     /**
      * @return void
      */
     protected function getStyles(): void
     {
         if ($this->styles) {
-            foreach ($this->styles as $style)  echo '<link rel="stylesheet" href="' . $style . '">';
+            foreach ($this->styles as $style) echo '<link rel="stylesheet" href="'  . $style . '">';
         }
     }
 
@@ -61,7 +69,7 @@ trait BaseMethods
      */
     protected function getScripts(): void
     {
-        foreach ($this->scripts as $script)  echo '<script src="' . $script . '"></script>';
+        foreach ($this->scripts as $script) echo '<script type="text/javascript" src="' . $script . '"></script>';
     }
 
     /**

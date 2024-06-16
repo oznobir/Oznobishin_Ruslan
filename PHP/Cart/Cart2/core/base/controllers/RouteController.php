@@ -5,7 +5,7 @@ namespace core\base\controllers;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 
-class RouteController extends BaseControllers
+class RouteController extends BaseController
 {
     use Singleton;
     use BaseMethods;

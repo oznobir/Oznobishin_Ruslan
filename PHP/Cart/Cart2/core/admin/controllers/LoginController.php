@@ -3,7 +3,7 @@
 namespace core\admin\controllers;
 
 
-use core\base\controllers\BaseControllers;
+use core\base\controllers\BaseController;
 use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
 use core\base\models\UsersModel;
@@ -11,7 +11,7 @@ use core\base\settings\Settings;
 use DateTime;
 
 /** @uses LoginController */
-class LoginController extends BaseControllers
+class LoginController extends BaseController
 {
     protected UsersModel $model;
 

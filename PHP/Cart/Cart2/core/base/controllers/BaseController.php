@@ -10,11 +10,12 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
-abstract class BaseControllers
+abstract class BaseController
 {
     use BaseMethods;
 
     protected string $header;
+    protected string $content;
     protected string $footer;
     protected string|array $page;
     protected string $controller;
@@ -96,12 +97,13 @@ abstract class BaseControllers
             if ($space === $routes['site']['pathControllers']) $template = SITE_TEMPLATE;
             else $template = ADMIN_TEMPLATE;
 
-            $path = $template . explode('controller', strtolower($class->getShortName()))[0] . '.php';
-        } else $path .= '.php';
+//            $path = $template . explode('controller', strtolower($class->getShortName()))[0] . '.php';
+            $path = $template . $this->getController();
+        }
 
         if ($data) extract($data);
         ob_start();
-        if (!@include_once $path) throw new RouteException('Нет шаблона - ' . $path);
+        if (!@include_once $path . '.php') throw new RouteException('Нет шаблона - ' . $path . '.php');
         return ob_get_clean();
     }
 
@@ -111,24 +113,23 @@ abstract class BaseControllers
      */
     protected function init(bool $admin = false): void
     {
-        if (!$admin) {
-            if (SITE_CSS_JS['styles']) {
-                foreach (SITE_CSS_JS['styles'] as $item)
-                    $this->styles[] = PATH . SITE_TEMPLATE . trim($item, '/');
-            }
-            if (SITE_CSS_JS['scripts']) {
-                foreach (SITE_CSS_JS['scripts'] as $item)
-                    $this->scripts[] = PATH . SITE_TEMPLATE . trim($item, '/');
-            }
-        } else {
-            if (ADMIN_CSS_JS['styles']) {
-                foreach (ADMIN_CSS_JS['styles'] as $item)
-                    $this->styles[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
-            }
-            if (ADMIN_CSS_JS['scripts']) {
-                foreach (ADMIN_CSS_JS['scripts'] as $item)
-                    $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
-            }
+        $path = $admin ? ADMIN_TEMPLATE : SITE_TEMPLATE;
+        $const = $admin ? ADMIN_CSS_JS : SITE_CSS_JS;
+        if (!empty($const['styles_external'])) {
+            foreach ($const['styles_external'] as $item)
+                $this->styles[] = trim($item, '');
+        }
+        if (!empty($const['scripts_external'])) {
+            foreach ($const['scripts_external'] as $item)
+                $this->scripts[] = trim($item, '');
+        }
+        if (!empty($const['styles_our'])) {
+            foreach ($const['styles_our'] as $item)
+                $this->styles[] = PATH . $path . trim($item, '/');
+        }
+        if (!empty($const['scripts_our'])) {
+            foreach ($const['scripts_our'] as $item)
+                $this->scripts[] = PATH . $path . trim($item, '/');
         }
     }
 
@@ -140,10 +141,10 @@ abstract class BaseControllers
      */
     protected function checkAuth(bool $type = false): void
     {
-        if(!$this->userId = UsersModel::instance()->checkUser(false, $type)){
+        if (!$this->userId = UsersModel::instance()->checkUser(false, $type)) {
             $type && $this->redirect(PATH);
         }
-        if(property_exists($this, 'usersModel')){
+        if (property_exists($this, 'usersModel')) {
             $this->usersModel = UsersModel::instance();
         }
     }

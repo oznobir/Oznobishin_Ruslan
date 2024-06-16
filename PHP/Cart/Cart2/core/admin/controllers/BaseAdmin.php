@@ -3,7 +3,7 @@
 namespace core\admin\controllers;
 
 use core\admin\models\Model;
-use core\base\controllers\BaseControllers;
+use core\base\controllers\BaseController;
 use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
@@ -12,14 +12,14 @@ use libraries\FileEdit;
 use libraries\TextModify;
 
 
-abstract class BaseAdmin extends BaseControllers
+abstract class BaseAdmin extends BaseController
 {
     /** @uses $notDelete */
-    protected string $menu;
-    protected string $content;
     protected ?Model $model = null;
     protected ?string $table = null;
     protected ?object $settings = null;
+    protected string $title;
+    protected string $menu;
     protected array $columns = [];
     protected array $foreignData = [];
     protected ?string $adminAlias = null;
@@ -28,7 +28,6 @@ abstract class BaseAdmin extends BaseControllers
     protected array $menuTables = [];
     protected array $fileArray = [];
     protected array $translate = [];
-    protected string $title;
     protected array $info = [];
     protected array $blocks = [];
     protected ?string $formTemplates = null;

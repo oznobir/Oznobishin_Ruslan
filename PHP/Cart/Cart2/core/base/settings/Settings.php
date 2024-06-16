@@ -10,41 +10,45 @@ class Settings
 
     private string $expansion = 'core/admin/expansions/';
     private string $info = 'core/base/messages/';
-    private string $defaultTable = 'products';
+    private string $defaultTable = 'goods';
     private array $projectTables = [
-        'products' => ['name' => 'Товары', 'img' => 'pages.png'],
-        'categories' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
-        'goods' => ['name' => 'Товары - тест', 'img' => 'pages.png'],
-        'cat_goods' => ['name' => 'Категории товаров - тест', 'img' => 'pages.png'],
-        'filters' => ['name' => 'Характеристики товаров - тест', 'img' => 'pages.png'],
-        'cat_filters' => ['name' => 'Категории характеристик - тест', 'img' => 'pages.png'],
-        'manufacturer' => ['name' => 'Производители - тест', 'img' => 'pages.png'],
-        'color' => ['name' => 'Цвет - тест', 'img' => 'pages.png'],
+        'goods' => ['name' => 'Товары', 'img' => 'pages.png'],
+        'cat_goods' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
+        'filters' => ['name' => 'Характеристики товаров', 'img' => 'pages.png'],
+        'cat_filters' => ['name' => 'Категории характеристик', 'img' => 'pages.png'],
+        'manufacturer' => ['name' => 'Производители', 'img' => 'pages.png'],
+        'color' => ['name' => 'Цвет', 'img' => 'pages.png'],
+        'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
-        'text' => ['name', 'filters_name', 'price', 'alias'],
-        'textarea' => ['description', 'content'],
+        'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email',],
+        'textarea' => ['content', 'address', 'description', 'keywords'],
         'radio' => ['visible', 'status'],
         'select' => ['position', 'pid'],
-        'img' => ['img'],
+        'img' => ['img', 'img_logo'],
         'gallery_img' => ['gallery_img'],
         'checkboxlist' => ['filters', 'manufacturer', 'color'],
     ];
-    private array $templateFiles = ['img', 'gallery_img'];
+    private array $templateFiles = ['img', 'img_logo', 'gallery_img'];
     private array $translate = [
         'name' => ['Название', 'Не более 70 символов'],
         'filters_name' => ['Название фильтра', 'Не более 50 символов'],
         'content' => ['Описание', 'Не более 70 символов'],
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
         'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
-        'description' => ['Описание', 'Не более 160 символов'],
+        'description' => ['SEO - описание', 'Не более 250 символов'],
+        'keywords' => ['SEO - ключевые слова', 'Не более 250 символов'],
         'pid' => ['Родительская категория', ''],
         'price' => ['Цена за единицу', ''],
         'alias' => ['Alias', 'Если не заполнено, формируется автоматически'],
         'position' => ['Позиция в меню', ''],
+        'address' => ['Адрес', 'Не более 300 символов'],
+        'phone' => ['Телефон', ''],
+        'email' => ['Email', ''],
         'gallery_img' => ['Галерея изображений', ''],
         'img' => ['Основное изображение', ''],
+        'img_logo' => ['Лого сайта', ''],
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
@@ -56,8 +60,8 @@ class Settings
     ];
     private array $blockNeedle = [
         'vg-rows' => [],
-        'vg-img' => ['img', 'gallery_img'],
-        'vg-content' => ['description', 'content'],
+        'vg-img' => ['img', 'img_logo', 'gallery_img'],
+        'vg-content' => ['content'],
     ];
     private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all
         'filters_goods' => ['goods', 'filters'],

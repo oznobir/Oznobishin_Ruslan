@@ -5,7 +5,7 @@ namespace core\base\controllers;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 
-class BaseAsync extends BaseControllers
+class BaseAsync extends BaseController
 {
     /**
      * @return false|string
