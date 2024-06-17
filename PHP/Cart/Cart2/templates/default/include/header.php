@@ -21,56 +21,48 @@
             </div>
             <nav class="header__nav">
                 <ul class="header__nav-list">
+                    <?php if (!empty($this->menu['catalog'])) : ?>
+                        <li class="header__nav-parent">
+                            <a href="<?= $this->getUrl('catalog'); ?>"><span>Каталог</span></a>
+                            <ul class="header__nav-sublist">
+                                <?php foreach ($this->menu['catalog'] as $item) : ?>
+                                    <li>
+                                        <a href="<?= $this->getUrl(['catalog' => $item['alias']]); ?>">
+                                            <span><?= $item['name'] ?></span>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (!empty($this->menu['information'])) : ?>
+                        <li class="">
+                            <?php foreach ($this->menu['information'] as $item) : ?>
+                            <a href="<?= $this->getUrl(['information' => $item['alias']]); ?>">
+                                <span><?= $item['name'] ?></span>
+                            </a>
+                            <ul class="header__nav-sublist">
 
-                    <li class="header__nav-parent">
-                        <a href="http://somesite.ru/catalog/"><span>Каталог</span></a>
-                        <ul class="header__nav-sublist">
-                            <li>
-                                <a href="http://somesite.ru/for-clients/"><span>item-1</span></a>
-                            </li>
-
-                            <li>
-                                <a href="http://somesite.ru/for-installers/"><span>item-2</span></a>
-                            </li>
-
-                            <li>
-                                <a href="http://somesite.ru/for-stores/"><span>item-3</span></a>
-                            </li>
-
-                            <li>
-                                <a href="http://somesite.ru/for-builders/"><span>item-4</span></a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="">
-                        <a href="http://somesite.ru/delivery/"><span>Оплата и доставка</span></a>
-                        <ul class="header__nav-sublist">
-
-                        </ul>
-                    </li>
+                            </ul>
+                            <?php endforeach; ?>
+                        </li>
+                    <?php endif; ?>
 
                     <li class="">
-                        <a href="http://somesite.ru/actions/"><span>Акции и скидки</span></a>
-                        <ul class="header__nav-sublist">
-
-                        </ul>
-                    </li>
-
-                    <li class="">
-                        <a href="http://somesite.ru/news/"><span>Новости</span></a>
+                        <a href="<?= $this->getUrl('news'); ?>">
+                            <span>Новости</span>
+                        </a>
                         <ul class="header__nav-sublist">
 
                         </ul>
                     </li>
 
                     <li class="">
-                        <a href="http://somesite.ru/contacts/"><span>Контакты</span></a>
+                        <a href="<?= $this->getUrl('contacts'); ?>"><span>Контакты</span></a>
                         <ul class="header__nav-sublist">
 
                         </ul>
                     </li>
-
                 </ul>
             </nav>
         </div>

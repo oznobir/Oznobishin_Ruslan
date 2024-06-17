@@ -13,18 +13,19 @@ class Settings
     private string $defaultTable = 'goods';
     private array $projectTables = [
         'goods' => ['name' => 'Товары', 'img' => 'pages.png'],
-        'cat_goods' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
+        'catalog' => ['name' => 'Категории товаров', 'img' => 'pages.png'],
         'filters' => ['name' => 'Характеристики товаров', 'img' => 'pages.png'],
         'cat_filters' => ['name' => 'Категории характеристик', 'img' => 'pages.png'],
         'manufacturer' => ['name' => 'Производители', 'img' => 'pages.png'],
         'color' => ['name' => 'Цвет', 'img' => 'pages.png'],
+        'information' => ['name' => 'Информация о сайте', 'img' => 'pages.png'],
         'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
         'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email',],
         'textarea' => ['content', 'address', 'description', 'keywords'],
-        'radio' => ['visible', 'status'],
+        'radio' => ['visible', 'show_top_menu'],
         'select' => ['position', 'pid'],
         'img' => ['img', 'img_logo'],
         'gallery_img' => ['gallery_img'],
@@ -36,7 +37,7 @@ class Settings
         'filters_name' => ['Название фильтра', 'Не более 50 символов'],
         'content' => ['Описание', 'Не более 70 символов'],
         'visible' => ['Видимость', 'Показать или скрыть отображение на сайте'],
-        'status' => ['Статус', 'Видимость с пометкой - нет в наличии'],
+        'show_top_menu' => ['Видимость в верхнем меню', 'Показать или скрыть отображение в верхнем меню'],
         'description' => ['SEO - описание', 'Не более 250 символов'],
         'keywords' => ['SEO - ключевые слова', 'Не более 250 символов'],
         'pid' => ['Родительская категория', ''],
@@ -52,11 +53,11 @@ class Settings
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
-        'tables' => ['categories', 'cat_filters'],
+        'tables' => ['catalog', 'cat_filters'],
     ];
     private array $radio = [
         'visible' => ['Нет', 'Да', 'default' => 'Да'],
-        'status' => ['Нет', 'Да', 'default' => 'Нет'],
+        'show_top_menu' => ['Нет', 'Да', 'default' => 'Да'],
     ];
     private array $blockNeedle = [
         'vg-rows' => [],
@@ -73,7 +74,8 @@ class Settings
         'price' => ['int' => true],
         'login' => ['empty' => true, 'trim' => true],
         'password' => ['crypt' => true, 'empty' => true],
-        'description' => ['count' => 160, 'trim' => true],
+        'description' => ['count' => 350, 'trim' => true],
+        'keywords' => ['count' => 350, 'trim' => true],
     ];
     private array $routes = [
         'default' => [
@@ -85,7 +87,6 @@ class Settings
             'pathControllers' => 'core/site/controllers/',
             'hrUrl' => true,
             'routes' => [
-                'catalog' => 'index',
             ],
         ],
         'admin' => [

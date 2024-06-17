@@ -1,4 +1,0 @@
-Fault: 12-06-2024 23:51:39 - Ошибка в SQL запросе: UPDATE blocked_access SET login= 'admin', ip= '127.0.0.1', time= NOW(), trying= '2' WHERE id = '127.0.0.1' - 1292 Truncated incorrect DOUBLE value: '127.0.0.1'
-file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\core\base\models\BaseModel.php 
-in line: 41
-

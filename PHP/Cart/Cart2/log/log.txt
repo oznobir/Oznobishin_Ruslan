@@ -1,8 +1,1 @@
-Fault: 16-06-2024 06:08:32 - Class "core\site\controllers\Index.phpController" does not exist
-file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\core\base\controllers\BaseController.php 
-in line: 50
-
-Fault: 16-06-2024 06:10:39 - Class "core\site\controllers\Division-internal.htmlController" does not exist
-file: C:\OSPanel\domains\localhost\Oznobishin_Ruslan\PHP\Cart\Cart2\core\base\controllers\BaseController.php 
-in line: 50
 

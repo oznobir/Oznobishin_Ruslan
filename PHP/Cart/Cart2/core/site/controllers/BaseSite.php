@@ -12,6 +12,7 @@ abstract class BaseSite extends BaseController
     protected ?Model $model = null;
     protected ?string $table = null;
     protected array $set;
+    protected array $menu;
 
     /**
      * @throws DbException
@@ -24,6 +25,14 @@ abstract class BaseSite extends BaseController
             'order' => ['id'], 'limit' => 1
         ]);
         if ($this->set) $this->set = $this->set[0];
+        $this->menu['catalog'] = $this->model->select('catalog', [
+            'where' => ['visible' => '1', 'pid' => null],
+            'order' => ['position']
+        ]);
+        $this->menu['information'] = $this->model->select('information', [
+            'where' => ['visible' => 1, 'show_top_menu' => 1],
+            'order' => ['position']
+        ]);
     }
 
     /**
