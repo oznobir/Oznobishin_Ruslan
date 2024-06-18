@@ -19,11 +19,12 @@ class Settings
         'manufacturer' => ['name' => 'Производители', 'img' => 'pages.png'],
         'color' => ['name' => 'Цвет', 'img' => 'pages.png'],
         'information' => ['name' => 'Информация о сайте', 'img' => 'pages.png'],
+        'socials' => ['name' => 'Социальные сети', 'img' => 'pages.png'],
         'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
-        'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email',],
+        'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email', 'external_url', 'icons_svg',],
         'textarea' => ['content', 'address', 'description', 'keywords'],
         'radio' => ['visible', 'show_top_menu'],
         'select' => ['position', 'pid'],
@@ -47,8 +48,10 @@ class Settings
         'address' => ['Адрес', 'Не более 300 символов'],
         'phone' => ['Телефон', ''],
         'email' => ['Email', ''],
+        'external_url' => ['Внешняя ссылка', ''],
         'gallery_img' => ['Галерея изображений', ''],
         'img' => ['Основное изображение', ''],
+        'icons_svg' => ['Путь к иконке в svg', ''],
         'img_logo' => ['Лого сайта', ''],
     ];
     private array $rootItems = [

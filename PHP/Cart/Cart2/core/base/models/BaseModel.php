@@ -66,6 +66,7 @@ abstract class BaseModel extends BaseModelMethods
      * 'condition' => ['AND', 'OR', ...],
      * 'order' => ['column', ...],
      * 'order_direction' => ['ASC' or 'DESC'],
+     * 'group' => string или [],
      * 'limit' => '1' or ...
      * 'join_structure' => false or true - возвращать обработанный массив данных
      * // 1 вариант записи join (может быть несколько вложенных массивов):
@@ -105,8 +106,10 @@ abstract class BaseModel extends BaseModelMethods
         $where .= $join_arr['where'] ?? '';
         $join = $join_arr['join'] ?? '';
         $order = $this->createOrder($set, $table) ?? '';
+        $group = $this->createGroup($set);
         $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
-        $query = "SELECT $fields FROM $table $join $where $order $limit";
+
+        $query = "SELECT $fields FROM $table $join $where $group $order $limit";
 
         if (!empty($set['return_query'])) return $query;
         $res = $this->query(trim($query));

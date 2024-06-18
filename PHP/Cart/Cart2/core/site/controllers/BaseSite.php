@@ -14,6 +14,8 @@ abstract class BaseSite extends BaseController
     protected array $set;
     protected array $menu;
 
+
+//    protected array $socials;
     /**
      * @throws DbException
      */
@@ -33,10 +35,15 @@ abstract class BaseSite extends BaseController
             'where' => ['visible' => 1, 'show_top_menu' => 1],
             'order' => ['position']
         ]);
+        $this->menu['socials'] = $this->model->select('socials', [
+            'where' => ['visible' => 1],
+            'order' => ['position']
+        ]);
     }
 
     /**
      * @throws RouteException
+     * @uses outputData
      */
     protected function outputData(): false|string
     {
@@ -73,6 +80,7 @@ abstract class BaseSite extends BaseController
      * @param array|string $url
      * @param array|string $queryString
      * @return string
+     * @uses getUrl
      */
     protected function getUrl(array|string $url = '', array|string $queryString = ''): string
     {

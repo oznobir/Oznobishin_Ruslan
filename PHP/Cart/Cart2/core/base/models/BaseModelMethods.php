@@ -131,7 +131,7 @@ abstract class BaseModelMethods
                     } else  $condition = $set['conditions'][$c_count - 1];
 
                     if ($operand === 'IN' || $operand === 'NOT IN') {
-                        if (is_string($item) && strpos($item, 'SELECT')) $str_in = $item;
+                        if (is_string($item) && str_contains($item, 'SELECT')) $str_in = $item;
                         else {
                             if (!is_array($item)) $item = explode(',', $item);
                             $str_in = '';
@@ -217,6 +217,16 @@ abstract class BaseModelMethods
             return compact('fields', 'join', 'where');
         }
         return null;
+    }
+
+    /**
+     * @param $set
+     * @return string
+     */
+    protected function createGroup($set): string
+    {
+        return isset($set['group']) ? 'GROUP BY ' . implode(', ', (array)$set['group']) : '';
+        // HAVING ...
     }
 
     /**

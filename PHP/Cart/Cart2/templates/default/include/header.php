@@ -38,12 +38,12 @@
                     <?php if (!empty($this->menu['information'])) : ?>
                         <li class="">
                             <?php foreach ($this->menu['information'] as $item) : ?>
-                            <a href="<?= $this->getUrl(['information' => $item['alias']]); ?>">
-                                <span><?= $item['name'] ?></span>
-                            </a>
-                            <ul class="header__nav-sublist">
+                                <a href="<?= $this->getUrl(['information' => $item['alias']]); ?>">
+                                    <span><?= $item['name'] ?></span>
+                                </a>
+                                <ul class="header__nav-sublist">
 
-                            </ul>
+                                </ul>
                             <?php endforeach; ?>
                         </li>
                     <?php endif; ?>
@@ -71,99 +71,78 @@
         </div>
         <div class="header__sidebar">
             <div class="header__sidebar_btn">
-                <a href="http://somesite.ru/cart/">
+                <a href="<?= $this->getUrl('cart'); ?>">
                     <svg class="inline-svg-icon svg-basket">
-                        <use xlink:href="assets/img/icons.svg#basket"></use>
+                        <use href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#basket"></use>
                     </svg>
                 </a>
             </div>
             <div class="header__sidebar_btn burger-menu">
                 <div class="burger-menu__link">
                     <span class="burger"></span>
-                    <span class="burger-desc">меню</span>
+                    <!--                    <span class="burger-desc">меню</span>-->
                 </div>
             </div>
-            <div class="header__sidebar_btn"><a href="../../../index.php">
-                    <svg class="inline-svg-icon svg-instagram">
-                        <use xlink:href="assets/img/icons.svg#instagram"></use>
-                    </svg>
-                </a></div>
-            <div class="header__sidebar_btn"><a href="../../../index.php">
-                    <svg class="inline-svg-icon svg-vk">
-                        <use xlink:href="assets/img/icons.svg#vk"></use>
-                    </svg>
-                </a></div>
-            <div class="header__sidebar_btn"><a href="../../../index.php">
-                    <svg class="inline-svg-icon svg-facebook">
-                        <use xlink:href="assets/img/icons.svg#facebook"></use>
-                    </svg>
-                </a></div>
+            <?php if (!empty($this->menu['socials'])) : ?>
+                <?php foreach ($this->menu['socials'] as $item) : ?>
+                    <div class="header__sidebar_btn">
+                        <a href="<?= $this->getUrl($item['external_url']); ?>">
+                            <svg class="inline-svg-icon svg-socials">
+                                <use href="<?= $this->getUrl([SITE_TEMPLATE => $item['icons_svg']]); ?>"></use>
+                            </svg>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
         <div class="header__menu _hidden">
             <div class="header__menu_close close_modal"></div>
             <ul class="header__menu_burger">
-
-                <li>
-                    <a href="http://somesite.ru/catalog/"><span>Каталог</span></a>
-
-                    <ul class="header__menu_sublist">
-
+                <?php if (!empty($this->menu['catalog'])): ?>
+                    <li>
+                        <a href="<?= $this->getUrl('catalog'); ?>">
+                            <span>Каталог</span>
+                        </a>
+                        <ul class="header__menu_sublist">
+                            <?php foreach ($this->menu['catalog'] as $item) : ?>
+                                <li>
+                                    <a href="<?= $this->getUrl(['catalog' => $item['alias']]); ?>">
+                                        <span><?= $item['name'] ?></span>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+                <?php if (!empty($this->menu['information'])): ?>
+                    <?php foreach ($this->menu['information'] as $item) : ?>
                         <li>
-                            <a href="http://somesite.ru/for-clients/"><span>item-1</span></a>
+                            <a href="<?= $this->getUrl(['information' => $item['alias']]); ?>">
+                                <span><?= $item['name'] ?></span>
+                            </a>
+                            <ul class="header__menu_sublist">
+
+
+                            </ul>
                         </li>
-
-                        <li>
-                            <a href="http://somesite.ru/for-installers/"><span>item-2</span></a>
-                        </li>
-
-                        <li>
-                            <a href="http://somesite.ru/for-stores/"><span>item-3</span></a>
-                        </li>
-
-                        <li>
-                            <a href="http://somesite.ru/for-builders/"><span>item-4</span></a>
-                        </li>
-
-                    </ul>
-
-                </li>
-
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 <li>
-                    <a href="http://somesite.ru/delivery/"><span>Оплата и доставка</span></a>
-
+                    <a href="<?= $this->getUrl('news');?>">
+                        <span>Новости</span>
+                    </a>
                     <ul class="header__menu_sublist">
 
                     </ul>
-
                 </li>
-
                 <li>
-                    <a href="http://somesite.ru/actions/"><span>Акции и скидки</span></a>
-
+                    <a href="<?= $this->getUrl('contacts');?>">
+                        <span>Контакты</span>
+                    </a>
                     <ul class="header__menu_sublist">
 
                     </ul>
-
                 </li>
-
-                <li>
-                    <a href="http://somesite.ru/news/"><span>Новости</span></a>
-
-                    <ul class="header__menu_sublist">
-
-                    </ul>
-
-                </li>
-
-                <li>
-                    <a href="http://somesite.ru/contacts/"><span>Контакты</span></a>
-
-                    <ul class="header__menu_sublist">
-
-                    </ul>
-
-                </li>
-
             </ul>
         </div>
         <div class="header__callback _hidden">
@@ -178,7 +157,7 @@
                 <div class="header__callback_privacy">
                     <label class="checkbox">
                         <input type="checkbox"/>
-                        <div class="checkbox__text">Соглашаюсь с правилами обработки персональных данных</div>
+                        <div class="box__text">Соглашаюсь с правилами обработки персональных данных</div>
                     </label>
                 </div>
                 <button type="submit" class="form-submit header__callback_submit">Отправить</button>

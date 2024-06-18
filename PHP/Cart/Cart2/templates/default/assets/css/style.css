@@ -1019,48 +1019,48 @@ input[type='search'], input[type='text'], input[type='email'] {
 	height: 28px
 }*/
 
-@media screen and (max-width: 1600px) {
-	.header__sidebar_btn svg.svg-personality {
-		width: 21px;
-		height: 21px
-	}
-}
+/*@media screen and (max-width: 1600px) {*/
+/*	.header__sidebar_btn svg.svg-personality {*/
+/*		width: 21px;*/
+/*		height: 21px*/
+/*	}*/
+/*}*/
 
-.header__sidebar_btn svg.svg-instagram {
+.header__sidebar_btn svg.svg-socials {
 	width: 40px;
 	height: 40px
 }
 
 @media screen and (max-width: 1600px) {
-	.header__sidebar_btn svg.svg-instagram {
+	.header__sidebar_btn svg.svg-socials {
 		width: 30px;
 		height: 30px
 	}
 }
 
-.header__sidebar_btn svg.svg-vk {
-	width: 40px;
-	height: 40px
-}
+/*.header__sidebar_btn svg.svg-socials {*/
+/*	width: 40px;*/
+/*	height: 40px*/
+/*}*/
 
-@media screen and (max-width: 1600px) {
-	.header__sidebar_btn svg.svg-vk {
-		width: 30px;
-		height: 30px
-	}
-}
+/*@media screen and (max-width: 1600px) {*/
+/*	.header__sidebar_btn svg.svg-socials {*/
+/*		width: 30px;*/
+/*		height: 30px*/
+/*	}*/
+/*}*/
 
-.header__sidebar_btn svg.svg-facebook {
-	width: 40px;
-	height: 40px
-}
+/*.header__sidebar_btn svg.svg-socials {*/
+/*	width: 40px;*/
+/*	height: 40px*/
+/*}*/
 
-@media screen and (max-width: 1600px) {
-	.header__sidebar_btn svg.svg-facebook {
-		width: 30px;
-		height: 30px
-	}
-}
+/*@media screen and (max-width: 1600px) {*/
+/*	.header__sidebar_btn svg.svg-socials {*/
+/*		width: 30px;*/
+/*		height: 30px*/
+/*	}*/
+/*}*/
 
 .header__sidebar_btn.burger-menu {
 	height: calc(100vh - 316px);
