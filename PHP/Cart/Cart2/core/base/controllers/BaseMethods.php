@@ -10,15 +10,19 @@ trait BaseMethods
 {
     /**
      * @param array|string $str
+     * @param bool $full флаг: true(default) - htmlspecialchars, false - strip_tags
      * @return array|string
      */
-    protected function clearTags($str): array|string
+    protected function clearTags($str, $full = true): array|string
     {
         if (is_array($str)) {
             foreach ($str as $key => $itemStr)
-                $str[$key] = $this->clearTags($itemStr);
+                $str[$key] = $this->clearTags($itemStr, $full);
             return $str;
-        } else return trim(htmlspecialchars($str, ENT_QUOTES, 'UTF-8'));
+        } else {
+            if ($full) return trim(htmlspecialchars($str, ENT_QUOTES, 'UTF-8'));
+            else  return trim(strip_tags($str));
+        }
     }
 
     /**
@@ -49,9 +53,9 @@ trait BaseMethods
 
     protected function getController()
     {
-        return  preg_split('/_?controller/',
-                strtolower(preg_replace('/([^A-Z])([A_Z])/', '$1_$2', (new ReflectionClass($this))->getShortName())),
-                0, PREG_SPLIT_NO_EMPTY)[0];
+        return preg_split('/_?controller/',
+            strtolower(preg_replace('/([^A-Z])([A_Z])/', '$1_$2', (new ReflectionClass($this))->getShortName())),
+            0, PREG_SPLIT_NO_EMPTY)[0];
     }
 
     /**
@@ -60,7 +64,7 @@ trait BaseMethods
     protected function getStyles(): void
     {
         if ($this->styles) {
-            foreach ($this->styles as $style) echo '<link rel="stylesheet" href="'  . $style . '">';
+            foreach ($this->styles as $style) echo '<link rel="stylesheet" href="' . $style . '">';
         }
     }
 

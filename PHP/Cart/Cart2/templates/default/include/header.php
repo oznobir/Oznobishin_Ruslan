@@ -83,8 +83,8 @@
                     <!--                    <span class="burger-desc">меню</span>-->
                 </div>
             </div>
-            <?php if (!empty($this->menu['socials'])) : ?>
-                <?php foreach ($this->menu['socials'] as $item) : ?>
+            <?php if (!empty($this->socials)) : ?>
+                <?php foreach ($this->socials as $item) : ?>
                     <div class="header__sidebar_btn">
                         <a href="<?= $this->getUrl($item['external_url']); ?>">
                             <svg class="inline-svg-icon svg-socials">

@@ -7,10 +7,14 @@ namespace core\site\controllers;
  */
 class IndexController extends BaseSite
 {
+    protected array $sales;
+    protected function inputData(): void
+    {
+        parent::inputData();
+        $this->sales = $this->model->select('sales', [
+            'where' => ['visible' => 1],
+            'order' => ['position']
+        ]);
 
-//    protected function inputData(): void
-//    {
-//        parent::inputData();
-//        $res = $this->model->getGoods();
-//    }
+    }
 }

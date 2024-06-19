@@ -18,17 +18,19 @@ class Settings
         'cat_filters' => ['name' => 'Категории характеристик', 'img' => 'pages.png'],
         'manufacturer' => ['name' => 'Производители', 'img' => 'pages.png'],
         'color' => ['name' => 'Цвет', 'img' => 'pages.png'],
+        'sales' => ['name' => 'Акции', 'img' => 'pages.png'],
         'information' => ['name' => 'Информация о сайте', 'img' => 'pages.png'],
         'socials' => ['name' => 'Социальные сети', 'img' => 'pages.png'],
         'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
     ];
     private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
-        'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email', 'external_url', 'icons_svg',],
-        'textarea' => ['content', 'address', 'description', 'keywords'],
+        'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email', 'external_url',
+            'icons_svg', 'sub_title', 'number_years'],
+        'textarea' => ['content', 'address', 'description', 'keywords', 'short_content'],
         'radio' => ['visible', 'show_top_menu'],
         'select' => ['position', 'pid'],
-        'img' => ['img', 'img_logo'],
+        'img' => ['img', 'img_logo', 'img_years'],
         'gallery_img' => ['gallery_img'],
         'checkboxlist' => ['filters', 'manufacturer', 'color'],
     ];
@@ -49,10 +51,15 @@ class Settings
         'phone' => ['Телефон', ''],
         'email' => ['Email', ''],
         'external_url' => ['Внешняя ссылка', ''],
+        'sub_title' => ['Подзаголовок', ''],
+        'short_content' => ['Краткое описание', 'Не более 200 символов'],
         'gallery_img' => ['Галерея изображений', ''],
         'img' => ['Основное изображение', ''],
         'icons_svg' => ['Путь к иконке в svg', ''],
         'img_logo' => ['Лого сайта', ''],
+        'img_years' => ['Изображение количества лет на рынке', ''],
+        'number_years' => ['Количество лет на рынке', 'Число'],
+
     ];
     private array $rootItems = [
         'name' => 'Корневая категория',
@@ -64,7 +71,7 @@ class Settings
     ];
     private array $blockNeedle = [
         'vg-rows' => [],
-        'vg-img' => ['img', 'img_logo', 'gallery_img'],
+        'vg-img' => ['img', 'img_logo', 'gallery_img', 'img_years', 'number_years'],
         'vg-content' => ['content'],
     ];
     private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all

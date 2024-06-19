@@ -13,9 +13,8 @@ abstract class BaseSite extends BaseController
     protected ?string $table = null;
     protected array $set;
     protected array $menu;
+    protected array $socials;
 
-
-//    protected array $socials;
     /**
      * @throws DbException
      */
@@ -35,12 +34,12 @@ abstract class BaseSite extends BaseController
             'where' => ['visible' => 1, 'show_top_menu' => 1],
             'order' => ['position']
         ]);
-        $this->menu['socials'] = $this->model->select('socials', [
+        $this->socials = $this->model->select('socials', [
             'where' => ['visible' => 1],
             'order' => ['position']
         ]);
     }
-
+// outputData перенести в class Views
     /**
      * @throws RouteException
      * @uses outputData
@@ -116,5 +115,44 @@ abstract class BaseSite extends BaseController
             return $url . $str;
 
         return preg_replace('/\/{2,}/', '/', PATH . trim($url, '/') . END_SLASH . $str);
+    }
+
+    /**
+     * @param string $str
+     * @return array|false
+     * @uses spaceArr
+     */
+    protected function spaceArr(string $str): false|array
+    {
+        return preg_split('/\s+/', $str, 0, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * @param int $counter
+     * @param array|string $words
+     * @return mixed|string|null
+     * @uses wordsCounter
+     */
+    protected function wordsCounter(int $counter, array|string $words = 'years'): mixed
+    {
+        $arr = [
+            'years' => ['лет', 'год', 'года'],
+        ];
+        if (is_array($words)) $arr = $words;
+        else $arr = $arr[$words] ?? array_shift($arr);
+
+        if (!$arr) return null;
+
+        $char = (int)substr($counter, -1);
+        $counter = (int)substr($counter, -2);
+
+        if (($counter >= 10 && $counter <= 20) || ($char >= 5 && $char <= 9) || !$char)
+            return $arr[0] ?? null;
+        elseif ($char === 1)
+            return $arr[1] ?? null;
+        else
+            return $arr[2] ?? null;
+
+
     }
 }
