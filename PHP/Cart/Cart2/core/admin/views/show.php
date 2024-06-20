@@ -17,7 +17,7 @@
                    class="vg-wrap vg-element vg-full vg-firm-background-color4 vg-box-shadow show_element">
                     <div class="vg-element vg-half vg-center">
                         <?php if ($data['id']) : ?>
-                            <img src="<?= PATH . UPLOAD_DIR ?><?= $data['img'] ?: 'pages.png' ?>" alt="service">
+                            <img src="<?= PATH . UPLOAD_DIR ?><?= $data['img'] ?? 'pages.png' ?>" alt="service">
                         <?php endif; ?>
                     </div>
                     <div class="vg-element vg-half vg-center">

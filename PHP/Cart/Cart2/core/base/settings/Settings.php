@@ -10,6 +10,7 @@ class Settings
 
     private string $expansion = 'core/admin/expansions/';
     private string $info = 'core/base/messages/';
+    private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private string $defaultTable = 'goods';
     private array $projectTables = [
         'goods' => ['name' => 'Товары', 'img' => 'pages.png'],
@@ -23,12 +24,11 @@ class Settings
         'socials' => ['name' => 'Социальные сети', 'img' => 'pages.png'],
         'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
     ];
-    private string $formTemplates = PATH . 'core/admin/views/include/form_templates/';
     private array $templateArr = [
         'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email', 'external_url',
-            'icons_svg', 'sub_title', 'number_years'],
+            'icons_svg', 'sub_title', 'number_years', 'discount',],
         'textarea' => ['content', 'address', 'description', 'keywords', 'short_content'],
-        'radio' => ['visible', 'show_top_menu'],
+        'radio' => ['visible', 'show_top_menu', 'hit', 'sale', 'new', 'hot'],
         'select' => ['position', 'pid'],
         'img' => ['img', 'img_logo', 'img_years'],
         'gallery_img' => ['gallery_img'],
@@ -59,6 +59,11 @@ class Settings
         'img_logo' => ['Лого сайта', ''],
         'img_years' => ['Изображение количества лет на рынке', ''],
         'number_years' => ['Количество лет на рынке', 'Число'],
+        'hit' => ['Хит продаж', ''],
+        'sale' => ['Акция', ''],
+        'new' => ['Новинка', ''],
+        'hot' => ['Горячее предложение', ''],
+        'discount' => ['Скидка', ''],
 
     ];
     private array $rootItems = [
@@ -68,6 +73,10 @@ class Settings
     private array $radio = [
         'visible' => ['Нет', 'Да', 'default' => 'Да'],
         'show_top_menu' => ['Нет', 'Да', 'default' => 'Да'],
+        'hit' => ['Нет', 'Да', 'default' => 'Нет'],
+        'sale' => ['Нет', 'Да', 'default' => 'Нет'],
+        'new' => ['Нет', 'Да', 'default' => 'Нет'],
+        'hot' => ['Нет', 'Да', 'default' => 'Нет'],
     ];
     private array $blockNeedle = [
         'vg-rows' => [],
@@ -82,10 +91,17 @@ class Settings
     private array $validation = [
         'name' => ['empty' => true, 'count' => 70, 'trim' => true],
         'price' => ['int' => true],
+        'discount' => ['int' => true],
         'login' => ['empty' => true, 'trim' => true],
         'password' => ['crypt' => true, 'empty' => true],
         'description' => ['count' => 350, 'trim' => true],
         'keywords' => ['count' => 350, 'trim' => true],
+    ];
+    private array $marketing = [
+        'hit' => ['name' => 'Хиты продаж', 'icon' => '<svg><use xlink:href="' . PATH . SITE_TEMPLATE . 'assets/img/icons.svg#hit"></use></svg>'],
+        'hot' => ['name' => 'Горячие предложения', 'icon' => '<svg><use xlink:href="' . PATH . SITE_TEMPLATE . 'assets/img/icons.svg#hot"></use></svg>'],
+        'sale' => ['name' => 'Распродажа', 'icon' => '%'],
+        'new' => ['name' => 'Новинки', 'icon' => '<span>new</span>'],
     ];
     private array $routes = [
         'default' => [

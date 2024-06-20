@@ -40,6 +40,7 @@ abstract class BaseSite extends BaseController
         ]);
     }
 // outputData перенести в class Views
+
     /**
      * @throws RouteException
      * @uses outputData
@@ -154,5 +155,19 @@ abstract class BaseSite extends BaseController
             return $arr[2] ?? null;
 
 
+    }
+
+    /**
+     * @param array $data
+     * @param array $parameters
+     * @param string $template
+     * @return void
+     * @throws RouteException
+     */
+    protected function showCardGoods(array $data, array $parameters, string $template = 'cardGoods'): void
+    {
+        if (!empty($data)) {
+            echo $this->render(SITE_TEMPLATE . 'include/' . $template, compact('data', 'parameters'));
+        }
     }
 }

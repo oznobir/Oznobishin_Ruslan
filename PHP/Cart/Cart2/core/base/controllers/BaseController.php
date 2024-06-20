@@ -103,7 +103,7 @@ abstract class BaseController
 
         if ($data) extract($data);
         ob_start();
-        if (!@include_once $path . '.php') throw new RouteException('Нет шаблона - ' . $path . '.php');
+        if (!include $path . '.php') throw new RouteException('Нет шаблона - ' . $path . '.php');
         return ob_get_clean();
     }
 

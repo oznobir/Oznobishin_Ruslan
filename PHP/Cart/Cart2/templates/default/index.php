@@ -1,4 +1,3 @@
-<?php ?>
 <?php if (!empty($this->sales)) : ?>
     <section class="slider">
         <div class="slider__container swiper-container">
@@ -69,1208 +68,868 @@
         </div>
     </section>
 <?php endif; ?>
+<?php if (!empty($this->marketing['goods']) && !empty($this->marketing['all'])): ?>
+    <section class="offers">
+        <div class="offers__tabs">
+            <ul class="offers__tabs_header">
+                <?php $i = -1; ?>
+                <?php foreach ($this->marketing['all'] as $key => $item): ?>
+                    <?php if (!empty($this->marketing['goods'][$key])): ?>
+                        <li<?= !++$i ? ' class="active"' : '' ?>>
+                            <div class="icon-offer">
+                                <?= $item['icon'] ?>
+                            </div>
+                            <?= $item['name'] ?>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+            <?php $i = -1; ?>
+            <?php foreach ($this->marketing['all'] as $key => $value): ?>
+                <?php if (!empty($this->marketing['goods'][$key])): ?>
+                    <div class="offers__tabs_content<?= !++$i ? ' active' : '' ?>">
+                        <div class="offers__tabs_subheader subheader">
+                            <?= $value['name'] ?>
+                        </div>
+                        <div class="offers__tabs_container swiper-container">
+                            <div class="offers__tabs_wrapper swiper-wrapper">
+                                <?php foreach ($this->marketing['goods'][$key] as $item) {
+                                    $this->showCardGoods($item, ['icon' => $value['icon']]);
+                                } ?>
+                            </div>
+                        </div>
+                        <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
 
-<section class="offers">
-    <div class="offers__tabs">
-        <ul class="offers__tabs_header">
-            <li class="active">
-                <div class="icon-offer">
-                    <svg>
-                        <use xlink:href="assets/img/icons.svg#hit"></use>
-                    </svg>
+            <div class="offers__tabs_content">
+                <div class="offers__tabs_subheader subheader">
+                    Горячие предложения
                 </div>
-                Хиты продаж
-            </li>
-            <li>
-                <div class="icon-offer">
-                    <svg>
-                        <use xlink:href="assets/img/icons.svg#hot"></use>
-                    </svg>
-                </div>
-                Горячие предложения
-            </li>
-            <li>
-                <div class="icon-offer">%</div>
-                Акции
-            </li>
-            <li>
-                <div class="icon-offer"><span>new</span></div>
-                Новинки
-            </li>
-        </ul>
-        <div class="offers__tabs_content active">
-            <div class="offers__tabs_subheader subheader">
-                Хиты продаж
-            </div>
-            <div class="offers__tabs_container swiper-container">
-                <div class="offers__tabs_wrapper swiper-wrapper">
-
-                    <div class="offers__tabs_card swiper-slide">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-
-                                </div>
-
+                <div class="offers__tabs_container swiper-container">
+                    <div class="offers__tabs_wrapper swiper-wrapper">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
+                                <img src="assets/img/offers.png" alt="">
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
-                            </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hit"></use>
-                            </svg>
-                        </div>
-                    </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
+                                        </div>
 
-                    <div class="offers__tabs_card swiper-slide">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <svg>
+                                    <use xlink:href="assets/img/icons.svg#hot"></use>
+                                </svg>
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hit"></use>
-                            </svg>
-                        </div>
-                    </div>
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
+                                        </div>
 
-                    <div class="offers__tabs_card swiper-slide">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <svg>
+                                    <use xlink:href="assets/img/icons.svg#hot"></use>
+                                </svg>
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hit"></use>
-                            </svg>
-                        </div>
-                    </div>
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
+                                        </div>
 
-                    <div class="offers__tabs_card swiper-slide">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <svg>
+                                    <use xlink:href="assets/img/icons.svg#hot"></use>
+                                </svg>
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hit"></use>
-                            </svg>
-                        </div>
-                    </div>
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
 
-                    <div class="offers__tabs_card swiper-slide">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
-                            </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hit"></use>
-                            </svg>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
-        </div>
-        <div class="offers__tabs_content">
-            <div class="offers__tabs_subheader subheader">
-                Горячие предложения
-            </div>
-            <div class="offers__tabs_container swiper-container">
-                <div class="offers__tabs_wrapper swiper-wrapper">
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
                                 </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <svg>
+                                    <use xlink:href="assets/img/icons.svg#hot"></use>
+                                </svg>
                             </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hot"></use>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
-                            </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hot"></use>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
-                            </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hot"></use>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
-
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
-                            </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <svg>
-                                <use xlink:href="assets/img/icons.svg#hot"></use>
-                            </svg>
                         </div>
                     </div>
                 </div>
+                <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
             </div>
-            <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
-        </div>
-        <div class="offers__tabs_content">
-            <div class="offers__tabs_subheader subheader">
-                Акции
-            </div>
-            <div class="offers__tabs_container swiper-container">
-                <div class="offers__tabs_wrapper swiper-wrapper">
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
+            <div class="offers__tabs_content">
+                <div class="offers__tabs_subheader subheader">
+                    Акции
+                </div>
+                <div class="offers__tabs_container swiper-container">
+                    <div class="offers__tabs_wrapper swiper-wrapper">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
 
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                %
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            %
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                %
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            %
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                %
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            %
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
 
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                %
                             </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            %
                         </div>
                     </div>
                 </div>
+                <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
             </div>
-            <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
-        </div>
-        <div class="offers__tabs_content">
-            <div class="offers__tabs_subheader subheader">
-                Новинки
-            </div>
-            <div class="offers__tabs_container swiper-container">
-                <div class="offers__tabs_wrapper swiper-wrapper">
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+            <div class="offers__tabs_content">
+                <div class="offers__tabs_subheader subheader">
+                    Новинки
+                </div>
+                <div class="offers__tabs_container swiper-container">
+                    <div class="offers__tabs_wrapper swiper-wrapper">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <span>New</span>
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <span>New</span>
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
 
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <span>New</span>
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <span>New</span>
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
 
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <span>New</span>
                             </div>
                         </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <span>New</span>
-                        </div>
-                    </div>
-                    <div class="offers__tabs_card">
-                        <div class="offers__tabs_image">
+                        <div class="offers__tabs_card">
+                            <div class="offers__tabs_image">
 
-                            <img src="assets/img/offers.png" alt="">
-                        </div>
-                        <div class="offers__tabs_description">
-                            <div class="offers__tabs_name">
-                                <span>Смазка силиконовая SILICOT,</span>
-                                универсальная с фторопластом 10г стик-пакет
-                                <div class="card-main-info__table">
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Бренд
+                                <img src="assets/img/offers.png" alt="">
+                            </div>
+                            <div class="offers__tabs_description">
+                                <div class="offers__tabs_name">
+                                    <span>Смазка силиконовая SILICOT,</span>
+                                    универсальная с фторопластом 10г стик-пакет
+                                    <div class="card-main-info__table">
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Бренд
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                ВМПАВТО
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            ВМПАВТО
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Вес
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Вес
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                0.1 кг
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            0.1 кг
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Термостойкость
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Термостойкость
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                от -50°C до +230°C
+                                            </div>
                                         </div>
-                                        <div class="card-main-info__table-item">
-                                            от -50°C до +230°C
-                                        </div>
-                                    </div>
 
-                                    <div class="card-main-info__table-row">
-                                        <div class="card-main-info__table-item">
-                                            Номинальный объем
-                                        </div>
-                                        <div class="card-main-info__table-item">
-                                            10 гр
+                                        <div class="card-main-info__table-row">
+                                            <div class="card-main-info__table-item">
+                                                Номинальный объем
+                                            </div>
+                                            <div class="card-main-info__table-item">
+                                                10 гр
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="offers__tabs_price">
+                                    Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                                </div>
                             </div>
-                            <div class="offers__tabs_price">
-                                Цена: <span class="offers_old-price">84 руб.</span> <span class="offers_new-price">59 руб.</span>
+                            <button class="offers__btn">купить сейчас</button>
+                            <div class="icon-offer">
+                                <span>New</span>
                             </div>
-                        </div>
-                        <button class="offers__btn">купить сейчас</button>
-                        <div class="icon-offer">
-                            <span>New</span>
                         </div>
                     </div>
                 </div>
+                <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
             </div>
-            <a href="index.html" class="offers__readmore readmore">Смотреть каталог</a>
+
+            <div class="offers__controls controls _prev">
+                <svg>
+                    <use xlink:href="assets/img/icons.svg#arrow"></use>
+                </svg>
+            </div>
+            <div class="offers__controls controls _next">
+                <svg>
+                    <use xlink:href="assets/img/icons.svg#arrow"></use>
+                </svg>
+            </div>
         </div>
-        <div class="offers__controls controls _prev">
-            <svg>
-                <use xlink:href="assets/img/icons.svg#arrow"></use>
-            </svg>
-        </div>
-        <div class="offers__controls controls _next">
-            <svg>
-                <use xlink:href="assets/img/icons.svg#arrow"></use>
-            </svg>
-        </div>
-    </div>
-</section>
+    </section>
+<?php endif; ?>
+
 
 <div class="horizontal">
     <div class="horizontal__wrapper">

@@ -37,13 +37,15 @@ class DeleteController extends BaseAdmin
                 $files = $settings::get('templateFiles');
                 foreach ($files as $file) {
                     $templates = $settings::get('templateArr');
-                    foreach ($templates[$file] as $item) {
-                        if (!empty($this->data[$item])) {
-                            $fileData = json_decode($this->data[$item], true) ?: $this->data[$item];
-                            if (is_array($fileData)) {
-                                foreach ($fileData as $f)
-                                    @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $f);
-                            } else @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $fileData);
+                    if(!empty($templates[$file])){
+                        foreach ($templates[$file] as $item) {
+                            if (!empty($this->data[$item])) {
+                                $fileData = json_decode($this->data[$item], true) ?: $this->data[$item];
+                                if (is_array($fileData)) {
+                                    foreach ($fileData as $f)
+                                        @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $f);
+                                } else @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $fileData);
+                            }
                         }
                     }
                 }
