@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июн 20 2024 г., 18:28
+-- Время создания: Июн 21 2024 г., 11:56
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -20,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- База данных: `myshop2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `advantages`
+--
+
+CREATE TABLE `advantages` (
+  `id` int NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `img` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `position` int DEFAULT NULL,
+  `visible` tinyint(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `advantages`
+--
+
+INSERT INTO `advantages` (`id`, `name`, `img`, `position`, `visible`) VALUES
+(1, 'Опыт работы свыше 14 лет', 'advantages/adv1.png', 1, 1),
+(2, 'Комплексный подход', 'advantages/adv2.png', 2, 1),
+(3, 'Квалифицированные сотрудники', 'advantages/adv3.png', 3, 1),
+(4, 'Долгосрочное сотрудничество', 'advantages/adv4.png', 4, 1),
+(5, 'Работаем со всеми современными системами', 'advantages/adv5.png', 5, 1),
+(6, 'Гарантия качества', 'advantages/adv6.png', 6, 1);
 
 -- --------------------------------------------------------
 
@@ -161,17 +187,17 @@ CREATE TABLE `color_goods` (
 --
 
 INSERT INTO `color_goods` (`id`, `goods_id`, `color_id`) VALUES
-(301, 23, 8),
-(302, 23, 3),
-(311, 26, 4),
-(312, 26, 3),
-(317, 25, 4),
-(318, 25, 8),
-(319, 25, 1),
-(320, 25, 3),
-(321, 24, 4),
-(322, 24, 6),
-(323, 24, 7);
+(324, 23, 8),
+(325, 23, 3),
+(326, 24, 4),
+(327, 24, 6),
+(328, 24, 7),
+(329, 25, 4),
+(330, 25, 8),
+(331, 25, 1),
+(332, 25, 3),
+(333, 26, 4),
+(334, 26, 3);
 
 -- --------------------------------------------------------
 
@@ -274,7 +300,9 @@ CREATE TABLE `goods` (
   `pid` int DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `content` text COLLATE utf8mb4_general_ci,
+  `short_content` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `price` float DEFAULT NULL,
+  `discount` int DEFAULT NULL,
   `img` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `gallery_img` text COLLATE utf8mb4_general_ci,
   `visible` tinyint DEFAULT '1',
@@ -282,7 +310,6 @@ CREATE TABLE `goods` (
   `date` date DEFAULT NULL,
   `datetime` datetime DEFAULT NULL,
   `alias` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `discount` int DEFAULT NULL,
   `hit` tinyint DEFAULT '0',
   `sale` tinyint DEFAULT '0',
   `new` tinyint DEFAULT '0',
@@ -293,11 +320,11 @@ CREATE TABLE `goods` (
 -- Дамп данных таблицы `goods`
 --
 
-INSERT INTO `goods` (`id`, `pid`, `name`, `content`, `price`, `img`, `gallery_img`, `visible`, `position`, `date`, `datetime`, `alias`, `discount`, `hit`, `sale`, `new`, `hot`) VALUES
-(23, 1, 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия', '<p>Android, экран 6.67\" AMOLED (1220x2712) 144 Гц, Mediatek Dimensity 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 2500, 'goods/img_11_1711042128249.webp', '[\"goods\\/img_7_1711072021871_34b58b1e.webp\",\"goods\\/img_11_1711042128249_7785e565.webp\",\"goods\\/img_15_1711131941591_ef03aa96.webp\"]', 1, 1, '2024-06-20', '2024-06-20 18:17:19', 'smartfon-xiaomi-13t-pro-12gb512gb-mezhdunarodnaya-versiya', 0, 0, 1, 1, 0),
-(24, 1, 'Смартфон Samsung Galaxy Z Flip5 SM-F731B/DS 8GB/256GB', '<p>Android, экран 6.7\" AMOLED (1080x2640) 120 Гц, Qualcomm Snapdragon 8 Gen2 SM8550, ОЗУ 8 ГБ, память 256 ГБ, камера 12 Мп, аккумулятор 3700 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IPX8</p>', 2980, 'goods/img_14_1711042460430_48eabf6a.webp', '[\"goods\\/img_10_1711041932595_382de75e.webp\",\"goods\\/img_7_1711072021871_7abce657.webp\",\"goods\\/img_11_1711042128249_8afc5df0.webp\",\"goods\\/img_15_1711131941591_ab519c92.webp\"]', 1, 2, '2024-06-20', '2024-06-20 18:20:00', 'smartfon-samsung-galaxy-z-flip5-sm-f731bds-8gb256gb', 0, 0, 0, 1, 1),
-(25, 1, 'Смартфон Apple iPhone 15 128GB', '<p>Apple iOS, экран 6.1\" OLED (1179x2556) 60 Гц, Apple A16 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 48 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 3500.05, 'goods/img_7_1711072021871.webp', '[\"goods\\/6_1711041613282_5e431ba5.webp\",\"goods\\/img_10_1711041932595_a0d8c876.webp\",\"goods\\/img_11_1711042128249_b5eddb2a.webp\",\"goods\\/img_15_1711131941591_bd26e2e2.webp\"]', 1, 3, '2024-06-20', '2024-06-20 18:19:26', 'smartfon-apple-iphone-15-128gb', 0, 0, 0, 0, 1),
-(26, 2, 'Планшет Lenovo Tab P11 Plus TB-J616X 6GB/128GB LTE', '<p>11\" IPS, 60 Гц (2000x1200), Android, MediaTek Helio G90T, ОЗУ 6 ГБ, флэш-память 128 ГБ, цвет серый</p>', 1500.15, 'goods/img_16_1713087551260.webp', '[\"goods\\/17_1713087825459_4ffec7fa.webp\",\"goods\\/img_16_1713087551260_10ab666b.webp\",\"goods\\/img_22_1713090477061_a701baae.webp\"]', 1, 1, '2024-06-20', '2024-06-20 18:18:29', 'planshet-lenovo-tab-p11-plus-tb-j616x-6gb128gb-lte', 0, 1, 1, 0, 0);
+INSERT INTO `goods` (`id`, `pid`, `name`, `content`, `short_content`, `price`, `discount`, `img`, `gallery_img`, `visible`, `position`, `date`, `datetime`, `alias`, `hit`, `sale`, `new`, `hot`) VALUES
+(23, 1, 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия', '<p>Android, экран 6.67\" AMOLED (1220x2712) 144 Гц, Mediatek Dimensity 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Android, экран 6.67\" AMOLED', 2500, 10, 'goods/img_11_1711042128249.webp', '[\"goods\\/img_7_1711072021871_34b58b1e.webp\",\"goods\\/img_11_1711042128249_7785e565.webp\",\"goods\\/img_15_1711131941591_ef03aa96.webp\"]', 1, 1, '2024-06-21', '2024-06-21 11:40:13', 'smartfon-xiaomi-13t-pro-12gb512gb-mezhdunarodnaya-versiya', 1, 1, 1, 0),
+(24, 1, 'Смартфон Samsung Galaxy Z Flip5 SM-F731B/DS 8GB/256GB', '<p>Android, экран 6.7\" AMOLED (1080x2640) 120 Гц, Qualcomm Snapdragon 8 Gen2 SM8550, ОЗУ 8 ГБ, память 256 ГБ, камера 12 Мп, аккумулятор 3700 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IPX8</p>', 'Android, экран 6.7\" AMOLED', 2980, 15, 'goods/img_14_1711042460430_48eabf6a.webp', '[\"goods\\/img_10_1711041932595_382de75e.webp\",\"goods\\/img_7_1711072021871_7abce657.webp\",\"goods\\/img_11_1711042128249_8afc5df0.webp\",\"goods\\/img_15_1711131941591_ab519c92.webp\"]', 1, 2, '2024-06-21', '2024-06-21 11:40:32', 'smartfon-samsung-galaxy-z-flip5-sm-f731bds-8gb256gb', 0, 1, 1, 1),
+(25, 1, 'Смартфон Apple iPhone 15 128GB', '<p>Apple iOS, экран 6.1\" OLED (1179x2556) 60 Гц, Apple A16 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 48 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Apple iOS, экран 6.1\" OLED', 3500.05, 20, 'goods/img_7_1711072021871.webp', '[\"goods\\/6_1711041613282_5e431ba5.webp\",\"goods\\/img_10_1711041932595_a0d8c876.webp\",\"goods\\/img_11_1711042128249_b5eddb2a.webp\",\"goods\\/img_15_1711131941591_bd26e2e2.webp\"]', 1, 3, '2024-06-21', '2024-06-21 11:40:49', 'smartfon-apple-iphone-15-128gb', 1, 0, 0, 1),
+(26, 2, 'Планшет Lenovo Tab P11 Plus TB-J616X 6GB/128GB LTE', '<p>11\" IPS, 60 Гц (2000x1200), Android, MediaTek Helio G90T, ОЗУ 6 ГБ, флэш-память 128 ГБ, цвет серый</p>', 'Android, MediaTek Helio', 1500.15, 0, 'goods/img_16_1713087551260.webp', '[\"goods\\/17_1713087825459_4ffec7fa.webp\",\"goods\\/img_16_1713087551260_10ab666b.webp\",\"goods\\/img_22_1713090477061_a701baae.webp\"]', 1, 1, '2024-06-21', '2024-06-21 11:41:08', 'planshet-lenovo-tab-p11-plus-tb-j616x-6gb128gb-lte', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -371,6 +398,32 @@ INSERT INTO `manufacturer_goods` (`goods_id`, `manufacturer_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `news`
+--
+
+CREATE TABLE `news` (
+  `id` int NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `short_content` varchar(350) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `content` text COLLATE utf8mb4_general_ci,
+  `visible` tinyint(1) DEFAULT '1',
+  `alias` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Дамп данных таблицы `news`
+--
+
+INSERT INTO `news` (`id`, `name`, `date`, `short_content`, `content`, `visible`, `alias`) VALUES
+(1, 'В каталог добавлены модели Смартфон Xiaomi 13T-pro', '2024-06-21', 'Для заказа стали доступны\r\nСмартфон Xiaomi 13T! Ну очеееень круть!!!', '<p>Смартфон Xiaomi 13T</p>', 1, 'v-katalog-tovarov-dobavleny-modeli-smartfon-xiaomi-13t-pro'),
+(2, 'Новый Смартфон Xiaomi 13T', '2024-06-21', 'Рады сообщить, что в нашем интернет-магазине для заказа стали доступны\r\nСмартфон Xiaomi 13T! Ну вообще отпад!!!', '<p>Смартфон Xiaomi 13T! Ну вообще отпад!!!</p>', 1, 'noviy-smartfon-xiaomi-13t'),
+(3, 'Планшет Lenovo Tab P11 Plus - Одни плюсы', '2024-06-21', 'Рады сообщить, что в нашем интернет-магазине для заказа стали доступны\r\nПланшет Lenovo Tab P11 Plus! Одни плююююююююсы!', '<p>Планшет Lenovo Tab P11 Plus. Одни плююююююююсы!</p>', 1, 'planshet-lenovo-tab-p11-plus-odni-plyusy'),
+(4, 'Стали доступны Планшет Lenovo Tab', '2024-06-21', 'Рады сообщить, что в нашем интернет-магазине для заказа стали доступны\r\nПланшет Lenovo Tab', '<p>Планшет Lenovo Tab С381 Plus. Только 381 + 1 плююююююююсы!</p>', 1, 'stali-dostupny-planshet-lenovo-tab');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `old_alias`
 --
 
@@ -379,20 +432,6 @@ CREATE TABLE `old_alias` (
   `table_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `table_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Дамп данных таблицы `old_alias`
---
-
-INSERT INTO `old_alias` (`alias`, `table_name`, `table_id`) VALUES
-('green', 'color', 5),
-('red', 'color', 1),
-('yellow', 'color', 2),
-('white', 'color', 4),
-('black', 'color', 3),
-('pink', 'color', 7),
-('brown', 'color', 8),
-('blue', 'color', 6);
 
 -- --------------------------------------------------------
 
@@ -487,10 +526,13 @@ CREATE TABLE `settings` (
   `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `keywords` varchar(350) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `description` varchar(350) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(350) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `short_content` text COLLATE utf8mb4_general_ci,
+  `content` text COLLATE utf8mb4_general_ci,
   `img_logo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `address` varchar(350) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `promo_img` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `img_years` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `number_years` varchar(63) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -499,8 +541,8 @@ CREATE TABLE `settings` (
 -- Дамп данных таблицы `settings`
 --
 
-INSERT INTO `settings` (`id`, `name`, `keywords`, `description`, `phone`, `email`, `img_logo`, `address`, `img_years`, `number_years`) VALUES
-(1, 'Магазин товаров', '', '', '8-800-000-00-00', 'test@myshop2.by', 'settings/myshop_407e28ce.png', 'г. Москва пер.Машиностроителей, д.12, к.12', 'settings/15.svg', '15');
+INSERT INTO `settings` (`id`, `name`, `keywords`, `description`, `address`, `phone`, `email`, `short_content`, `content`, `img_logo`, `promo_img`, `img_years`, `number_years`) VALUES
+(1, 'Магазин товаров', '', '', 'г. Москва пер.Машиностроителей, д.12, к.12', '8-800-000-00-00', 'test@myshop2.by', '<p>В основе нашей компании : самые современные информационные технологии, собственные программные разработки, накопленная за годы работы аналитическая и статистическая информация по рынку, высококвалифицированный коллектив — мы делаем все для того, чтобы Вы были довольны нашей работой.</p>', '<p>Начал свою работу в 1999 году. С самого начала главной целью было предложить нашим клиентам самый широкий спектр товаров и аксессуаров, а развитие интернет&ndash;технологий дало возможность максимально упростить и ускорить процесс покупки.</p>\r\n<p>Компания быстро росла, и сегодня, занимая одну из ведущих позиции на этом рынке, мы не стоим на месте. В основе нашей компании : самые современные информационные технологии, собственные программные разработки, накопленная за годы работы аналитическая и статистическая информация по рынку, высококвалифицированный коллектив &mdash; мы делаем все для того, чтобы Вы были довольны нашей работой.</p>', 'settings/myshop_407e28ce.png', 'settings/about.png', 'settings/15.svg', '15');
 
 -- --------------------------------------------------------
 
@@ -550,6 +592,12 @@ INSERT INTO `users` (`id`, `name`, `login`, `password`, `credentials`) VALUES
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `advantages`
+--
+ALTER TABLE `advantages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `blocked_access`
@@ -639,6 +687,12 @@ ALTER TABLE `manufacturer_goods`
   ADD KEY `manufacturer_id` (`manufacturer_id`);
 
 --
+-- Индексы таблицы `news`
+--
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `products`
 --
 ALTER TABLE `products`
@@ -675,6 +729,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `advantages`
+--
+ALTER TABLE `advantages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT для таблицы `blocked_access`
 --
 ALTER TABLE `blocked_access`
@@ -702,7 +762,7 @@ ALTER TABLE `color`
 -- AUTO_INCREMENT для таблицы `color_goods`
 --
 ALTER TABLE `color_goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=324;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=335;
 
 --
 -- AUTO_INCREMENT для таблицы `country_manufacturers`
@@ -732,6 +792,12 @@ ALTER TABLE `information`
 -- AUTO_INCREMENT для таблицы `manufacturer`
 --
 ALTER TABLE `manufacturer`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `news`
+--
+ALTER TABLE `news`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
