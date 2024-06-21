@@ -1513,8 +1513,10 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .footer__top_logo img {
-    width: 87px;
-    height: 108px
+    width: 50%;
+    height: 50%
+    /*width: 87px;*/
+    /*height: 108px*/
 }
 
 .footer__top_menu {

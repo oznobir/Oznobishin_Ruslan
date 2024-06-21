@@ -2,40 +2,39 @@
     <div class="footer__wrapper">
         <div class="footer__top">
             <div class="footer__top_logo">
-                <img src="../assets/img/Logo.svg" alt="">
+                <img src="<?= $this->img($this->set['img_logo']); ?>" alt="<?= $this->set['name'] ?>">
             </div>
             <div class="footer__top_menu">
                 <ul>
 
                     <li>
-                        <a href="http://somesite.ru/catalog/"><span>Каталог</span></a>
+                        <a href="<?= $this->getUrl('catalog'); ?>"><span>Каталог</span></a>
                     </li>
+                    <?php if (!empty($this->menu['information'])) : ?>
+                        <?php foreach ($this->menu['information'] as $item) : ?>
+                            <li>
+                                <a href="<?= $this->getUrl(['information' => $item['alias']]); ?>">
+                                    <span><?= $item['name'] ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
 
+                    <?php endif; ?>
                     <li>
-                        <a href="http://somesite.ru/about/"><span>О нас</span></a>
+                        <a href="<?= $this->getUrl('news'); ?>"><span>Новости</span></a>
                     </li>
-
                     <li>
-                        <a href="http://somesite.ru/delivery/"><span>Доставка и оплата</span></a>
+                        <a href="<?= $this->getUrl('contacts'); ?>"><span>Контакты</span></a>
                     </li>
-
                     <li>
-                        <a href="http://somesite.ru/contacts/"><span>Контакты</span></a>
-                    </li>
-
-                    <li>
-                        <a href="http://somesite.ru/news/"><span>Новости</span></a>
-                    </li>
-
-                    <li>
-                        <a href="http://somesite.ru/sitemap/"><span>Карта сайта</span></a>
+                        <a href="/"><span>Карта сайта</span></a>
                     </li>
 
                 </ul>
             </div>
             <div class="footer__top_contacts">
-                <div><a href="mailto:test@test.ru">test@test.ru</a></div>
-                <div><a href="tel:+74842750204">+7 (4842) 75-02-04</a></div>
+                <div><a href="mailto:<?= $this->set['email'] ?>"><?= $this->set['email'] ?></a></div>
+                <div><a href="tel:<?= preg_replace('/[^+\d]/', '', $this->set['phone']); ?>"><?= $this->set['phone'] ?></a></div>
                 <div><a class="js-callback">Связаться с нами</a></div>
             </div>
         </div>
