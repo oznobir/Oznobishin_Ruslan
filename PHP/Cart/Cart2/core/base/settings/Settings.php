@@ -20,9 +20,11 @@ class Settings
         'manufacturer' => ['name' => 'Производители', 'img' => 'pages.png'],
         'color' => ['name' => 'Цвет', 'img' => 'pages.png'],
         'sales' => ['name' => 'Акции', 'img' => 'pages.png'],
+        'news' => ['name' => 'Новости', 'img' => 'pages.png'],
         'information' => ['name' => 'Информация о сайте', 'img' => 'pages.png'],
         'socials' => ['name' => 'Социальные сети', 'img' => 'pages.png'],
         'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
+        'advantages' => ['name' => 'Преимущества', 'img' => 'pages.png'],
     ];
     private array $templateArr = [
         'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email', 'external_url',
@@ -30,7 +32,7 @@ class Settings
         'textarea' => ['content', 'address', 'description', 'keywords', 'short_content'],
         'radio' => ['visible', 'show_top_menu', 'hit', 'sale', 'new', 'hot'],
         'select' => ['position', 'pid'],
-        'img' => ['img', 'img_logo', 'img_years'],
+        'img' => ['img', 'img_logo', 'img_years', 'promo_img'],
         'gallery_img' => ['gallery_img'],
         'checkboxlist' => ['filters', 'manufacturer', 'color'],
     ];
@@ -57,6 +59,7 @@ class Settings
         'img' => ['Основное изображение', ''],
         'icons_svg' => ['Путь к иконке в svg', ''],
         'img_logo' => ['Лого сайта', ''],
+        'promo_img' => ['Изображение о нашей компании'],
         'img_years' => ['Изображение количества лет на рынке', ''],
         'number_years' => ['Количество лет на рынке', 'Число'],
         'hit' => ['Хит продаж', ''],
@@ -80,7 +83,7 @@ class Settings
     ];
     private array $blockNeedle = [
         'vg-rows' => [],
-        'vg-img' => ['img', 'img_logo', 'gallery_img', 'img_years', 'number_years'],
+        'vg-img' => ['img', 'img_logo', 'promo_img', 'gallery_img', 'img_years', 'number_years'],
         'vg-content' => ['content'],
     ];
     private array $manyToMany = [  // 'type' => 'child' || 'root' || else - all

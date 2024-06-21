@@ -82,7 +82,7 @@ class Model extends BaseModel
                 // скидки
                 if (!empty($this->showColumns('goods')['discount'])) {
                     foreach ($goods as $key => $item) {
-                        $this->applyDiscount($data[$key], $item['discount']);
+                        $this->applyDiscount($goods[$key], $item['discount']);
                     }
                 }
                 if ($filters) {

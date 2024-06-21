@@ -12,6 +12,8 @@ use core\base\settings\Settings;
 class IndexController extends BaseSite
 {
     protected array $sales;
+    protected array $advantages;
+    protected array $news;
     protected array $marketing;
 
 
@@ -24,7 +26,18 @@ class IndexController extends BaseSite
         parent::inputData();
         $this->sales = $this->model->select('sales', [
             'where' => ['visible' => 1],
-            'order' => ['position']
+            'order' => ['position'],
+        ]);
+        $this->advantages = $this->model->select('advantages', [
+            'where' => ['visible' => 1],
+            'order' => ['position'],
+            'limit' => 6
+        ]);
+        $this->news = $this->model->select('news', [
+            'where' => ['visible' => 1],
+            'order' => ['date'],
+            'order_direction' => ['DESC'],
+            'limit' => 3
         ]);
         $this->marketing['all'] = Settings::get('marketing');
         foreach ($this->marketing['all'] as $type => $item) {

@@ -163,8 +163,9 @@ abstract class BaseSite extends BaseController
      * @param string $template
      * @return void
      * @throws RouteException
+     * @uses showOneItems
      */
-    protected function showCardGoods(array $data, array $parameters, string $template = 'cardGoods'): void
+    protected function showOneItems(array $data, array $parameters, string $template = 'cardOneGoods'): void
     {
         if (!empty($data)) {
             echo $this->render(SITE_TEMPLATE . 'include/' . $template, compact('data', 'parameters'));

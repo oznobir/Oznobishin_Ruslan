@@ -3,6 +3,7 @@
 namespace core\base\controllers;
 
 use DateTime;
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionClass;
 
@@ -105,5 +106,32 @@ trait BaseMethods
         $dataTime = new DateTime();
         $str = "$event: {$dataTime->format('d-m-Y H:i:s')} - $message\r\n";
         file_put_contents("log/$file", $str, FILE_APPEND);
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function dateFormat($date)
+    {
+        if (!$date) return $date;
+        $daysArr = [
+            'Sunday' => 'Воскресенье', 'Monday' => 'Понедельник', 'Tuesday' => 'Вторник', 'Wednesday' => 'Среда',
+            'Thursday' => 'Четверг', 'Friday' => 'Пятница', 'Saturday' => 'Суббота',
+        ];
+        $monthsArr = [
+            1 => 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь',
+            'Октябрь', 'Ноябрь', 'Декабрь',
+        ];
+        $dateArr = [];
+        $dateData = new DateTime($date);
+        $dateArr['year'] = $dateData->format('Y');
+        $dateArr['month'] = $monthsArr[$this->num($dateData->format('m'))];
+        $dateArr['monthFormat'] = preg_match('/т$/u', $dateArr['month']) ? $dateArr['month'] . 'а' :
+            preg_replace('/[ьй]/u', 'я', $dateArr['month']);
+        $dateArr['weekDay'] = $daysArr[$dateData->format('l')];
+        $dateArr['day'] = $dateData->format('d');
+        $dateArr['time'] = $dateData->format('H:i:s');
+        $dateArr['format'] = $dateArr['day'] . ' ' . mb_strtolower($dateArr['monthFormat']) . ' ' . $dateArr['year'];
+        return $dateArr;
     }
 }
