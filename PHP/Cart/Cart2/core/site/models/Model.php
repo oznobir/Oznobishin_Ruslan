@@ -130,7 +130,7 @@ class Model extends BaseModel
                 }
             }
         }
-        return  $goods ?? null;
+        return  $goods ?: null;
     }
 
     /**

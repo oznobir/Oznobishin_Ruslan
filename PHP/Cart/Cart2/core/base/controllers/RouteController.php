@@ -18,27 +18,23 @@ class RouteController extends BaseController
      */
     private function __construct()
     {
-        $strUri = $_SERVER['REQUEST_URI'];
-        if ($_SERVER['QUERY_STRING']) {
-            $strUri = substr($strUri, 0, strpos($strUri, $_SERVER['QUERY_STRING']) - 1);
-        }
-        // в uri const PATH
-        $path = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php'));
-        if ($path !== PATH) throw new RouteException('Не существующая директория сайта', 1);
-        // слэш в конце uri
-        if (str_ends_with($strUri, '/') && $strUri !== PATH) {
+        $strUri = $this->clearTags($_SERVER['REQUEST_URI']);
+        // проверяем слэш в конце uri
+        if (str_ends_with($strUri, '/') && $strUri !== PATH)
             $this->redirect(rtrim($strUri, '/'), 301);
-        }
-        // есть ли routes Settings
-        $this->routes = Settings::get('routes');
-        if (!$this->routes) throw new RouteException('Отсутствуют маршруты в базовых настройках', 1);
+        // удаляем в конце uri QUERY_STRING
+        if ($_SERVER['QUERY_STRING'])
+            $strUri = substr($strUri, 0, strpos($strUri, $_SERVER['QUERY_STRING']) - 1);
+        // проверяем в uri const PATH
+        if (substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php')) !== PATH)
+            throw new RouteException('Не существующая директория сайта', 1);
 
-        // далее в uri == alias admin
+        $this->routes = Settings::get('routes');
+        // проверяем в uri alias admin
         $url = explode('/', substr($strUri, strlen(PATH)));
         if (isset($url[0]) && $url[0] === $this->routes['admin']['alias']) {
             array_shift($url);
-
-            // далее в uri == папке название плагина (name), файл настроек плагина - NameSettings.php
+            // проверяем в uri название плагина (name), файл настроек плагина - NameSettings.php
             if (isset($url[0]) && is_dir($_SERVER['DOCUMENT_ROOT'] . PATH . $this->routes['plugin']['path'] . $url[0])) {
                 $plugin = array_shift($url);
                 $pluginSettings = $this->routes['plugin']['path'] . $plugin . '/' . ucfirst($plugin) . 'Settings';
@@ -53,29 +49,27 @@ class RouteController extends BaseController
                 }
                 $nameRoute = 'plugin';
 
-            } else {
+            } else { // если в uri admin нет плагина (то admin)
                 $this->controller = $this->routes['admin']['pathControllers'];
                 $hrUrl = $this->routes['admin']['hrUrl'];
                 $this->controller = $this->routes['admin']['pathControllers'];
                 $nameRoute = 'admin';
             }
-
-            //далее в uri != alias admin
-        } else {
+        } else { //если в uri нет alias admin (то site)
             $hrUrl = $this->routes['site']['hrUrl'];
             $this->controller = $this->routes['site']['pathControllers'];
             $nameRoute = 'site';
         }
         $this->creatRoute($nameRoute, $url);
 
-        // далее в uri параметры: при hrUrl = false - ключ -> значение, при hrUrl = true - slug, ключ -> значение
+        // далее в uri параметры: при hrUrl = false - ключ -> значение, при hrUrl = true - alias, ключ -> значение
         if (isset($url[1])) {
             $count = count($url);
             $key = '';
             if (!$hrUrl) $i = 1;
             else {
                 $i = 2;
-                $this->parameters['slug'] = $url[1];
+                $this->parameters['alias'] = $url[1];
             }
             for (; $i < $count; $i++) {
                 if (!$key) {

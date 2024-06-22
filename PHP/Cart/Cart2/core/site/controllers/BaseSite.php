@@ -14,6 +14,7 @@ abstract class BaseSite extends BaseController
     protected array $set;
     protected array $menu;
     protected array $socials;
+    protected string $breadcrumbs;
 
     /**
      * @throws DbException
@@ -47,6 +48,7 @@ abstract class BaseSite extends BaseController
      */
     protected function outputData(): false|string
     {
+        $this->breadcrumbs = $this->render(SITE_TEMPLATE . 'include/breadcrumbs');
         $this->content = $this->render();
         $this->header = $this->render(SITE_TEMPLATE . 'include/header');
         $this->footer = $this->render(SITE_TEMPLATE . 'include/footer');
@@ -165,7 +167,7 @@ abstract class BaseSite extends BaseController
      * @throws RouteException
      * @uses showOneItems
      */
-    protected function showOneItems(array $data, array $parameters, string $template = 'cardOneGoods'): void
+    protected function showOneItems(array $data, array $parameters = [], string $template = 'cardOneGoods'): void
     {
         if (!empty($data)) {
             echo $this->render(SITE_TEMPLATE . 'include/' . $template, compact('data', 'parameters'));

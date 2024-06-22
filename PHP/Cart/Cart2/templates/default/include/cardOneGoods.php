@@ -1,10 +1,14 @@
-<?php /** @var array $data */ ?>
-<div class="offers__tabs_card swiper-slide">
-    <div class="offers__tabs_image">
+<?php
+/** @var array $data */
+$mainClass = $parameters['mainClass'] ?? 'offers__tabs_card swiper-slide';
+$prefixAddClass = $parameters['prefixAddClass'] ?? 'offers';
+?>
+<div class="<?= $mainClass ?>">
+    <div class="<?= $prefixAddClass ?>__tabs_image">
         <img src="<?= $this->img($data['img']) ?>" alt="<?= $data['name'] ?>">
     </div>
-    <div class="offers__tabs_description">
-        <div class="offers__tabs_name">
+    <div class="<?= $prefixAddClass ?>__tabs_description">
+        <div class="<?= $prefixAddClass ?>__tabs_name">
             <span><?= $data['name'] ?></span><br>
             <?= $data['short_content'] ?>
 
@@ -23,9 +27,9 @@
                 </div>
             <?php endif; ?>
         </div>
-        <div class="offers__tabs_price">
-            Цена: <?= !empty($data['old_price']) ? '<span class="offers_old-price">' . $data['old_price'] . ' руб.</span>' : '' ?>
-            <span class="offers_new-price"><?= $data['price'] ?> руб.</span>
+        <div class="<?= $prefixAddClass ?>__tabs_price">
+            Цена: <?= !empty($data['old_price']) ? '<span class="' . $prefixAddClass . '_old-price">' . $data['old_price'] . ' руб.</span>' : '' ?>
+            <span class="<?= $prefixAddClass ?>_new-price"><?= $data['price'] ?> руб.</span>
         </div>
     </div>
     <button class="offers__btn" data-addToCart="<?= $data['id'] ?>">купить сейчас</button>
