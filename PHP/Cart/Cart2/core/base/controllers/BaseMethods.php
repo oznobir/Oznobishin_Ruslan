@@ -34,6 +34,7 @@ trait BaseMethods
     {
         return (!empty($num) && preg_match('/\d/', $num)) ?
             preg_replace('/[^\d.]/', '', $num) * 1 : 0;
+//        return intval($num);
     }
 
     /**

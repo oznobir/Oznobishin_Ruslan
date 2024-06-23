@@ -43,13 +43,46 @@ class CatalogController extends BaseSite
         if ($this->data) $where = ['pid' => $this->data['id']];
         else $this->data['name'] = 'Каталог';
 
-        $this->sFilters = $this->sPrices = null;
-        $this->createSortingOrder($order);
+        $this->sFilters = $this->sPrices = $order = null;
+        $this->createSOrder($order);
+        $operand = $this->checkPricesAndFilters($where);
         $this->goods = $this->model->getGoods([
             'where' => $where,
+            'operand' => $operand,
             'order' => $order['order'],
             'order_direction' => $order['order_direction'],
         ], $this->sFilters, $this->sPrices);
+    }
+
+    /**
+     * @param array $where
+     * @return array
+     * @throws DbException
+     */
+    protected function checkPricesAndFilters(array &$where): array
+    {
+        $dbWhere = [];
+        $dbOperand = [];
+        if (isset($_GET['min_price'])) {
+            $dbWhere['price'] = $this->num($_GET['min_price']);
+            $dbOperand[] = '>=';
+        }
+        if (isset($_GET['max_price'])) {
+            $dbWhere['price  '] = $this->num($_GET['max_price']);
+            $dbOperand[] = '<=';
+        }
+        if (!empty($_GET['filters'])) {
+            $filters = implode(', ', $this->clearTags($_GET['filters']));
+            $dbWhere['id'] = $this->model->select('filters_goods', [
+                'fields' => ['goods_id'],
+                'where' => ['filters_id' => $filters],
+                'return_query' => true
+            ]);
+            $dbOperand[] = 'IN';
+        }
+        $where = array_merge($dbWhere, $where);
+        $dbOperand[] = '=';
+        return $dbOperand;
     }
 
     /**
@@ -57,7 +90,7 @@ class CatalogController extends BaseSite
      * @return void
      * @throws DbException
      */
-    protected function createSortingOrder(&$order): void
+    protected function createSOrder(&$order): void
     {
         $order['order'] = $order['order_direction'] = null;
         if (isset($_GET['order'])) {

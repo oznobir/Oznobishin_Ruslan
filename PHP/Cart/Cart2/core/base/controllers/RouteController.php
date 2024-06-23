@@ -18,7 +18,7 @@ class RouteController extends BaseController
      */
     private function __construct()
     {
-        $strUri = $this->clearTags($_SERVER['REQUEST_URI']);
+        $strUri = $_SERVER['REQUEST_URI'];
         // проверяем слэш в конце uri
         if (str_ends_with($strUri, '/') && $strUri !== PATH)
             $this->redirect(rtrim($strUri, '/'), 301);

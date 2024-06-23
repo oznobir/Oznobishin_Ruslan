@@ -41,7 +41,10 @@ class Model extends BaseModel
             if ($catalogPrice !== false && !empty($this->showColumns('goods')['price'])) {
                 $set['fields'] = ['MIN(price) as min_price', 'MAX(price) as max_price'];
                 $catalogPrice = $this->select('goods', $set);
-                if (!empty($catalogPrice[0])) $catalogPrice = $catalogPrice[0];
+                if (!empty($catalogPrice[0])) {
+                    $catalogPrice['min_price'] = $_GET['min_price'] ?? floor($catalogPrice[0]['min_price']);
+                    $catalogPrice['max_price'] = $_GET['max_price'] ?? ceil($catalogPrice[0]['max_price']);
+                }
             }
             if ($catalogFilters !== false && in_array('filters', $this->showTables())) {
                 $parentFiltersFields = [];
@@ -72,6 +75,7 @@ class Model extends BaseModel
                                 'goods_id' => $this->select('goods', [
                                     'fields' => [$this->showColumns('goods')['pri'][0]],
                                     'where' => $set['where'],
+                                    'operand' => $set['operand'] ?? null,
                                     'return_query' => true
                                 ]),
                             ],
@@ -107,7 +111,7 @@ class Model extends BaseModel
                         $child = [];
                         foreach ($item as $row => $rowValue) {
                             if (str_starts_with($row, 'f_')) {
-                                $name = preg_replace('/^f_/','' , $row);
+                                $name = preg_replace('/^f_/', '', $row);
                                 $parent[$name] = $rowValue;
                             } else $child[$row] = $rowValue;
                         }
@@ -119,8 +123,8 @@ class Model extends BaseModel
                             $catalogFilters[$parent['id']]['values'] = [];
                         }
                         $catalogFilters[$parent['id']]['values'][$child['id']] = $child;
-                        if(isset($goods[$item['goods_id']])){
-                            if(empty($goods[$item['goods_id']]['filters'][$parent['id']])){
+                        if (isset($goods[$item['goods_id']])) {
+                            if (empty($goods[$item['goods_id']]['filters'][$parent['id']])) {
                                 $goods[$item['goods_id']]['filters'][$parent['id']] = $parent;
                                 $goods[$item['goods_id']]['filters'][$parent['id']]['values'] = [];
                             }
@@ -130,7 +134,7 @@ class Model extends BaseModel
                 }
             }
         }
-        return  $goods ?: null;
+        return $goods ?: null;
     }
 
     /**
