@@ -42,8 +42,9 @@ class Model extends BaseModel
                 $set['fields'] = ['MIN(price) as min_price', 'MAX(price) as max_price'];
                 $catalogPrice = $this->select('goods', $set);
                 if (!empty($catalogPrice[0])) {
-                    $catalogPrice['min_price'] = $_GET['min_price'] ?? floor($catalogPrice[0]['min_price']);
-                    $catalogPrice['max_price'] = $_GET['max_price'] ?? ceil($catalogPrice[0]['max_price']);
+                    $catalogPrice = $catalogPrice[0];
+                    $catalogPrice['min_price'] = $_GET['min_price'] ?? floor($catalogPrice['min_price']);
+                    $catalogPrice['max_price'] = $_GET['max_price'] ?? ceil($catalogPrice['max_price']);
                 }
             }
             if ($catalogFilters !== false && in_array('filters', $this->showTables())) {

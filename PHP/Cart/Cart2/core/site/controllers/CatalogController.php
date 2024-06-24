@@ -72,17 +72,98 @@ class CatalogController extends BaseSite
             $dbOperand[] = '<=';
         }
         if (!empty($_GET['filters'])) {
-            $filters = implode(', ', $this->clearTags($_GET['filters']));
-            $dbWhere['id'] = $this->model->select('filters_goods', [
-                'fields' => ['goods_id'],
-                'where' => ['filters_id' => $filters],
-                'return_query' => true
-            ]);
-            $dbOperand[] = 'IN';
+            $subQuery =  $this->setFilters();
+            if($subQuery) {
+                $dbWhere['id'] = $this->setFilters();
+                $dbOperand[] = 'IN';
+            }
+//            foreach ($_GET['filters'] as $key => $item)
+//                $_GET['filters'][$key] = $this->num($item);
+//            $filters = implode(', ', $_GET['filters']);
+//            $dbWhere['id'] = $this->model->select('filters_goods', [
+//                'fields' => ['goods_id'],
+//                'where' => ['filters_id' => $filters],
+//                'return_query' => true
+//            ]);
+//            $dbOperand[] = 'IN';
         }
         $where = array_merge($dbWhere, $where);
         $dbOperand[] = '=';
         return $dbOperand;
+    }
+
+    /**
+     * @throws DbException
+     */
+    private function setFilters(): string
+    {
+        foreach ($_GET['filters'] as $key => $item) {
+            if (!$_GET['filters'][$key]) {
+                unset($_GET['filters'][$key]);
+                continue;
+            }
+            $_GET['filters'][$key] = $this->num($item);
+        }
+        $queryFil = 'SELECT DISTINCT pid FROM filters WHERE id IN(' . implode(', ', $_GET['filters']) . ')';
+        $res = $this->model->select('filters', [
+            'fields' => ['id'],
+            'where' => ['id' => $queryFil],
+            'operand' => ['IN'],
+            'join' => [
+                'filters f_val' => [
+                    'fields' => ['id'],
+                    'where' => ['id' => $_GET['filters']],
+                    'operand' => ['IN'],
+                    'on' => ['id', 'pid'],
+                ],
+            ],
+            'join_structure' => true,
+        ]);
+        if ($res) {
+            $arr = [];
+            $i = 0;
+            foreach ($res as $item) {
+                if (isset($item['join']['f_val']))
+                    $arr[$i++] = array_column($item['join']['f_val'], 'id');
+            }
+            $resArr = $this->crossDiffArr($arr);
+            if ($resArr) {
+                $filtersCount = 0;
+                foreach ($resArr as $item) {
+                    if ($filtersCount < count($item)) $filtersCount = count($item);
+                }
+                return $this->model->select('filters_goods', [
+                    'fields' => 'goods_id',
+                    'where' => ['filters_id' => $resArr],
+                    'operand' => ['IN'],
+                    'conditions' => ['OR'],
+                    'group' => 'goods_id',
+                    'having' => ['COUNT(goods_id)', '>=', $filtersCount],
+                    'return_query' => true
+                ]);
+            }
+
+        }
+        return '';
+    }
+
+    /**
+     * @param array $arr
+     * @param int $counter
+     * @return array
+     */
+    private function crossDiffArr(array $arr, int $counter = 0): array
+    {
+        if (count($arr) === 1) return array_chunk(array_shift($arr), 1);
+        if ($counter === count($arr) - 1) return $arr[$counter];
+        $buffer = $this->crossDiffArr($arr, $counter + 1);
+        $res = [];
+        foreach ($arr[$counter] as $a) {
+            foreach ($buffer as $b) {
+                $res[] = is_array($b) ? array_merge([$a], $b) : [$a, $b];
+            }
+        }
+        return $res;
     }
 
     /**

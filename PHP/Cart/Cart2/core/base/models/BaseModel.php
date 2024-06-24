@@ -96,7 +96,7 @@ abstract class BaseModel extends BaseModelMethods
      * @return int|bool|array|string результат запроса
      * @throws DbException ошибки
      */
-    final public function select(string $table, array $set = []): int|bool|array|string
+    final public function select(string $table, array $set = [], $add = ''): int|bool|array|string
     {
         $fields = $this->createFields($set, $table);
         $where = $this->createWhere($set, $table);
@@ -109,7 +109,7 @@ abstract class BaseModel extends BaseModelMethods
         $group = $this->createGroup($set);
         $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
 
-        $query = "SELECT $fields FROM $table $join $where $group $order $limit";
+        $query = "SELECT $add $fields FROM $table $join $where $group $order $limit";
 
         if (!empty($set['return_query'])) return $query;
         $res = $this->query(trim($query));

@@ -93,7 +93,9 @@ abstract class BaseSite extends BaseController
                     $str .= !$str ? '?' : '&';
                     if (is_array($item)) {
                         $key .= '[]';
-                        foreach ($item as $v) $str .= $key . '=' . $v;
+                        foreach ($item as $v)
+                            $str .= $key . '=' . $v . '&';
+                        $str = rtrim($str, '&');
                     } else $str .= $key . '=' . $item;
                 }
             } else {
@@ -108,7 +110,7 @@ abstract class BaseSite extends BaseController
                 if ($item) {
                     if (!is_numeric($key)) $urlStr .= $key . '/' . $item . '/';
                     else $urlStr .= $item . '/';
-                }
+                } elseif (!is_numeric($key)) $urlStr .= $key . '/';
             }
             $url = $urlStr;
         }

@@ -131,14 +131,22 @@ abstract class BaseModelMethods
                     } else  $condition = $set['conditions'][$c_count - 1];
 
                     if ($operand === 'IN' || $operand === 'NOT IN') {
+                        $flagArr = false;
                         if (is_string($item) && str_contains($item, 'SELECT')) $str_in = $item;
                         else {
                             if (!is_array($item)) $item = explode(',', $item);
                             $str_in = '';
                             foreach ($item as $value)
-                                $str_in .= "'" . trim(mb_escape($value)) . "', ";
+                                if (!is_array($value)) $str_in .= "'" . trim(mb_escape($value)) . "', ";
+                                else {
+                                    $str_in = '';
+                                    $flagArr = true;
+                                    foreach ($value as $v)
+                                        $str_in .= "'" . trim(mb_escape($v)) . "', ";
+                                    $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition . ' ';
+                                }
                         }
-                        $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition;
+                        if (!$flagArr) $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition;
                     } elseif (str_contains($operand, 'LIKE')) {
                         $likeTemplate = explode('%', $operand);
                         foreach ($likeTemplate as $keyLike => $itemLike) {
@@ -225,7 +233,8 @@ abstract class BaseModelMethods
      */
     protected function createGroup($set): string
     {
-        return isset($set['group']) ? 'GROUP BY ' . implode(', ', (array)$set['group']) : '';
+        $having = isset($set['having']) ? 'HAVING ' . implode(' ', (array)$set['having']) : '';
+        return isset($set['group']) ? 'GROUP BY ' . implode(', ', (array)$set['group']) . ' ' . $having : '';
         // HAVING ...
     }
 
