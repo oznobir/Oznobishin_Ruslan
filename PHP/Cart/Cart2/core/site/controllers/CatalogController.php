@@ -74,7 +74,7 @@ class CatalogController extends BaseSite
         if (!empty($_GET['filters'])) {
             $subQuery =  $this->setFilters();
             if($subQuery) {
-                $dbWhere['id'] = $this->setFilters();
+                $dbWhere['id'] = $subQuery;
                 $dbOperand[] = 'IN';
             }
 //            foreach ($_GET['filters'] as $key => $item)
