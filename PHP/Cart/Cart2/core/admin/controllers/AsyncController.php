@@ -12,15 +12,19 @@ use libraries\FileEdit;
  */
 class AsyncController extends BaseAdmin
 {
+    protected array $asyncData = [];
+
     /**
+     * @param $data
      * @return array
      * @throws DOMException
      * @throws DbException
      * @throws RouteException
      * @uses async
      */
-    public function async(): array
+    public function async($data): array
     {
+        $this->asyncData = $data;
         if (isset($this->asyncData['ajax'])) {
             $this->asyncData = $this->clearTags($this->asyncData);
             if (!$this->userId) $this->exec();

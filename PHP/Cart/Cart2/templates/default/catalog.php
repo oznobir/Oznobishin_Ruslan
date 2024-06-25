@@ -10,7 +10,7 @@
                 <h2>В данном разделе нет товаров</h2>
             <?php else: ?>
                 <aside class="catalog-aside">
-                    <?php if (!empty($this->sFilters) && !empty($this->sPrices)): ?>
+                    <?php if (!empty($this->sFilters) || !empty($this->sPrices)): ?>
                         <div class="catalog-aside__wrap">
                             <div class="catalog-aside-block">
                                 <div class="catalog-aside-block__top">
@@ -117,9 +117,17 @@
                                     </a>
                                 <?php endforeach; ?>
                             <?php endif; ?>
-                            <div class="catalog-section-top-items__unit catalog-section-top-items__toggle">
-                                Показывать по:
-                            </div>
+                            <?php if (!empty($this->sQuantities)): ?>
+                                <div class="catalog-section-top-items__unit catalog-section-top-items__toggle"
+                                onclick="this.querySelector('.qtyItems').classList.toggle('opened')">
+                                    Показывать по: <span><?= $_SESSION['quantities'] ?? ''?></span>
+                                    <div class="qtyItems">
+                                        <?php foreach ($this->sQuantities as $item): ?>
+                                            <a href="#"><?= $item ?></a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="catalog-section__wrapper">

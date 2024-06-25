@@ -50,7 +50,9 @@ trait BaseMethods
      */
     protected function isAjax(): bool
     {
-        return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'ajaxrequest');
+        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'ajaxrequest' ||
+                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
 
     protected function getController()

@@ -136,15 +136,15 @@ abstract class BaseModelMethods
                         else {
                             if (!is_array($item)) $item = explode(',', $item);
                             $str_in = '';
-                            foreach ($item as $value)
+                            foreach ($item as $value) {
                                 if (!is_array($value)) $str_in .= "'" . trim(mb_escape($value)) . "', ";
                                 else {
-                                    $str_in = '';
                                     $flagArr = true;
                                     foreach ($value as $v)
                                         $str_in .= "'" . trim(mb_escape($v)) . "', ";
                                     $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition . ' ';
                                 }
+                            }
                         }
                         if (!$flagArr) $where .= $table . $key . ' ' . $operand . ' (' . trim($str_in, ', ') . ') ' . $condition;
                     } elseif (str_contains($operand, 'LIKE')) {

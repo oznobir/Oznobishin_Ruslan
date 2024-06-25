@@ -19,6 +19,7 @@ class CatalogController extends BaseSite
         'Цене' => 'price_asc',
         'Названию' => 'name_asc',
     ];
+    protected array $sQuantities = [6, 9, 12];
     protected ?array $sFilters;
     protected ?array $sPrices;
 

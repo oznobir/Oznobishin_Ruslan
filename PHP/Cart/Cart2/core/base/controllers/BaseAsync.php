@@ -28,8 +28,7 @@ class BaseAsync extends BaseController
         }
         $controller = str_replace('/', '\\', $controller);
         $async = new $controller;
-        $async->asyncData = $data;
-        $result = $async->async();
+        $result = $async->async($data);
         if (is_array($result) || is_object($result)) $result = json_encode($result);
         return $result;
     }
