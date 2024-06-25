@@ -1,6 +1,6 @@
 $(function () {
     //------------------- Swipers -------------------//
-    var mainSlider = new Swiper('.slider__container', {
+    const mainSlider = new Swiper('.slider__container', {
         pagination: {
             el: '.slider__pagination',
             type: 'fraction',
@@ -11,7 +11,7 @@ $(function () {
         },
     });
 
-    var partnersSlider = new Swiper('.partners__container', {
+    const partnersSlider = new Swiper('.partners__container', {
         navigation: {
             nextEl: '.partners__controls._next',
             prevEl: '.partners__controls._prev',
@@ -44,9 +44,9 @@ $(function () {
         }
     });
 
-    var indexOffersSlider= null;
+    let indexOffersSlider = null;
 
-    var indexOffersSliderOptions = {
+    const indexOffersSliderOptions = {
         navigation: {
             nextEl: '.offers__controls._next',
             prevEl: '.offers__controls._prev',
@@ -77,15 +77,15 @@ $(function () {
         $(this)
             .addClass('active').siblings().removeClass('active')
             .closest('div.offers__tabs').find('div.offers__tabs_content').removeClass('active').eq($(this).index()).addClass('active');
-        var index = $(this).index();
+        let index = $(this).index();
         indexOffersSlider[index].slideTo(0);
         indexOffersSlider[index].update();
 
     });
     //------------------- Burger Sidebar  -------------------//
     $('.burger-menu').on('click', function () {
-        var burgerHidden = $('.header__menu').hasClass('_hidden');
-        var callbackHidden = $('.header__callback').hasClass('_hidden');
+        const burgerHidden = $('.header__menu').hasClass('_hidden');
+        const callbackHidden = $('.header__callback').hasClass('_hidden');
         if(burgerHidden) {//бургер скрыт
             if(!callbackHidden) {//но открыта обратка
                 $('.header__callback').addClass('_hidden');//скроем обратку
@@ -137,8 +137,8 @@ $(function () {
     });
     //------------------- Overlay Events  -------------------//
     $('.overlay').on('click', function () {
-        var burgerHidden = $('.header__menu').hasClass('_hidden');
-        var callbackHidden = $('.header__callback').hasClass('_hidden');
+        const burgerHidden = $('.header__menu').hasClass('_hidden');
+        const callbackHidden = $('.header__callback').hasClass('_hidden');
 
         if(!burgerHidden) {
             $('.header__menu').addClass('_hidden');
@@ -156,14 +156,14 @@ $(function () {
     $('.js-mask-phone').mask("+7 (999) 999-99-99");
 
     //------------------- Horizontal Scroll -------------------//
-    var controller = new ScrollMagic.Controller();
+    const controller = new ScrollMagic.Controller();
 
     if($(window).width() > 1024) {
-        var timeline = new TimelineMax();
+        const timeline = new TimelineMax();
         timeline
             .to($('.horizontal__wrapper'), 1, {xPercent: '-50'});
 
-        var horizontalScroll = new ScrollMagic.Scene({
+        const horizontalScroll = new ScrollMagic.Scene({
             triggerElement: '.horizontal',
             triggerHook: 'onEnter',
             offset: $('.horizontal__wrapper').height(),
@@ -178,9 +178,9 @@ $(function () {
 
     //------------------- Sticky Search -------------------//
     if ($(window).width() > 1024 && $('.news').length > 0) {
-        var heightToFooter = $('.news').offset().top;
+        const heightToFooter = $('.news').offset().top;
 
-        var stickySearch = new ScrollMagic.Scene({
+        const stickySearch = new ScrollMagic.Scene({
             triggerElement: '.footer',
             triggerHook: 'onEnter'
         })

@@ -11,10 +11,10 @@ class AsyncController extends BaseSite
 
     /**
      * @param $data
-     * @return array
+     * @return array|void
      * @uses async
      */
-    public function async($data): array
+    public function async($data)
     {
         $this->asyncData = $data;
         if (isset($this->asyncData['ajax'])) {
