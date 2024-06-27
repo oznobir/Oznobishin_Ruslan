@@ -6463,7 +6463,8 @@ input[type='search'], input[type='text'], input[type='email'] {
     letter-spacing: .16px;
     transition: .3s;
     margin-right: 24px;
-    text-decoration: none
+    text-decoration: none;
+    padding: 6px 4px;
 }
 
 @media screen and (max-width: 600px) {
@@ -7537,4 +7538,8 @@ input[type='search'], input[type='text'], input[type='email'] {
     display: block;
     color: #010101;
     text-decoration: none;
+}
+.pagination-current {
+    background-color: #D4DDE1;
+    padding: 6px 20px;
 }

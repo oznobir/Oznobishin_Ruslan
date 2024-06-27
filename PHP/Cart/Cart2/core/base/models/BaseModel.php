@@ -98,8 +98,10 @@ abstract class BaseModel extends BaseModelMethods
      */
     final public function select(string $table, array $set = [], $add = ''): int|bool|array|string
     {
+        $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         $fields = $this->createFields($set, $table);
         $where = $this->createWhere($set, $table);
+        $this->createPagination($set, $table, $where, $limit);
         $join_arr = $this->createJoin($set, $table, !$where);
         $fields .= $join_arr['fields'] ?? '';
         $fields = rtrim($fields, ', ');
@@ -107,7 +109,6 @@ abstract class BaseModel extends BaseModelMethods
         $join = $join_arr['join'] ?? '';
         $order = $this->createOrder($set, $table) ?? '';
         $group = $this->createGroup($set);
-        $limit = isset($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
 
         $query = "SELECT $add $fields FROM $table $join $where $group $order $limit";
 
@@ -310,7 +311,7 @@ abstract class BaseModel extends BaseModelMethods
         $order = $this->createOrder($set);
         $limit = !empty($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         if (method_exists($this, 'createPagination'))
-            $this->createPagination($set, "($query)", $limit);
+            $this->createPagination($set, $maxTableCount,"($query)", $limit);
         $query .= " $order $limit";
         $this->union = [];
         return $this->query(trim($query));

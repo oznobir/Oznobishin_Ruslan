@@ -9,11 +9,14 @@ use core\site\models\Model;
 
 abstract class BaseSite extends BaseController
 {
+    /** @uses  pagination*/
     protected ?Model $model = null;
     protected ?string $table = null;
     protected array $set;
     protected array $menu;
     protected array $socials;
+    protected ?array $sPagination;
+
     protected string $breadcrumbs;
 
     /**
@@ -54,6 +57,86 @@ abstract class BaseSite extends BaseController
         $this->footer = $this->render(SITE_TEMPLATE . 'include/footer');
 
         return $this->render(SITE_TEMPLATE . 'layout/default');
+    }
+
+    protected function pagination(array $pag, array|string $url = null, ?array $icons = null, string $class = ''): void
+    {
+        if ($url) {
+            $firstUrl = $this->getUrl($url);
+            $addClass = $class;
+        } else {
+            $url = ['catalog' => $this->parameters['alias'] ?? ''];
+            $firstUrl = $this->getUrl($url);
+            $addClass = 'catalog';
+        }
+        if (!$icons) $icons = [
+            'first' => '<<',
+            'back' => '<',
+            'forward' => '>',
+            'last' => '>>',
+        ];
+        $queryString = $_GET ?? [];
+        if (isset($_GET['page'])) unset($queryString['page']);
+
+        if (empty($queryString)) $str = $firstUrl . '?page=';
+        else $str = $this->getUrl($url, $queryString) . '&page=';
+
+        foreach ($pag as $key => $item) {
+            if (is_array($item)) {
+                foreach ($item as $value) {
+                    if($key == 'previous' && $value === 1)$href = $firstUrl;
+                    else $href = $str . $value;
+                    $this->showLinkPagination($value, $href, $addClass);
+                }
+            } elseif ($key == 'current') {
+                $this->showLinkPagination($item, '', $addClass);
+            } else {
+                if (($key == 'first' || $key == 'back') && $item === 1) $href = $firstUrl;
+                else $href = $str . $item;
+                $this->showLinkPagination($icons[$key], $href, $addClass);
+            }
+        }
+//        if (!empty($pag['first'])) {
+//            $href = $pag['first'] === 1 ? $firstUrl : $str . $pag['first'];
+//            $this->showLinkPagination($icons['first'], $href);
+//        }
+//        if (!empty($pag['back'])) {
+//            $href = $pag['back'] === 1 ? $firstUrl : $str . $pag['back'];
+//            $this->showLinkPagination($icons['back'], $href);
+//        }
+//        if (!empty($pag['previous'])) {
+//            foreach ($pag['previous'] as $value) {
+//                $this->showLinkPagination($value, $str . $value);
+//            }
+//        }
+//        if (!empty($pag['current'])) {
+//            $this->showLinkPagination($pag['current'], '', ' pag');
+//        }
+//        if (!empty($pag['next'])) {
+//            foreach ($pag['next'] as $value) {
+//                $this->showLinkPagination($value, $str . $value);
+//            }
+//        }
+//        if (!empty($pag['forward'])) {
+//            $this->showLinkPagination($icons['forward'], $str . $pag['forward']);
+//        }
+//        if (!empty($pag['last'])) {
+//            $this->showLinkPagination($icons['last'], $str . $pag['last']);
+//        }
+    }
+
+    protected function showLinkPagination($name, $href = '', $addClass = 'catalog'): void
+    {
+        if ($href) echo <<<TEXT
+                            <a href="$href" class="$addClass-section-pagination__item">
+                                $name
+                            </a>
+TEXT;
+        else echo <<<TEXT
+                            <div class="$addClass-section-pagination__item pagination-current">
+                                $name
+                            </div>
+TEXT;
     }
 
     /**
@@ -157,8 +240,6 @@ abstract class BaseSite extends BaseController
             return $arr[1] ?? null;
         else
             return $arr[2] ?? null;
-
-
     }
 
     /**

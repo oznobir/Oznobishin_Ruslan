@@ -11,7 +11,7 @@ use core\base\exceptions\RouteException;
 class CatalogController extends BaseSite
 {
     /**
-     * @uses $order
+     * @uses $order, $sQuantities
      */
 
     protected ?array $goods;
@@ -19,7 +19,7 @@ class CatalogController extends BaseSite
         'Цене' => 'price_asc',
         'Названию' => 'name_asc',
     ];
-    protected array $sQuantities = [6, 9, 12];
+    protected array $sQuantities = [2, 4, 6];
     protected ?array $sFilters;
     protected ?array $sPrices;
 
@@ -52,7 +52,12 @@ class CatalogController extends BaseSite
             'operand' => $operand,
             'order' => $order['order'],
             'order_direction' => $order['order_direction'],
+            'pagination' => [
+                'qty' => $_SESSION['quantities'] ?? QTY,
+                'page' => $this->num($_GET['page'] ?? 1) ?: 1
+            ],
         ], $this->sFilters, $this->sPrices);
+        $this->sPagination = $this->model->getPagination();
     }
 
     /**
@@ -73,8 +78,8 @@ class CatalogController extends BaseSite
             $dbOperand[] = '<=';
         }
         if (!empty($_GET['filters'])) {
-            $subQuery =  $this->setFilters();
-            if($subQuery) {
+            $subQuery = $this->setFilters();
+            if ($subQuery) {
                 $dbWhere['id'] = $subQuery;
                 $dbOperand[] = 'IN';
             }

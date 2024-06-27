@@ -6,9 +6,82 @@ use core\base\exceptions\DbException;
 
 abstract class BaseModelMethods
 {
+    protected ?array $pagination;
     protected array $sqlFunc = ['NOW()'];
     protected array $columnsTables = [];
     protected array $union = [];
+
+    /**
+     * @param array $set
+     * @param string $table
+     * @param string|null $where
+     * @param string $limit
+     * @return void
+     * @throws DbException
+     */
+    protected function createPagination(array $set, string $table, ?string $where, string &$limit): void
+    {
+        if (!empty($set['pagination'])) {
+            $numPages = null;
+            $numPost = (int)($set['pagination']['qty'] ?? QTY);
+            $numLinks = (int)($set['pagination']['qty_links'] ?? QTY_LINKS);
+            $page = (int)(!is_array($set['pagination']) ? $set['pagination'] : $set['pagination']['page'] ?? 1);
+            if ($page > 0 && $numPost > 0) {
+                $totalCount = $this->getTotalCount($table, $where);
+                $numPages = (int)ceil($totalCount / $numPost);
+                $limit = 'LIMIT ' . ($page - 1) * $numPost . ',' . $numPost;
+            }
+
+            if (!$numPages || $numPages === 1 || $page > $numPages) $res = null;
+            else {
+                $res = [];
+                if ($page != 1) {
+                    $res['first'] = 1;
+                    $res['back'] = $page - 1;
+                }
+                if ($page > $numLinks + 1) {
+                    for ($i = $page - $numLinks; $i < $page; $i++)
+                        $res['previous'][] = $i;
+                } else {
+                    for ($i = 1; $i < $page; $i++)
+                        $res['previous'][] = $i;
+                }
+                $res['current'] = $page;
+                if ($page + $numLinks < $numPages) {
+                    for ($i = $page + 1; $i <= $page + $numLinks; $i++)
+                        $res['next'][] = $i;
+                } else {
+                    for ($i = $page + 1; $i <= $numPages; $i++)
+                        $res['next'][] = $i;
+                }
+                if ($page !== $numPages) {
+                    $res['forward'] = $page + 1;
+                    $res['last'] = $numPages;
+                }
+            }
+            $this->pagination = $res;
+        }
+    }
+
+    /**
+     * @param string $table
+     * @param string $where
+     * @return mixed|string
+     * @throws DbException
+     */
+
+    protected function getTotalCount(string $table, string $where): mixed
+    {
+        return $this->query("SELECT COUNT(*) as count FROM $table $where")[0]['count'];
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getPagination(): ?array
+    {
+        return $this->pagination;
+    }
 
     /**
      * @param array $set массив значений для построения запроса

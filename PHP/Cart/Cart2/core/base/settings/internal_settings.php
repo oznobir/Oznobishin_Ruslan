@@ -19,8 +19,8 @@ const COOKIE_TIME = 60;
 const CRYPT_KEY = 'd825e55c785e13ab385248818457e7bec9f0e02e242b7585a94ee658e88d75ee';
 const BLOCK_TIME = 3;
 
-const QTY = 8;
-const QTY_LINKS = 3;
+const QTY = 4;
+const QTY_LINKS = 2;
 
 const ADMIN_CSS_JS = [
     'styles_our' => ['css/main.css'],

@@ -119,8 +119,8 @@
                             <?php endif; ?>
                             <?php if (!empty($this->sQuantities)): ?>
                                 <div class="catalog-section-top-items__unit catalog-section-top-items__toggle"
-                                onclick="this.querySelector('.qtyItems').classList.toggle('opened')">
-                                    Показывать по: <span><?= $_SESSION['quantities'] ?? ''?></span>
+                                     onclick="this.querySelector('.qtyItems').classList.toggle('opened')">
+                                    Показывать по: <span><?= $_SESSION['quantities'] ?? '' ?></span>
                                     <div class="qtyItems">
                                         <?php foreach ($this->sQuantities as $item): ?>
                                             <a href="#"><?= $item ?></a>
@@ -141,31 +141,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="catalog-section-pagination">
-                        <a href="catalog.html#"
-                           class="catalog-section-pagination__item catalog-section-pagination__prev">
-
-                        </a>
-                        <a href="catalog.html#" class="catalog-section-pagination__item">
-                            1
-                        </a>
-                        <a href="catalog.html#" class="catalog-section-pagination__item">
-                            2
-                        </a>
-                        <a href="catalog.html#" class="catalog-section-pagination__item">
-                            3
-                        </a>
-                        <a href="catalog.html#" class="catalog-section-pagination__item">
-                            4
-                        </a>
-                        <a href="catalog.html#" class="catalog-section-pagination__item">
-                            5
-                        </a>
-                        <a href="catalog.html#"
-                           class="catalog-section-pagination__item catalog-section-pagination__next">
-
-                        </a>
-                    </div>
+                    <?php if (!empty($this->sPagination)): ?>
+                        <div class="catalog-section-pagination">
+                            <?=$this->pagination($this->sPagination)?>
+                        </div>
+                    <?php endif; ?>
                 </section>
             <?php endif; ?>
         </div>
