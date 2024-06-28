@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июн 21 2024 г., 11:56
+-- Время создания: Июн 28 2024 г., 21:41
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 
 --
 -- База данных: `myshop2`
---
+-- admin/login admin password 123
 
 -- --------------------------------------------------------
 
@@ -92,38 +92,6 @@ INSERT INTO `catalog` (`id`, `name`, `keywords`, `description`, `pid`, `position
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `categories`
---
-
-CREATE TABLE `categories` (
-  `id` int NOT NULL,
-  `pid` int DEFAULT NULL,
-  `slug` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `position` int DEFAULT NULL,
-  `img` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Дамп данных таблицы `categories`
---
-
-INSERT INTO `categories` (`id`, `pid`, `slug`, `name`, `position`, `img`) VALUES
-(1, 0, 'mobile', 'Телефоны', 1, ''),
-(2, 0, 'planshety', 'Планшеты', 2, ''),
-(3, 0, 'noutbuki', 'Ноутбуки', 3, ''),
-(4, 0, 'monitory', 'Мониторы', 4, ''),
-(5, 1, 'phone-xiaomi', 'Телефоны Xiaomi', 2, ''),
-(6, 1, 'phone-apple', 'Телефоны Apple', 1, ''),
-(7, 1, 'phone-samsung', 'Телефоны Samsung', 3, ''),
-(8, 2, 'planshety-lenovo', 'Планшеты Lenovo', 1, ''),
-(9, 3, 'noutbuki-asus', 'Ноутбуки Asus', 3, ''),
-(10, 3, 'noutbuki-digma', 'Ноутбуки digma', 2, ''),
-(11, 3, 'noutbuki-apple', 'Ноутбуки apple', 1, '');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `cat_filters`
 --
 
@@ -187,17 +155,44 @@ CREATE TABLE `color_goods` (
 --
 
 INSERT INTO `color_goods` (`id`, `goods_id`, `color_id`) VALUES
-(324, 23, 8),
-(325, 23, 3),
-(326, 24, 4),
-(327, 24, 6),
-(328, 24, 7),
-(329, 25, 4),
-(330, 25, 8),
-(331, 25, 1),
-(332, 25, 3),
-(333, 26, 4),
-(334, 26, 3);
+(401, 64, 6),
+(402, 64, 2),
+(403, 64, 5),
+(404, 64, 8),
+(405, 64, 1),
+(481, 63, 4),
+(482, 63, 6),
+(483, 63, 5),
+(484, 63, 1),
+(485, 63, 3),
+(486, 62, 6),
+(487, 62, 2),
+(488, 62, 7),
+(489, 62, 3),
+(490, 23, 8),
+(491, 23, 3),
+(492, 24, 4),
+(493, 24, 6),
+(494, 24, 7),
+(495, 25, 4),
+(496, 25, 8),
+(497, 25, 1),
+(498, 25, 3),
+(499, 61, 1),
+(500, 61, 3),
+(501, 65, 4),
+(502, 65, 6),
+(503, 65, 2),
+(504, 65, 5),
+(505, 65, 8),
+(506, 65, 3),
+(507, 66, 4),
+(508, 66, 6),
+(509, 66, 2),
+(510, 66, 8),
+(511, 66, 1),
+(512, 26, 4),
+(513, 26, 3);
 
 -- --------------------------------------------------------
 
@@ -241,20 +236,37 @@ INSERT INTO `filters` (`id`, `filters_name`, `pid`, `position`) VALUES
 (2, 'Display1', NULL, 2),
 (3, 'ROM1', NULL, 3),
 (4, 'OS1', NULL, 4),
-(5, 'Snapdragon', 1, 4),
-(6, 'Apple', 1, 3),
-(7, 'TN+Film', 2, 4),
-(8, 'Amoled', 2, 2),
-(9, 'Intel', 1, 1),
-(10, 'RAM1', NULL, 5),
-(13, 'HDD 1000', 3, 4),
-(14, 'UFS 256', 3, 3),
-(15, 'SSD 512', 3, 2),
+(5, 'RAM1', NULL, 5),
+(6, 'Apple A16 Bionic', 1, 6),
+(7, 'TN+Film', 2, 7),
+(8, '6.67 AMOLED', 2, 11),
+(9, 'Intel', 1, 2),
+(13, 'HDD 1000 Gb', 5, 3),
+(14, 'UFS 256 Gb', 5, 2),
+(15, 'SSD 512 Gb', 5, 1),
 (16, 'Android', 4, 4),
 (17, 'iOS', 4, 3),
 (18, 'Windows', 4, 2),
-(19, 'AMD', 1, 2),
-(21, 'IPS', 2, 3);
+(19, 'AMD', 1, 5),
+(21, 'IPS', 2, 6),
+(24, 'UFS 128 Gb', 5, 4),
+(25, 'UFS 64 Gb', 5, 3),
+(26, '4Gb', 3, 2),
+(27, '2 Gb', 3, 3),
+(28, '6 Gb', 3, 3),
+(29, 'Mediatek G91', 1, 1),
+(30, 'Mediatek Helio G85', 1, 4),
+(31, 'Snapdragon 685', 1, 3),
+(32, 'Apple A17 Pro', 1, 7),
+(33, 'Apple A14', 1, 8),
+(34, 'Exynos 2400', 1, 9),
+(35, 'Exynos 1200', 1, 10),
+(36, '6.1 AMOLED', 2, 1),
+(37, '6.4 AMOLED', 2, 2),
+(38, '5 AMOLED', 2, 3),
+(39, '6.7 OLED', 2, 4),
+(40, '6.1 OLED', 2, 8),
+(41, 'Snapdragon 8', 1, 11);
 
 -- --------------------------------------------------------
 
@@ -272,22 +284,70 @@ CREATE TABLE `filters_goods` (
 --
 
 INSERT INTO `filters_goods` (`goods_id`, `filters_id`) VALUES
-(23, 5),
-(24, 5),
-(26, 5),
 (25, 6),
+(64, 6),
+(65, 6),
 (23, 8),
 (24, 8),
 (25, 8),
-(23, 14),
-(24, 15),
+(63, 8),
+(65, 8),
+(26, 13),
+(24, 14),
+(25, 14),
+(61, 14),
+(63, 14),
+(64, 14),
 (25, 15),
 (26, 15),
 (23, 16),
 (24, 16),
 (25, 16),
 (26, 16),
-(26, 21);
+(61, 16),
+(62, 16),
+(63, 16),
+(66, 16),
+(64, 17),
+(65, 17),
+(26, 21),
+(61, 21),
+(24, 24),
+(25, 24),
+(61, 24),
+(62, 24),
+(63, 24),
+(64, 24),
+(65, 24),
+(23, 25),
+(62, 25),
+(63, 25),
+(65, 25),
+(66, 25),
+(64, 26),
+(65, 27),
+(66, 27),
+(62, 28),
+(63, 28),
+(64, 28),
+(65, 28),
+(66, 28),
+(23, 31),
+(61, 31),
+(62, 31),
+(63, 31),
+(65, 32),
+(25, 33),
+(64, 33),
+(65, 33),
+(24, 34),
+(66, 34),
+(24, 35),
+(66, 35),
+(62, 36),
+(64, 37),
+(65, 39),
+(66, 39);
 
 -- --------------------------------------------------------
 
@@ -301,7 +361,7 @@ CREATE TABLE `goods` (
   `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `content` text COLLATE utf8mb4_general_ci,
   `short_content` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `price` float DEFAULT NULL,
+  `price` decimal(8,2) DEFAULT NULL,
   `discount` int DEFAULT NULL,
   `img` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `gallery_img` text COLLATE utf8mb4_general_ci,
@@ -321,10 +381,16 @@ CREATE TABLE `goods` (
 --
 
 INSERT INTO `goods` (`id`, `pid`, `name`, `content`, `short_content`, `price`, `discount`, `img`, `gallery_img`, `visible`, `position`, `date`, `datetime`, `alias`, `hit`, `sale`, `new`, `hot`) VALUES
-(23, 1, 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия', '<p>Android, экран 6.67\" AMOLED (1220x2712) 144 Гц, Mediatek Dimensity 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Android, экран 6.67\" AMOLED', 2500, 10, 'goods/img_11_1711042128249.webp', '[\"goods\\/img_7_1711072021871_34b58b1e.webp\",\"goods\\/img_11_1711042128249_7785e565.webp\",\"goods\\/img_15_1711131941591_ef03aa96.webp\"]', 1, 1, '2024-06-21', '2024-06-21 11:40:13', 'smartfon-xiaomi-13t-pro-12gb512gb-mezhdunarodnaya-versiya', 1, 1, 1, 0),
-(24, 1, 'Смартфон Samsung Galaxy Z Flip5 SM-F731B/DS 8GB/256GB', '<p>Android, экран 6.7\" AMOLED (1080x2640) 120 Гц, Qualcomm Snapdragon 8 Gen2 SM8550, ОЗУ 8 ГБ, память 256 ГБ, камера 12 Мп, аккумулятор 3700 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IPX8</p>', 'Android, экран 6.7\" AMOLED', 2980, 15, 'goods/img_14_1711042460430_48eabf6a.webp', '[\"goods\\/img_10_1711041932595_382de75e.webp\",\"goods\\/img_7_1711072021871_7abce657.webp\",\"goods\\/img_11_1711042128249_8afc5df0.webp\",\"goods\\/img_15_1711131941591_ab519c92.webp\"]', 1, 2, '2024-06-21', '2024-06-21 11:40:32', 'smartfon-samsung-galaxy-z-flip5-sm-f731bds-8gb256gb', 0, 1, 1, 1),
-(25, 1, 'Смартфон Apple iPhone 15 128GB', '<p>Apple iOS, экран 6.1\" OLED (1179x2556) 60 Гц, Apple A16 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 48 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Apple iOS, экран 6.1\" OLED', 3500.05, 20, 'goods/img_7_1711072021871.webp', '[\"goods\\/6_1711041613282_5e431ba5.webp\",\"goods\\/img_10_1711041932595_a0d8c876.webp\",\"goods\\/img_11_1711042128249_b5eddb2a.webp\",\"goods\\/img_15_1711131941591_bd26e2e2.webp\"]', 1, 3, '2024-06-21', '2024-06-21 11:40:49', 'smartfon-apple-iphone-15-128gb', 1, 0, 0, 1),
-(26, 2, 'Планшет Lenovo Tab P11 Plus TB-J616X 6GB/128GB LTE', '<p>11\" IPS, 60 Гц (2000x1200), Android, MediaTek Helio G90T, ОЗУ 6 ГБ, флэш-память 128 ГБ, цвет серый</p>', 'Android, MediaTek Helio', 1500.15, 0, 'goods/img_16_1713087551260.webp', '[\"goods\\/17_1713087825459_4ffec7fa.webp\",\"goods\\/img_16_1713087551260_10ab666b.webp\",\"goods\\/img_22_1713090477061_a701baae.webp\"]', 1, 1, '2024-06-21', '2024-06-21 11:41:08', 'planshet-lenovo-tab-p11-plus-tb-j616x-6gb128gb-lte', 1, 1, 1, 1);
+(23, 1, 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия', '<p>Android, экран 6.67\" AMOLED (1220x2712) 144 Гц, Mediatek Dimensity 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Android, экран 6.67\" AMOLED', '2500.00', 10, 'goods/img_11_1711042128249.webp', '[\"goods\\/img_7_1711072021871_34b58b1e.webp\",\"goods\\/img_11_1711042128249_7785e565.webp\",\"goods\\/img_15_1711131941591_ef03aa96.webp\"]', 1, 3, '2024-06-28', '2024-06-28 22:15:05', 'smartfon-xiaomi-13t-pro-12gb512gb-mezhdunarodnaya-versiya', 1, 1, 1, 0),
+(24, 1, 'Смартфон Samsung Galaxy Z Flip5 SM-F731B/DS 8GB/256GB', '<p>Android, экран 6.7\" AMOLED (1080x2640) 120 Гц, Qualcomm Snapdragon 8 Gen2 SM8550, ОЗУ 8 ГБ, память 256 ГБ, камера 12 Мп, аккумулятор 3700 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IPX8</p>', 'Android, экран 6.7\" AMOLED', '2980.00', 15, 'goods/img_14_1711042460430_48eabf6a.webp', '[\"goods\\/img_10_1711041932595_382de75e.webp\",\"goods\\/img_7_1711072021871_7abce657.webp\",\"goods\\/img_11_1711042128249_8afc5df0.webp\",\"goods\\/img_15_1711131941591_ab519c92.webp\"]', 1, 4, '2024-06-28', '2024-06-28 22:15:24', 'smartfon-samsung-galaxy-z-flip5-sm-f731bds-8gb256gb', 0, 1, 1, 1),
+(25, 1, 'Смартфон Apple iPhone 15 128GB', '<p>Apple iOS, экран 6.1\" OLED (1179x2556) 60 Гц, Apple A16 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 48 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Apple iOS, экран 6.1\" OLED', '3500.05', 20, 'goods/img_7_1711072021871.webp', '[\"goods\\/6_1711041613282_5e431ba5.webp\",\"goods\\/img_10_1711041932595_a0d8c876.webp\",\"goods\\/img_11_1711042128249_b5eddb2a.webp\",\"goods\\/img_15_1711131941591_bd26e2e2.webp\"]', 1, 5, '2024-06-28', '2024-06-28 22:15:42', 'smartfon-apple-iphone-15-128gb', 1, 0, 0, 1),
+(26, 2, 'Планшет Lenovo Tab P11 Plus TB-J616X 6GB/128GB LTE', '<p>11\" IPS, 60 Гц (2000x1200), Android, MediaTek Helio G90T, ОЗУ 6 ГБ, флэш-память 128 ГБ, цвет серый</p>', 'Android, MediaTek Helio', '1500.00', 0, 'goods/img_16_1713087551260.webp', '[\"goods\\/17_1713087825459_4ffec7fa.webp\",\"goods\\/img_16_1713087551260_10ab666b.webp\",\"goods\\/img_22_1713090477061_a701baae.webp\"]', 1, 1, '2024-06-28', '2024-06-28 22:17:03', 'planshet-lenovo-tab-p11-plus-tb-j616x-6gb128gb-lte', 1, 1, 1, 1),
+(61, 1, 'Смартфон Xiaomi Redmi 10C NFC 4GB/128GB международная версия', '<p>Android, экран 6.71\" IPS (720x1650) 60 Гц, Qualcomm Snapdragon 680, ОЗУ 4 ГБ, память 128 ГБ, поддержка карт памяти, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM)&nbsp;</p>', 'Android, экран 6.71\" IPS (720x1650) 60 Гц, Qualcomm Snapdragon 680, ОЗУ 4 ГБ, память 128 ГБ, поддержка карт памяти, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM) ', '430.00', 5, 'goods/10_1711041932595_4dd8a736.webp', '[\"goods\\/11_1711042128249_add669a6.webp\",\"goods\\/14_1711042460430_56e6281a.webp\",\"goods\\/15_1711131941591_1aa59320.webp\"]', 1, 6, '2024-06-28', '2024-06-28 22:16:01', 'smartfon-xiaomi-redmi-10c-nfc-4gb128gb-mezhdunarodnaya-versiya', 1, 0, 0, 0),
+(62, 1, 'Смартфон Xiaomi Redmi Note 12', '<p>Android, экран 6.67\" AMOLED (1080x2400) 120 Гц, Qualcomm Snapdragon 685, ОЗУ 6 ГБ, память 128 ГБ, поддержка карт памяти, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM), влагозащита IP53&nbsp;</p>', 'Смартфон Xiaomi Redmi Note 12 6GB/128GB с NFC международная версия (серый оникс)', '685.00', 5, 'goods/15_1711131941591_f3501e42.webp', '[\"goods\\/10_1711041932595_baa6d2d4.webp\",\"goods\\/11_1711042128249_6fb65f4d.webp\"]', 1, 2, '2024-06-28', '2024-06-28 22:14:47', 'smartfon-xiaomi-redmi-note-12', 0, 1, 0, 0),
+(63, 1, 'Смартфон Xiaomi 13T Pro', '<p>Android, экран 6.67\" AMOLED 144 Гц, Mediatek 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия', '2500.00', 10, 'goods/1_1711039208066_098a6065.png', '[\"goods\\/2_1711039396535_7db3fb92.png\",\"goods\\/3_1711039508491_1106fedd.png\",\"goods\\/4_1711041124918_f3baa1fa.webp\",\"goods\\/5_1711041487549_ed31597a.webp\"]', 1, 1, '2024-06-28', '2024-06-28 22:09:55', 'smartfon-xiaomi-13t-pro', 0, 0, 1, 1),
+(64, 1, 'Смартфон Apple iPhone 14 128GB (полуночный)', '<p>Apple iOS, экран 6.1\" OLED (1170x2532) 60 Гц, Apple A15 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 12 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Apple iOS, экран 6.1\" OLED (1170x2532) 60 Гц, Apple A15 Bionic, ', '2935.00', 5, 'goods/7_1711072021871_42ec892e.webp', '[\"goods\\/3_1711039508491_8e48c4be.png\",\"goods\\/4_1711041124918_c5d5bfdc.webp\",\"goods\\/5_1711041487549_fc763971.webp\"]', 1, 7, '2024-06-28', '2024-06-28 21:32:29', 'smartfon-apple-iphone-14-128gb-polunochniy', 0, 0, 1, 0),
+(65, 1, 'Смартфон Apple iPhone 11 128GB', '<p>Apple iOS, экран 6.1\" IPS (828x1792), Apple A13 Bionic, ОЗУ 4 ГБ, память 128 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Apple iOS, экран 6.1\" IPS (828x1792), Apple A13 Bionic, ОЗУ 4 ГБ', '2530.00', 5, 'goods/4_1711041124918_d015f796.webp', '[\"goods\\/5_1711041487549_fea41d23.webp\",\"goods\\/6_1711041613282_88130192.webp\",\"goods\\/7_1711072021871_24e969f9.webp\"]', 1, 8, '2024-06-28', '2024-06-28 22:16:29', 'smartfon-apple-iphone-11-128gb', 0, 0, 1, 1),
+(66, 1, 'Смартфон Samsung Galaxy S22 Ultra 5G', '<p>Android, экран 6.8\" AMOLED (1440x3088) 120 Гц, Exynos 2200, ОЗУ 12 ГБ, память 256 ГБ, камера 108 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 'Android, экран 6.8\" AMOLED (1440x3088) 120 Гц, Exynos 2200, ОЗУ 12', '1890.00', 0, 'goods/11_1711042128249_ffd43ec1.webp', '[\"goods\\/2_1711039396535_fb8487d2.png\",\"goods\\/10_1711041932595_5742f948.webp\",\"goods\\/11_1711042128249_76f80fae.webp\"]', 1, 9, '2024-06-28', '2024-06-28 22:16:45', 'smartfon-samsung-galaxy-s22-ultra-5g', 0, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -391,8 +457,14 @@ CREATE TABLE `manufacturer_goods` (
 
 INSERT INTO `manufacturer_goods` (`goods_id`, `manufacturer_id`) VALUES
 (25, 1),
+(64, 1),
+(65, 1),
 (24, 2),
+(66, 2),
 (23, 3),
+(61, 3),
+(62, 3),
+(63, 3),
 (26, 4);
 
 -- --------------------------------------------------------
@@ -448,50 +520,6 @@ CREATE TABLE `parsing_table` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products`
---
-
-CREATE TABLE `products` (
-  `id` int NOT NULL,
-  `pid` int NOT NULL,
-  `slug` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `price` float NOT NULL,
-  `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` tinyint NOT NULL DEFAULT '1',
-  `position` int DEFAULT NULL,
-  `visible` tinyint DEFAULT NULL,
-  `gallery_img` text COLLATE utf8mb4_general_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Дамп данных таблицы `products`
---
-
-INSERT INTO `products` (`id`, `pid`, `slug`, `name`, `description`, `price`, `img`, `status`, `position`, `visible`, `gallery_img`) VALUES
-(1, 5, 'redmi-10c-nfc', 'Смартфон Xiaomi Redmi 10C NFC 4GB/128GB международная версия (серый)', 'Android, экран 6.71\" IPS (720x1650) 60 Гц, Qualcomm Snapdragon 680, ОЗУ 4 ГБ, память 128 ГБ, поддержка карт памяти, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM) ', 430, 'img_1_1711039208066.png', 1, 1, 1, NULL),
-(2, 5, 'redmi-note-12-nfc', 'Смартфон Xiaomi Redmi Note 12 6GB/128GB с NFC международная версия (серый оникс)', 'Android, экран 6.67\" AMOLED (1080x2400) 120 Гц, Qualcomm Snapdragon 685, ОЗУ 6 ГБ, память 128 ГБ, поддержка карт памяти, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM), влагозащита IP53 ', 685.5, 'img_2_1711039396535.png', 1, 2, 1, NULL),
-(3, 5, '13t-pro-black', 'Смартфон Xiaomi 13T Pro 12GB/512GB международная версия (черный)', '<p>Android, экран 6.67\" AMOLED 144 Гц, Mediatek 9200+, ОЗУ 12 ГБ, память 512 ГБ, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68</p>', 2501, 'img_3_1711039508491.png', 1, 3, 1, NULL),
-(4, 6, 'iphone-14-128gb-polunochnyi', 'Смартфон Apple iPhone 14 128GB (полуночный)', 'Apple iOS, экран 6.1\" OLED (1170x2532) 60 Гц, Apple A15 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 12 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68 ', 2935, 'img_4_1711041124918.webp', 1, 1, 1, NULL),
-(5, 6, 'iphone-11-128gb-chernyi', 'Смартфон Apple iPhone 11 128GB (черный)', 'Apple iOS, экран 6.1\" IPS (828x1792), Apple A13 Bionic, ОЗУ 4 ГБ, память 128 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IP68', 2115.35, 'img_5_1711041487549.webp', 1, 2, 1, NULL),
-(6, 6, 'iphone-15-128gb-chernyi', 'Смартфон Apple iPhone 15 128GB (черный)', 'Apple iOS, экран 6.1\" OLED (1179x2556) 60 Гц, Apple A16 Bionic, ОЗУ 6 ГБ, память 128 ГБ, камера 48 Мп, 1 SIM (nano-SIM/eSIM), влагозащита IP68 ', 3500.5, 'img_6_1711041613282.webp', 1, 3, 1, NULL),
-(7, 6, 'iphone-13-128gb-zelenyi', 'Apple iPhone 13 128GB (зеленый)', 'Apple iOS, экран 6.1\" OLED (1170x2532) 60 Гц, Apple A15 Bionic, ОЗУ 4 ГБ, память 128 ГБ, камера 12 Мп, аккумулятор 3227 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IP68 ', 2603, 'img_7_1711072021871.webp', 1, 4, 1, NULL),
-(10, 7, 'galaxy-s22-ultra-5g-sm-chernyi', 'Смартфон Samsung Galaxy S22 Ultra 5G SM-S908B/DS 12GB/256GB (черный фантом)', 'Android, экран 6.8\" AMOLED (1440x3088) 120 Гц, Exynos 2200, ОЗУ 12 ГБ, память 256 ГБ, камера 108 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM/eSIM), влагозащита IP68                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ', 2516, 'img_10_1711041932595.webp', 1, 1, 1, NULL),
-(11, 7, 'galaxy-a23-sm-a23-persikovyi', 'Samsung Galaxy A23 SM-A235F/DSN 4GB/64GB (персиковый)', 'Android, экран 6.6\" PLS (1080x2408) 90 Гц, Qualcomm Snapdragon 680, ОЗУ 4 ГБ, память 64 ГБ, поддержка карт памяти, камера 50 Мп, аккумулятор 5000 мАч, 2 SIM (nano-SIM) ', 763.5, 'img_11_1711042128249.webp', 1, 2, 1, NULL),
-(14, 7, 'galaxy-z-flip5-bezhevyi', 'Смартфон Samsung Galaxy Z Flip5 SM-F731B/DS 8GB/256GB (бежевый)', 'Android, экран 6.7\" AMOLED (1080x2640) 120 Гц, Qualcomm Snapdragon 8 Gen2 SM8550, ОЗУ 8 ГБ, память 256 ГБ, камера 12 Мп, аккумулятор 3700 мАч, 1 SIM (nano-SIM/eSIM), влагозащита IPX8\r\n', 2976.5, 'img_14_1711042460430.webp', 1, 3, 1, NULL),
-(15, 7, 'galaxy-a01-sm-a015fds-chernyi', 'Смартфон Samsung Galaxy A01 SM-A015F/DS (черный)', 'Android, экран 5.7\" PLS (720x1560), Qualcomm Snapdragon 439, ОЗУ 2 ГБ, память 16 ГБ, поддержка карт памяти, камера 13 Мп, аккумулятор 3000 мАч, 2 SIM (nano-SIM) ', 210, 'img_15_1711131941591.webp', 1, 4, 1, NULL),
-(16, 8, 'lenovo-tab-m10-plus-3rd-gen-tb-128xu', 'Планшет Lenovo Tab M10 Plus 3rd Gen TB-128XU 4GB/128GB LTE (серый)', '10.61\" IPS, 60 Гц (2000x1200), Android, Qualcomm Snapdragon 680, ОЗУ 4 ГБ, флэш-память 128 ГБ, цвет серый', 782.7, 'img_16_1713087551260.webp', 1, 1, 1, NULL),
-(17, 8, 'lenovo-tab-p11-plus-tb-j616x-6gb128gb', 'Планшет Lenovo Tab P11 Plus TB-J616X 6GB/128GB LTE (серый)', '11\" IPS, 60 Гц (2000x1200), Android, MediaTek Helio G90T, ОЗУ 6 ГБ, флэш-память 128 ГБ, цвет серый', 1482, 'img_17_1713087825459.webp', 1, 2, 1, NULL),
-(18, 9, 'asus-rog-strix-g15-g513rc-hn133', 'Игровой ноутбук ASUS ROG Strix G15 G513RC-HN133', '15.6\" 1920 x 1080, IPS, 144 Гц, AMD Ryzen 7 6800H, 16 ГБ DDR5, SSD 512 ГБ, видеокарта NVIDIA GeForce RTX 3050 4 ГБ (TGP 95 Вт), без ОС, цвет крышки черный, аккумулятор 56 Вт·ч', 4005, 'img_18_1713088418727.webp', 1, 1, 1, NULL),
-(19, 9, 'asus-tuf-gaming-a17-fa706ihrb-hx050', 'Игровой ноутбук ASUS TUF Gaming A17 FA706IHRB-HX050', '17.3\" 1920 x 1080, IPS, 144 Гц, AMD Ryzen 5 4600H, 16 ГБ DDR4, SSD 512 ГБ, видеокарта NVIDIA GeForce GTX 1650 4 ГБ GDDR6, без ОС, цвет крышки черный, аккумулятор 48 Вт·ч', 3222, 'img_19_1713088786380.webp', 0, 2, 1, NULL),
-(20, 10, 'digma-eve-c5403-dn15cn-4bxw02', 'Ноутбук Digma EVE C5403 DN15CN-4BXW02', '15.6\" 1920 x 1080, IPS, 60 Гц, Intel Celeron N4020, 4 ГБ LPDDR4, SSD 128 ГБ, видеокарта встроенная, Windows 11 Pro, цвет крышки серебристый, аккумулятор 37 Вт·ч', 1000, 'img_20_1713089106633.webp', 1, 1, 1, NULL),
-(21, 10, 'digma-pro-fortis-m-dn15p5-8cxn01', 'Ноутбук Digma Pro Fortis M DN15P5-8CXN01', '15.6\" 1920 x 1080, IPS, 60 Гц, Intel Core i5 10210U 1600 МГц, 8 ГБ, SSD 512 ГБ, видеокарта встроенная, без ОС, цвет крышки серебристый', 1705, 'img_21_1713089225500.webp', 1, 2, 1, NULL),
-(22, 11, 'apple-macbook-air-13-m1-2020-mgn63', 'Ноутбук Apple Macbook Air 13\" M1 2020 MGN63', '13.3\" 2560 x 1600, IPS, 60 Гц, Apple M1, 8 ГБ, SSD 256 ГБ, видеокарта встроенная, Mac OS, цвет крышки серый, аккумулятор 49.9 Вт·ч', 3627, 'img_22_1713090477061.webp', 1, 1, 1, NULL);
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `sales`
 --
 
@@ -511,9 +539,9 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`id`, `name`, `sub_title`, `position`, `visible`, `img`, `external_url`, `short_content`) VALUES
-(1, 'Акция 1', 'Продажа', 1, 1, 'sales/services.jpg', '/catalog', 'Два по цене один. Два по цене один. Два по цене один. Два по цене один.Два по цене один. Два по цене один.Два по цене один.'),
-(2, 'Акция 2', 'Услуги', 2, 1, 'sales/services-detail1.jpg', '/catalog', 'За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. '),
-(3, 'Акция 3', 'Пустышка', 3, 1, 'sales/sservices1.jpg', '/catalog/null1', 'Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . ');
+(1, 'Акция 1', 'Продажа', 1, 1, 'sales/services.jpg', '/', 'Два по цене один. Два по цене один. Два по цене один. Два по цене один.Два по цене один. Два по цене один.Два по цене один.'),
+(2, 'Акция 2', 'Услуги', 2, 1, 'sales/services-detail1.jpg', '/', 'За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. За это бесплатно то. '),
+(3, 'Акция 3', 'Пустышка', 3, 1, 'sales/sservices1.jpg', '/', 'Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . Просто так, дарю . ');
 
 -- --------------------------------------------------------
 
@@ -612,14 +640,6 @@ ALTER TABLE `catalog`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `slug` (`slug`),
-  ADD KEY `categories_categories_id_fk` (`pid`);
-
---
 -- Индексы таблицы `cat_filters`
 --
 ALTER TABLE `cat_filters`
@@ -693,14 +713,6 @@ ALTER TABLE `news`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `products`
---
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `slug` (`slug`),
-  ADD KEY `category_id` (`pid`);
-
---
 -- Индексы таблицы `sales`
 --
 ALTER TABLE `sales`
@@ -762,7 +774,7 @@ ALTER TABLE `color`
 -- AUTO_INCREMENT для таблицы `color_goods`
 --
 ALTER TABLE `color_goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=335;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=514;
 
 --
 -- AUTO_INCREMENT для таблицы `country_manufacturers`
@@ -774,13 +786,13 @@ ALTER TABLE `country_manufacturers`
 -- AUTO_INCREMENT для таблицы `filters`
 --
 ALTER TABLE `filters`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT для таблицы `goods`
 --
 ALTER TABLE `goods`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT для таблицы `information`
@@ -829,12 +841,6 @@ ALTER TABLE `users`
 --
 
 --
--- Ограничения внешнего ключа таблицы `categories`
---
-ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_categories_id_fk` FOREIGN KEY (`pid`) REFERENCES `categories` (`id`);
-
---
 -- Ограничения внешнего ключа таблицы `color_goods`
 --
 ALTER TABLE `color_goods`
@@ -872,12 +878,6 @@ ALTER TABLE `manufacturer`
 ALTER TABLE `manufacturer_goods`
   ADD CONSTRAINT `manufacturer_goods_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   ADD CONSTRAINT `manufacturer_goods_ibfk_2` FOREIGN KEY (`manufacturer_id`) REFERENCES `manufacturer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
--- Ограничения внешнего ключа таблицы `products`
---
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_categories_id_fk` FOREIGN KEY (`pid`) REFERENCES `categories` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
