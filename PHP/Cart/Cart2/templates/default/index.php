@@ -3,18 +3,19 @@
         <div class="slider__container swiper-container">
             <div class="slider__wrapper swiper-wrapper">
                 <?php foreach ($this->sales as $item): ?>
-                    <a href="<?= $this->getUrl($item['external_url']); ?>" class="slider__item swiper-slide"
-                       style="text-decoration: none">
+                    <div class="slider__item swiper-slide">
                         <div class="slider__item-description">
-                            <div class="slider__item-prev-text"><?= $item['sub_title'] ?></div>
-                            <div class="slider__item-header">
-                                <?php foreach ($this->spaceArr($item['name']) as $value): ?>
-                                    <span><?= $value ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="slider__item-text">
-                                <?= $this->clearTags($item['short_content'], false); ?>
-                            </div>
+                            <a href="<?= $this->getUrl($item['external_url']); ?>" style="text-decoration: none">
+                                <div class="slider__item-prev-text"><?= $item['sub_title'] ?></div>
+                                <div class="slider__item-header">
+                                    <?php foreach ($this->spaceArr($item['name']) as $value): ?>
+                                        <span><?= $value ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="slider__item-text">
+                                    <?= $this->clearTags($item['short_content'], false); ?>
+                                </div>
+                            </a>
                             <div class="slider__item-logos">
                                 <?php if (!empty($this->set['img_years']) && !empty($this->set['number_years'])): ?>
                                     <div class="slider__item-15yrs">
@@ -27,10 +28,11 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="slider__item-image">
+                        <a class="slider__item-image" href="<?= $this->getUrl($item['external_url']); ?>"
+                           style="text-decoration: none">
                             <img src="<?= $this->img($item['img']) ?>" alt="<?= $item['name'] ?>">
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 <?php endforeach; ?>
             </div>
 
@@ -181,19 +183,19 @@
         <button type="submit" class="form-submit feedback__submit">Отправить</button>
     </form>
 </section>
-<?php if(!empty($this->news)):?>
-<section class="news">
-    <div class="news__name subheader">
-        Новости
-    </div>
-    <div class="news__wrapper">
-        <?php foreach ($this->news as $item){
-            $this->showOneItems($item, [], 'cardOneNews');
-        }?>
-    </div>
-    <a href="<?=$this->getUrl('news')?>" class="news__reasdmore readmore">Смотреть все</a>
-</section>
-<?php endif;?>
+<?php if (!empty($this->news)): ?>
+    <section class="news">
+        <div class="news__name subheader">
+            Новости
+        </div>
+        <div class="news__wrapper">
+            <?php foreach ($this->news as $item) {
+                $this->showOneItems($item, [], 'cardOneNews');
+            } ?>
+        </div>
+        <a href="<?= $this->getUrl('news') ?>" class="news__reasdmore readmore">Смотреть все</a>
+    </section>
+<?php endif; ?>
 <div class="search ">
     <button>
         <svg class="inline-svg-icon svg-search">

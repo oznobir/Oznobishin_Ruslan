@@ -3,7 +3,8 @@
 $mainClass = $parameters['mainClass'] ?? 'offers__tabs_card swiper-slide';
 $prefixAddClass = $parameters['prefixAddClass'] ?? 'offers';
 ?>
-<div class="<?= $mainClass ?>">
+<a class="<?= $mainClass ?>" href="<?= $this->getUrl(['product' => $data['alias']]) ?>" data-productContainer
+   style="color: black; text-decoration: none">
     <div class="<?= $prefixAddClass ?>__tabs_image">
         <img src="<?= $this->img($data['img']) ?>" alt="<?= $data['name'] ?>">
     </div>
@@ -38,4 +39,4 @@ $prefixAddClass = $parameters['prefixAddClass'] ?? 'offers';
             <?= $parameters['icon'] ?>
         </div>
     <?php endif; ?>
-</div>
+</a>

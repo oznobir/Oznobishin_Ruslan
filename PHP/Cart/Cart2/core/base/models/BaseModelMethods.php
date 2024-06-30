@@ -193,6 +193,8 @@ abstract class BaseModelMethods
                 $condition = '';
                 foreach ($set['where'] as $key => $item) {
                     $where .= ' ';
+                    if (preg_match('/\.\d+$/', $key))
+                        $key = preg_replace('/\.\d+$/', '', $key);
                     if (isset($set['operand'][$o_count])) {
                         $operand = $set['operand'][$o_count];
                         $o_count++;

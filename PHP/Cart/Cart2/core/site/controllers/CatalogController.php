@@ -70,11 +70,11 @@ class CatalogController extends BaseSite
         $dbWhere = [];
         $dbOperand = [];
         if (isset($_GET['min_price'])) {
-            $dbWhere['price'] = $this->num($_GET['min_price']);
+            $dbWhere['price.0'] = $this->num($_GET['min_price']);
             $dbOperand[] = '>=';
         }
         if (isset($_GET['max_price'])) {
-            $dbWhere['price  '] = $this->num($_GET['max_price']);
+            $dbWhere['price.1'] = $this->num($_GET['max_price']);
             $dbOperand[] = '<=';
         }
         if (!empty($_GET['filters'])) {

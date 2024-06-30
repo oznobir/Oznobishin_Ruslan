@@ -131,7 +131,7 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     border-color: #2D3033;
-    background: #335252;
+    background: #ffac52;
     color: #fff;
 }
 
@@ -292,7 +292,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     position: absolute;
     top: 0;
     left: 0;
-    fill: #335252
+    fill: #ffac52
 }
 
 .controls._prev svg {
@@ -360,7 +360,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .readmore:hover {
-    background: #335252;
+    background: #ffac52;
     border-color: #292C31;
     color: #fff;
 }
@@ -415,7 +415,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     content: '';
     width: 30px;
     height: 2px;
-    background: #335252;
+    background: #ffac52;
     display: block;
     transform: rotate(45deg);
     position: absolute;
@@ -427,7 +427,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     content: '';
     width: 30px;
     height: 2px;
-    background: #335252;
+    background: #ffac52;
     display: block;
     transform: rotate(-45deg);
     position: absolute;
@@ -906,7 +906,7 @@ input[type='search'], input[type='text'], input[type='email'] {
         right: 0;
         width: 60px;
         height: 100vh;
-        border-left: 1px solid #335252
+        border-left: 1px solid #ffac52
     }
 }
 
@@ -998,7 +998,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1024px) {
     .header__sidebar_btn svg {
-        fill: #335252
+        fill: #ffac52
     }
 }
 
@@ -1103,7 +1103,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1024px) {
     .header__sidebar_btn.burger-menu .burger {
-        background: #335252
+        background: #ffac52
     }
 }
 
@@ -1126,7 +1126,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1024px) {
     .header__sidebar_btn.burger-menu .burger::before {
-        background: #335252
+        background: #ffac52
     }
 }
 
@@ -1149,7 +1149,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1024px) {
     .header__sidebar_btn.burger-menu .burger::after {
-        background: #335252
+        background: #ffac52
     }
 }
 
@@ -1803,7 +1803,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .button-blue:hover {
-    background-color: #335252;
+    background-color: #ffac52;
     color: #fff;
 }
 
@@ -1812,13 +1812,13 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .button-darkcyan {
-    background-color: #335252;
+    background-color: #ffac52;
     color: #fff;
 }
 
 .button-darkcyan:hover {
     background-color: #D4DDE1;
-    color: #335252;
+    color: #ffac52;
 }
 
 .button-basket svg {
@@ -1850,7 +1850,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .slider__button:hover {
-    color: #335252
+    color: #ffac52
 }
 
 @media screen and (max-width: 480px) {
@@ -1868,13 +1868,13 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .slider__prev:hover::before {
-    border-left: 1px solid #335252;
-    border-bottom: 1px solid #335252;
+    border-left: 1px solid #ffac52;
+    border-bottom: 1px solid #ffac52;
     transform: rotate(45deg) translateY(-50%)
 }
 
 .slider__prev:hover::after {
-    background-color: #335252
+    background-color: #ffac52
 }
 
 .slider__prev::before {
@@ -1908,12 +1908,12 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .slider__next:hover::before {
-    border-right: 1px solid #335252;
-    border-bottom: 1px solid #335252
+    border-right: 1px solid #ffac52;
+    border-bottom: 1px solid #ffac52
 }
 
 .slider__next:hover::after {
-    background-color: #335252
+    background-color: #ffac52
 }
 
 .slider__next::before {
@@ -2302,7 +2302,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .card-item__btn:hover {
-    background: #335252;
+    background: #ffac52;
     color: #fff;
 }
 
@@ -3038,7 +3038,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .slider__item-15yrs p {
-    color: #335252;
+    color: #ffac52;
     line-height: 18px;
     margin-left: -3px;
     margin-top: 10px
@@ -3807,7 +3807,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     font-size: 18px;
     text-transform: uppercase;
     font-weight: 900;
-    color: #335252
+    color: #ffac52
 }
 
 .offers__tabs_price span {
@@ -3857,7 +3857,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .offers__btn:hover {
-    background: #335252;
+    background: #ffac52;
     color: #fff;
 }
 
@@ -4525,7 +4525,7 @@ input[type='search'], input[type='text'], input[type='email'] {
         position: relative;
         width: auto;
         height: auto;
-        color: #335252;
+        color: #ffac52;
         padding: 0
     }
 }
@@ -5151,7 +5151,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 .card-main-info__share-link svg {
 	width: 100%;
 	height: 100%;
-	fill: #335252
+	fill: #ffac52
 }*/
 
 .card-main-info__sale {
@@ -5260,7 +5260,8 @@ input[type='search'], input[type='text'], input[type='email'] {
 .card-main-info-size__count {
     width: 44px;
     height: 42px;
-    border: 1px solid #2D3033;
+    /*border: 1px solid #2D3033;*/
+    background-color: #D4DDE1;
     padding-left: 11px;
     display: flex;
     align-items: center;
@@ -5274,7 +5275,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1680px) {
     .card-main-info-size__count {
-        width: 25px;
+        width: 50px;
         height: 25px;
         padding-left: 0;
         align-items: center;
@@ -5346,7 +5347,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .card-tabs__background {
-    background: linear-gradient(-90deg, #335252 0%, rgba(51, 51, 51, 0) 100%);
+    background: linear-gradient(-90deg, #ffac52 0%, rgba(51, 51, 51, 0) 100%);
     width: 100px;
     top: 0;
     bottom: 0;
@@ -5371,7 +5372,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .card-tabs__top {
-    background-color: #335252
+    background-color: #ffac52
 }
 
 .card-tabs__top-items {
@@ -6478,7 +6479,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .catalog-section-pagination__item:hover {
-    color: #335252
+    color: #ffac52
 }
 
 .catalog-section-pagination__prev {
@@ -6512,12 +6513,12 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .catalog-section-pagination__prev:hover::before {
-    border-left: 2px solid #335252;
-    border-bottom: 2px solid #335252
+    border-left: 2px solid #ffac52;
+    border-bottom: 2px solid #ffac52
 }
 
 .catalog-section-pagination__prev:hover::after {
-    background-color: #335252
+    background-color: #ffac52
 }
 
 .catalog-section-pagination__next {
@@ -6550,12 +6551,12 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .catalog-section-pagination__next:hover::before {
-    border-right: 2px solid #335252;
-    border-bottom: 2px solid #335252
+    border-right: 2px solid #ffac52;
+    border-bottom: 2px solid #ffac52
 }
 
 .catalog-section-pagination__next:hover::after {
-    background-color: #335252
+    background-color: #ffac52
 }
 
 .catalog-section__line {
@@ -6879,7 +6880,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 .division-internal-item__arrow-stat svg {
     max-width: 100%;
     max-height: 100%;
-    fill: #335252
+    fill: #ffac52
 }
 
 .services {
@@ -7230,7 +7231,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .basket-btn:hover {
-    background: #335252;
+    background: #ffac52;
     color: #fff;
 }
 
@@ -7492,7 +7493,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .execute-order_btn:hover {
-    background: #335252;
+    background: #ffac52;
     color: #fff;
 }
 

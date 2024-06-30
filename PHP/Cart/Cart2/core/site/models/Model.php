@@ -27,18 +27,20 @@ class Model extends BaseModel
      */
     public function getGoods(array $set = [], &$catalogFilters = null, &$catalogPrice = null): array|bool|int|string|null
     {
+        $columnsGoods = $this->showColumns('goods');
         if (empty($set['join_structure'])) $set['join_structure'] = true;
         if (empty($set['where'])) $set['where'] = [];
         if (empty($set['order'])) {
             $set['order'] = [];
-            if (!empty($this->showColumns('goods')['pid'])) $set['order'][] = 'pid';
-            if (!empty($this->showColumns('goods')['price'])) $set['order'][] = 'price';
+            if (!empty($columnsGoods['pid'])) $set['order'][] = 'pid';
+            if (!empty($columnsGoods['price'])) $set['order'][] = 'price';
         }
 
         $goods = $this->select('goods', $set);
         if ($goods) {
             unset($set['join'], $set['join_structure'], $set['pagination']);
-            if ($catalogPrice !== false && !empty($this->showColumns('goods')['price'])) {
+
+            if ($catalogPrice !== false && !empty($columnsGoods['price'])) {
                 $set['fields'] = ['MIN(price) as min_price', 'MAX(price) as max_price'];
                 $catalogPrice = $this->select('goods', $set);
                 if (!empty($catalogPrice[0])) {
@@ -47,16 +49,25 @@ class Model extends BaseModel
                     $catalogPrice['max_price'] = $_GET['max_price'] ?? ceil($catalogPrice['max_price']);
                 }
             }
+            // скидки
+            if (!empty($columnsGoods['discount'])) {
+                foreach ($goods as $item) {
+                    $this->applyDiscount($item, $item['discount']);
+                }
+            }
             if ($catalogFilters !== false && in_array('filters', $this->showTables())) {
-                $parentFiltersFields = [];
+
                 $filtersWhere = [];
                 $filtersOrder = [];
-                foreach ($this->showColumns('filters') as $name => $item) {
+
+                $columnsFilters = $this->showColumns('filters');
+                if (!empty($columnsFilters['visible'])) $filtersWhere['visible'] = 1;
+                if (!empty($columnsFilters['position'])) $filtersOrder[] = 'position';
+
+                $parentFiltersFields = [];
+                foreach ($columnsFilters as $name => $item) {
                     if (!empty($item) && $name !== 'pri') $parentFiltersFields[] = $name . ' as f_' . $name;
                 }
-                if (!empty($this->showColumns('filters')['visible'])) $filtersWhere['visible'] = 1;
-                if (!empty($this->showColumns('filters')['position'])) $filtersOrder[] = 'position';
-
                 $filters = $this->select('filters', [
                     'where' => $filtersWhere,
                     'join' => [
@@ -74,7 +85,7 @@ class Model extends BaseModel
                             ],
                             'where' => [
                                 'goods_id' => $this->select('goods', [
-                                    'fields' => [$this->showColumns('goods')['pri'][0]],
+                                    'fields' => [$columnsGoods['pri'][0]],
                                     'where' => $set['where'],
                                     'operand' => $set['operand'] ?? null,
                                     'return_query' => true
@@ -84,12 +95,7 @@ class Model extends BaseModel
                         ],
                     ],
                 ]);
-                // скидки
-                if (!empty($this->showColumns('goods')['discount'])) {
-                    foreach ($goods as $key => $item) {
-                        $this->applyDiscount($goods[$key], $item['discount']);
-                    }
-                }
+
                 if ($filters) {
                     // подсчет товаров в фильтре
                     $filtersIds = array_unique(array_column($filters, 'id'));
@@ -130,6 +136,9 @@ class Model extends BaseModel
                                 $goods[$item['goods_id']]['filters'][$parent['id']]['values'] = [];
                             }
                             $goods[$item['goods_id']]['filters'][$parent['id']]['values'][$item['id']] = $child;
+                            uasort($goods[$item['goods_id']]['filters'], function ($a, $b) {
+                                return (int)$a['position'] < (int)$b['position'] ? -1 : 1;
+                            });
                         }
                     }
                 }
