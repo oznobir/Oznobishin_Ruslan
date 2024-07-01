@@ -9,7 +9,7 @@ use core\site\models\Model;
 
 abstract class BaseSite extends BaseController
 {
-    /** @uses  pagination*/
+    /** @uses  pagination */
     protected ?Model $model = null;
     protected ?string $table = null;
     protected array $set;
@@ -18,6 +18,7 @@ abstract class BaseSite extends BaseController
     protected ?array $sPagination;
 
     protected string $breadcrumbs;
+    protected array $cart;
 
     /**
      * @throws DbException
@@ -42,8 +43,10 @@ abstract class BaseSite extends BaseController
             'where' => ['visible' => 1],
             'order' => ['position']
         ]);
+        if(!$this->isAjax() && !$this->isPost()){
+            $this->getCartData();
+        }
     }
-// outputData перенести в class Views
 
     /**
      * @throws RouteException
@@ -57,6 +60,126 @@ abstract class BaseSite extends BaseController
         $this->footer = $this->render(SITE_TEMPLATE . 'include/footer');
 
         return $this->render(SITE_TEMPLATE . 'layout/default');
+    }
+
+    /**
+     * @throws DbException
+     */
+    protected function addToCart($id, $qty): array
+    {
+        if (!$id) return ['success' => 0, 'message' => 'Отсутствует ID товара'];
+        $data = $this->model->select('goods', [
+            'fields' => ['id'],
+            'where' => ['id' => $id, 'visible' => 1],
+            'limit' => 1,
+        ]);
+        if (!$data) return ['success' => 0, 'message' => 'Отсутствует товар'];
+        $cart = &$this->getCart();
+        $cart[$id] = $qty;
+        $this->updateCookieCart($cart);
+        $res = $this->getCartData(true);
+
+        if ($res && !empty($res['goods'][$id])) {
+            $res['current'] = $res['goods'][$id];
+        }
+        return $res;
+    }
+
+    /**
+     * @param bool $cartChanged
+     * @return array|null
+     * @throws DbException
+     */
+    protected function getCartData(bool $cartChanged = false): ?array
+    {
+        if (!empty($this->cart) && !$cartChanged) return $this->cart;
+
+        $cart = &$this->getCart();
+        if (empty($cart)) {
+            $this->clearCart();
+            return null;
+        }
+        $var = false;
+        $goods = $this->model->getGoods([
+            'where' => ['id' => array_keys($cart), 'visible' => 1],
+            'operand' => ['IN', '=']
+        ], $var, $var);
+
+        if (empty($goods)) {
+            $this->clearCart();
+            return null;
+        }
+        $cartChanged = false;
+        foreach ($cart as $id => $qty) {
+            if (empty($goods[$id])) {
+                unset($cart[$id]);
+                $cartChanged = true;
+                continue;
+            }
+            $this->cart['goods'][$id] = $goods[$id];
+            $this->cart['goods'][$id]['qty'] = $qty;
+        }
+        if ($cartChanged) $this->updateCookieCart($cart);
+
+        return $this->totalSum();
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function totalSum(): ?array
+    {
+        if (empty($this->cart['goods'])) {
+            $this->clearCart();
+            return null;
+        }
+
+        $this->cart['total_sum'] = $this->cart['total_old_sum'] = $this->cart['total_qty'] = 0;
+        foreach ($this->cart['goods'] as $item) {
+            $this->cart['total_qty'] += $item['qty'];
+            $sum = round($item['qty'] * $item['price'], 2);
+            $this->cart['total_sum'] += $sum;
+            if (empty($item['old_price'])) $this->cart['total_old_sum'] += $sum;
+            else $this->cart['total_old_sum'] += round($item['qty'] * $item['old_price'], 2);
+        }
+        return $this->cart;
+    }
+
+    /**
+     * @return void
+     */
+    public function clearCart(): void
+    {
+        unset($_COOKIE['cart'], $_SESSION['cart']);
+        $this->cart = [];
+        if (defined('CART') || strtolower(CART) === 'cookie') {
+            setcookie('cart', '', 1, PATH);
+        }
+    }
+
+    /**
+     * @param array $cart
+     * @return void
+     */
+
+    protected function updateCookieCart(array $cart): void
+    {
+//        $cart = &$this->getCart();
+        if (defined('CART') && strtolower(CART) === 'cookie') {
+            setcookie('cart', json_encode($cart), time() + 3600 * 2, PATH);
+        }
+    }
+
+    protected function &getCart()
+    {
+        if (defined('CART') && strtolower(CART) === 'cookie') {
+            if (!isset($_COOKIE['cart'])) $_COOKIE['cart'] = [];
+            else $_COOKIE['cart'] = is_string($_COOKIE['cart']) ? json_decode($_COOKIE['cart'], true) : $_COOKIE['cart'];
+            return $_COOKIE['cart'];
+        } else {
+            if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
+            return $_SESSION['cart'];
+        }
     }
 
     protected function pagination(array $pag, array|string $url = null, ?array $icons = null, string $class = ''): void
@@ -79,12 +202,12 @@ abstract class BaseSite extends BaseController
         if (isset($_GET['page'])) unset($queryString['page']);
 
         if (empty($queryString)) $str = $firstUrl . '?page=';
-        else $str = $this->getUrl($url, $queryString) . '&page=';
+        else $str = $this->getUrl($url, $queryString) . END_SLASH . '&page=';
 
         foreach ($pag as $key => $item) {
             if (is_array($item)) {
                 foreach ($item as $value) {
-                    if($key == 'previous' && $value === 1)$href = $firstUrl;
+                    if ($key == 'previous' && $value === 1) $href = $firstUrl;
                     else $href = $str . $value;
                     $this->showLinkPagination($value, $href, $addClass);
                 }
@@ -96,33 +219,6 @@ abstract class BaseSite extends BaseController
                 $this->showLinkPagination($icons[$key], $href, $addClass);
             }
         }
-//        if (!empty($pag['first'])) {
-//            $href = $pag['first'] === 1 ? $firstUrl : $str . $pag['first'];
-//            $this->showLinkPagination($icons['first'], $href);
-//        }
-//        if (!empty($pag['back'])) {
-//            $href = $pag['back'] === 1 ? $firstUrl : $str . $pag['back'];
-//            $this->showLinkPagination($icons['back'], $href);
-//        }
-//        if (!empty($pag['previous'])) {
-//            foreach ($pag['previous'] as $value) {
-//                $this->showLinkPagination($value, $str . $value);
-//            }
-//        }
-//        if (!empty($pag['current'])) {
-//            $this->showLinkPagination($pag['current'], '', ' pag');
-//        }
-//        if (!empty($pag['next'])) {
-//            foreach ($pag['next'] as $value) {
-//                $this->showLinkPagination($value, $str . $value);
-//            }
-//        }
-//        if (!empty($pag['forward'])) {
-//            $this->showLinkPagination($icons['forward'], $str . $pag['forward']);
-//        }
-//        if (!empty($pag['last'])) {
-//            $this->showLinkPagination($icons['last'], $str . $pag['last']);
-//        }
     }
 
     protected function showLinkPagination($name, $href = '', $addClass = 'catalog'): void

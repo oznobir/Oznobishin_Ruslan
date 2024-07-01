@@ -68,12 +68,12 @@ $(function () {
             }
         }
     };
-    indexOffersSlider =  new Swiper('.offers__tabs_container', indexOffersSliderOptions);
+    indexOffersSlider = new Swiper('.offers__tabs_container', indexOffersSliderOptions);
     new Swiper('.active .offers__tabs_container', indexOffersSliderOptions);
 
 
     //------------------- Tabs Mainpage -------------------//
-    $('ul.offers__tabs_header').on('click', 'li:not(.active)', function() {
+    $('ul.offers__tabs_header').on('click', 'li:not(.active)', function () {
         $(this)
             .addClass('active').siblings().removeClass('active')
             .closest('div.offers__tabs').find('div.offers__tabs_content').removeClass('active').eq($(this).index()).addClass('active');
@@ -86,28 +86,26 @@ $(function () {
     $('.burger-menu').on('click', function () {
         const burgerHidden = $('.header__menu').hasClass('_hidden');
         const callbackHidden = $('.header__callback').hasClass('_hidden');
-        if(burgerHidden) {//бургер скрыт
-            if(!callbackHidden) {//но открыта обратка
+        if (burgerHidden) {//бургер скрыт
+            if (!callbackHidden) {//но открыта обратка
                 $('.header__callback').addClass('_hidden');//скроем обратку
                 if ($(window).width() <= 1024) {//на мобилке
                     $('.overlay').removeClass('_visible');
                     $('.header__sidebar').removeClass('_bg-opened');
                 }
-            }
-            else {//обратка закрыта
+            } else {//обратка закрыта
                 $('.overlay').addClass('_visible');//покажем оверлей тк его нет
-                if($(window).width() <= 1024) {
+                if ($(window).width() <= 1024) {
                     $('.header__sidebar').addClass('_bg-opened')//на бургере повернем крестик
                     $('.header__menu').removeClass('_hidden');
                 }
             }
-            if($(window).width() > 1024){
+            if ($(window).width() > 1024) {
                 $('.header__menu').removeClass('_hidden');//в любом случае вызовем меню на десктопе
             }
-        }
-        else {//бургер открыт
+        } else {//бургер открыт
             $('.overlay').removeClass('_visible');//скроем оверлей
-            if($(window).width() <= 1024) {
+            if ($(window).width() <= 1024) {
                 $('.header__sidebar').removeClass('_bg-opened')//свернем крестик в бургер
             }
             $('.header__menu').addClass('_hidden');//скроем меню
@@ -115,7 +113,7 @@ $(function () {
     });
     $('.header__menu_close').on('click', function () {
         $('.overlay').removeClass('_visible');
-        if($(window).width() <= 1024) {
+        if ($(window).width() <= 1024) {
             $('.header__sidebar').removeClass('_bg-opened')
         }
         $('.header__menu').addClass('_hidden');
@@ -123,14 +121,14 @@ $(function () {
     //------------------- Callback Popup  -------------------//
     $('.js-callback').on('click', function () {
         $('.overlay').addClass('_visible');
-        if($(window).width() <= 1024) {
+        if ($(window).width() <= 1024) {
             $('.header__sidebar').addClass('_bg-opened')
         }
         $('.header__callback').removeClass('_hidden');
     });
     $('.header__callback_close').on('click', function () {
         $('.overlay').removeClass('_visible');
-        if($(window).width() <= 1024) {
+        if ($(window).width() <= 1024) {
             $('.header__sidebar').removeClass('_bg-opened')
         }
         $('.header__callback').addClass('_hidden');
@@ -140,15 +138,15 @@ $(function () {
         const burgerHidden = $('.header__menu').hasClass('_hidden');
         const callbackHidden = $('.header__callback').hasClass('_hidden');
 
-        if(!burgerHidden) {
+        if (!burgerHidden) {
             $('.header__menu').addClass('_hidden');
         }
-        if(!callbackHidden) {
+        if (!callbackHidden) {
             $('.header__callback').addClass('_hidden');
         }
 
         $('.overlay').removeClass('_visible');
-        if($(window).width() <= 1024) {
+        if ($(window).width() <= 1024) {
             $('.header__sidebar').removeClass('_bg-opened')
         }
     });
@@ -158,7 +156,7 @@ $(function () {
     //------------------- Horizontal Scroll -------------------//
     const controller = new ScrollMagic.Controller();
 
-    if($(window).width() > 1024) {
+    if ($(window).width() > 1024) {
         const timeline = new TimelineMax();
         timeline
             .to($('.horizontal__wrapper'), 1, {xPercent: '-50'});
@@ -173,7 +171,6 @@ $(function () {
             .setPin(".horizontal__wrapper")
             .addTo(controller);
     }
-
 
 
     //------------------- Sticky Search -------------------//
@@ -193,14 +190,14 @@ $(function () {
         $('.header__sidebar').addClass(['animated', 'bounceInUp']);
     }
     //--------------- Quantities catalog ----------------------//
-    $('.qtyItems a').on('click', function (e){
+    $('.qtyItems a').on('click', function (e) {
         e.preventDefault();
         let qty = +$(this).text()
-        if(qty && !isNaN(qty)){
+        if (qty && !isNaN(qty)) {
             $(this).closest('.catalog-section-top-items__toggle').children('span').html(qty)
             $.ajax({
                 url: '/',
-                data:{
+                data: {
                     qty: qty,
                     ajax: 'catalog_quantities'
                 }
@@ -212,3 +209,110 @@ $(function () {
 
     })
 });
+document.addEventListener('DOMContentLoaded', () => {
+    let moreBtn = document.querySelector('.card-main-info__description .more-button')
+    if (moreBtn) {
+        moreBtn.addEventListener('click', e => {
+            e.preventDefault()
+            document.querySelectorAll('.card-tabs__toggle.tabs__toggle')[1].dispatchEvent(new Event('click'))
+            window.scrollTo({
+                top: document.querySelector('.card-tabs').getBoundingClientRect().top + scrollY,
+                behavior: 'smooth'
+            })
+
+        })
+    }
+    (function () {
+        let start = 0
+        document.querySelectorAll('.card-main-gallery-thumb__slide').forEach(item => {
+            item.addEventListener('click', () => {
+                let itemCoords = item.getBoundingClientRect()
+                let parentCoords = item.parentElement.parentElement.getBoundingClientRect()
+                let itemY = scrollY + itemCoords.y
+                let parentY = scrollY + parentCoords.y
+                let margin = parseFloat(getComputedStyle(item)['marginBottom'])
+                let top = Math.ceil(itemCoords.height + margin)
+                if (item.nextElementSibling && Math.ceil(itemY - parentY + top) >= parentCoords.height) {
+                    start -= top
+                } else if (item.previousElementSibling && itemY <= parentY) {
+                    start += top
+                }
+                item.parentElement.style.transition = '0.3s'
+                item.parentElement.style.transform = `translate3d(0px, ${start}px, 0px)`
+            })
+        })
+    })()
+    changeQty()
+    addToCart()
+})
+
+function addToCart() {
+    document.querySelectorAll('[data-addToCart]').forEach(item => {
+        item.addEventListener('click', e => {
+            e.preventDefault()
+            let cart = {}
+            cart.id = +item.getAttribute('data-addToCart')
+            if (cart.id && !isNaN(cart.id)) {
+                let productContainer = item.closest('[data-productContainer]') || document
+                cart.qty = 1
+                let qtyBlock = productContainer.querySelector('[data-quantity]')
+                if (qtyBlock) {
+                    cart.qty = +qtyBlock.innerHTML
+                }
+                cart.ajax = 'add_to_cart'
+                $.ajax({
+                    url: '/',
+                    data: cart,
+                    error: res => {
+                        console.error(res)
+                    },
+                    success: res => {
+                        try {
+                            res = JSON.parse(res)
+                            if (typeof res.current === 'undefined') {
+                                throw new Error('current - undefined')
+                            }
+                            item.setAttribute('data-toCartAdded', 'true');
+                            ['data-totalQty', 'data-totalSum', 'data-totalOldSum'].forEach(attr => {
+                                let cAttr = attr.replace(/data-/, '').replace(/([^A-Z])([A-Z])/g, '$1_$2').toLowerCase()
+                                document.querySelectorAll(`[${attr}]`).forEach(el => {
+                                    if (typeof res[cAttr] !== 'undefined') {
+                                        el.innerHTML = res[cAttr]
+                                    }
+                                })
+                            })
+                        } catch (e) {
+                            alert('Ошибка')
+                        }
+                    }
+                })
+            }
+        })
+    })
+}
+
+function changeQty() {
+    document.querySelectorAll('[data-quantityMinus], [data-quantityPlus]').forEach(item => {
+        item.addEventListener('click', e => {
+            e.preventDefault()
+            let productContainer = item.closest('[data-productContainer]') || document
+            let inCart = false
+            let qtyEl = productContainer.querySelector('[data-quantity]')
+            if (qtyEl) {
+                let qty = +qtyEl.innerHTML || 1
+                if (item.hasAttribute('data-quantityPlus')) {
+                    qty++
+                } else {
+                    qty = qty <= 1 ? 1 : --qty
+                }
+                qtyEl.innerHTML = String(qty)
+                let addToCartEl = productContainer.querySelector('[data-addToCart]')
+                if (addToCartEl && addToCartEl.hasAttribute('data-toCartAdded')) {
+                    addToCartEl.dispatchEvent(new Event('click'))
+                }
+
+            }
+        })
+    })
+
+}

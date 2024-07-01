@@ -91,7 +91,7 @@
                                 <?php endforeach; ?>
                             </div>
                             <?php if (count($this->data['filters']) > 4): ?>
-                                <a href=#" class="card-main-info__more more-button">
+                                <a href="#" class="card-main-info__more more-button">
                                     Показать все
                                 </a>
                             <?php endif; ?>
@@ -106,21 +106,26 @@
                                     Количество:
                                 </span>
                                 <span class="card-main-info-size__body">
-                                    <span class="card-main-info-size__control button card-main-info-size__control_minus js-counterDecrement" data-quantityMinus></span>
-                                    <span class="card-main-info-size__count js-counterShow" data-quantity>1</span>
-                                    <span class="card-main-info-size__control button card-main-info-size__control_plus js-counterIncrement" data-quantityPlus></span>
+                                    <span class="card-main-info-size__control button card-main-info-size__control_minus js-counterDecrement"
+                                          data-quantityMinus></span>
+                                    <span class="card-main-info-size__count js-counterShow" data-quantity>
+                                        <?= $this->cart['goods'][$this->data['id']]['qty'] ?? '1' ?>
+                                    </span>
+                                    <span class="card-main-info-size__control button card-main-info-size__control_plus js-counterIncrement"
+                                          data-quantityPlus></span>
                                 </span>
                             </label>
                         </div>
                         <div class="card-main-info__buttons">
-                            <a href="#" data-adToCart="<?= $this->data['id'] ?>"
+                            <a href="#" data-addToCart="<?= $this->data['id'] ?>
+                            <?= !empty($this->cart['goods'][$this->data['id']]) ? ' data-toCartAdded' : '' ?>"
                                class="card-main-info__button button-basket button-blue button-big button">
                                 <svg>
                                     <use xlink:href="/assets/img/icons.svg#basket"></use>
                                 </svg>
                                 <span>в корзину</span>
                             </a>
-                            <a href="#" data-adToCart="<?= $this->data['id'] ?>" data-oneClick
+                            <a href="#" data-addToCart="<?= $this->data['id'] ?>" data-oneClick
                                class="card-main-info__button button-darkcyan button-big button">
                                 купить сейчас
                             </a>

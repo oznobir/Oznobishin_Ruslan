@@ -39,7 +39,12 @@ class Model extends BaseModel
         $goods = $this->select('goods', $set);
         if ($goods) {
             unset($set['join'], $set['join_structure'], $set['pagination']);
-
+            // скидки
+            if (!empty($columnsGoods['discount'])) {
+                foreach ($goods as $key => $item) {
+                    $this->applyDiscount($goods[$key], $item['discount']);
+                }
+            }
             if ($catalogPrice !== false && !empty($columnsGoods['price'])) {
                 $set['fields'] = ['MIN(price) as min_price', 'MAX(price) as max_price'];
                 $catalogPrice = $this->select('goods', $set);
@@ -47,12 +52,6 @@ class Model extends BaseModel
                     $catalogPrice = $catalogPrice[0];
                     $catalogPrice['min_price'] = $_GET['min_price'] ?? floor($catalogPrice['min_price']);
                     $catalogPrice['max_price'] = $_GET['max_price'] ?? ceil($catalogPrice['max_price']);
-                }
-            }
-            // скидки
-            if (!empty($columnsGoods['discount'])) {
-                foreach ($goods as $item) {
-                    $this->applyDiscount($item, $item['discount']);
                 }
             }
             if ($catalogFilters !== false && in_array('filters', $this->showTables())) {

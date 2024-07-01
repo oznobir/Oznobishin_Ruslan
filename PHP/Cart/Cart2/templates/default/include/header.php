@@ -71,10 +71,11 @@
         </div>
         <div class="header__sidebar">
             <div class="header__sidebar_btn">
-                <a href="<?= $this->getUrl('cart'); ?>">
+                <a href="<?= $this->getUrl('cart'); ?>" class="cart-btn-wrap">
                     <svg class="inline-svg-icon svg-basket">
                         <use href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#basket"></use>
                     </svg>
+                        <span data-totalQty><?= $this->cart['total_qty'] ?? 0?></span>
                 </a>
             </div>
             <div class="header__sidebar_btn burger-menu">
@@ -128,7 +129,7 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
                 <li>
-                    <a href="<?= $this->getUrl('news');?>">
+                    <a href="<?= $this->getUrl('news'); ?>">
                         <span>Новости</span>
                     </a>
                     <ul class="header__menu_sublist">
@@ -136,7 +137,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="<?= $this->getUrl('contacts');?>">
+                    <a href="<?= $this->getUrl('contacts'); ?>">
                         <span>Контакты</span>
                     </a>
                     <ul class="header__menu_sublist">
