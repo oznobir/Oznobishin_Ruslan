@@ -5,6 +5,7 @@ namespace core\site\controllers;
 use core\base\controllers\BaseController;
 use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
+use core\base\settings\Settings;
 use core\site\models\Model;
 
 abstract class BaseSite extends BaseController
@@ -15,6 +16,7 @@ abstract class BaseSite extends BaseController
     protected array $set;
     protected array $menu;
     protected array $socials;
+    protected array $marketing;
     protected ?array $sPagination;
 
     protected string $breadcrumbs;
@@ -22,6 +24,7 @@ abstract class BaseSite extends BaseController
 
     /**
      * @throws DbException
+     * @throws RouteException
      */
     protected function inputData(): void
     {
@@ -43,9 +46,9 @@ abstract class BaseSite extends BaseController
             'where' => ['visible' => 1],
             'order' => ['position']
         ]);
-        if(!$this->isAjax() && !$this->isPost()){
-            $this->getCartData();
-        }
+        $this->marketing['all'] = Settings::get('marketing');
+        $this->getCartData();
+
     }
 
     /**
@@ -142,6 +145,7 @@ abstract class BaseSite extends BaseController
             if (empty($item['old_price'])) $this->cart['total_old_sum'] += $sum;
             else $this->cart['total_old_sum'] += round($item['qty'] * $item['old_price'], 2);
         }
+        if($this->cart['total_old_sum'] ===  $this->cart['total_sum']) unset($this->cart['total_old_sum']);
         return $this->cart;
     }
 
@@ -179,6 +183,22 @@ abstract class BaseSite extends BaseController
         } else {
             if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
             return $_SESSION['cart'];
+        }
+    }
+
+    /**
+     * @param $id
+     * @return void
+     * @throws DbException
+     */
+    protected function deleteCartData($id): void
+    {
+        $id = $this->num($id);
+        if($id){
+            $cart = &$this->getCart();
+            unset($cart[$id]);
+            $this->updateCookieCart($cart);
+            $this->getCartData(true);
         }
     }
 

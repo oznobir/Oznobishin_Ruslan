@@ -25,6 +25,8 @@ class Settings
         'socials' => ['name' => 'Социальные сети', 'img' => 'pages.png'],
         'settings' => ['name' => 'Настройки сайта', 'img' => 'pages.png'],
         'advantages' => ['name' => 'Преимущества', 'img' => 'pages.png'],
+        'delivery' => ['name' => 'Способы доставки', 'img' => 'pages.png'],
+        'payments' => ['name' => 'Способы оплаты', 'img' => 'pages.png'],
     ];
     private array $templateArr = [
         'text' => ['name', 'filters_name', 'price', 'alias', 'phone', 'email', 'external_url',

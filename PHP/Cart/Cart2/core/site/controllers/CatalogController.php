@@ -39,9 +39,9 @@ class CatalogController extends BaseSite
                 throw new RouteException('Нет данных в таблице catalog по ссылке ' . $this->parameters['alias']);
             $this->data = $data[0];
         }
-        $where = ['visible' => 1];
+        $where['visible'] = 1;
 
-        if ($this->data) $where = ['pid' => $this->data['id']];
+        if ($this->data) $where['pid'] = $this->data['id'];
         else $this->data['name'] = 'Каталог';
 
         $this->sFilters = $this->sPrices = $order = null;

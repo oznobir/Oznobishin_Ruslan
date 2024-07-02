@@ -277,7 +277,7 @@ function addToCart() {
                                 let cAttr = attr.replace(/data-/, '').replace(/([^A-Z])([A-Z])/g, '$1_$2').toLowerCase()
                                 document.querySelectorAll(`[${attr}]`).forEach(el => {
                                     if (typeof res[cAttr] !== 'undefined') {
-                                        el.innerHTML = res[cAttr]
+                                        el.innerHTML = res[cAttr] + (attr !== 'data-totalQty' ? ' руб.' :'')
                                     }
                                 })
                             })
@@ -296,7 +296,6 @@ function changeQty() {
         item.addEventListener('click', e => {
             e.preventDefault()
             let productContainer = item.closest('[data-productContainer]') || document
-            let inCart = false
             let qtyEl = productContainer.querySelector('[data-quantity]')
             if (qtyEl) {
                 let qty = +qtyEl.innerHTML || 1

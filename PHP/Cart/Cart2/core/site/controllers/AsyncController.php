@@ -3,6 +3,7 @@
 namespace core\site\controllers;
 
 use core\base\exceptions\DbException;
+use core\site\models\Model;
 
 class AsyncController extends BaseSite
 {
@@ -19,14 +20,13 @@ class AsyncController extends BaseSite
 
         if (isset($data['ajax'])) {
 //                     $data = $this->clearTags($data);
-//                     $this->inputData();
             switch ($data['ajax']) {
                 case 'catalog_quantities':
                     $qty = $data['qty'] ? $this->num($data['qty']) : 0;
                     $qty && $_SESSION['quantities'] = $qty;
                     break;
                 case 'add_to_cart':
-                    $this->inputData();
+                    $this->model = Model::instance();
                     $id = $data['id'] ? $this->num($data['id']) : 0;
                     $qty = $data['qty'] ? $this->num($data['qty']) : 1;
                     return $this->addToCart($id, $qty);

@@ -14,8 +14,6 @@ class IndexController extends BaseSite
     protected array $sales;
     protected array $advantages;
     protected array $news;
-    protected array $marketing;
-
 
     /**
      * @throws RouteException
@@ -39,7 +37,6 @@ class IndexController extends BaseSite
             'order_direction' => ['DESC'],
             'limit' => 3
         ]);
-        $this->marketing['all'] = Settings::get('marketing');
         foreach ($this->marketing['all'] as $type => $item) {
             $this->marketing['goods'][$type] = $this->model->getGoods([
                 'where' => [$type => 1, 'visible' => 1],

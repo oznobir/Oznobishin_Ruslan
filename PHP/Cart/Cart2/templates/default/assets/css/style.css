@@ -2465,7 +2465,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 .card-item__line {
     display: grid;
-    grid-template-columns: 15% 55% 15% 15%;
+    grid-template-columns: 22% 56% 12% 10%;
     margin-bottom: 21px
 }
 
@@ -2562,7 +2562,8 @@ input[type='search'], input[type='text'], input[type='email'] {
     max-width: 190px;
     justify-content: center;
     display: flex;
-    align-items: center
+    align-items: center;
+    text-decoration: none;
 }
 
 @media screen and (max-width: 1366px) {
@@ -5219,7 +5220,8 @@ input[type='search'], input[type='text'], input[type='email'] {
     width: 32px;
     height: 32px;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 1680px) {
@@ -7214,7 +7216,10 @@ input[type='search'], input[type='text'], input[type='email'] {
 }
 
 .basket-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
     width: 280px;
     text-transform: uppercase;
     min-height: 50px;
