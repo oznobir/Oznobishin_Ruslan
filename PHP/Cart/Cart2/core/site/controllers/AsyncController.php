@@ -7,8 +7,6 @@ use core\site\models\Model;
 
 class AsyncController extends BaseSite
 {
-
-
     /**
      * @param $data
      * @return array|void
@@ -17,9 +15,7 @@ class AsyncController extends BaseSite
      */
     public function async($data)
     {
-
         if (isset($data['ajax'])) {
-//                     $data = $this->clearTags($data);
             switch ($data['ajax']) {
                 case 'catalog_quantities':
                     $qty = $data['qty'] ? $this->num($data['qty']) : 0;

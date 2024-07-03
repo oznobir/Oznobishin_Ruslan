@@ -244,6 +244,22 @@ document.addEventListener('DOMContentLoaded', () => {
     })()
     changeQty()
     addToCart()
+    document.querySelectorAll('[data-popup]').forEach(item => {
+        if (item.getAttribute('data-popup')) {
+            console.log(item.getAttribute('data-popup'))
+            let popupEl = document.querySelector(`.${item.getAttribute('data-popup')}`)
+            if (popupEl) {
+                item.addEventListener('click', ()=>{
+                    popupEl.classList.add('open')
+                })
+                popupEl.addEventListener('click', e => {
+                    if(e.target === popupEl){
+                        popupEl.classList.remove('open')
+                    }
+                })
+            }
+        }
+    })
 })
 
 function addToCart() {
@@ -277,7 +293,7 @@ function addToCart() {
                                 let cAttr = attr.replace(/data-/, '').replace(/([^A-Z])([A-Z])/g, '$1_$2').toLowerCase()
                                 document.querySelectorAll(`[${attr}]`).forEach(el => {
                                     if (typeof res[cAttr] !== 'undefined') {
-                                        el.innerHTML = res[cAttr] + (attr !== 'data-totalQty' ? ' руб.' :'')
+                                        el.innerHTML = res[cAttr] + (attr !== 'data-totalQty' ? ' руб.' : '')
                                     }
                                 })
                             })

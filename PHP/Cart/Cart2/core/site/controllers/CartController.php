@@ -11,6 +11,11 @@ class CartController extends BaseSite
     protected function inputData(): void
     {
         parent::inputData();
+        $this->userData = [
+            'name' => 'user',
+            'phone' => 12345678,
+            'email' => 'user@test.by'
+        ];
         $this->delivery = $this->model->select('delivery');
         $this->payments = $this->model->select('payments');
         if (!empty($this->parameters['alias']) && $this->parameters['alias'] === 'remove') {

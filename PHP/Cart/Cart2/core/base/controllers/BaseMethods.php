@@ -63,12 +63,24 @@ trait BaseMethods
     }
 
     /**
+     * @param array $arr
+     * @return void
+     */
+    #[NoReturn] protected function addSessionData(array $arr = []): void
+    {
+        if (!$arr) $arr = $_POST ?? [];
+        foreach ($arr as $key => $item)
+            $_SESSION['res'][$key] = $item;
+        $this->redirect();
+    }
+
+    /**
      * @return void
      */
     protected function getStyles(): void
     {
         if ($this->styles) {
-            foreach ($this->styles as $style) echo '<link rel="stylesheet" href="' . $style . '">';
+            foreach ($this->styles as $style) echo '<link rel="stylesheet" href="' . $style . '">' . PHP_EOL;
         }
     }
 
@@ -77,7 +89,7 @@ trait BaseMethods
      */
     protected function getScripts(): void
     {
-        foreach ($this->scripts as $script) echo '<script type="text/javascript" src="' . $script . '"></script>';
+        foreach ($this->scripts as $script) echo '<script type="text/javascript" src="' . $script . '"></script>'. PHP_EOL;
     }
 
     /**

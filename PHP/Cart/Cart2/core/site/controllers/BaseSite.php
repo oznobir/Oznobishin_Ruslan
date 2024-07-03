@@ -10,9 +10,13 @@ use core\site\models\Model;
 
 abstract class BaseSite extends BaseController
 {
-    /** @uses  pagination */
+    /**
+     * @uses  pagination
+     * @uses  setFormValues
+     */
     protected ?Model $model = null;
-    protected ?string $table = null;
+    //protected ?string $table = null;
+    protected array $userData = [];
     protected array $set;
     protected array $menu;
     protected array $socials;
@@ -63,6 +67,18 @@ abstract class BaseSite extends BaseController
         $this->footer = $this->render(SITE_TEMPLATE . 'include/footer');
 
         return $this->render(SITE_TEMPLATE . 'layout/default');
+    }
+
+    /**
+     * @param int|string $key
+     * @param string|null $property
+     * @param array $arr
+     * @return mixed|string
+     */
+    protected function setFormValues(int|string $key, string $property = null, array $arr = []): mixed
+    {
+        if (!$arr) $arr = $_SESSION['user'] ?? [];
+        return $arr[$key] ?? ($this->$property[$key] ?? '');
     }
 
     /**
@@ -145,7 +161,7 @@ abstract class BaseSite extends BaseController
             if (empty($item['old_price'])) $this->cart['total_old_sum'] += $sum;
             else $this->cart['total_old_sum'] += round($item['qty'] * $item['old_price'], 2);
         }
-        if($this->cart['total_old_sum'] ===  $this->cart['total_sum']) unset($this->cart['total_old_sum']);
+        if ($this->cart['total_old_sum'] === $this->cart['total_sum']) unset($this->cart['total_old_sum']);
         return $this->cart;
     }
 
@@ -194,7 +210,7 @@ abstract class BaseSite extends BaseController
     protected function deleteCartData($id): void
     {
         $id = $this->num($id);
-        if($id){
+        if ($id) {
             $cart = &$this->getCart();
             unset($cart[$id]);
             $this->updateCookieCart($cart);

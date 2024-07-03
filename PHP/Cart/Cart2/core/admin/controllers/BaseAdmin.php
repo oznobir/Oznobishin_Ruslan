@@ -7,14 +7,17 @@ use core\base\controllers\BaseController;
 use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
-use JetBrains\PhpStorm\NoReturn;
 use libraries\FileEdit;
 use libraries\TextModify;
 
 
 abstract class BaseAdmin extends BaseController
 {
-    /** @uses $notDelete */
+    /**
+     * @uses $notDelete
+     * @uses getTinymceDefault
+     * @uses outputData
+     */
     protected ?Model $model = null;
     protected ?string $table = null;
     protected ?object $settings = null;
@@ -36,7 +39,7 @@ abstract class BaseAdmin extends BaseController
 
     /**
      * @return void
-     * @throws RouteException
+     * @throws RouteException|DbException
      */
     protected function inputData(): void
     {
@@ -56,6 +59,7 @@ abstract class BaseAdmin extends BaseController
     /**
      * @return void
      * @throws RouteException
+     * @throws DbException
      */
     protected function exec(): void
     {
@@ -175,7 +179,7 @@ abstract class BaseAdmin extends BaseController
      */
     protected function expansionBase(array $args = [], object|string|bool $settings = false): mixed
     {
-        if(!$this->table) return false;
+        if (!$this->table) return false;
         $fileName = explode('_', $this->table);
         $className = '';
         foreach ($fileName as $name)
@@ -356,18 +360,6 @@ abstract class BaseAdmin extends BaseController
             $_SESSION['res']['answer'] = '<div class="error">' . $this->info['empty'] . ' ' . $answer . '</div>';
             $this->addSessionData($arr);
         }
-    }
-
-    /**
-     * @param array|null $arr
-     * @return void
-     */
-    #[NoReturn] protected function addSessionData(?array $arr): void
-    {
-        if (!$arr) $arr = $_POST;
-        foreach ($arr as $key => $item)
-            $_SESSION['res'][$key] = $item;
-        $this->redirect();
     }
 
     /**
@@ -900,7 +892,7 @@ abstract class BaseAdmin extends BaseController
     /**
      * @return string
      */
-    protected function getTinymceDefault()
+    protected function getTinymceDefault(): string
     {
         return !empty($this->blocks['vg-content']) ? implode(',', $this->blocks['vg-content']) : '';
 

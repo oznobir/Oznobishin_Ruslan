@@ -32,7 +32,6 @@
                                     корзину</a>
                             </div>
                         </div>
-
                         <div class="catalog-section__wrapper">
                             <div class="catalog-section-items">
                                 <div class="catalog-section-items__wrapper">
@@ -54,7 +53,8 @@
                                                     <span class="card-item_new-price"><?= $item['price'] ?> руб.</span>
                                                 </div>
                                             </div>
-                                            <a href="<?= $this->getUrl(['cart' => 'remove', 'id' => $item['id'] ]) ?>" class="card-item__btn">
+                                            <a href="<?= $this->getUrl(['cart' => 'remove', 'id' => $item['id']]) ?>"
+                                               class="card-item__btn">
                                                 Удалить
                                             </a>
                                             <span class="card-main-info-size__body">
@@ -89,7 +89,7 @@
 
         <section class="order-registration">
             <div class="container">
-                <form class="order-registration-form">
+                <form class="order-registration-form" method="post" action="<?=$this->getUrl('orders')?>">
                     <?php if (!empty($this->payments)): ?>
                         <div class="order-registration-payment">
                             <div class="order-registration-titel">Оплата</div>
@@ -127,7 +127,35 @@
                         Сумма к оплате:
                         <span class="amount-pay" data-totalSum><?= $this->cart['total_sum'] ?> руб.</span>
                     </div>
-                    <input class="execute-order_btn" type="submit" name="" value="Оформить заказ">
+                    <input class="execute-order_btn" type="button" value="Оформить заказ" data-popup="order-popup">
+                    <div class="order-popup">
+                        <div class="order-popup__inner">
+                            <h2>Оформление заказа</h2>
+                            <label>
+                                <input type="text" value="<?= $this->setFormValues('name', 'userData') ?>"
+                                       name="name" required placeholder="Ваше имя">
+                            </label>
+                            <label>
+                                <input type="tel" value="<?= $this->setFormValues('phone', 'userData') ?>"
+                                       name="phone" required placeholder="Ваш телефон">
+                            </label>
+                            <label>
+                                <input type="email" value="<?= $this->setFormValues('email', 'userData') ?>"
+                                       name="email" required placeholder="Ваш e-mail">
+                            </label>
+                            <label>
+                                <textarea name="address" placeholder="Ваш адрес"
+                                          rows="5"><?= $this->setFormValues('address', 'userData') ?></textarea>
+                            </label>
+                            <div class="amount-pay-wrapp">
+                                Сумма к оплате:
+                                <span class="amount-pay" data-totalSum><?= $this->cart['total_sum'] ?> руб.</span>
+                            </div>
+                            <div class="send-order">
+                                <input class="execute-order_btn" type="submit" value="Оформить заказ">
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </section>
