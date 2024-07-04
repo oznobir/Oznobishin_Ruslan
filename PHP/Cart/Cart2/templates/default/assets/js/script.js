@@ -222,6 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         })
     }
+    let basketBtn = document.querySelector('.basket-btn')
+    if (basketBtn) {
+        basketBtn.addEventListener('click', e => {
+            e.preventDefault()
+            window.scrollTo({
+                top: document.querySelector('.order-registration').getBoundingClientRect().top + scrollY,
+                behavior: 'smooth'
+            })
+
+        })
+    }
     (function () {
         let start = 0
         document.querySelectorAll('.card-main-gallery-thumb__slide').forEach(item => {
@@ -246,20 +257,20 @@ document.addEventListener('DOMContentLoaded', () => {
     addToCart()
     document.querySelectorAll('[data-popup]').forEach(item => {
         if (item.getAttribute('data-popup')) {
-            console.log(item.getAttribute('data-popup'))
             let popupEl = document.querySelector(`.${item.getAttribute('data-popup')}`)
             if (popupEl) {
-                item.addEventListener('click', ()=>{
+                item.addEventListener('click', () => {
                     popupEl.classList.add('open')
                 })
                 popupEl.addEventListener('click', e => {
-                    if(e.target === popupEl){
+                    if (e.target === popupEl) {
                         popupEl.classList.remove('open')
                     }
                 })
             }
         }
     })
+    document.querySelectorAll('input[type="tel"]').forEach(item => phoneValidate(item))
 })
 
 function addToCart() {
@@ -330,4 +341,53 @@ function changeQty() {
         })
     })
 
+}
+
+function phoneValidate(item) {
+    let countriesOptions = {
+        '+375': {  // +375(12)123-45-67
+            limit: 17, pattern: '^80|375', formatChars: {'4': '(', '7': ')', '11': '-', '14': '-'},
+        },
+        '+7': { // +7(123)123-45-67
+            limit: 16, pattern: '^[78]', formatChars: {'2': '(', '6': ')', '10': '-', '13': '-'},
+        },
+    }
+    item.addEventListener('input', e => {
+        if (e.inputType === 'deleteContentBackward' || e.inputType === 'deleteContentForward') {
+            return false
+        }
+        item.value = item.value.replace(/\D/g, '')
+        if (item.value) {
+            let code = '+375'
+            let limitAll = 18
+            if (countriesOptions.hasOwnProperty(code)) {
+                if (countriesOptions[code].pattern) {
+                    let regExp = new RegExp(countriesOptions[code].pattern)
+                    if (regExp.test(item.value)) {
+                        item.value = item.value.replace(regExp, code)
+                    }
+                }
+                if (!/^\+/.test(item.value)) {
+                    item.value = '+' + item.value
+                }
+                if (countriesOptions[code].pattern) {
+                    let regExp = new RegExp(code.replace(/\+/g, '\\+'), 'g')
+                    if (regExp.test(item.value)) {
+                        for (let i in countriesOptions[code].formatChars) {
+                            let j = +i
+                            if (item.value[j] && item.value[j] !== countriesOptions[code].formatChars[i]) {
+                                item.value = item.value.substring(0, j) + countriesOptions[code].formatChars[i] + item.value.substring(j)
+                            }
+                        }
+                        if (item.value[countriesOptions[code].limit]) {
+                            limitAll = countriesOptions[code].limit
+                        }
+                    }
+                }
+            }
+            item.value = item.value.substring(0, limitAll)
+        }
+    })
+    item.dispatchEvent(new Event('input'))
+    item.addEventListener('change', () => phoneValidate(item))
 }

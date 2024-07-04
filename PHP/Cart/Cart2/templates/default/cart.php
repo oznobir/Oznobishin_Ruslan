@@ -27,7 +27,7 @@
                                 <span class="total-basket-price_new-price" data-totalSum><?= $this->cart['total_sum'] ?> руб.</span>
                             </div>
                             <div class="basket-btns">
-                                <button class="basket-btn">Перейти к оформлению</button>
+                                <a class="basket-btn">Перейти к оформлению</a>
                                 <a href="<?= $this->getUrl(['cart' => 'remove']) ?>" class="basket-btn">Очистить
                                     корзину</a>
                             </div>
