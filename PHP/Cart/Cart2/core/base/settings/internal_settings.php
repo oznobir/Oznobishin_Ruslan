@@ -62,6 +62,7 @@ const SITE_CSS_JS = [
         'assets/js/bodyscrolllock/bodyScrollLock.min.js',
         'assets/js/app.js',
         'assets/js/script.js',
+        'assets/js/showMessage.js',
     ],
 
 ];

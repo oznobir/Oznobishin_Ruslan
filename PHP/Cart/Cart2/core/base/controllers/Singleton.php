@@ -28,6 +28,6 @@ trait Singleton
     static public function get($property)
     {
         if (!empty(self::instance()->$property)) return self::instance()->$property;
-        else throw new RouteException('Отсутствует свойство ' . $property . ' в ' . self::class);
+        else throw new RouteException('Отсутствует свойство ' . $property . ' в ' . self::class, 2);
     }
 }

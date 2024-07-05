@@ -1,5 +1,7 @@
 <?php
+
 namespace core\base\exceptions;
+
 use core\base\controllers\BaseMethods;
 use Exception;
 
@@ -14,9 +16,8 @@ class RouteException extends Exception
         parent::__construct($messages, $code);
         $this->messages = include 'messages.php';
         $error = $this->getMessage() ?: $this->messages[$this->getCode()];
-//        $error = $messages ? $messages : $this->getMessage();
-        $error .= "\r\nfile: {$this->getFile()} \r\nin line: {$this->getLine()}\r\n";
-//        if ($this->messages[$this->getCode()]) $this->message = $this->messages[$this->getCode()];
+        $error .= PHP_EOL . "file: {$this->getFile()}" . PHP_EOL . "in line: {$this->getLine()}" . PHP_EOL;
+        if ($this->messages[$this->getCode()]) $this->message = $this->messages[$this->getCode()];
         $this->writeLog($error);
     }
 }

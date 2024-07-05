@@ -27,6 +27,12 @@
 <main class="main">
     <?= $this->content ?>
 </main>
+<?php if (!empty($_SESSION['res']['answer'])): ?>
+    <div class="message__wrap">
+        <?= $_SESSION['res']['answer']['success'] ?? $_SESSION['res']['answer']['error'] ?>
+        <?php unset($_SESSION['res']['answer']) ?>
+    </div>
+<?php endif; ?>
 <footer class="footer">
     <?= $this->footer ?>
 </footer>

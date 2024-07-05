@@ -18,7 +18,8 @@ spl_autoload_register(/** @throws RouteException */ function ($class) {
 });
 
 try {
-   BaseRoute::routeDirection();
+    BaseRoute::routeDirection();
 } catch (RouteException $e) {
-    exit($e->getMessage());
+    BaseRoute::instance()->sendAnswer($e->getMessage());
+//    exit($e->getMessage());
 }

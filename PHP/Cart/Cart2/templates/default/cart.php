@@ -89,7 +89,7 @@
 
         <section class="order-registration">
             <div class="container">
-                <form class="order-registration-form" method="post" action="<?=$this->getUrl('orders')?>">
+                <form class="order-registration-form" method="post" action="<?= $this->getUrl('orders') ?>">
                     <?php if (!empty($this->payments)): ?>
                         <div class="order-registration-payment">
                             <div class="order-registration-titel">Оплата</div>
@@ -97,7 +97,8 @@
                                 <?php foreach ($this->payments as $key => $item): ?>
                                     <label class="order-registration-radio-item">
                                         <input class="order-registration-rad-inp" type="radio"
-                                               name="paymentId"<?= !$key ? ' checked' : '' ?>>
+                                               value="<?= $item['id'] ?>"
+                                               name="paymentsId"<?= !$key ? ' checked' : '' ?>>
                                         <div class="order-registration-radio-item-descr">
                                             <?= $item['name'] ?>
                                         </div>
@@ -113,7 +114,8 @@
                                 <?php foreach ($this->delivery as $key => $item): ?>
                                     <label class="order-registration-radio-item">
                                         <input class="order-registration-rad-inp" type="radio"
-                                               name="deliverId"<?= !$key ? ' checked' : '' ?>>
+                                               value="<?= $item['id'] ?>"
+                                               name="deliveryId"<?= !$key ? ' checked' : '' ?>>
                                         <div class="order-registration-radio-item-descr">
                                             <?= $item['name'] ?>
                                         </div>
@@ -128,20 +130,20 @@
                         <span class="amount-pay" data-totalSum><?= $this->cart['total_sum'] ?> руб.</span>
                     </div>
                     <input class="execute-order_btn" type="button" value="Оформить заказ" data-popup="order-popup">
-                    <div class="order-popup">
+                    <div class="order-popup<?= !empty($_SESSION['res']['answer']['error']) ? ' open' : '' ?>">
                         <div class="order-popup__inner">
                             <h2>Оформление заказа</h2>
                             <label>
                                 <input type="text" value="<?= $this->setFormValues('name', 'userData') ?>"
-                                       name="name" required placeholder="Ваше имя">
+                                       name="name" placeholder="Ваше имя">
                             </label>
                             <label>
                                 <input type="tel" value="<?= $this->setFormValues('phone', 'userData') ?>"
-                                       name="phone" required placeholder="Ваш телефон">
+                                       name="phone" placeholder="Ваш телефон">
                             </label>
                             <label>
                                 <input type="email" value="<?= $this->setFormValues('email', 'userData') ?>"
-                                       name="email" required placeholder="Ваш e-mail">
+                                       name="email" placeholder="Ваш e-mail">
                             </label>
                             <label>
                                 <textarea name="address" placeholder="Ваш адрес"

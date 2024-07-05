@@ -13,6 +13,7 @@ abstract class BaseSite extends BaseController
     /**
      * @uses  pagination
      * @uses  setFormValues
+     * @uses  $userData
      */
     protected ?Model $model = null;
     //protected ?string $table = null;
@@ -77,7 +78,7 @@ abstract class BaseSite extends BaseController
      */
     protected function setFormValues(int|string $key, string $property = null, array $arr = []): mixed
     {
-        if (!$arr) $arr = $_SESSION['user'] ?? [];
+        if (!$arr) $arr = $_SESSION['res'] ?? [];
         return $arr[$key] ?? ($this->$property[$key] ?? '');
     }
 

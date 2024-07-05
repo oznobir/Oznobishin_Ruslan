@@ -19,12 +19,12 @@ class ProductController extends BaseSite
     {
         parent::inputData();
         if (empty($this->parameters['alias']))
-            throw new RouteException('Отсутствует ссылка на товар');
+            throw new RouteException('Отсутствует ссылка на товар', 3);
         $data = $this->model->getGoods([
             'where' => ['alias' => $this->parameters['alias'], 'visible' => 1]
         ]);
         if (!$data)
-            throw new RouteException('Отсутствует товар по ссылке ' . $this->parameters['alias']);
+            throw new RouteException('Отсутствует товар по ссылке ' . $this->parameters['alias'], 3);
         else $this->data = array_shift($data);
         $delivery = $this->model->select('information', [
             'where' => [

@@ -16,7 +16,7 @@ class DbException extends Exception
         $this->messages = include 'messages.php';
         $error = $this->getMessage() ?: $this->messages[$this->getCode()];
         $error .= "\r\nfile: {$this->getFile()} \r\nin line: {$this->getLine()}\r\n";
-//        if ($this->messages[$this->getCode()]) $this->message = $this->messages[$this->getCode()];
+        if ($this->messages[$this->getCode()]) $this->message = $this->messages[$this->getCode()];
         $this->writeLog($error, 'db_log.txt');
     }
 }

@@ -17,7 +17,7 @@ trait ValidationHelper
     {
         $value = $this->clearTags($value);
         if (empty($value)) {
-            $this->sendAnswer('Не заполнено поле ' . $answer);
+            $this->sendAnswer('Не заполнено поле "' . $answer . '"');
         }
         return $value;
     }
@@ -31,7 +31,7 @@ trait ValidationHelper
     {
         $value = preg_replace('/\D/', '', $value);
         if (!is_numeric($value)) {
-            $this->sendAnswer('Некорректные данные в поле ' . $answer);
+            $this->sendAnswer('Некорректные данные в поле "' . $answer . '"');
             return false;
         }
         return $value;
@@ -46,7 +46,7 @@ trait ValidationHelper
     {
         $value = preg_replace('/\D/', '', $value);
         if (!preg_match('/^375\d{9}$/', $value)) {
-            $this->sendAnswer('Некорректный формат номера телефона ' . $answer);
+            $this->sendAnswer('Некорректный формат номера в поле "' . $answer . '"');
             return false;
         }
         return $value;
@@ -61,24 +61,12 @@ trait ValidationHelper
     {
         $value = $this->clearTags($value);
         if (!preg_match('/^[\w\-\.]+@[\w\-]+\.[\w\-]/', $value)) {
-            $this->sendAnswer('Некорректный формат e-mail ' . $answer);
+            $this->sendAnswer('Некорректный формат email в поле "' . $answer . '"');
             return false;
         }
         return $value;
     }
 
-    /**
-     * @param string $text
-     * @param string $class error or success, default error
-     * @return void
-     */
-    protected function sendAnswer(string $text, string $class = 'error'): void
-    {
-        $_SESSION['res']['answer'] = '<div class="' . $class . '">' . $text . '</div>';
-        if ($class === 'error') {
-            $this->addSessionData();
-        }
-    }
 //    /**
 //     * @param string $value
 //     * @param string $field

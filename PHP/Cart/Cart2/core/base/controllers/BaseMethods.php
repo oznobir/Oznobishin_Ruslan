@@ -63,6 +63,20 @@ trait BaseMethods
     }
 
     /**
+     * @param string $text
+     * @param string $class error or success, default error
+     * @return void
+     */
+    public function sendAnswer(string $text, string $class = 'error'): void
+    {
+        $_SESSION['res']['answer'][$class] = '<div class="' . $class . '">' . $text . '</div>';
+
+        if ($class === 'error') {
+            $this->addSessionData();
+        }
+    }
+
+    /**
      * @param array $arr
      * @return void
      */
@@ -89,7 +103,7 @@ trait BaseMethods
      */
     protected function getScripts(): void
     {
-        foreach ($this->scripts as $script) echo '<script type="text/javascript" src="' . $script . '"></script>'. PHP_EOL;
+        foreach ($this->scripts as $script) echo '<script type="text/javascript" src="' . $script . '"></script>' . PHP_EOL;
     }
 
     /**
@@ -97,7 +111,7 @@ trait BaseMethods
      * @param int|false $code
      * @return void
      */
-    #[NoReturn] protected function redirect($url = false, $code = false): void
+    #[NoReturn] public function redirect($url = false, $code = false): void
     {
         if ($code) {
             $codes = ['301' => 'HTTP/1.1 301 Moved Permanently'];

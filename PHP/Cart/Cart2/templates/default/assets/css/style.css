@@ -7605,3 +7605,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     display: flex;
     justify-content: center;
 }
+
+.order-popup__inner h2 {
+    text-align: center;
+}
