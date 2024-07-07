@@ -25,7 +25,7 @@ class LoginController extends BaseController
         $this->model->setAdmin();
         if (isset($this->parameters['logout'])) {
             $this->checkAuth(true);
-            $userLog = 'Выход пользователя ' . $this->userId['name'];
+            $userLog = 'Выход пользователя ' . $this->userData['name'];
             $this->writeLog($userLog, 'users_log.txt', 'Access user');
             $this->model->logout();
             $this->redirect(PATH);

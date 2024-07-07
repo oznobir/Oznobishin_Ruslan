@@ -19,7 +19,7 @@ class SearchController extends BaseAdmin
      */
     protected function inputData(): void
     {
-        if (!$this->userId) $this->exec();
+        if (!$this->userData['id']) $this->exec();
         $text = $this->clearTags($_GET['search']);
         $table = $this->clearTags($_GET['search_table']);
         $this->data = $this->model->searchData($text, $table);

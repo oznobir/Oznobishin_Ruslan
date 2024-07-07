@@ -13,11 +13,9 @@ abstract class BaseSite extends BaseController
     /**
      * @uses  pagination
      * @uses  setFormValues
-     * @uses  $userData
      */
     protected ?Model $model = null;
     //protected ?string $table = null;
-    protected array $userData = [];
     protected array $set;
     protected array $menu;
     protected array $socials;
@@ -34,6 +32,7 @@ abstract class BaseSite extends BaseController
     protected function inputData(): void
     {
         $this->init();
+        $this->checkAuth();
         if (!$this->model) $this->model = Model::instance();
         $this->set = $this->model->select('settings', [
             'order' => ['id'], 'limit' => 1

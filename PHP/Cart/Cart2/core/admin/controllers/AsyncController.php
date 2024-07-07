@@ -27,7 +27,7 @@ class AsyncController extends BaseAdmin
         $this->asyncData = $data;
         if (isset($this->asyncData['ajax'])) {
             $this->asyncData = $this->clearTags($this->asyncData);
-            if (!$this->userId) $this->exec();
+            if (!$this->userData['id']) $this->exec();
             switch ($this->asyncData['ajax']) {
                 case 'sitemap':
                     return (new SitemapController())->inputAsyncData($this->asyncData['linksCounter']);

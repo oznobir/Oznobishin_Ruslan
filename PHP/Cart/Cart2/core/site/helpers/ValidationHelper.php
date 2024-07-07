@@ -8,6 +8,11 @@ trait ValidationHelper
 {
     use BaseMethods;
 
+    /**
+     * @param array|null $validation
+     * @param array $arrAdd
+     * @return void
+     */
     protected function clearFormFields(?array $validation, array &$arrAdd = []): void
     {
         //        array_filter()
@@ -17,7 +22,7 @@ trait ValidationHelper
                 $arr['count'] = $validation[$key]['count'] ?? 140;
                 $arr['translate'] = $validation[$key]['translate'] ?? $this->clearTags($key);
                 foreach ($validation[$key]['methods'] as $method) {
-                    $arrAdd[$key] = $this->$method($item, $arr);
+                    $arrAdd[$key] = $item = $this->$method($item, $arr);
                 }
             }
         }

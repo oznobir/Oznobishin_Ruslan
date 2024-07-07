@@ -19,7 +19,7 @@ class ShowController extends BaseAdmin
      */
     protected function inputData(): void
     {
-        if (!$this->userId) $this->exec();
+        if (!$this->userData['id']) $this->exec();
         $this->createTableData();
         $this->createData();
         $this->template = ADMIN_TEMPLATE . 'show';

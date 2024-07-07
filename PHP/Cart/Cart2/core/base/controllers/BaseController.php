@@ -25,7 +25,7 @@ abstract class BaseController
     protected array $data = [];
     protected ?string $error = null;
     protected ?string $template = null;
-    protected array|false $userId = false;
+    protected array $userData = ['id' => false];
     protected array $styles;
     protected array $scripts;
 
@@ -140,9 +140,11 @@ abstract class BaseController
      */
     protected function checkAuth(bool $type = false): void
     {
-        if (!$this->userId = UsersModel::instance()->checkUser(false, $type)) {
-            $type && $this->redirect(PATH);
-        }
+        $userData = UsersModel::instance()->checkUser(false, $type);
+
+        if (!$userData && $type) $this->redirect(PATH);
+        if ($userData) $this->userData = $userData;
+
         if (property_exists($this, 'usersModel')) {
             $this->usersModel = UsersModel::instance();
         }

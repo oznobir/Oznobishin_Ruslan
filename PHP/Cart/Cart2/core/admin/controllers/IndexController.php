@@ -2,16 +2,17 @@
 
 namespace core\admin\controllers;
 
+use core\base\exceptions\DbException;
 use core\base\exceptions\RouteException;
 
 class IndexController extends BaseAdmin
 {
     /**
-     * @throws RouteException
+     * @throws RouteException|DbException
      */
     protected function inputData(): void
     {
-        if (!$this->userId) $this->exec();
+        if (!$this->userData['id']) $this->exec();
         $this->template = ADMIN_TEMPLATE . 'index';
     }
 }

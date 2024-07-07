@@ -24,27 +24,27 @@ class OrdersController extends BaseSite
         'phone' => [
             'translate' => 'Телефон',
             'count' => '20',
-            'methods' => ['emptyField', 'countField', 'phoneField', 'numericField'],
+            'methods' => ['emptyField', 'phoneField'],
         ],
         'email' => [
             'translate' => 'E-mail',
-            'count' => '240',
+            'count' => '40',
             'methods' => ['emptyField', 'countField', 'emailField'],
         ],
         'address' => [
             'translate' => 'Адрес',
-            'count' => '240',
+            'count' => '40',
             'methods' => ['countField', 'stringField'],
         ],
         'delivery_id' => [
             'translate' => 'Способы доставки',
             'count' => '2',
-            'methods' => ['countField', 'emptyField', 'numericField'],
+            'methods' => ['emptyField', 'countField', 'numericField'],
         ],
         'payments_id' => [
             'translate' => 'Способы оплаты',
             'count' => '2',
-            'methods' => ['countField', 'emptyField', 'numericField'],
+            'methods' => ['emptyField', 'countField', 'numericField'],
         ],
     ];
     protected array $delivery;
@@ -75,13 +75,15 @@ class OrdersController extends BaseSite
         $visitor = [];
         $columnsOrders = $this->model->showColumns('orders');
         $columnsVisitors = $this->model->showColumns('visitors');
-        $this->clearFormFields($this->validation);
+//        $this->clearFormFields($this->validation);
         foreach ($_POST as $key => $item) {
-//            if (!empty($this->validation[$key]['methods'])) {
-//                foreach ($this->validation[$key]['methods'] as $method) {
-//                    $_POST[$key] = $item = $this->$method($item, $this->validation[$key]['translate'] ?? $key);
-//                }
-//            }
+            if (!empty($this->validation[$key]['methods'])) {
+                foreach ($this->validation[$key]['methods'] as $method) {
+                    $arr['count'] = $this->validation[$key]['count'] ?? 140;
+                    $arr['translate'] = $this->validation[$key]['translate'] ?? $this->clearTags($key);
+                    $_POST[$key] = $item = $this->$method($item, $arr);
+                }
+            }
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
@@ -109,12 +111,12 @@ class OrdersController extends BaseSite
                 'fields' => $visitor,
                 'return_id' => true
             ]);
-            if (!is_array($order['visitor_id']))
+            if (!$order['visitor_id'])
                 throw new RouteException('Ошибка добавления в таблицу  visitors', 3);
         }
         $order['total_sum'] = $this->cart['total_sum'];
         $order['total_old_sum'] = $this->cart['total_old_sum'] ?? $this->cart['total_sum'];
-        $order['total_qty'] = $this->cart['total_old_sum'];
+        $order['total_qty'] = $this->cart['total_qty'];
 
         $baseStatus = $this->model->select('orders_statuses', [
             'fields' => 'id',
