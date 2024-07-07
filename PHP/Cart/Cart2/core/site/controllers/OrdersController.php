@@ -18,23 +18,33 @@ class OrdersController extends BaseSite
     protected array $validation = [
         'name' => [
             'translate' => 'Ваше имя',
-            'methods' => ['emptyField'],
+            'count' => '40',
+            'methods' => ['emptyField', 'countField', 'stringField'],
         ],
         'phone' => [
             'translate' => 'Телефон',
-            'methods' => ['emptyField', 'phoneField', 'numericField'],
+            'count' => '20',
+            'methods' => ['emptyField', 'countField', 'phoneField', 'numericField'],
         ],
         'email' => [
             'translate' => 'E-mail',
-            'methods' => ['emptyField', 'emailField'],
+            'count' => '240',
+            'methods' => ['emptyField', 'countField', 'emailField'],
         ],
-        'deliveryId' => [
+        'address' => [
+            'translate' => 'Адрес',
+            'count' => '240',
+            'methods' => ['countField', 'stringField'],
+        ],
+        'delivery_id' => [
             'translate' => 'Способы доставки',
-            'methods' => ['emptyField', 'numericField'],
+            'count' => '2',
+            'methods' => ['countField', 'emptyField', 'numericField'],
         ],
-        'paymentsId' => [
+        'payments_id' => [
             'translate' => 'Способы оплаты',
-            'methods' => ['emptyField', 'numericField'],
+            'count' => '2',
+            'methods' => ['countField', 'emptyField', 'numericField'],
         ],
     ];
     protected array $delivery;
@@ -65,18 +75,18 @@ class OrdersController extends BaseSite
         $visitor = [];
         $columnsOrders = $this->model->showColumns('orders');
         $columnsVisitors = $this->model->showColumns('visitors');
+        $this->clearFormFields($this->validation);
         foreach ($_POST as $key => $item) {
-            if (!empty($this->validation[$key]['methods'])) {
-                foreach ($this->validation[$key]['methods'] as $method) {
-                    $_POST[$key] = $item = $this->$method($item, $this->validation[$key]['translate'] ?? $key);
-                }
-            }
+//            if (!empty($this->validation[$key]['methods'])) {
+//                foreach ($this->validation[$key]['methods'] as $method) {
+//                    $_POST[$key] = $item = $this->$method($item, $this->validation[$key]['translate'] ?? $key);
+//                }
+//            }
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
         if (empty($visitor['email']) && empty($visitor['phone']))
             throw new RouteException('Отсутствуют данные email и phone для оформления заказа', 3);
-
 
         $visitorWhere = $visitorCondition = [];
         if (!empty($visitor['email']) && !empty($visitor['phone'])) {
@@ -86,7 +96,6 @@ class OrdersController extends BaseSite
             $visitorKey = !empty($visitor['email']) ? 'email' : 'phone';
             $visitorWhere[$visitorKey] = $visitor[$visitorKey];
         }
-
         $resVisitor = $this->model->select('visitors', [
             'fields' => 'id',
             'where' => $visitorWhere,
@@ -125,12 +134,43 @@ class OrdersController extends BaseSite
             throw new RouteException('Ошибка сохранения данных в таблицу orders', 3);
 
         if (!$resVisitor) UsersModel::instance()->checkUser($order['visitor_id']);
+        if (!$this->setOrdersGoods($order))
+            throw new RouteException('Ошибка сохранения данных в таблицу orders_goods', 3);
 
-        $this->sendAnswer('Ваш заказ на сумму ' . $order['total_sum'] . ' руб. сохранен.' . PHP_EOL . ' Спасибо!', 'success');
+        $this->sendAnswer('Ваш заказ на сумму ' . $order['total_sum'] . ' руб. сохранен. Спасибо за заказ!', 'success');
         $this->sendOrderEmail(['order' => $order, 'visitor' => $visitor]);
         $this->clearCart();
 
         $this->redirect(PATH);
+    }
+
+    /**
+     * @param array $order
+     * @return string|int|bool|array
+     * @throws DbException
+     * @throws RouteException
+     */
+    protected function setOrdersGoods(array $order): string|int|bool|array
+    {
+        $tables = $this->model->showTables();
+        if (!in_array('orders_goods', $tables))
+            throw new RouteException('Отсутствует таблица orders_goods', 3);
+        $ordersGoods = [];
+        $colOrdersGoods = $this->model->showColumns('orders_goods');
+        foreach ($this->cart['goods'] as $key => $item) {
+            $ordersGoods[$key]['orders_id'] = $order['id'];
+            foreach ($item as $field => $value) {
+                if (!empty($colOrdersGoods[$field])) {
+                    if ($colOrdersGoods['pri'][0] === $field && isset($colOrdersGoods['goods_id'])) {
+                        $ordersGoods[$key]['goods_id'] = $value;
+                    } else  $ordersGoods[$key][$field] = $value;
+                }
+            }
+        }
+        return
+            $this->model->add('orders_goods', [
+                'fields' => $ordersGoods,
+            ]);
     }
 
     protected function sendOrderEmail(array $orderData)

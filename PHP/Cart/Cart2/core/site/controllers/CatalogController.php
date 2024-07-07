@@ -36,7 +36,7 @@ class CatalogController extends BaseSite
                 'limit' => 1
             ]);
             if (!$data)
-                throw new RouteException('Нет данных в таблице catalog по ссылке ' . $this->parameters['alias']);
+                throw new RouteException('Нет данных в таблице catalog по ссылке ' . $this->parameters['alias'], 3);
             $this->data = $data[0];
         }
         $where['visible'] = 1;

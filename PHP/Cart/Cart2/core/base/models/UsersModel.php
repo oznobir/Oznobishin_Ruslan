@@ -16,7 +16,7 @@ class UsersModel extends BaseModel
     use Singleton, BaseMethods;
 
     private string $cookieName = 'identifier';
-    private string $cookieAdminName = 'W_identifier';
+    private string $cookieAdminName = 'UserMS';
     private array $userData = [];
     private ?string $error;
     private string $usersTable = 'visitors';
@@ -117,6 +117,7 @@ class UsersModel extends BaseModel
     /**
      * @return bool
      * @throws AuthException
+     * @uses set
      */
     private function set(): bool
     {
@@ -147,6 +148,7 @@ class UsersModel extends BaseModel
      * @return bool
      * @throws AuthException
      * @throws DbException
+     * @uses unPackage
      */
     private function unPackage(): bool
     {

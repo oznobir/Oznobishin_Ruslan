@@ -32,9 +32,12 @@ trait BaseMethods
      */
     protected function num($num): float|int
     {
-        return (!empty($num) && preg_match('/\d/', $num)) ?
-            preg_replace('/[^\d.]/', '', $num) * 1 : 0;
-//        return intval($num);
+//        filter_var()
+//        return (!empty($num) && preg_match('/\d/', $num)) ?
+//            preg_replace('/[^\d.]/', '', $num) * 1 : 0;
+//
+//        return str_contains('.', $num) ? floatval($num) : intval($num);
+        return intval($num);
     }
 
     /**

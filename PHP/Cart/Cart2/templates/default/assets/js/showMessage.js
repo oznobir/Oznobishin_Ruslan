@@ -10,25 +10,27 @@ document.addEventListener('DOMContentLoaded', () => {
             zIndex: '110',
         }
         let successStyles = {
-            backgroundColor: '#6fbf36',
+            backgroundColor: '#78c93f',
             color: 'white',
             marginBottom: '10px',
             padding: '25px 30px',
-            borderRadius: '20px'
+            borderRadius: '20px',
+            textAlign: 'center',
         }
         let errorStyles = {
-            backgroundColor: '#ff7f27',
+            backgroundColor: '#f4a452',
             color: 'white',
             marginBottom: '10px',
             padding: '25px 30px',
-            borderRadius: '20px'
+            borderRadius: '20px',
+            textAlign: 'center',
         }
         if (messageWrap.innerHTML.trim()) {
             for (let i in styles) {
                 messageWrap.style[i] = styles[i]
             }
             if (!messageWrap.children.length) {
-                let classDiv = /error/i.test(messageWrap.innerHTML) ? 'error' : 'success'
+                let classDiv = /ошибка/i.test(messageWrap.innerHTML) ? 'error' : 'success'
                 messageWrap.innerHTML = `<div class="${classDiv}">${messageWrap.innerHTML}</div>`
             }
             for (let i in messageWrap.children) {
