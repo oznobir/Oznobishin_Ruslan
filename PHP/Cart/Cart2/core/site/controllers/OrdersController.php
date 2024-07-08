@@ -33,7 +33,7 @@ class OrdersController extends BaseSite
         ],
         'address' => [
             'translate' => 'Адрес',
-            'count' => '40',
+            'count' => '140',
             'methods' => ['countField', 'stringField'],
         ],
         'delivery_id' => [
@@ -75,15 +75,9 @@ class OrdersController extends BaseSite
         $visitor = [];
         $columnsOrders = $this->model->showColumns('orders');
         $columnsVisitors = $this->model->showColumns('visitors');
-//        $this->clearFormFields($this->validation);
+//        $this->clearFormFieldsOld($this->validation);
         foreach ($_POST as $key => $item) {
-            if (!empty($this->validation[$key]['methods'])) {
-                foreach ($this->validation[$key]['methods'] as $method) {
-                    $arr['count'] = $this->validation[$key]['count'] ?? 140;
-                    $arr['translate'] = $this->validation[$key]['translate'] ?? $this->clearTags($key);
-                    $_POST[$key] = $item = $this->$method($item, $arr);
-                }
-            }
+            $_POST[$key] = $this->clearFormFields($this->validation[$key], $item, $key);
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
@@ -113,6 +107,8 @@ class OrdersController extends BaseSite
             ]);
             if (!$order['visitor_id'])
                 throw new RouteException('Ошибка добавления в таблицу  visitors', 3);
+
+            UsersModel::instance()->checkUser($order['visitor_id']);
         }
         $order['total_sum'] = $this->cart['total_sum'];
         $order['total_old_sum'] = $this->cart['total_old_sum'] ?? $this->cart['total_sum'];
@@ -135,7 +131,6 @@ class OrdersController extends BaseSite
         if (!$order['id'])
             throw new RouteException('Ошибка сохранения данных в таблицу orders', 3);
 
-        if (!$resVisitor) UsersModel::instance()->checkUser($order['visitor_id']);
         if (!($goods = $this->setOrdersGoods($order)))
             throw new RouteException('Ошибка сохранения данных в таблицу orders_goods', 3);
         $order['delivery'] = $this->delivery[$order['delivery_id']]['name'] ?? '';
@@ -196,14 +191,14 @@ class OrdersController extends BaseSite
                     if (!is_numeric(key($item)))
                         $templatesArr[] = $this->renderOrderMailTemplate($template, $item);
                     else {
-                        if($common = preg_grep('/' . $name . 'Header\./', $list)){
+                        if ($common = preg_grep('/' . $name . 'Header\./', $list)) {
                             $common = array_shift($common);
                             $templatesArr[] = $this->renderOrderMailTemplate(file_get_contents($dir . $common), []);
                         }
-                        foreach ($item as $i){
+                        foreach ($item as $i) {
                             $templatesArr[] = $this->renderOrderMailTemplate($template, $i);
                         }
-                        if($common = preg_grep('/' . $name . 'Footer\./', $list)){
+                        if ($common = preg_grep('/' . $name . 'Footer\./', $list)) {
                             $common = array_shift($common);
                             $templatesArr[] = $this->renderOrderMailTemplate(file_get_contents($dir . $common), []);
                         }
@@ -213,7 +208,7 @@ class OrdersController extends BaseSite
                 }
             }
         }
-       return $templatesArr;
+        return $templatesArr;
     }
 
     /**
