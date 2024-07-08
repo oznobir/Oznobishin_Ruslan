@@ -210,7 +210,7 @@
     <div class="search ">
         <button>
             <svg class="inline-svg-icon svg-search">
-                <use xlink:href="assets/img/icons.svg#search"></use>
+                <use xlink:href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#search"></use>
             </svg>
         </button>
             <input type="search" placeholder="Поиск по каталогу">

@@ -13,7 +13,7 @@ trait ValidationHelper
      * @param array $arrAdd
      * @return void
      */
-    protected function clearFormFields(?array $validation, array &$arrAdd = []): void
+    protected function clearFormFieldsOld(?array $validation, array &$arrAdd = []): void
     {
         //        array_filter()
         if (!$arrAdd) $arrAdd = &$_POST;
@@ -26,6 +26,28 @@ trait ValidationHelper
                 }
             }
         }
+    }
+
+    /**
+     * @param array|null $validation
+     * @param string $field
+     * @param string $key
+     * @return string
+     */
+    protected function clearFormFields(?array $validation, string $field, string $key): string
+    {
+        if ($validation) {
+            if (!empty($validation['methods'])) {
+                $validation['count'] = $validation['count'] ?? 140;
+                $validation['translate'] = $validation['translate'] ?? $this->clearTags($key);
+                $clearField = $field;
+                foreach ($validation['methods'] as $method) {
+                    $clearField = $this->$method($clearField, $validation);
+                }
+                return $clearField;
+            }
+        }
+        return $this->clearTags($field);
     }
 
     /**

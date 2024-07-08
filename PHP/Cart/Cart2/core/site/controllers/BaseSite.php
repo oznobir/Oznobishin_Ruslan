@@ -186,7 +186,7 @@ abstract class BaseSite extends BaseController
     {
 //        $cart = &$this->getCart();
         if (defined('CART') && strtolower(CART) === 'cookie') {
-            setcookie('cart', json_encode($cart), time() + 3600 * 2, PATH);
+            setcookie('cart', json_encode($cart), time() + 3600 * 24 * 2, PATH);
         }
     }
 

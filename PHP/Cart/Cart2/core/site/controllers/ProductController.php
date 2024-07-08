@@ -10,7 +10,7 @@ use core\base\exceptions\RouteException;
  */
 class ProductController extends BaseSite
 {
-    protected array $delivery;
+    protected array $deliveryInfo;
     /**
      * @throws DbException
      * @throws RouteException
@@ -36,6 +36,6 @@ class ProductController extends BaseSite
             'conditions' => ['AND', 'OR'],
             'limit' => 1
         ]);
-        if($delivery) $this->delivery = $delivery[0];
+        if($delivery) $this->deliveryInfo = $delivery[0];
     }
 }
