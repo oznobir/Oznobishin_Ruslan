@@ -2637,19 +2637,19 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1600px) {
     .slider {
-        height: calc(100vh - 240px)
+        /*height: calc(100vh - 240px)*/
     }
 }
 
 @media screen and (max-width: 1366px) {
     .slider {
-        height: calc(100vh - 180px)
+        /*height: calc(100vh - 180px)*/
     }
 }
 
 @media screen and (max-width: 1024px) {
     .slider {
-        min-height: calc(50vw - 39px);
+        /*min-height: calc(50vw - 39px);*/
         height: auto
     }
 }

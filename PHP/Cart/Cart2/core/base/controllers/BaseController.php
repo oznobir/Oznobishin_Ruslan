@@ -67,6 +67,7 @@ abstract class BaseController
         } else $this->page = $this->$inputData();
 
         if ($this->error) $this->writeLog($this->error);
+
         $this->getPage();
     }
 

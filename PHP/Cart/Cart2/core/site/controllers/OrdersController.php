@@ -176,6 +176,7 @@ class OrdersController extends BaseSite
     /**
      * @param array $orderData
      * @return array
+     * @throws DbException
      */
     protected function sendOrderEmail(array $orderData): array
     {
@@ -206,6 +207,9 @@ class OrdersController extends BaseSite
 
                 }
             }
+            $sender = new SendMailController();
+            $info = $sender->setMailBody($templatesArr)->send($orderData['visitor']['email']);
+            if (!$info) $this->error = $sender->getErrorInfo();
         }
         return $templatesArr;
     }
