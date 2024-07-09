@@ -77,7 +77,7 @@ class OrdersController extends BaseSite
         $columnsVisitors = $this->model->showColumns('visitors');
 //        $this->clearFormFieldsOld($this->validation);
         foreach ($_POST as $key => $item) {
-            $_POST[$key] = $this->clearFormFields($this->validation[$key], $item, $key);
+            $_POST[$key] = $item = $this->clearFormFields($this->validation[$key], $item, $key);
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
@@ -107,9 +107,8 @@ class OrdersController extends BaseSite
             ]);
             if (!$order['visitor_id'])
                 throw new RouteException('Ошибка добавления в таблицу  visitors', 3);
-
-            UsersModel::instance()->checkUser($order['visitor_id']);
         }
+        UsersModel::instance()->checkUser($order['visitor_id']);
         $order['total_sum'] = $this->cart['total_sum'];
         $order['total_old_sum'] = $this->cart['total_old_sum'] ?? $this->cart['total_sum'];
         $order['total_qty'] = $this->cart['total_qty'];
