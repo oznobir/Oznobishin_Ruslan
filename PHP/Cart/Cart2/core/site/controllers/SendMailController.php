@@ -11,12 +11,9 @@ use PHPMailer\PHPMailer\Exception;
 
 class SendMailController extends BaseSite
 {
-    /*
-     * @uses
-     */
     private string $_body = '';
     private string $_ErrorInfo;
-    private string $CharSet = 'UTF-8';
+
 
 //    protected function inputData(): void
 //    {
@@ -60,7 +57,7 @@ class SendMailController extends BaseSite
             $mail->Host = 'smtp.yandex.by';                     //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                   //Enable SMTP authentication
             $mail->Username = 'test-myshop2@yandex.by';                     //SMTP username
-            $mail->Password = 'cqnxszczbabhpeup';                               //SMTP password
+            $mail->Password = '###########';                               //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->Port = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
