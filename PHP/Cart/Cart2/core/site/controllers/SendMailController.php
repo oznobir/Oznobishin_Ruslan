@@ -5,8 +5,6 @@ namespace core\site\controllers;
 use core\base\exceptions\DbException;
 use core\site\models\Model;
 use PHPMailer\PHPMailer\PHPMailer;
-
-//use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class SendMailController extends BaseSite
@@ -18,7 +16,6 @@ class SendMailController extends BaseSite
 //    protected function inputData(): void
 //    {
 //        parent::inputData();
-//
 //    }
     /**
      * @param $body
@@ -34,13 +31,15 @@ class SendMailController extends BaseSite
     }
 
     /**
+     * @param $email
+     * @param $subject
+     * @return bool
      * @throws DbException
      */
     public function send($email = null, $subject = null): bool
     {
         if (!$this->model) $this->model = Model::instance();
         $to = [];
-
         $this->set = $this->model->select('settings', [
             'order' => ['id'], 'limit' => 1
         ]);
