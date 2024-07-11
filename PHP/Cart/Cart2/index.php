@@ -15,9 +15,9 @@ spl_autoload_register(/** @throws RouteException */ function ($class) {
     $file = str_replace("\\", "/", $class) . '.php';
     if (!@include_once $file) throw new RouteException("Класс $class не подключен");
 });
-if (is_readable('vendor/autoload.php'))
-    include 'vendor/autoload.php';
-else throw new RouteException("Файл vendor/autoload.php не найден");
+//if (is_readable('vendor/autoload.php'))
+//    include 'vendor/autoload.php';
+//else throw new RouteException("Файл vendor/autoload.php не найден");
 
 
 try {

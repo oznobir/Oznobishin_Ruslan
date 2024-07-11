@@ -24,7 +24,7 @@ class OrdersController extends BaseSite
         'phone' => [
             'translate' => 'Телефон',
             'count' => '20',
-            'methods' => ['emptyField', 'phoneField'],
+            'methods' => ['emptyField', 'phone375Field'],
         ],
         'email' => [
             'translate' => 'E-mail',
@@ -45,6 +45,12 @@ class OrdersController extends BaseSite
             'translate' => 'Способы оплаты',
             'count' => '2',
             'methods' => ['emptyField', 'countField', 'numericField'],
+        ],
+        'password' => [
+            'translate' => 'Пароль',
+            'count' => '140',
+            'countMin' => '5',
+            'methods' => ['emptyField', 'countMinField', 'countField', 'md5PassField'],
         ],
     ];
     protected array $delivery;
@@ -76,26 +82,37 @@ class OrdersController extends BaseSite
         $columnsOrders = $this->model->showColumns('orders');
         $columnsVisitors = $this->model->showColumns('visitors');
 //        $this->clearFormFieldsOld($this->validation);
+        if (empty($_POST['address']) && intval($_POST['delivery_id']) != 2) unset($_POST['address']);
+        else $this->sendAnswer('При доставке "По адресу" заполните поле Адрес', 'error', 'address');
+        if (!empty($_POST['password'])) {
+            if ($this->userData['id'])
+                unset($_POST['password']);
+            elseif ($_POST['password'] !== $_POST['confirm_password'])
+                $this->sendAnswer('Пароли не совпадают', 'error', 'confirm_password');
+        }
+        unset($_POST['confirm_password']);
         foreach ($_POST as $key => $item) {
             $_POST[$key] = $item = $this->clearFormFields($this->validation[$key], $item, $key);
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
-        if (empty($visitor['email']) && empty($visitor['phone']))
-            throw new RouteException('Отсутствуют данные email и phone для оформления заказа', 3);
-
-        $visitorWhere = $visitorCondition = [];
-        if (!empty($visitor['email']) && !empty($visitor['phone'])) {
-            $visitorWhere = ['email' => $visitor['email'], 'phone' => $visitor['phone']];
-            $visitorCondition = ['OR'];
-        } else {
-            $visitorKey = !empty($visitor['email']) ? 'email' : 'phone';
-            $visitorWhere[$visitorKey] = $visitor[$visitorKey];
-        }
+//        $visitorWhere = ['password' => $visitor['password']];
+//        $visitorCondition[] = 'AND';
+//        if (!empty($visitor['email']) && !empty($visitor['phone'])) {
+//            $visitorWhere = ['email' => $visitor['email'], 'phone' => $visitor['phone']];
+//            $visitorCondition[] = 'OR';
+//        } else {
+//            $visitorKey = !empty($visitor['email']) ? 'email' : 'phone';
+//            $visitorWhere[$visitorKey] = $visitor[$visitorKey];
+//        }
+        $visitorWhere = [
+            'password' => $visitor['password'],
+            'email' => $visitor['email'],
+            'phone' => $visitor['phone']];
         $resVisitor = $this->model->select('visitors', [
             'fields' => 'id',
             'where' => $visitorWhere,
-            'conditions' => $visitorCondition,
+//            'conditions' => $visitorCondition,
             'limit' => 1
         ]);
         if ($resVisitor) {
@@ -108,7 +125,8 @@ class OrdersController extends BaseSite
             if (!$order['visitor_id'])
                 throw new RouteException('Ошибка добавления в таблицу  visitors', 3);
         }
-        UsersModel::instance()->checkUser($order['visitor_id']);
+        if (!UsersModel::instance()->checkUser($order['visitor_id']))
+            throw new RouteException('Ошибка регистрации пользователя', 3);
         $order['total_sum'] = $this->cart['total_sum'];
         $order['total_old_sum'] = $this->cart['total_old_sum'] ?? $this->cart['total_sum'];
         $order['total_qty'] = $this->cart['total_qty'];
@@ -176,7 +194,7 @@ class OrdersController extends BaseSite
     /**
      * @param array $orderData
      * @return array
-     * @throws DbException
+     * @throws DbException|RouteException
      */
     protected function sendOrderEmail(array $orderData): array
     {

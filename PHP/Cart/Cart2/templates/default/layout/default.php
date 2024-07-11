@@ -29,10 +29,10 @@
 </main>
 <?php if (!empty($_SESSION['res']['answer'])): ?>
     <div class="message__wrap">
-        <?= $_SESSION['res']['answer']['success'] ?? $_SESSION['res']['answer']['error'] ?>
-        <?php unset($_SESSION['res']['answer']) ?>
+        <?= $_SESSION['res']['answer'] ?>
     </div>
 <?php endif; ?>
+<?php if (!empty($_SESSION['res'])) unset($_SESSION['res']) ?>
 <footer class="footer">
     <?= $this->footer ?>
 </footer>

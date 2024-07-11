@@ -1014,17 +1014,17 @@ input[type='search'], input[type='text'], input[type='email'] {
     }
 }
 
-/*.header__sidebar_btn svg.svg-personality {
-	width: 28px;
-	height: 28px
-}*/
+.header__sidebar_btn svg.svg-personality {
+    width: 25px;
+    height: 25px
+}
 
-/*@media screen and (max-width: 1600px) {*/
-/*	.header__sidebar_btn svg.svg-personality {*/
-/*		width: 21px;*/
-/*		height: 21px*/
-/*	}*/
-/*}*/
+@media screen and (max-width: 1600px) {
+    .header__sidebar_btn svg.svg-personality {
+        width: 21px;
+        height: 21px
+    }
+}
 
 .header__sidebar_btn svg.svg-socials {
     width: 40px;
@@ -1063,7 +1063,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 /*}*/
 
 .header__sidebar_btn.burger-menu {
-    height: calc(100vh - 316px);
+    height: calc(100vh - 396px);
     min-height: 79px;
     display: flex;
     flex-direction: column;
@@ -1075,7 +1075,7 @@ input[type='search'], input[type='text'], input[type='email'] {
 
 @media screen and (max-width: 1600px) {
     .header__sidebar_btn.burger-menu {
-        height: calc(100vh - 236px);
+        height: calc(100vh - 296px);
         min-height: 59px
     }
 }
@@ -7494,7 +7494,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     transition: .3s;
     border: none;
     cursor: pointer;
-    margin: 40px 0 60px;
+    margin: 40px 0 30px;
 }
 
 .execute-order_btn:hover {
@@ -7567,7 +7567,7 @@ input[type='search'], input[type='text'], input[type='email'] {
     color: #6fbf36;
 }
 
-.order-popup {
+.order-popup, .login-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -7580,32 +7580,57 @@ input[type='search'], input[type='text'], input[type='email'] {
     align-items: center;
 }
 
-.order-popup.open {
+.order-popup.open,
+.login-popup.open {
     display: flex;
 }
 
-.order-popup__inner {
+.order-popup__inner,
+.login-popup__inner {
     margin: 20px;
     flex-basis: 600px;
-    padding: 30px 20px;
+    padding: 5px 25px;
     background: white;
-    max-height: 90vh;
+    max-height: 95vh;
     overflow-y: auto;
 }
 
-.order-popup__inner > label > input,
-.order-popup__inner > label > textarea {
+.order-popup__inner label input,
+.login-popup__inner label input,
+.order-popup__inner label textarea {
     width: 100%;
     padding: 10px 10px;
     border: 1px solid #D4DDE1;
     margin-bottom: 15px;
 }
 
-.order-popup__inner > .send-order {
+.order-popup__inner .send-order
+.login-popup__inner .send-order {
+    display: flex;
+    justify-content: center;
+}
+.login-popup__inner h2
+.order-popup__inner h2 {
+    text-align: center;
+
+}
+.send-order, send-login{
     display: flex;
     justify-content: center;
 }
 
-.order-popup__inner h2 {
-    text-align: center;
+.login-popup__inner form {
+    border: 1px solid #D4DDE1;
+    padding: 10px 10px;
+    margin-top: -12px;
+}
+
+.login-popup__inner h2 span {
+    border: 1px solid #D4DDE1;
+    padding: 10px 24px;
+    cursor: pointer;
+}
+.order-popup__inner .error,
+.login-popup__inner .error{
+    color: indianred;
 }

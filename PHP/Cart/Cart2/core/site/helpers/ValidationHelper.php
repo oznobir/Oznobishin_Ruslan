@@ -19,8 +19,9 @@ trait ValidationHelper
         if (!$arrAdd) $arrAdd = &$_POST;
         foreach ($arrAdd as $key => $item) {
             if (!empty($validation[$key]['methods'])) {
+                $arr['name'] = $this->clearTags($key);
                 $arr['count'] = $validation[$key]['count'] ?? 140;
-                $arr['translate'] = $validation[$key]['translate'] ?? $this->clearTags($key);
+                $arr['translate'] = $validation[$key]['translate'] ?? $arr['name'];
                 foreach ($validation[$key]['methods'] as $method) {
                     $arrAdd[$key] = $item = $this->$method($item, $arr);
                 }
@@ -38,8 +39,10 @@ trait ValidationHelper
     {
         if ($validation) {
             if (!empty($validation['methods'])) {
+                $validation['name'] = $this->clearTags($key);
+                $validation['countMin'] = $validation['countMin'] ?? null;
                 $validation['count'] = $validation['count'] ?? 140;
-                $validation['translate'] = $validation['translate'] ?? $this->clearTags($key);
+                $validation['translate'] = $validation['translate'] ?? $validation['name'];
                 $clearField = $field;
                 foreach ($validation['methods'] as $method) {
                     $clearField = $this->$method($clearField, $validation);
@@ -55,10 +58,20 @@ trait ValidationHelper
      * @param array $answer
      * @return string|null
      */
+    protected function md5PassField(?string $value, array $answer): string|null
+    {
+        unset($answer);
+        return md5($value);
+    }
+    /**
+     * @param string|null $value
+     * @param array $answer
+     * @return string|null
+     */
     protected function emptyField(?string $value, array $answer): string|null
     {
         if (empty($value)) {
-            $this->sendAnswer('Не заполнено поле "' . $answer['translate'] . '"');
+            $this->sendAnswer('Не заполнено поле "' . $answer['translate'] . '"', 'error', $answer['name']);
         }
         return $value;
     }
@@ -71,7 +84,22 @@ trait ValidationHelper
     protected function countField(?string $value, array $answer): string|null
     {
         if (mb_strlen(trim($value)) > $answer['count']) {
-            $this->sendAnswer('В поле "' . $answer['translate'] . '" недопустимое количество символов');
+            $this->sendAnswer('Поле ' . $answer['translate'] . ' должно содержать не более ' . $answer['count'] . ' символов', 'error', $answer['name']);
+        }
+        return $value;
+    }
+
+    /**
+     * @param string|null $value
+     * @param array $answer
+     * @return string|null
+     */
+    protected function countMinField(?string $value, array $answer): string|null
+    {
+        if (!$answer['countMin']) {
+            if (mb_strlen(trim($value)) < $answer['countMin']) {
+                $this->sendAnswer('Поле ' . $answer['translate'] . ' должно содержать не менее ' . $answer['countMin'] . ' символов', 'error', $answer['name']);
+            }
         }
         return $value;
     }
@@ -86,7 +114,7 @@ trait ValidationHelper
     {
         $value = $this->num($value);
         if (!is_numeric($value)) {
-            $this->sendAnswer('Некорректные данные в поле "' . $answer['translate'] . '"');
+            $this->sendAnswer('Некорректные данные в поле ' . $answer['translate'] , 'error', $answer['name']);
         }
         return $value;
     }
@@ -107,11 +135,11 @@ trait ValidationHelper
      * @param array $answer
      * @return int
      */
-    protected function phoneField(string $value, array $answer): int
+    protected function phone375Field(string $value, array $answer): int
     {
         $value = preg_replace('/\D/', '', $value);
         if (!preg_match('/^375\d{9}$/', $value)) {
-            $this->sendAnswer('Некорректный формат номера в поле "' . $answer['translate'] . '"');
+            $this->sendAnswer('Некорректный формат номера телефона для РБ', 'error', $answer['name']);
         }
         return $value;
     }
@@ -124,7 +152,7 @@ trait ValidationHelper
     protected function emailField(string $value, array $answer): string
     {
         if (!preg_match('/^[\w\-\.]+@[\w\-]+\.[\w\-]/', $value)) {
-            $this->sendAnswer('Некорректный формат данных в поле "' . $answer['translate'] . '"');
+            $this->sendAnswer('Некорректный формат в поле E-mail', 'error', $answer['name']);
         }
         return $value;
     }

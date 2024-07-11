@@ -75,7 +75,16 @@
                     <svg class="inline-svg-icon svg-basket">
                         <use href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#basket"></use>
                     </svg>
-                        <span data-totalQty><?= $this->cart['total_qty'] ?? 0?></span>
+                    <span data-totalQty><?= $this->cart['total_qty'] ?? 0 ?></span>
+                </a>
+            </div>
+            <div class="header__sidebar_btn">
+                <a href="<?= $this->userData['id'] ? $this->getUrl('account') : '#" data-popup="login-popup' ?>"
+                   class="cart-btn-wrap">
+                    <svg class="inline-svg-icon svg-personality">
+                        <use href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#personality"></use>
+                    </svg>
+
                 </a>
             </div>
             <div class="header__sidebar_btn burger-menu">
@@ -166,3 +175,59 @@
         </div>
     </div>
 </div>
+<?php if (!$this->userData['id']): ?>
+    <div class="login-popup<?= !empty($_SESSION['res']['answerForm']) ? ' open' : '' ?>">
+        <div class="login-popup__inner">
+            <h2><span>Регистрация</span><span>Вход</span></h2>
+            <form action="<?= $this->getUrl(['login' => 'registration']) ?>" method="post">
+                <?php if (!empty($_SESSION['res']['answerForm'])) $res = $_SESSION['res']['answerForm'] ?>
+                <?= $res['name'] ?? '' ?>
+                <label>
+                    <input type="text" value="<?= $this->setFormValues('name') ?>"
+                           name="name" placeholder="Ваше имя">
+                </label>
+                <?= $res['phone'] ?? '' ?>
+                <label>
+                    <input type="tel" value="<?= $this->setFormValues('phone') ?>"
+                           name="phone" placeholder="Ваш телефон">
+                </label>
+                <?= $res['email'] ?? '' ?>
+                <label>
+                    <input type="email" value="<?= $this->setFormValues('email') ?>"
+                           name="email" placeholder="Ваш e-mail">
+                </label>
+                <?= $res['password'] ?? '' ?>
+                <label>
+                    <input type="password"  name="password" placeholder="Пароль">
+                </label>
+                <?= $res['confirm_password'] ?? '' ?>
+                <label>
+                    <input type="password" name="confirm_password" placeholder="Подтверждение пароля">
+                </label>
+                <div class="send-login">
+                    <input class="execute-order_btn" type="submit" value="Регистрация">
+                </div>
+            </form>
+            <form action="<?= $this->getUrl(['login' => 'auth']) ?>" method="post" style="display: none">
+                <?= !empty($res['phone']) ?? '' ?>
+                <label>
+                    <input type="tel" value=""
+                           name="phone" placeholder="Ваш телефон">
+                </label>
+                <?= !empty($res['email']) ?? '' ?>
+                <label>
+                    <input type="text" value=""
+                           name="email" placeholder="Ваш e-mail">
+                </label>
+                <?= !empty($res['password']) ?? '' ?>
+                <label>
+                    <input type="password" name="password_auth" placeholder="Пароль">
+                </label>
+                <div class="send-login">
+                    <input class="execute-order_btn" type="submit" value="Вход">
+                </div>
+            </form>
+
+        </div>
+    </div>
+<?php endif; ?>

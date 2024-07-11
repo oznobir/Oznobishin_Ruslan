@@ -368,7 +368,7 @@ abstract class BaseModel extends BaseModelMethods
      */
     private function getArr(array $set): array
     {
-        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST; //htmlspecialchars()
+        $set['fields'] = (!empty($set['fields']) && is_array($set['fields'])) ? $set['fields'] : $_POST;
         $set['files'] = (!empty($set['files']) && is_array($set['files'])) ? $set['files'] : false;
         $set['except'] = (!empty($set['except']) && is_array($set['except'])) ? $set['except'] : false;
         $set['return_id'] = $set['return_id'] ?? false;

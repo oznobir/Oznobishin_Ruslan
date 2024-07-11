@@ -61,10 +61,12 @@
                     <span class="division-internal-item__title">
                          <?= $item['name'] ?>
                     </span>
-                        <span class="division-internal-item__arrow-stat">
-                        <svg><use xlink:href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#arrow-right"></use></svg>
+                    <span class="division-internal-item__arrow-stat">
+                        <svg>
+                            <use xlink:href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#arrow-right"></use>
+                        </svg>
                     </span>
-                        <span class="division-internal-item__arrow">
+                    <span class="division-internal-item__arrow">
                         <img src="<?= PATH . SITE_TEMPLATE ?>assets/img/divisions/devision-arrow.png" alt="Далее">
                     </span>
                     </a>

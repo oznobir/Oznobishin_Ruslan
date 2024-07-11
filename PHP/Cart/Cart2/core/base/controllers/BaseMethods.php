@@ -68,15 +68,21 @@ trait BaseMethods
     /**
      * @param string $text
      * @param string $class error or success, default error
+     * @param string|false $fieldForm
      * @return void
      */
-    public function sendAnswer(string $text, string $class = 'error'): void
+    public function sendAnswer(string $text, string $class = 'error', string|false $fieldForm = false): void
     {
-        $_SESSION['res']['answer'][$class] = '<div class="' . $class . '">' . $text . '</div>';
+        if (!$fieldForm)
+            $_SESSION['res']['answer'] = '<div class="' . $class . '">' . $text . '</div>';
+        else
+            $_SESSION['res']['answerForm'][$fieldForm] = '<div class="' . $class . '">' . $text . '</div>';
 
         if ($class === 'error') {
             $this->addSessionData();
         }
+
+
     }
 
     /**

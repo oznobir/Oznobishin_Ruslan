@@ -130,25 +130,40 @@
                         <span class="amount-pay" data-totalSum><?= $this->cart['total_sum'] ?> руб.</span>
                     </div>
                     <input class="execute-order_btn" type="button" value="Оформить заказ" data-popup="order-popup">
-                    <div class="order-popup<?= !empty($_SESSION['res']['answer']['error']) ? ' open' : '' ?>">
+                    <div class="order-popup<?= !empty($_SESSION['res']['answerForm']) ? ' open' : '' ?>">
                         <div class="order-popup__inner">
                             <h2>Оформление заказа</h2>
+                            <?php if (!empty($_SESSION['res']['answerForm'])) $res = $_SESSION['res']['answerForm'] ?>
+                            <?= $res['name'] ?? '' ?>
                             <label>
-                                <input type="text" value="<?= $this->setFormValues('name', 'userData') ?>"
+                                <input type="text"  value="<?= $this->setFormValues('name', 'userData') ?>"
                                        name="name" placeholder="Ваше имя">
                             </label>
+                            <?= $res['phone'] ?? '' ?>
                             <label>
-                                <input type="tel" value="<?= $this->setFormValues('phone', 'userData') ?>"
+                                <input type="tel"  value="<?= $this->setFormValues('phone', 'userData') ?>"
                                        name="phone" placeholder="Ваш телефон">
                             </label>
+                            <?= $res['email'] ?? '' ?>
                             <label>
-                                <input type="email" value="<?= $this->setFormValues('email', 'userData') ?>"
+                                <input type="email"  value="<?= $this->setFormValues('email', 'userData') ?>"
                                        name="email" placeholder="Ваш e-mail">
                             </label>
+                            <?= $res['address'] ?? '' ?>
                             <label>
                                 <textarea name="address" placeholder="Ваш адрес"
-                                          rows="5"><?= $this->setFormValues('address', 'userData') ?></textarea>
+                                          rows="3"><?= $this->setFormValues('address', 'userData') ?></textarea>
                             </label>
+                            <?php if(!$this->userData['id']):?>
+                                <?= $res['password'] ?? '' ?>
+                                <label>
+                                    <input type="password"  name="password" placeholder="Пароль">
+                                </label>
+                                <?= $res['confirm_password'] ?? '' ?>
+                                <label>
+                                    <input type="password"  name="confirm_password" placeholder="Подтверждение пароля">
+                                </label>
+                            <?php endif; ?>
                             <div class="amount-pay-wrapp">
                                 Сумма к оплате:
                                 <span class="amount-pay" data-totalSum><?= $this->cart['total_sum'] ?> руб.</span>

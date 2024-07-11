@@ -259,7 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.getAttribute('data-popup')) {
             let popupEl = document.querySelector(`.${item.getAttribute('data-popup')}`)
             if (popupEl) {
-                item.addEventListener('click', () => {
+                item.addEventListener('click', e => {
+                    e.preventDefault()
                     popupEl.classList.add('open')
                 })
                 popupEl.addEventListener('click', e => {
@@ -271,6 +272,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
     document.querySelectorAll('input[type="tel"]').forEach(item => phoneValidate(item))
+    let loginVariants = document.querySelectorAll('.login-popup h2 span')
+    let loginFormVariants = document.querySelectorAll('.login-popup form')
+    loginVariants.forEach(item => {
+        item.addEventListener('click', () => {
+            let index = [...loginVariants].indexOf(item)
+            loginFormVariants[index].style.display = 'block'
+            loginFormVariants[+!index].style.display = 'none'
+        })
+    })
 })
 
 function addToCart() {

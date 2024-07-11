@@ -3,6 +3,7 @@
 namespace core\site\controllers;
 
 use core\base\exceptions\DbException;
+use core\base\exceptions\RouteException;
 use core\site\models\Model;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -35,10 +36,14 @@ class SendMailController extends BaseSite
      * @param $subject
      * @return bool
      * @throws DbException
+     * @throws RouteException
      */
     public function send($email = null, $subject = null): bool
     {
         if (!$this->model) $this->model = Model::instance();
+        if (is_readable('vendor/autoload.php'))
+            include 'vendor/autoload.php';
+        else throw new RouteException("Файл vendor/autoload.php не найден");
         $to = [];
         $this->set = $this->model->select('settings', [
             'order' => ['id'], 'limit' => 1
