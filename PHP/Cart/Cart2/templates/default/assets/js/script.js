@@ -279,6 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let index = [...loginVariants].indexOf(item)
             loginFormVariants[index].style.display = 'block'
             loginFormVariants[+!index].style.display = 'none'
+            item.classList.add('login-active')
+            loginVariants[+!index].classList.remove('login-active')
         })
     })
 })

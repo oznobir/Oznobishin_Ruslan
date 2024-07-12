@@ -123,7 +123,7 @@ class UsersModel extends BaseModel
     {
         $cookieString = $this->package();
         if ($cookieString) {
-            setcookie($this->cookieName, $cookieString, time() + 60 * 60 * 24 * 365 * 10, PATH);
+            setcookie($this->cookieName, $cookieString, time() + 60 * 60 * 24 * 10, PATH);
             return true;
         }
         throw new AuthException('Ошибка установки cookie', 1);

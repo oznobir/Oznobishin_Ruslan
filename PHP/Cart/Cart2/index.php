@@ -23,6 +23,8 @@ spl_autoload_register(/** @throws RouteException */ function ($class) {
 try {
     BaseRoute::routeDirection();
 } catch (RouteException $e) {
-    BaseRoute::instance()->sendAnswer($e->getMessage());
+    $error = BaseRoute::instance();
+    $_SESSION['res']['answer'] = $error->sendAnswer($e->getMessage());
+    $error->redirect();
 //    exit($e->getMessage());
 }

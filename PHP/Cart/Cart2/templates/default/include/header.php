@@ -176,31 +176,36 @@
     </div>
 </div>
 <?php if (!$this->userData['id']): ?>
-    <div class="login-popup<?= !empty($_SESSION['res']['answerForm']) ? ' open' : '' ?>">
+    <?php if (!empty($_SESSION['res']['answerForm']['form_1'])) $res1 = $_SESSION['res']['answerForm'];
+    if (!empty($_SESSION['res']['answerForm']['form_2'])) $res2 = $_SESSION['res']['answerForm']; ?>
+    <div class="login-popup<?= !empty($res1) || !empty($res2) ? ' open' : '' ?>">
         <div class="login-popup__inner">
-            <h2><span>Регистрация</span><span>Вход</span></h2>
-            <form action="<?= $this->getUrl(['login' => 'registration']) ?>" method="post">
-                <?php if (!empty($_SESSION['res']['answerForm'])) $res = $_SESSION['res']['answerForm'] ?>
-                <?= $res['name'] ?? '' ?>
+            <h2>
+                <span<?= empty($res2) ? ' class="login-active"' : '' ?>>Регистрация</span>
+                <span<?= !empty($res2) ? ' class="login-active"' : '' ?>>Вход</span>
+            </h2>
+            <form action="<?= $this->getUrl(['login' => 'registration']) ?>"<?= !empty($res2) ? ' style="display: none" ' : '' ?>
+                  method="post">
+                <?= $res1['name'] ?? '' ?>
                 <label>
-                    <input type="text" value="<?= $this->setFormValues('name') ?>"
+                    <input type="text" value="<?= !empty($res1) ? $this->setFormValues('name') : '' ?>"
                            name="name" placeholder="Ваше имя">
                 </label>
-                <?= $res['phone'] ?? '' ?>
+                <?= $res1['phone'] ?? '' ?>
                 <label>
-                    <input type="tel" value="<?= $this->setFormValues('phone') ?>"
+                    <input type="tel" value="<?= !empty($res1) ? $this->setFormValues('phone') : '' ?>"
                            name="phone" placeholder="Ваш телефон">
                 </label>
-                <?= $res['email'] ?? '' ?>
+                <?= $res1['email'] ?? '' ?>
                 <label>
-                    <input type="email" value="<?= $this->setFormValues('email') ?>"
+                    <input type="email" value="<?= !empty($res1) ? $this->setFormValues('email') : '' ?>"
                            name="email" placeholder="Ваш e-mail">
                 </label>
-                <?= $res['password'] ?? '' ?>
+                <?= $res1['password'] ?? '' ?>
                 <label>
-                    <input type="password"  name="password" placeholder="Пароль">
+                    <input type="password" name="password" placeholder="Пароль">
                 </label>
-                <?= $res['confirm_password'] ?? '' ?>
+                <?= $res1['confirm_password'] ?? '' ?>
                 <label>
                     <input type="password" name="confirm_password" placeholder="Подтверждение пароля">
                 </label>
@@ -208,20 +213,21 @@
                     <input class="execute-order_btn" type="submit" value="Регистрация">
                 </div>
             </form>
-            <form action="<?= $this->getUrl(['login' => 'auth']) ?>" method="post" style="display: none">
-                <?= !empty($res['phone']) ?? '' ?>
+            <form action="<?= $this->getUrl(['login' => 'auth']) ?>"<?= empty($res2) ? ' style="display: none" ' : '' ?>
+                  method="post">
+                <?= $res2['phone'] ?? '' ?>
                 <label>
-                    <input type="tel" value=""
-                           name="phone" placeholder="Ваш телефон">
+                    <input type="tel" value="<?= !empty($res2) ? $this->setFormValues('phone') : '' ?>"
+                           name="phone" placeholder="Введите Ваш телефон">
                 </label>
-                <?= !empty($res['email']) ?? '' ?>
+                <?= $res2['email'] ?? '' ?>
                 <label>
-                    <input type="text" value=""
-                           name="email" placeholder="Ваш e-mail">
+                    <input type="email" value="<?= !empty($res2) ? $this->setFormValues('email') : '' ?>"
+                           name="email" placeholder="и/или Ваш e-mail">
                 </label>
-                <?= !empty($res['password']) ?? '' ?>
+                <?= $res2['password'] ?? '' ?>
                 <label>
-                    <input type="password" name="password_auth" placeholder="Пароль">
+                    <input type="password" name="password" placeholder="Пароль" value="">
                 </label>
                 <div class="send-login">
                     <input class="execute-order_btn" type="submit" value="Вход">

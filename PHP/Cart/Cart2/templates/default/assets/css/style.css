@@ -7609,28 +7609,30 @@ input[type='search'], input[type='text'], input[type='email'] {
     display: flex;
     justify-content: center;
 }
+
 .login-popup__inner h2
 .order-popup__inner h2 {
     text-align: center;
 
 }
-.send-order, send-login{
+
+.send-order, send-login {
     display: flex;
     justify-content: center;
 }
 
-.login-popup__inner form {
-    border: 1px solid #D4DDE1;
-    padding: 10px 10px;
-    margin-top: -12px;
-}
-
 .login-popup__inner h2 span {
-    border: 1px solid #D4DDE1;
     padding: 10px 24px;
     cursor: pointer;
 }
+
+span.login-active {
+    background: #ffac52;
+    color: #fff;
+}
+
+
 .order-popup__inner .error,
-.login-popup__inner .error{
+.login-popup__inner .error {
     color: indianred;
 }

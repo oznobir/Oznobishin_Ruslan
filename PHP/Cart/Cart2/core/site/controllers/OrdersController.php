@@ -79,20 +79,23 @@ class OrdersController extends BaseSite
 
         $order = [];
         $visitor = [];
+        $resError = [];
         $columnsOrders = $this->model->showColumns('orders');
         $columnsVisitors = $this->model->showColumns('visitors');
-//        $this->clearFormFieldsOld($this->validation);
-        if (empty($_POST['address']) && intval($_POST['delivery_id']) != 2) unset($_POST['address']);
-        else $this->sendAnswer('При доставке "По адресу" заполните поле Адрес', 'error', 'address');
+        if (empty($_POST['address']) && $_POST['delivery_id'] == '2')
+            $resError['address'] = $this->sendAnswer('При доставке "По адресу" заполните поле Адрес');
+        else unset($_POST['address']);
         if (!empty($_POST['password'])) {
             if ($this->userData['id'])
                 unset($_POST['password']);
             elseif ($_POST['password'] !== $_POST['confirm_password'])
-                $this->sendAnswer('Пароли не совпадают', 'error', 'confirm_password');
+                $resError['confirm_password'] = $this->sendAnswer('Пароли не совпадают');
         }
         unset($_POST['confirm_password']);
         foreach ($_POST as $key => $item) {
-            $_POST[$key] = $item = $this->clearFormFields($this->validation[$key], $item, $key);
+            if (empty($resError[$key])) {
+                $_POST[$key] = $item = $this->clearFormFields($this->validation[$key], $item, $key, $resError);
+            }
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
@@ -152,7 +155,7 @@ class OrdersController extends BaseSite
             throw new RouteException('Ошибка сохранения данных в таблицу orders_goods', 3);
         $order['delivery'] = $this->delivery[$order['delivery_id']]['name'] ?? '';
         $order['payments'] = $this->payments[$order['payments_id']]['name'] ?? '';
-        $this->sendAnswer('Ваш заказ на сумму ' . $order['total_sum'] . ' руб. сохранен. Спасибо за заказ!', 'success');
+        $_SESSION['res']['answer'] = $this->sendAnswer('Ваш заказ на сумму ' . $order['total_sum'] . ' руб. сохранен. Спасибо за заказ!', 'success');
         $this->sendOrderEmail(['order' => $order, 'visitor' => $visitor, 'goods' => $goods]);
         $this->clearCart();
 
