@@ -8,10 +8,10 @@
         <div class="container">
             <div class="catalog-internal-wrap">
                 <?php if (empty($this->goods)): ?>
-                    <h2>В данном разделе нет товаров</h2>
+                    <h2>Товары не найдены</h2>
                 <?php else: ?>
-                    <aside class="catalog-aside">
-                        <?php if (!empty($this->sFilters) || !empty($this->sPrices)): ?>
+                    <?php if (!empty($this->sFilters) || !empty($this->sPrices)): ?>
+                        <aside class="catalog-aside">
                             <div class="catalog-aside__wrap">
                                 <div class="catalog-aside-block">
                                     <div class="catalog-aside-block__top">
@@ -107,8 +107,8 @@
                                     </div>
                                 </div>
                             </div>
-                        <?php endif; ?>
-                    </aside>
+                        </aside>
+                    <?php endif; ?>
                     <section class="catalog-section catalog-section__four">
                         <div class="catalog-section-top">
                             <div class="catalog-section-top-items">
@@ -157,4 +157,4 @@
             </div>
         </div>
     </section>
-</main>>
+</main>

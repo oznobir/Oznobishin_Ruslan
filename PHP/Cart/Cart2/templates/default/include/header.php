@@ -79,8 +79,8 @@
                 </a>
             </div>
             <div class="header__sidebar_btn">
-                <a href="<?= $this->userData['id'] ? $this->getUrl('account') : '#" data-popup="login-popup' ?>"
-                   class="cart-btn-wrap">
+                <a <?= $this->userData['id'] ? 'href="' . $this->getUrl('account') . '" ' : 'data-popup="login-popup" ' ?>
+                        class="cart-btn-wrap">
                     <svg class="inline-svg-icon svg-personality">
                         <use href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#personality"></use>
                     </svg>

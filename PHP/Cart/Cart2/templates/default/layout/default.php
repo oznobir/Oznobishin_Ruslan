@@ -15,14 +15,14 @@
     <?= $this->header ?>
 </header>
 <?php if ($this->getController() !== 'index'): ?>
-    <div class="search search-internal">
+    <form class="search search-internal"  action="<?= $this->getUrl('search')?>">
         <button>
             <svg class="inline-svg-icon svg-search">
                 <use xlink:href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#search"></use>
             </svg>
         </button>
-        <input type="search" placeholder="Поиск по каталогу">
-    </div>
+        <input type="search" placeholder="Поиск по каталогу" name="search">
+    </form>
 <?php endif; ?>
 <main class="main">
     <?= $this->content ?>

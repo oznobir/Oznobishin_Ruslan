@@ -61,8 +61,9 @@ abstract class BaseSite extends BaseController
      */
     protected function outputData(): false|string
     {
+
         $this->breadcrumbs = $this->render(SITE_TEMPLATE . 'include/breadcrumbs');
-        $this->content = $this->render();
+        $this->content = $this->render($this->template ?? '');
         $this->header = $this->render(SITE_TEMPLATE . 'include/header');
         $this->footer = $this->render(SITE_TEMPLATE . 'include/footer');
 
@@ -221,11 +222,10 @@ abstract class BaseSite extends BaseController
     protected function pagination(array $pag, array|string $url = null, ?array $icons = null, string $class = ''): void
     {
         if ($url) {
-            $firstUrl = $this->getUrl($url);
             $addClass = $class;
         } else {
-            $url = ['catalog' => $this->parameters['alias'] ?? ''];
-            $firstUrl = $this->getUrl($url);
+            $controller = $this->getController();
+            $url = [$controller => $this->parameters['alias'] ?? ''];
             $addClass = 'catalog';
         }
         if (!$icons) $icons = [
@@ -237,9 +237,13 @@ abstract class BaseSite extends BaseController
         $queryString = $_GET ?? [];
         if (isset($_GET['page'])) unset($queryString['page']);
 
-        if (empty($queryString)) $str = $firstUrl . '?page=';
-        else $str = $this->getUrl($url, $queryString) . END_SLASH . '&page=';
-
+        if (empty($queryString)) {
+            $firstUrl = $this->getUrl($url);
+            $str = $firstUrl . END_SLASH . '?page=';
+        } else {
+            $firstUrl = $this->getUrl($url, $queryString);
+            $str = $firstUrl . END_SLASH . '&page=';
+        }
         foreach ($pag as $key => $item) {
             if (is_array($item)) {
                 foreach ($item as $value) {

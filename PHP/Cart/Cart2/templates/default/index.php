@@ -209,12 +209,12 @@
             <a href="<?= $this->getUrl('news') ?>" class="news__reasdmore readmore">Смотреть все</a>
         </section>
     <?php endif; ?>
-    <div class="search ">
+    <form class="search" action="<?= $this->getUrl('search')?>">
         <button>
             <svg class="inline-svg-icon svg-search">
                 <use xlink:href="<?= PATH . SITE_TEMPLATE ?>assets/img/icons.svg#search"></use>
             </svg>
         </button>
-            <input type="search" placeholder="Поиск по каталогу">
-    </div>
+            <input type="search" placeholder="Поиск по каталогу" name="search">
+    </form>
 </main>

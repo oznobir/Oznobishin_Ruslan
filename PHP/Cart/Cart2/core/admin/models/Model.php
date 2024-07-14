@@ -180,6 +180,173 @@ class Model extends BaseModel
             'order' => $order,
             'order_direction' => $orderDirection,
         ]);
+//        $searchWord = 'смарт';
+//        $query = "
+//SELECT
+//    id AS id,
+//    CASE WHEN goods.name <> '' THEN goods.name END AS NAME,
+//    'goods' AS TABLE_NAME
+//FROM goods
+//WHERE
+//    goods.name LIKE '%$searchWord%'
+//    OR goods.content LIKE '%$searchWord%'
+//    OR goods.short_content LIKE '%$searchWord%'
+//    OR goods.img LIKE '%$searchWord%'
+//    OR goods.gallery_img LIKE '%$searchWord%'
+//    OR goods.alias LIKE '%$searchWord%'
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN catalog.name <> '' THEN catalog.name END AS NAME,
+//    'catalog'  AS TABLE_NAME
+//FROM catalog
+//WHERE
+//    catalog.name LIKE '%$searchWord%'
+//    OR catalog.keywords LIKE '%$searchWord%'
+//    OR catalog.description LIKE '%$searchWord%'
+//    OR catalog.alias LIKE '%$searchWord%'
+//    OR catalog.img LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN filters.filters_name <> '' THEN filters.filters_name END AS NAME,
+//    'filters'  AS TABLE_NAME
+//FROM filters
+//WHERE
+//    filters.filters_name LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN cat_filters.name <> '' THEN cat_filters.name END AS NAME,
+//    'cat_filters' AS TABLE_NAME
+//FROM cat_filters
+//WHERE
+//    cat_filters.name LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN manufacturer.name <> '' THEN manufacturer.name END AS NAME,
+//    'manufacturer'  AS TABLE_NAME
+//FROM manufacturer
+//WHERE
+//    manufacturer.name LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN color.name <> '' THEN color.name END AS NAME,
+//    'color' AS TABLE_NAME
+//FROM color
+//WHERE
+//   color.name LIKE '%$searchWord%'
+//   OR color.img LIKE '%$searchWord%'
+//   OR color.alias LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN sales.name <> '' THEN sales.name END AS NAME,
+//    'sales'  AS TABLE_NAME
+//FROM sales
+//WHERE
+//    sales.name LIKE '%$searchWord%'
+//    OR sales.sub_title LIKE '%$searchWord%'
+//    OR sales.img LIKE '%$searchWord%'
+//    OR sales.external_url LIKE '%$searchWord%'
+//    OR sales.short_content LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN news.name <> '' THEN news.name END AS NAME,
+//    'news'  AS TABLE_NAME
+//FROM news
+//WHERE
+//    news.name LIKE '%$searchWord%'
+//    OR news.short_content LIKE '%$searchWord%'
+//    OR news.content LIKE '%$searchWord%'
+//    OR news.alias LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN information.name <> '' THEN information.name END AS NAME,
+//    'information'  AS TABLE_NAME
+//FROM information
+//WHERE
+//    information.content LIKE '%$searchWord%'
+//    OR information.name LIKE '%$searchWord%'
+//    OR information.alias LIKE '%$searchWord%'
+//    OR information.keywords LIKE '%$searchWord%'
+//    OR information.description LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN socials.name <> '' THEN socials.name END AS NAME,
+//    'socials' AS TABLE_NAME
+//FROM socials
+//WHERE
+//    socials.name LIKE '%$searchWord%'
+//    OR socials.icons_svg LIKE '%$searchWord%'
+//    OR socials.external_url LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN settings.name <> '' THEN settings.name END AS NAME,
+//    'settings'  AS TABLE_NAME
+//FROM settings
+//WHERE
+//    settings.name LIKE '%$searchWord%'
+//    OR settings.keywords LIKE '%$searchWord%'
+//    OR settings.description LIKE '%$searchWord%'
+//    OR settings.address LIKE '%$searchWord%'
+//    OR settings.phone LIKE '%$searchWord%'
+//    OR settings.email LIKE '%$searchWord%'
+//    OR settings.short_content LIKE '%$searchWord%'
+//    OR settings.content LIKE '%$searchWord%'
+//    OR settings.img_logo LIKE '%$searchWord%'
+//    OR settings.promo_img LIKE '%$searchWord%'
+//    OR settings.img_years LIKE '%$searchWord%'
+//    OR settings.number_years LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN advantages.name <> '' THEN advantages.name END AS NAME,
+//    'advantages'  AS TABLE_NAME
+//FROM advantages
+//WHERE
+//    advantages.name LIKE '%$searchWord%'
+//    OR advantages.img LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN delivery.name <> '' THEN delivery.name END AS NAME,
+//    'delivery'  AS TABLE_NAME
+//FROM delivery
+//WHERE
+//    delivery.name LIKE '%$searchWord%'
+//    OR delivery.alias LIKE '%$searchWord%'
+//
+//UNION
+//SELECT
+//    id AS id,
+//    CASE WHEN payments.name <> '' THEN payments.name END AS NAME,
+//    'payments'  AS TABLE_NAME
+//FROM payments
+//WHERE
+//    payments.name LIKE '%$searchWord%'
+//    OR payments.alias LIKE '%$searchWord%'
+//ORDER BY
+//    NAME LIKE '%$searchWord%'
+//DESC";
+
         if ($result) {
             foreach ($result as $index => $item) {
                 $result[$index]['table_alias'] = $projectTables[$item['table_name']]['name'] ?? $item['table_name'];
@@ -187,7 +354,7 @@ class Model extends BaseModel
             }
         }
 
-        return $result ?:[];
+        return $result ?: [];
     }
 
     /**

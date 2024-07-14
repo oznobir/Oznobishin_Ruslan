@@ -34,10 +34,10 @@
         <div class="vg-element vg-fifth">
             <div class="vg-element vg-half vg-right">
                 <div class="vg-element vg-text vg-center">
-                    <span class="vg-firm-color5"><?=$this->userId['name']?></span>
+                    <span class="vg-firm-color5"><?=$this->userData['name']?></span>
                 </div>
             </div>
-            <a href="<?= PATH . $this->adminAlias ?>/login/logout/<?= $this->userId['id']?>" class="vg-element vg-half vg-center">
+            <a href="<?= PATH . $this->adminAlias ?>/login/logout/<?= $this->userData['id']?>" class="vg-element vg-half vg-center">
                 <div>
                     <img src="<?= PATH . ADMIN_TEMPLATE ?>img/out.png" alt="">
                 </div>

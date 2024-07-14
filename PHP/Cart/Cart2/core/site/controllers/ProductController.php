@@ -26,6 +26,7 @@ class ProductController extends BaseSite
         if (!$data)
             throw new RouteException('Отсутствует товар по ссылке ' . $this->parameters['alias'], 3);
         else $this->data = array_shift($data);
+//      $query = "SELECT information.* FROM information WHERE information.visible = '1' AND information.name LIKE '%доставка%' OR information.name LIKE '%оплата%' LIMIT 1";
         $delivery = $this->model->select('information', [
             'where' => [
                 'visible' => 1,
