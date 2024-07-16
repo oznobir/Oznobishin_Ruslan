@@ -72,13 +72,13 @@ abstract class BaseModel extends BaseModelMethods
      * // 1 вариант записи join (может быть несколько вложенных массивов):
      * 'join' =>
      * ['name_table' => [
-     *      'table' => 'name_table',
-     *      'fields' => ['column as alias_column', ...],
-     *      'type' => 'left' or ...,
+     *      'table' => 'main_table', // если не указано, то к основной таблице
+     *      'fields' => ['column as alias_column', ...], // если не указано, то *
+     *      'type' => 'left' or ..., // если не указано, то LEFT JOIN
      *      'where' => ['column' => 'column_value', ...],
-     *      'operand' => ['=', ...],
-     *      'conditions' => ['OR', ...],
-     *      'group_conditions' => ['AND' or ...],
+     *      'operand' => ['=', ...], // если не указано, то '='
+     *      'conditions' => ['OR', ...], // если не указано, то AND
+     *      'group_conditions' => ['WHERE'], // если не указано, то WHERE
      *      'on' => [
      *        'table' => 'name_table',
      *        'fields' => ['column', 'parent_column']
@@ -311,7 +311,7 @@ abstract class BaseModel extends BaseModelMethods
         $order = $this->createOrder($set);
         $limit = !empty($set['limit']) ? 'LIMIT ' . $set['limit'] : '';
         if (method_exists($this, 'createPagination'))
-            $this->createPagination($set, $maxTableCount,"($query)", $limit);
+            $this->createPagination($set, $maxTableCount, "($query)", $limit);
         $query .= " $order $limit";
         $this->union = [];
         return $this->query(trim($query));

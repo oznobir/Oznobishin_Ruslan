@@ -47,6 +47,9 @@ class LoginController extends BaseSite
                 case 'auth':
                     $this->auth();
                     break;
+                case 'logout':
+                    UsersModel::instance()->logout();
+                    $this->redirect(PATH);
             }
         }
         throw new RouteException('Неверная ссылка при регистрации/авторизации пользователя', 0);

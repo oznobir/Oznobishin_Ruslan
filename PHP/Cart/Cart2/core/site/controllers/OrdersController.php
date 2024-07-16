@@ -49,7 +49,7 @@ class OrdersController extends BaseSite
         'password' => [
             'translate' => 'Пароль',
             'count' => '140',
-            'countMin' => '5',
+            'countMin' => '2',
             'methods' => ['emptyField', 'countMinField', 'countField', 'md5PassField'],
         ],
     ];
@@ -99,41 +99,51 @@ class OrdersController extends BaseSite
             if (!empty($columnsOrders[$key])) $order[$key] = $item;
             if (!empty($columnsVisitors[$key])) $visitor[$key] = $item;
         }
-//        $visitorWhere = ['password' => $visitor['password']];
-//        $visitorCondition[] = 'AND';
-//        if (!empty($visitor['email']) && !empty($visitor['phone'])) {
-//            $visitorWhere = ['email' => $visitor['email'], 'phone' => $visitor['phone']];
-//            $visitorCondition[] = 'OR';
-//        } else {
-//            $visitorKey = !empty($visitor['email']) ? 'email' : 'phone';
-//            $visitorWhere[$visitorKey] = $visitor[$visitorKey];
-//        }
-        $visitorWhere = [
-            'password' => $visitor['password'],
-            'email' => $visitor['email'],
-            'phone' => $visitor['phone']];
-        $resVisitor = $this->model->select('visitors', [
-            'fields' => 'id',
-            'where' => $visitorWhere,
-//            'conditions' => $visitorCondition,
-            'limit' => 1
-        ]);
-        if ($resVisitor) {
-            $order['visitor_id'] = $resVisitor[0]['id'];
-        } else {
-            $order['visitor_id'] = $this->model->add('visitors', [
-                'fields' => $visitor,
-                'return_id' => true
-            ]);
-            if (!$order['visitor_id'])
-                throw new RouteException('Ошибка добавления в таблицу  visitors', 3);
+        if (!empty($resError)) {
+            $_SESSION['res']['answerForm'] = $resError;
+            $this->addSessionData();
         }
-        if (!UsersModel::instance()->checkUser($order['visitor_id']))
-            throw new RouteException('Ошибка регистрации пользователя', 3);
+        if (!$this->userData['id']) {
+//            $query = "SELECT visitors.id
+//                      FROM visitors
+//                      WHERE visitors.password = '202cb962ac59075b964b07152d234b70'
+//                        AND visitors.email = 'q@ii.ru'
+//                        AND visitors.phone = '375331523231'
+//                      LIMIT 1";
+            $visitorWhere = [
+                'password' => $visitor['password'],
+                'email' => $visitor['email'],
+                'phone' => $visitor['phone']];
+            $resVisitor = $this->model->select('visitors', [
+                'fields' => 'id',
+                'where' => $visitorWhere,
+//            'conditions' => $visitorCondition,
+                'limit' => 1
+            ]);
+            if ($resVisitor) {
+                $order['visitor_id'] = $resVisitor[0]['id'];
+            } else {
+//                $query = "INSERT INTO visitors (name, phone, email, password)
+//                            VALUES ('user', '375336012455', 'qw@rttt.rt', '202cb962ac59075b964b07152d234b70')";
+                $order['visitor_id'] = $this->model->add('visitors', [
+                    'fields' => $visitor,
+                    'return_id' => true
+                ]);
+                if (!$order['visitor_id'])
+                    throw new RouteException('Ошибка добавления в таблицу  visitors', 3);
+            }
+            if (!UsersModel::instance()->checkUser($order['visitor_id']))
+                throw new RouteException('Ошибка регистрации пользователя', 3);
+        } else  $order['visitor_id'] = $this->userData['id'];
+
         $order['total_sum'] = $this->cart['total_sum'];
         $order['total_old_sum'] = $this->cart['total_old_sum'] ?? $this->cart['total_sum'];
         $order['total_qty'] = $this->cart['total_qty'];
-
+//        $query = "SELECT orders_statuses.id
+//                    FROM orders_statuses
+//                    ORDER BY orders_statuses.position ASC
+//                    LIMIT 1";
+//        // $order['orders_statuses_id'] = 2;
         $baseStatus = $this->model->select('orders_statuses', [
             'fields' => 'id',
             'order' => 'position',
@@ -143,7 +153,8 @@ class OrdersController extends BaseSite
             throw new RouteException('Нет данных из таблицы orders_statuses', 3);
 
         $order['orders_statuses_id'] = $baseStatus[0]['id'];
-
+//        $query = "INSERT INTO orders (payments_id, delivery_id, phone, visitor_id, total_sum, total_old_sum, total_qty, orders_statuses_id)
+//                    VALUES ('1', '1', '375336012455', '12', '2250', '2500', '1', '2')";
         $order['id'] = $this->model->add('orders', [
             'fields' => $order,
             'return_id' => true
@@ -156,9 +167,8 @@ class OrdersController extends BaseSite
         $order['delivery'] = $this->delivery[$order['delivery_id']]['name'] ?? '';
         $order['payments'] = $this->payments[$order['payments_id']]['name'] ?? '';
         $_SESSION['res']['answer'] = $this->sendAnswer('Ваш заказ на сумму ' . $order['total_sum'] . ' руб. сохранен. Спасибо за заказ!', 'success');
-        $this->sendOrderEmail(['order' => $order, 'visitor' => $visitor, 'goods' => $goods]);
+        if(!empty($visitor['email']))$this->sendOrderEmail(['order' => $order, 'visitor' => $visitor, 'goods' => $goods]);
         $this->clearCart();
-
         $this->redirect(PATH);
     }
 
@@ -188,6 +198,9 @@ class OrdersController extends BaseSite
                 }
             }
         }
+//        $query = "INSERT INTO orders (payments_id, delivery_id, phone, visitor_id,
+//                             total_sum, total_old_sum, total_qty, orders_statuses_id)
+//                    VALUES ('2', '2', '375336031530', '4', '4908.5', '5430', '3', '2')";
         if ($this->model->add('orders_goods', ['fields' => $ordersGoods,])) {
             return $preparedGoods;
         }
