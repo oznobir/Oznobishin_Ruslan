@@ -84,7 +84,6 @@ class OrdersController extends BaseSite
         $columnsVisitors = $this->model->showColumns('visitors');
         if (empty($_POST['address']) && $_POST['delivery_id'] == '2')
             $resError['address'] = $this->sendAnswer('При доставке "По адресу" заполните поле Адрес');
-        else unset($_POST['address']);
         if (!empty($_POST['password'])) {
             if ($this->userData['id'])
                 unset($_POST['password']);

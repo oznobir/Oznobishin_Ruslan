@@ -44,7 +44,8 @@ class LkController extends BaseSite
             'order_direction' => ['DESC'],
             'join' => [
                 'orders_goods' => [
-                    'on' => ['id', 'orders_id']],
+                    'on' => ['id', 'orders_id']
+                ],
                 'goods' => [
                     'on' => ['table' => 'orders_goods', 'fields' => ['goods_id', 'id']],
                     'fields' => ['name']
